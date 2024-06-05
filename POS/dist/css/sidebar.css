@@ -1,0 +1,70 @@
+.shopLogoMain {
+    display: flex;
+    justify-content: center;
+    margin: 20px 20px 0px 20px;
+}
+
+.shopImg {
+    width: 100px;
+    height: 100px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 50%;
+    border: 2px solid #1c9552;
+}
+
+.userName {
+    color: white !important;
+    font-weight: bold;
+    font-family: 'Font Awesome 5 Free';
+    font-size: 20px;
+}
+
+.userRole {
+    color: white !important;
+    font-weight: bold;
+    font-family: 'Font Awesome 5 Free';
+    font-size: 12px;
+}
+
+.userNameMain {
+    background: transparent;
+    border-radius: 4px;
+    padding: 5px 20px;
+}
+
+.userRoleMain {
+    background: #28a745;
+    border-radius: 4px;
+    padding: 5px 20px;
+}
+
+.user-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+    margin-top: -13px;
+}
+
+
+/* meaduim device */
+
+@media (min-width: 601px) and (max-width: 1280px) {
+    .shopImg {
+        width: 30px;
+        height: 30px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        border-radius: 50%;
+        border: 2px solid #1c9552;
+    }
+    .user-panel {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 10px;
+    }
+}

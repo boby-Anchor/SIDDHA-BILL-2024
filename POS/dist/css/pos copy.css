@@ -1,0 +1,144 @@
+.tittle-invoice{
+    font-size: xxx-large;
+    font-weight: 600;
+    font-family: 'Source Sans Pro';
+    letter-spacing: 10px;
+}
+
+#invoice-POS {
+    box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+    padding: 5mm;
+    margin: 0 auto;
+    width: 60mm;
+    background: #FFF;
+}
+
+#invoice-POS ::selection {
+    background: #f31544;
+    color: #FFF;
+}
+
+#invoice-POS ::moz-selection {
+    background: #f31544;
+    color: #FFF;
+}
+
+#invoice-POS h1 {
+    font-size: 1.5em;
+    color: #222;
+}
+
+#invoice-POS h2 {
+    font-size: 0.9em;
+    font-family: monospace;
+}
+
+#invoice-POS h3 {
+    font-size: 1.2em;
+    font-weight: 300;
+    line-height: 2em;
+}
+
+#invoice-POS p {
+    font-size: xx-small;
+    color: #666;
+    font-family: monospace;
+}
+
+#invoice-POS #top,
+#invoice-POS #mid,
+#invoice-POS #bot {
+    /* Targets all id with 'col-' */
+    border-bottom: 1px solid #EEE;
+}
+
+#invoice-POS #top {
+    min-height: 100px;
+}
+
+#invoice-POS #mid {
+    min-height: 80px;
+}
+
+#invoice-POS #bot {
+    min-height: 50px;
+}
+
+#invoice-POS #top .logo {
+    height: 50px;
+    width: 100%;
+    background: url('dist/img/Siddha.lk (1).png') no-repeat;
+    background-size: contain;
+}
+
+#invoice-POS .clientlogo {
+    float: left;
+    height: 60px;
+    width: 60px;
+    background: url(http://michaeltruong.ca/images/client.jpg) no-repeat;
+    background-size: 60px 60px;
+    border-radius: 50px;
+}
+
+#invoice-POS .info {
+    display: block;
+    margin-left: 0;
+    padding: 10px;
+    
+}
+
+#invoice-POS .invoiceInfo {
+   margin-top: 5px;
+
+}
+#invoice-POS .invoiceInfo label {
+    font-size: x-small;
+    font-family: monospace;
+
+}
+
+#invoice-POS .invoiceInfo div {
+    font-size: x-small;
+    font-family: monospace;
+    display: flex;
+    justify-content: start;
+
+}
+
+#invoice-POS .title {
+    float: right;
+}
+
+#invoice-POS .title p {
+    text-align: right;
+}
+
+#invoice-POS table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#invoice-POS .tabletitle {
+    font-size: 0.5em;
+    background: #EEE;
+}
+
+#invoice-POS .service {
+    border-bottom: 1px solid #EEE;
+}
+
+#invoice-POS .tableitem {
+    border: 1px solid #EEE;
+}
+
+#invoice-POS .item {
+    width: 24mm;
+}
+
+#invoice-POS .itemtext {
+    font-size: 0.5em;
+}
+
+#invoice-POS #legalcopy {
+    margin-top: 5mm;
+}

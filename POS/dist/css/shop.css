@@ -1,0 +1,39 @@
+.content-wrapper {
+    overflow-x: hidden;
+}
+
+.card-body {
+    /* overflow-x: scroll; */
+}
+
+.shopImage {
+    width: 100px;
+    height: 100px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.selected-shop {
+    background: springgreen;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.not-selected-shop {
+    background: #092631a6;
+    padding: 3px 6px;
+    border-radius: 5px;
+    color: white;
+}
+
+.shop-checkbox {
+    display: none;
+}
+
+.record_per_page_sele {
+    border: none;
+    background: none;
+    color: white;
+    font-weight: bold;
+}

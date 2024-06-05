@@ -1,0 +1,337 @@
+@font-face {
+    font-family: 'FontsFree-Net-Gilroy-Light';
+    /* Specify the font family name */
+    src: url('font/FontsFree-Net-Gilroy-Light.ttf') format('woff2'),
+        /* URL to the font file */
+
+}
+
+.customize-bar-main {
+    font-family: 'FontsFree-Net-Gilroy-Light';
+}
+
+.billPreviewMain {
+    height: 100vh;
+    background: whitesmoke;
+}
+
+.cbTittleMain {
+    border-bottom: solid 1px whitesmoke;
+}
+
+.logoImg {
+    height: 50px;
+    width: 100px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    
+    cursor: pointer;
+}
+
+.customize-bar {
+    background: #00000059;
+    border-radius: 20px;
+}
+
+.customize-bar i {
+    font-size: xx-large;
+}
+
+
+
+
+/* meadia query */
+@media (min-width: 768px) and (max-width: 1281px) {
+    .customize-bar h2 {
+        margin: 0;
+        font-size: x-large;
+    }
+
+    .customize-bar i {
+        font-size: x-large;
+    }
+}
+
+/* input range styles start */
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+.range-slider {
+    /* margin: 10px 0 0 0; */
+}
+
+.range-slider {
+    width: 100%;
+}
+
+.range-slider__range {
+    -webkit-appearance: none;
+    width: calc(100% - (73px));
+    height: 2px;
+    border-radius: 5px;
+    background: #4d4e4e;
+    outline: none;
+    padding: 0;
+    margin: 0;
+}
+
+.range-slider__range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    -webkit-transition: background 0.15s ease-in-out;
+    transition: background 0.15s ease-in-out;
+}
+
+.range-slider__range::-webkit-slider-thumb:hover {
+    background: #1abc9c;
+}
+
+.range-slider__range:active::-webkit-slider-thumb {
+    background: #1abc9c;
+}
+
+.range-slider__range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border: 0;
+    border-radius: 50%;
+    background: #2c3e50;
+    cursor: pointer;
+    -moz-transition: background 0.15s ease-in-out;
+    transition: background 0.15s ease-in-out;
+}
+
+.range-slider__range::-moz-range-thumb:hover {
+    background: #1abc9c;
+}
+
+.range-slider__range:active::-moz-range-thumb {
+    background: #1abc9c;
+}
+
+.range-slider__range:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px #fff, 0 0 0 6px #1abc9c;
+}
+
+.range-slider__value {
+    display: inline-block;
+    position: relative;
+    width: 60px;
+    color: #fff;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 3px;
+    background: #2c3e50;
+    padding: 5px 10px;
+    margin-left: 8px;
+}
+
+.range-slider__value:after {
+    position: absolute;
+    top: 8px;
+    left: -7px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-right: 7px solid #2c3e50;
+    border-bottom: 7px solid transparent;
+    content: "";
+}
+
+::-moz-range-track {
+    background: #d7dcdf;
+    border: 0;
+}
+
+input::-moz-focus-inner,
+input::-moz-focus-outer {
+    border: 0;
+}
+
+/* input range styles end */
+
+/*Start | On-Off Button Design*/
+.btn-onoff {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.btn-onoff input {
+    display: block;
+    position: absolute;
+    opacity: 0;
+}
+
+.btn-onoff span {
+    position: relative;
+    display: block;
+    width: 80px;
+    height: 35px;
+    border-radius: 40px;
+    background: #ccc;
+    border: 1px solid #ccc;
+    -webkit-transition: 400ms;
+    -moz-transition: 400ms;
+    -ms-transition: 400ms;
+    transition: 400ms;
+}
+
+.btn-onoff input:checked~span {
+    border: 1px solid #4caf50;
+    background: #4caf50;
+}
+
+.btn-onoff input~span:before {
+    content: "";
+    display: block;
+    width: 34px;
+    height: 34px;
+    position: absolute;
+    right: 0px;
+    font-size: 14px;
+    font-family: "Arial";
+    font-weight: bold;
+    line-height: 34px;
+    color: #444;
+    padding: 0px 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    -webkit-transition: 500ms;
+    -moz-transition: 500ms;
+    -ms-transition: 500ms;
+    transition: 500ms;
+}
+
+.btn-onoff input:checked~span:before {
+    content: "";
+    right: 28px;
+    color: #fff;
+}
+
+.btn-onoff input~span:after {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    top: 4px;
+    left: 4px;
+    background: #fff;
+    border-radius: 50%;
+    -webkit-transition: 400ms;
+    -moz-transition: 400ms;
+    -ms-transition: 400ms;
+    transition: 400ms;
+}
+
+.btn-onoff:hover input~span:after {
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    transform: scale(0.9);
+}
+
+.btn-onoff input:checked~span:after {
+    content: "";
+    left: 51px;
+}
+
+/*End | On-Off Button Design*/
+
+/* bill preview styles start */
+.paperSize48 {
+    background-color: whitesmoke;
+    width: 48mm;
+}
+
+.billpreviewlogo48 {
+    height: 40px;
+    width: 120px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    /* background-image: url(../img/Siddha.lk.png); */
+}
+
+.address48,
+.datetime48,
+.agent48 {
+    font-size: small;
+}
+
+.productTable48 {
+    font-size: small;
+}
+
+.paperSize58 {
+    background-color: whitesmoke;
+    width: 58mm;
+}
+
+.billpreviewlogo58 {
+    height: 70px;
+    width: 120px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    /* background-image: url(../img/Siddha.lk.png); */
+}
+.address58{
+    max-width: 130px;
+}
+.address58,
+.datetime58,
+.agent58 {
+    font-size: small;
+}
+
+.productTable58 {
+    font-size: small;
+}
+
+.billpreviewlogo80 {
+    height: 100px;
+    width: 160px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(../img/Siddha.lk.png);
+}
+
+.paperSize80 {
+    background-color: whitesmoke;
+    width: 80mm;
+}
+.contactNumber{
+    font-size:medium;
+    font-weight: bold;
+}
+/* bill preview styles end */
+
+/* table drag and move styles start */
+tbody {
+    counter-reset: rowNumber;
+}
+
+tbody tr {
+    counter-increment: rowNumber;
+}
+
+tbody tr td:first-child::before {
+        /* content: counter(rowNumber); */
+    }
+
+.drag-handle {
+    cursor: move;
+}
+
+/* table drag and move styles end */

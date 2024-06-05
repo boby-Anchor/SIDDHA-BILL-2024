@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'FontsFree-Net-Gilroy-Light';
+    /* Specify the font family name */
+    src: url('font/FontsFree-Net-Gilroy-Light.ttf') format('woff2'),
+        /* URL to the font file */
+
+}
+
+.au-tittle,
+.mu-tittle,
+.u-data-main {
+    font-family: 'FontsFree-Net-Gilroy-Light';
+    padding: 10px;
+
+}
+
+.data-enter-main,
+.manage-user-main {
+    padding: 50px;
+}
+
+.mu-tittle {
+    background: #2c3137;
+}
+
+.data-enter-main input,
+select {
+    background: #3d454d;
+    color: white;
+    font-weight: bold;
+}
+
+.data-enter-main input:focus,
+select:focus {
+    outline-style: solid;
+    outline-color: #58b158;
+    outline-width: 2px;
+}
+
+.u-data-main {
+    width: 100%;
+    background: #393c43;
+    padding: 20px;
+    margin-bottom:5px;
+}
+
+.u-data-main .d-flex {
+    background: #3d4248;
+    padding: 10px;
+}
