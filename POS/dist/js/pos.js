@@ -481,7 +481,12 @@ function printInvoice() {
 
 function checkout() {
   // console.log("Checkout");
-  // alert("checkout");
+  alert("checkout");
+  var patientName = $("#patientName").val();
+  var contactNo = $("#contactNo").val();
+  var doctorName = $("#doctorName").val();
+  var regNo = $("#regNo").val();
+
   var balance = $("#balance").text().replace(/,/g, "");
   var discountPercentage = $("#discountPercentage").val();
   var deliveryCharges = $("#deliveryCharges").val();
@@ -530,7 +535,6 @@ function checkout() {
       var productTotal = parseFloat($(this).find("#totalprice").text());
 
       // alert(product_unit);
-
       var productData = {
         code: code,
         ucv: ucv,
@@ -542,6 +546,10 @@ function checkout() {
         product_unit: product_unit,
         productTotal: productTotal,
         invoiceNumber: invoiceNumber,
+        patientName: patientName,
+        contactNo: contactNo,
+        doctorName: doctorName,
+        regNo: regNo,
         balance: balance,
         discountPercentage: discountPercentage,
         deliveryCharges: deliveryCharges,
@@ -554,8 +562,6 @@ function checkout() {
       poArray.push(productData);
       inArray.push(productData);
     });
-
-
 
 
     $.ajax({
