@@ -4,7 +4,7 @@ if (!isset($_SESSION['store_id'])) {
   header("location:login.php");
   exit();
 } else {
-  include('config/db.php');
+  include ('config/db.php');
 }
 // include('actions/cart-pos.php');
 //   include('actions/cart.php');
@@ -22,10 +22,10 @@ if (!isset($_SESSION['store_id'])) {
   <!-- Product -->
   <link rel="stylesheet" href="dist/css/product.css">
   <!-- Data Table CSS -->
-  <?php include("part/data-table-css.php"); ?>
+  <?php include ("part/data-table-css.php"); ?>
   <!-- Data Table CSS end -->
   <!-- All CSS -->
-  <?php include("part/all-css.php"); ?>
+  <?php include ("part/all-css.php"); ?>
   <!-- All CSS end -->
 
   <!-- bootstrap icon link -->
@@ -38,11 +38,11 @@ if (!isset($_SESSION['store_id'])) {
   <div class="wrapper">
 
     <!-- Navbar -->
-    <?php include("part/navbar.php"); ?>
+    <?php include ("part/navbar.php"); ?>
     <!-- Navbar end -->
 
     <!-- Sidebar -->
-    <?php include("part/sidebar.php"); ?>
+    <?php include ("part/sidebar.php"); ?>
     <!--  Sidebar end -->
 
     <div class="content-wrapper bg-dark">
@@ -60,21 +60,25 @@ if (!isset($_SESSION['store_id'])) {
               </div>
 
               <div class="col-12 p-2 amountDiv" id="discountField" style="color:#000 !important;">
-                <input type="text" placeholder="Discount %" class="form-control col-4" id="discountPercentage" name="discountPercentage" onkeyup="addDiscount()">
+                <input type="text" placeholder="Discount %" class="form-control col-4" id="discountPercentage"
+                  name="discountPercentage" onkeyup="addDiscount()">
               </div>
 
               <div class="col-12 p-2 amountDiv" id="deliveryChargesField">
-                <input type="text" placeholder="Delivery Charges" class="form-control col-4" id="deliveryCharges" name="deliveryCharges" onkeyup="checkNetTotal()">
+                <input type="text" placeholder="Delivery Charges" class="form-control col-4" id="deliveryCharges"
+                  name="deliveryCharges" onkeyup="checkNetTotal()">
               </div>
 
               <div class="col-12 p-2 amountDiv" id="ServiceChargesField">
                 <label class="col-5">Value added Services:</label>
-                <input type="text" class="form-control col-4" id="valueAddedServices" name="valueAddedServices" onkeyup="checkNetTotal()">
+                <input type="text" class="form-control col-4" id="valueAddedServices" name="valueAddedServices"
+                  onkeyup="checkNetTotal()">
               </div>
 
               <div class="col-12 p-2 amountDiv" id="packingChargesField">
                 <label class="col-5">Packing Charges:</label>
-                <input type="text" class="form-control col-4" id="packingChargesField" name="packingChargesField" onkeyup="checkNetTotal()">
+                <input type="text" class="form-control col-4" id="packingChargesField" name="packingChargesField"
+                  onkeyup="checkNetTotal()">
               </div>
 
               <div class="col-12 text-right">
@@ -83,11 +87,13 @@ if (!isset($_SESSION['store_id'])) {
               </div>
 
               <div class="col-12 p-2 amountDiv" id="cashAmountField">
-                <input type="text" placeholder="Enter Cash Amount" class="form-control col-4" id="cashAmount" name="cashAmount" onkeyup="checkBalance(this)">
+                <input type="text" placeholder="Enter Cash Amount" class="form-control col-4" id="cashAmount"
+                  name="cashAmount" onkeyup="checkBalance(this)">
               </div>
 
               <div class="col-12 p-2 amountDiv d-none" id="cardAmountField">
-                <input type="text" placeholder="Enter Card Amount" class="form-control col-4" id="cardAmount" name="cardAmount" onkeyup="checkBalance(this)">
+                <input type="text" placeholder="Enter Card Amount" class="form-control col-4" id="cardAmount"
+                  name="cardAmount" onkeyup="checkBalance(this)">
               </div>
 
               <div class="col-12 p-3" style="background: #0000004a;">
@@ -102,16 +108,19 @@ if (!isset($_SESSION['store_id'])) {
                   <div class="col-6 d-flex justify-content-end align-items-center">
                     <select name="payment-method-selector" id="payment-method-selector" class="payment-method-selector">
                       <?php
-                      $payment_type_rs =  $conn->query("SELECT * FROM payment_type");
+                      $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
-                      ?>
-                        <option value="<?= $payment_type_row['payment_type_id'] ?>"><?= $payment_type_row['payment_type'] ?></option>
-                      <?php
+                        ?>
+                        <option value="<?= $payment_type_row['payment_type_id'] ?>">
+                          <?= $payment_type_row['payment_type'] ?>
+                        </option>
+                        <?php
                       }
                       ?>
                     </select>
 
-                    <button class="btn check-outBtn col-6" id="checkoutBtn" onclick="checkBalance()">Checkout <i class="bi bi-arrow-right-circle-fill"></i></button>
+                    <button class="btn check-outBtn col-6" id="checkoutBtn" onclick="checkBalance()">Checkout <i
+                        class="bi bi-arrow-right-circle-fill"></i></button>
                   </div>
 
                 </div>
@@ -121,25 +130,44 @@ if (!isset($_SESSION['store_id'])) {
 
           <div class="col-12">
             <div class="row">
-              <div class="col-4 mb-3">
-                <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..." onchange="getBarcode2(this.value);">
+              <div class="d-flex justify-content-evenly">
+                <div class="p-2 p-x-2">
+                  <input type="text" id="patientName" name="patientName" class="form-control"
+                    placeholder="Patient Name">
+                </div>
+                <div class="p-2 p-x-2">
+                  <input type="text" id="contactNo" name="contactNo" class="form-control" placeholder="Contact No.">
+                </div>
+                <div id="doctorNameField" class="p-2 p-x-2">
+                  <input type="text" id="doctorName" name="doctorName" class="form-control" placeholder="Doctor Name">
+                </div>
+                <div id="regNoField" class="p-2 p-x-2">
+                  <input type="text" id="regNo" name="regNo" class="form-control" placeholder="REG No">
+                </div>
               </div>
-              <div class="col-4 mb-3">
+              <br>
+
+              <div class="col-4 mb-2 p-2 p-x-2">
+                <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
+                  onchange="getBarcode2(this.value);">
+              </div>
+              <div class="col-4 mb-2 p-2 p-x-2">
                 <select class="form-control" name="" id="selectPrices" onchange="getBarcode3()"></select>
               </div>
-              <div class="col-4 mb-3">
+              <div class="col-4 mb-2 p-2 p-x-2">
                 <select class="form-control" name="selectBillType" id="selectBillType">
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
                   while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
-                  ?>
-                    <option value="<?= $bill_type_row['bill_type_id'] ?>"><?= $bill_type_row['bill_type_name'] ?></option>
-                  <?php
+                    ?>
+                    <option value="<?= $bill_type_row['bill_type_id'] ?>"><?= $bill_type_row['bill_type_name'] ?>
+                    </option>
+                    <?php
                   }
                   ?>
                 </select>
               </div>
-              <div class="col-12">
+              <div class="col-12" style="height: 50vh; overflow:auto;">
                 <div>
                   <table class="table barcodeResults">
                     <tbody id="barcodeResults"></tbody>
@@ -159,7 +187,8 @@ if (!isset($_SESSION['store_id'])) {
 
               <!-- Company Product list -->
               <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
-                <form action="" method="post" onkeyup="searchProducts(); return false;"> <!-- Added method attribute -->
+                <form action="" method="post" onkeyup="searchProducts(); return false;">
+                  <!-- Added method attribute -->
                   <input type="search" class="form-control" name="search21" id="search21" placeholder="Search...">
                 </form>
                 <div class="row" id="productGrid" class="productGrid">
@@ -170,6 +199,7 @@ if (!isset($_SESSION['store_id'])) {
 
                     foreach ($userLoginData as $userData) {
                       $shop_id = $userData['shop_id'];
+
                       $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name ,
                         medicine_unit.unit AS unit , unit_category_variation.ucv_name 
                       FROM stock2
@@ -181,30 +211,27 @@ if (!isset($_SESSION['store_id'])) {
 
                       if (!empty($cm)) {
                         foreach ($cm as $v) {
-                  ?>
+                          ?>
                           <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
                             <div class="product-grid h-100">
                               <!-- <div class="product-image">
                                 <a href="#" class="image">
                                   <img src="dist/img/product/
-                                  <!-- <?php #echo $v['img']; 
-                                        ?> -->
+                                  <?php #echo $v['img']; 
+                                          ?> -->
                               <!-- " width="50" alt="Image"> -->
                               <!-- </a> -->
                               <!-- </div> -->
                               <div class="product-content">
-                               
-                                 <div class="name" style="color: #fff;"><?php echo $v['name']; ?> <br>    <?= $v['code']; ?></div>
+                                <div class="name" style="color: #fff;"><?php echo $v['name']; ?> <br> <?= $v['code']; ?></div>
                                 <div class="name" style="color: #f67019;"><?php echo $v['bName']; ?></div>
                                 <div class="price" style="color: #3dce12;">I:- RS <?php echo $v['item_s_price']; ?></div>
                                 <div class="price" style="color: #d8f13b;">U:- RS <?php echo $v['unit_s_price']; ?></div>
-                                
                                 <div class="price" style="color: #fff;">(<?= $v['ucv_name'] ?><?php echo $v['unit']; ?>)</div>
-                                
                               </div>
                             </div>
                           </div>
-                  <?php }
+                        <?php }
                       }
                     }
                   } ?>
@@ -221,7 +248,7 @@ if (!isset($_SESSION['store_id'])) {
                         data: {
                           searchName: searchInput
                         },
-                        success: function(response) {
+                        success: function (response) {
                           $('#productGrid').html(response);
                           //console.log(response)
                         },
@@ -231,7 +258,7 @@ if (!isset($_SESSION['store_id'])) {
                   }
 
                   //payment type online select //
-                  document.getElementById('selectBillType').addEventListener('change', function() {
+                  document.getElementById('selectBillType').addEventListener('change', function () {
                     var selectedValue = this.value;
 
                     var discountPercentageElement = document.getElementById('discountField');
@@ -264,23 +291,10 @@ if (!isset($_SESSION['store_id'])) {
                         packingChargesElement.classList.remove('d-none');
                         break;
                     }
-
-                    // if (selectedValue === '2') {
-
-                    //   if (deliveryChargesElement.classList.contains('d-none')) {
-                    //     deliveryChargesElement.classList.remove('d-none');
-                    //   }
-                    //   if (serviceChargesElement.classList.contains('d-none')) {
-                    //     serviceChargesElement.classList.remove('d-none');
-                    //   }
-                    // } else {
-                    //   deliveryChargesElement.classList.add('d-none');
-                    //   serviceChargesElement.classList.add('d-none');
-                    // }
-                  })
+                  });
 
                   // if select cash + card //
-                  document.getElementById('payment-method-selector').addEventListener('change', function() {
+                  document.getElementById('payment-method-selector').addEventListener('change', function () {
 
                     var selectedValue = this.value;
                     var cashAmountField = document.getElementById('cashAmountField');
@@ -321,16 +335,16 @@ if (!isset($_SESSION['store_id'])) {
     <!-- confirm po modal end -->
 
     <!-- Footer -->
-    <?php include("part/footer.php"); ?>
+    <?php include ("part/footer.php"); ?>
     <!-- Footer End -->
     <!-- Alert -->
-    <?php include("part/alert.php"); ?>
+    <?php include ("part/alert.php"); ?>
     <!-- Alert end -->
     <!-- All JS -->
-    <?php include("part/all-js.php"); ?>
+    <?php include ("part/all-js.php"); ?>
     <!-- All JS end -->
     <!-- Data Table JS -->
-    <?php include("part/data-table-js.php"); ?>
+    <?php include ("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
     <!-- select2 input field -->
@@ -354,12 +368,12 @@ if (!isset($_SESSION['store_id'])) {
           $invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'invoices'");
           $invoiceId_row = $invoiceId_rs->fetch_assoc();
           $invoiceId = $invoiceId_row['AUTO_INCREMENT'];
-          $invoiceNumber = "000" . $userId . $shop_id .  $invoiceId;
+          $invoiceNumber = "000" . $userId . $shop_id . $invoiceId;
 
           $bill_data_rs = $conn->query("SELECT * FROM `customize_bills` WHERE `customize_bill_shop-id` = '$shop_id'");
           $bill_data = $bill_data_rs->fetch_assoc();
 
-      ?>
+          ?>
           <div class="d-flex justify-content-center">
             <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
               <div class="row gap-1">
@@ -367,7 +381,8 @@ if (!isset($_SESSION['store_id'])) {
                   <tr>
                     <td colspan="3">
                       <div class="col-12 d-flex justify-content-center p-2">
-                        <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>" style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');"></div>
+                        <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>"
+                          style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');"></div>
                       </div>
                     </td>
                   </tr>
@@ -375,10 +390,12 @@ if (!isset($_SESSION['store_id'])) {
                   <tr>
                     <td>
                       <div class="col-12 d-flex justify-content-center">
-                        <label class="contactNumber" id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
+                        <label class="contactNumber"
+                          id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
                       </div>
-                      <div class="col-12 d-flex justify-content-center ">
-                        <label id="addresspreview" class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?></label>
+                      <div class="col-12 d-flex justify-content-center center">
+                        <label id="addresspreview"
+                          class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?></label>
                       </div>
                     </td>
                   </tr>
@@ -387,9 +404,10 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="col-12">
                   <div class="row">
                     <div class="col-12" style="text-align: center;">
-                      <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
+                      <span style="font-size: 10px;"><?= $currentDate ?>     <?= $currentTime ?></span> <br>
 
-                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoiceNumber" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span
+                          class="invoiceNumber" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
                     </div>
                   </div>
                 </div>
@@ -415,7 +433,7 @@ if (!isset($_SESSION['store_id'])) {
               </table>
             </div>
           </div>
-      <?php
+          <?php
         }
       }
       ?>
@@ -424,12 +442,14 @@ if (!isset($_SESSION['store_id'])) {
     <!-- ========================================== -->
 
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         $("#barcodeInput").focus();
       });
     </script>
+
+
     <script>
-      $(document).on('keyup', function(e) {
+      $(document).on('keyup', function (e) {
         if (e.which == 9) {
           var selector = document.getElementById('payment-method-selector');
           var enterAmountField = document.getElementById('cashAmount');
@@ -445,8 +465,39 @@ if (!isset($_SESSION['store_id'])) {
         }
       });
 
-      // cash or card selector change
-      document.addEventListener('DOMContentLoaded', function() {
+
+      // <?php
+
+      //   if (isset($_SESSION['store_id'])) {
+      
+      //     $userLoginData = $_SESSION['store_id'];
+      
+      //     foreach ($userLoginData as $userData) {
+      //       $shop_id = $userData['shop_id'];
+      
+      //       $conn->query("INSERT INTO test (id, name1, name2) VALUES ('$shop_id','$shop_id','test1')");
+      //       echo '<script> setFields();</script>';
+      
+      //       if ($shop_id == '2') {
+      //         echo '<script> setFields();</script>';
+      //       }
+      
+
+      //     }
+      //   }
+      
+      //   ?>
+
+
+      
+      document.addEventListener('DOMContentLoaded', function () {
+
+        var doctorNameField = document.getElementById('doctorNameField');
+        var regNoField = document.getElementById('regNoField');
+
+
+        
+        // cash or card selector change
         var selector = document.getElementById('payment-method-selector');
         var billTypeSelector = document.getElementById('selectBillType');
 
@@ -456,8 +507,7 @@ if (!isset($_SESSION['store_id'])) {
         billTypeSelector.dispatchEvent(event);
         event.preventDefault();
 
-
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
           if (event.key === "ArrowDown") {
             moveSelectorDown(selector);
           } else if (event.key === "ArrowUp") {

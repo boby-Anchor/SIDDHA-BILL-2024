@@ -66,7 +66,10 @@ if (is_array($inArray) && !empty($inArray)) {
                             <span class="product_cost"><?= $product_cost ?></span>
                         </div>
                         <div class="col-4 text-center">
-                            <span class="product_qty"><?= $product_qty ?><?= $product_unit ?></span>
+                            <span class="product_qty">
+                                <?= $product_qty ?>
+                            <!-- <?= $product_unit ?> -->
+                        </span>
                         </div>
                         <div class="col-4 text-center">
                             <span class="productTotal"><?= $productTotal ?></span>
