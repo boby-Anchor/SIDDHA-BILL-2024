@@ -546,10 +546,12 @@ function checkout() {
         product_unit: product_unit,
         productTotal: productTotal,
         invoiceNumber: invoiceNumber,
+
         patientName: patientName,
         contactNo: contactNo,
         doctorName: doctorName,
         regNo: regNo,
+        
         balance: balance,
         discountPercentage: discountPercentage,
         deliveryCharges: deliveryCharges,
