@@ -193,7 +193,6 @@ if (!isset($_SESSION['store_id'])) {
                 <script>
                   function searchProducts() {
                     var searchInput = document.getElementById('search21').value.trim();
-                    console.log(searchInput);
                     if (searchInput !== '') {
                       $.ajax({
                         type: 'POST',

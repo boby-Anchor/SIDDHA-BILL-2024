@@ -550,8 +550,6 @@ if (!isset($_SESSION['store_id'])) {
                     var liters = parseFloat($(this).val());
                     var milliliters = ucv_name * liters * 1000;
                    
-                    console.log(ucv_name);
-                   
                     $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
 
                 }
@@ -635,8 +633,6 @@ if (!isset($_SESSION['store_id'])) {
                     var cost = parseFloat($(this).val());
                     var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
                     var cost_per_unit = cost / milliliters;
-                   
-                    console.log(ucv_name);
                    
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
@@ -778,7 +774,6 @@ if (!isset($_SESSION['store_id'])) {
                     products: JSON.stringify(poArray),
                 },
                 success: function(response) {
-                    console.log(response);
                     Swal.mixin({
                         toast: true,
                         position: "top-end",

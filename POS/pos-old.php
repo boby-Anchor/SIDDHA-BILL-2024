@@ -668,7 +668,6 @@ if (!isset($_SESSION['store_id'])) {
                 }
             });
             reeq.done(function(data) {
-                console.log(data);
                 var obj = JSON.parse(data);
                 $('#current_due').text(obj['currentDue']);
                 $('.current_due').val(obj['currentDue']);

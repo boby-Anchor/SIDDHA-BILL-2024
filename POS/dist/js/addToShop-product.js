@@ -33,7 +33,6 @@ function shopSelected(productId) {
   req.onreadystatechange = function () {
     if (req.readyState == 4) {
       var response = req.responseText;
-      console.log(response);
       location.reload();
     }
   };
@@ -63,7 +62,6 @@ function oneByoneSelect(Id, productId, shopId) {
   req.onreadystatechange = function () {
     if (req.readyState == 4 && req.status == 200) {
       $response = req.responseText;
-      console.log($response);
     }
   };
   req.open("POST", "addToShopProductProcess.php", true);

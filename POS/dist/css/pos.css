@@ -33,7 +33,7 @@
 
 .amountDiv {
     background: #f96b0f !important;
-    align-content: end;
+    align-content: end; 
 }
 
 .amountDiv input {
@@ -50,6 +50,7 @@
 }
 
 .payment-method-selector {
+    overflow: scroll;
     margin-right: 5px;
     width: 100%;
     height: 50%;

@@ -470,7 +470,7 @@ if (!isset($_SESSION['store_id'])) {
                     });
                     reeq.done(function (val) {
                         var obj = JSON.parse(val);
-                        console.log(val);
+                        // console.log(val);
                         if(obj['amount'] < tt){
                             $('.coupon-msg').html('<span class="text-success"><i class="fas fa-check"></i> Coupon successfully redeemed.</span>');
                             $('.after-coupon').text(obj['discount']);

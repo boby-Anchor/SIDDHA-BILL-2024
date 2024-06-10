@@ -61,7 +61,6 @@ function handleDrop(e) {
     rows.forEach(function (row, index) {
       const position = index + 1;
       const title = row.querySelector("h2").innerText;
-      console.log(`Position ${position}: ${title}`);
 
       var form = new FormData();
       form.append("position", position);
@@ -71,7 +70,6 @@ function handleDrop(e) {
       req.onreadystatechange = function () {
         if (req.readyState == 4 && req.status == 200) {
           var response = req.responseText;
-          console.log(response);
           updateRowOrder();
         }
       };
@@ -144,7 +142,6 @@ $(document).ready(function () {
           processData: false,
           contentType: false,
           success: function (response) {
-            console.log(response);
             // Handle response from server if needed
           },
           error: function (xhr, status, error) {
@@ -165,7 +162,6 @@ document
   .addEventListener("input", function () {
     var inputValue = this.value;
     var selectedShopId = $("#selectedShopNumber").val();
-    console.log(selectedShopId);
     inputValue = inputValue.replace(/\D/g, "");
 
     inputValue = inputValue.slice(0, 10);
@@ -178,7 +174,6 @@ document
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-          console.log(xhr.responseText);
         }
       };
       xhr.send("contactNo=" + inputValue);
@@ -201,7 +196,6 @@ document
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-          console.log(xhr.responseText);
         }
       };
       xhr.send("address=" + inputValue);
@@ -222,7 +216,6 @@ document.getElementById("noteInput").addEventListener("input", function () {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        console.log(xhr.responseText);
       }
     };
     xhr.send("noteInput=" + inputValue);
@@ -269,7 +262,6 @@ $(document).ready(function () {
       processData: false,
       contentType: false,
       success: function (response) {
-        console.log(response);
         $("#sortable").html(response);
       },
       error: function (xhr, status, error) {
@@ -285,7 +277,6 @@ $(document).ready(function () {
       processData: false,
       contentType: false,
       success: function (response) {
-        console.log(response);
         $("#billpreviewTable tbody").html(response);
       },
       error: function (xhr, status, error) {

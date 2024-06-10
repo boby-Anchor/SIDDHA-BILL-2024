@@ -528,7 +528,6 @@ if (!isset($_SESSION['store_id'])) {
                 products: JSON.stringify(poArray),
               },
               success: function(response) {
-                console.log(response);
                 Swal.mixin({
                   toast: true,
                   position: "top-end",

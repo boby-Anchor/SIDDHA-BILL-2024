@@ -79,8 +79,6 @@
         });
       }
     });
-
-    console.log(poArray);
   });
 }
 
@@ -100,7 +98,6 @@ function updateOrderStatus(orderNumber, status) {
       if (txt == "success") {
         location.reload(true);
       }
-      console.log(txt);
     }
   };
   req.open("POST", "updateOrderStatusProcess.php", true);

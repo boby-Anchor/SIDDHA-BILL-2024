@@ -240,7 +240,6 @@ if (!isset($_SESSION['store_id'])) {
                 <script>
                   function searchProducts() {
                     var searchInput = document.getElementById('search21').value.trim();
-                    console.log(searchInput);
                     if (searchInput !== '') {
                       $.ajax({
                         type: 'POST',
@@ -305,17 +304,14 @@ if (!isset($_SESSION['store_id'])) {
 
                     switch (selectedValue) {
                       case "1":
-                        console.log(selectedValue);
                         cashAmountField.classList.remove('d-none')
                         break;
 
                       case "2":
-                        console.log(selectedValue);
                         cardAmountField.classList.remove('d-none');
                         break;
 
                       case "3":
-                        console.log(selectedValue);
                         cardAmountField.classList.remove('d-none');
                         cashAmountField.classList.remove('d-none');
                         break;

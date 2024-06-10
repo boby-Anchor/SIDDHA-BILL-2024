@@ -7,7 +7,6 @@ function getBarcode3() {
       var txt = req.responseText;
       var barcodeResults = document.getElementById("barcodeResults");
       var existingRows = barcodeResults.querySelectorAll("tr[data-barcode]");
-      console.log(existingRows);
 
       for (var i = 0; i < existingRows.length; i++) {
         var existingBarcode = existingRows[i].getAttribute("data-barcode");
@@ -93,10 +92,6 @@ function getBarcode(barcode, stock_s_price) {
   // alert($("#barcodeResults tr").length);
   $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
   $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
-}
-
-function testFunction() {
-  console.log("testing123");
 }
 
 // update total by qty
@@ -481,7 +476,7 @@ function printInvoice() {
 
 function checkout() {
   // console.log("Checkout");
-  alert("checkout");
+  // alert("checkout");
   var patientName = $("#patientName").val();
   var contactNo = $("#contactNo").val();
   var doctorName = $("#doctorName").val();
@@ -573,7 +568,6 @@ function checkout() {
         products: JSON.stringify(poArray),
       },
       success: function (response) {
-        console.log(response);
         Swal.mixin({
           toast: true,
           position: "top-end",

@@ -72,7 +72,10 @@ if (!isset($_SESSION['store_id'])) {
                                                     <div class="card card-body bg-success">
                                                         <h2 class="text-white text-uppercase">Sell Amount</h2>
                                                         <?php $currentDate = date('Y-m-d'); ?>
-                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
+                                                        <?php $result = mysqli_fetch_assoc($conn->query(
+                                                            "SELECT SUM(total_amount) AS total_amount FROM invoices
+                                                            WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"
+                                                        )); ?>
                                                         <p class="totalAmount"><?php echo $result['total_amount']; ?> LKR</p>
                                                     </div>
                                                 </div>
@@ -169,8 +172,8 @@ if (!isset($_SESSION['store_id'])) {
                                                         } ?>
                                                         <tr class="bg-dark">
                                                             <td></td>
-                                                            <td class="fw-bold" style="font-size:larger;" >Total Sales</td>
-                                                            <td class="fw-bold" style="font-size:larger;" ><?php echo $result['total_amount']; ?> LKR</td>
+                                                            <td class="fw-bold" style="font-size:larger;">Total Sales</td>
+                                                            <td class="fw-bold" style="font-size:larger;"><?php echo $result['total_amount']; ?> LKR</td>
                                                         </tr>
                                                     </tbody>
 
