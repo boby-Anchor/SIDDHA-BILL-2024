@@ -115,6 +115,8 @@ function addNewUnit() {
           });
         }
       });
+
+    console.log(poArray);
   });
 }
 

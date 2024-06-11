@@ -679,13 +679,17 @@ if (!isset($_SESSION['store_id'])) {
                 var add_discount = parseFloat($(this).val());
 
                 var discount = add_discount + 100;
+                console.log(discount);
 
                 var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
+                console.log(qty);
 
                 var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
                 var item_cost = cost_input / qty;
+                console.log(item_cost);
 
                 var item_sell_price = item_cost / 100 * discount;
+                console.log(item_sell_price);
 
                 $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
             });
@@ -750,6 +754,7 @@ if (!isset($_SESSION['store_id'])) {
                     products: JSON.stringify(poArray),
                 },
                 success: function(response) {
+                    console.log(response);
                     Swal.mixin({
                         toast: true,
                         position: "top-end",

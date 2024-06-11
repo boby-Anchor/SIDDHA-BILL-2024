@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("Asia/Colombo");
 session_start();
 if (!isset($_SESSION['store_id'])) {
     header("location:login.php");
@@ -28,19 +29,6 @@ if (!isset($_SESSION['store_id'])) {
             font-size: 50px;
             font-weight: bold;
         }
-        .cashier-cash , .cashier-card , .cashier-out{
-           font-weight: bold;
-  padding: 10px;
-        }
-        .cashier-cash{
-            background: #4b8c9f;
-        }
-        .cashier-card{
-            background: #0070ff;
-        }
-        .cashier-out{
-            background: #e35151;
-        }
     </style>
 
 </head>
@@ -60,7 +48,7 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Cashier's Today's Report</h1>
+                            <h1>ALL Sales Report</h1>
                         </div>
                     </div>
                 </div>
@@ -80,35 +68,82 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <div class="row">
-                                                <?php
-                                               $cashiers_rs= $conn->query("SELECT SUM(total_amount) AS total_amount , SUM(paidAmount) AS cashPayments ,
-                                               SUM(cardPaidAmount) AS cardPayments ,SUM(balance) AS cashOut, users.name AS name , shop.shopName AS shopName 
-                                                                FROM `invoices` 
-                                                                INNER JOIN users ON users.id = invoices.user_id
-                                                                INNER JOIN shop ON shop.shopId = invoices.shop_id
-                                                                GROUP BY user_id;");
-                                                                while($cashiers_data=$cashiers_rs->fetch_assoc()){
-                                                                    ?>
-                                                                      <div class="col-md-3">
-                                                    <div class="card card-body text-white" style="background-color:#15b580 !important" >
-                                                        <h2 class="text-white text-uppercase"><?= $cashiers_data['name'] ?></h2>
-                                                       <lable><?= $cashiers_data['shopName'] ?></lable>
-                                                        <p class="totalAmount"><?= $cashiers_data['total_amount'] ?> LKR</p>
-                                                        <p class="cashier-cash" >Card Payments : <?= $cashiers_data['cardPayments'] ?> LKR</p>
-                                                        <p class="cashier-card" >Cash Payments : <?= $cashiers_data['cashPayments'] ?> LKR</p>
-                                                        <p class="cashier-out" >Cash Out : -<?= $cashiers_data['cashOut'] ?> LKR</p>
-                                                    </div>
-                                                </div>
-                                                                    <?php
-                                                                }
-                                                ?>
-                                              
-                                            </div>
+                                           
                                         </div>
                                     </div>
                                 </div>
-                              
+                               <div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Top Sell Product</h4>
+                <form method="POST" id="filterForm">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date" required>
+                    <label for="end_date">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" required>
+                    <br>
+                    <button type="submit">Filter</button>
+                </form>
+            </div>
+            <div class="card-body">
+                <table id="mytable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr class="bg-info">
+                            <th>Invoice Number</th>
+                            <th>Patient Name</th>
+                            <th>Tell</th>
+                            <th>Doctor Name</th>
+                            <th>REG Number</th>
+                            <th>Total Amount</th>
+                            <th>Payment Type</th>
+                            <th>Bill Type</th>
+                            <th>Chachier</th>
+                            <th>SHOP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cash-sale">
+                        <?php
+                        $currentDate = date("Y-m-d");
+                        $sql = $conn->query("SELECT invoices.*, payment_type.payment_type, bill_type.bill_type_name ,users.name ,shop.shopName
+                                             FROM invoices 
+                                             INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method 
+                                             INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id 
+                                             INNER JOIN users ON users.id = invoices.user_id 
+                         INNER JOIN shop ON shop.shopId = invoices.shop_id 
+                                             WHERE DATE(`created`) = '$currentDate' ");
+                        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount 
+                                                                   FROM invoices 
+                                                                   WHERE DATE(`created`) = '$currentDate' 
+                                                                   AND user_id = '$user_id'"));
+                        while ($row = mysqli_fetch_assoc($sql)) {
+                        ?>
+                            <tr>
+                                <td><?php echo $row['invoice_id']; ?></td>
+                                <td><?php echo $row['p_name']; ?></td>
+                                <td><?php echo $row['contact_no']; ?></td>
+                                <td><?php echo $row['d_name']; ?></td>
+                                <td><?php echo $row['reg']; ?></td>
+                                <td><?php echo $row['total_amount']; ?></td>
+                                <td><?php echo $row['payment_type']; ?></td>
+                                <td><?php echo $row['bill_type_name']; ?></td>
+                                 <td><?php echo $row['name']; ?></td>
+                                  <td><?php echo $row['shopName']; ?></td>
+                            </tr>
+                        <?php
+                        } ?>
+                        <tr class="bg-dark">
+                            <td></td>
+                            <td class="fw-bold" style="font-size:larger;">Total Sales</td>
+                            <td class="fw-bold" style="font-size:larger;"><?php echo $result['total_amount']; ?> LKR</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
                             </div>
                     </section>
             <?php
@@ -135,7 +170,58 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
+ <!-- send data SearchSalesFilterDate -->
+<script>
+   document.getElementById('filterForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    SearchSalesFilterDate();
+});
 
+function SearchSalesFilterDate() {
+    var STDATE = $("#start_date").val();
+    var ENDDATE = $("#end_date").val();
+
+    var soteDate = {
+        STDATE: STDATE,
+        ENDDATE: ENDDATE
+    };
+
+    $.ajax({
+        url: "actions/cashier_all_sales_.php",
+        method: "POST",
+        data: {
+            sd: JSON.stringify(soteDate),
+        },
+        success: function (response) {
+            Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+            }).fire({
+                icon: "success",
+                title: "Success: Filtered!",
+            });
+
+            document.getElementById("cash-sale").innerHTML = response;
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+            }).fire({
+                icon: "error",
+                title: "Error: Something went wrong!" + xhr.responseText,
+            });
+        },
+    });
+}
+
+
+</script>
     <!-- Page specific script -->
     <script>
         $(function() {

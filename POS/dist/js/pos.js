@@ -7,6 +7,7 @@ function getBarcode3() {
       var txt = req.responseText;
       var barcodeResults = document.getElementById("barcodeResults");
       var existingRows = barcodeResults.querySelectorAll("tr[data-barcode]");
+      console.log(existingRows);
 
       for (var i = 0; i < existingRows.length; i++) {
         var existingBarcode = existingRows[i].getAttribute("data-barcode");
@@ -92,6 +93,10 @@ function getBarcode(barcode, stock_s_price) {
   // alert($("#barcodeResults tr").length);
   $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
   $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
+}
+
+function testFunction() {
+  console.log("testing123");
 }
 
 // update total by qty
@@ -475,138 +480,138 @@ function printInvoice() {
 }
 
 function checkout() {
-  // console.log("Checkout");
-  // alert("checkout");
   var patientName = $("#patientName").val();
   var contactNo = $("#contactNo").val();
-  var doctorName = $("#doctorName").val();
-  var regNo = $("#regNo").val();
 
-  var balance = $("#balance").text().replace(/,/g, "");
-  var discountPercentage = $("#discountPercentage").val();
-  var deliveryCharges = $("#deliveryCharges").val();
-  var valueAddedServices = $("#valueAddedServices").val();
-  var cashAmount = $("#cashAmount").val();
-  var cardAmount = $("#cardAmount").val();
-  var paymentmethodselector = $("#payment-method-selector").val();
+  if (patientName !== "" && contactNo !== "") {
+    var doctorName = $("#doctorName").val();
+    var regNo = $("#regNo").val();
 
-  if (balance === "" || balance < "0") {
-    Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-    }).fire({
-      icon: "error",
-      title: "Error: Paid Amount is Not Enough",
-    });
-  } else {
-    Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-    }).fire({
-      icon: "success",
-      title: "Success: Checkout Success !",
-    });
+    var balance = $("#balance").text().replace(/,/g, "");
+    var discountPercentage = $("#discountPercentage").val();
+    var deliveryCharges = $("#deliveryCharges").val();
+    var valueAddedServices = $("#valueAddedServices").val();
+    var cashAmount = $("#cashAmount").val();
+    var cardAmount = $("#cardAmount").val();
+    var paymentmethodselector = $("#payment-method-selector").val();
 
-    var invoiceNumber = $(".invoiceNumber").text();
+    if (balance === "" || balance < "0") {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      }).fire({
+        icon: "error",
+        title: "Error: Paid Amount is Not Enough",
+      });
+    } else {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      }).fire({
+        icon: "success",
+        title: "Success: Checkout Success !",
+      });
 
-    var poArray = [];
-    var inArray = [];
+      var invoiceNumber = $(".invoiceNumber").text();
 
-    $("#barcodeResults tr").each(function () {
+      var poArray = [];
+      var inArray = [];
 
-      var code = $(this).find("#code").text();
-      var ucv = $(this).find("#ucv").text();
-      var item_price = $(this).find("#item_price").text();
-      var unit_price = $(this).find("#unit_price").text();
-      var product_name = $(this).find("#product_name").text();
-      var product_cost = parseFloat($(this).find("#product_price").text());
-      var product_qty = parseInt($(this).find("#qty").val());
-      var selectBillType = $("#selectBillType").val();
-      var product_unit = $(this).find("#unit").text();
-      var productTotal = parseFloat($(this).find("#totalprice").text());
+      $("#barcodeResults tr").each(function () {
+        var code = $(this).find("#code").text();
+        var ucv = $(this).find("#ucv").text();
+        var item_price = $(this).find("#item_price").text();
+        var unit_price = $(this).find("#unit_price").text();
+        var product_name = $(this).find("#product_name").text();
+        var product_cost = parseFloat($(this).find("#product_price").text());
+        var product_qty = parseInt($(this).find("#qty").val());
+        var selectBillType = $("#selectBillType").val();
+        var product_unit = $(this).find("#unit").text();
+        var productTotal = parseFloat($(this).find("#totalprice").text());
 
-      // alert(product_unit);
-      var productData = {
-        code: code,
-        ucv: ucv,
-        item_price: item_price,
-        unit_price: unit_price,
-        product_name: product_name,
-        product_cost: product_cost,
-        product_qty: product_qty,
-        product_unit: product_unit,
-        productTotal: productTotal,
-        invoiceNumber: invoiceNumber,
+        // alert(product_unit);
+        var productData = {
+          code: code,
+          ucv: ucv,
+          item_price: item_price,
+          unit_price: unit_price,
+          product_name: product_name,
+          product_cost: product_cost,
+          product_qty: product_qty,
+          product_unit: product_unit,
+          productTotal: productTotal,
+          invoiceNumber: invoiceNumber,
 
-        patientName: patientName,
-        contactNo: contactNo,
-        doctorName: doctorName,
-        regNo: regNo,
-        
-        balance: balance,
-        discountPercentage: discountPercentage,
-        deliveryCharges: deliveryCharges,
-        valueAddedServices: valueAddedServices,
-        cashAmount: cashAmount,
-        cardAmount: cardAmount,
-        paymentmethodselector: paymentmethodselector,
-        selectBillType: selectBillType,
-      };
-      poArray.push(productData);
-      inArray.push(productData);
-    });
+          patientName: patientName,
+          contactNo: contactNo,
+          doctorName: doctorName,
+          regNo: regNo,
 
+          balance: balance,
+          discountPercentage: discountPercentage,
+          deliveryCharges: deliveryCharges,
+          valueAddedServices: valueAddedServices,
+          cashAmount: cashAmount,
+          cardAmount: cardAmount,
+          paymentmethodselector: paymentmethodselector,
+          selectBillType: selectBillType,
+        };
+        poArray.push(productData);
+        inArray.push(productData);
+      });
 
-    $.ajax({
-      url: "invoiceConfirmationInsert.php",
-      method: "POST",
-      data: {
-        products: JSON.stringify(poArray),
-      },
-      success: function (response) {
-        Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-        }).fire({
-          icon: "success",
-          title: "Success: Order Placed Successfully!",
-        });
-        $(".confirmPObtn").prop("disabled", false);
+      $.ajax({
+        url: "invoiceConfirmationInsert.php",
+        method: "POST",
+        data: {
+          products: JSON.stringify(poArray),
+        },
+        success: function (response) {
+          console.log(response);
+          Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+          }).fire({
+            icon: "success",
+            title: "Success: Order Placed Successfully!",
+          });
+          $(".confirmPObtn").prop("disabled", false);
 
-        $.ajax({
-          url: "invoicePrintAddData.php",
-          method: "POST",
-          data: {
-            products: inArray,
-          },
-          success: function (response) {
-            document.getElementById("printInvoiceData").innerHTML = response;
-            // console.log(response);
-            printInvoice();
-          },
-          error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-          },
-        });
-      },
-      error: function (xhr, status, error) {
-        console.error(xhr.responseText);
-        Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-        }).fire({
-          icon: "error",
-          title: "Error: Something went wrong!",
-        });
-      },
-    });
+          $.ajax({
+            url: "invoicePrintAddData.php",
+            method: "POST",
+            data: {
+              products: inArray,
+            },
+            success: function (response) {
+              document.getElementById("printInvoiceData").innerHTML = response;
+              // console.log(response);
+              printInvoice();
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr.responseText);
+            },
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr.responseText);
+          Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+          }).fire({
+            icon: "error",
+            title: "Error: Something went wrong!",
+          });
+        },
+      });
+    }
   }
 }

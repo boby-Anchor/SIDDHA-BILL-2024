@@ -274,6 +274,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 processData: false,
                                 contentType: false,
                                 success: function(response) {
+                                    console.log(response);
                                     // Handle response from server if needed
                                 },
                                 error: function(xhr, status, error) {

@@ -1,11 +1,12 @@
 .subTotal {
     font-size: x-large;
-    align-self: flex-end;
+    /*align-self: flex-end;*/
 }
 
 .netTotal {
-    font-size: xx-large;
-    align-self: flex-end;
+    font-size: xx-large; 
+     /*xx-large;*/
+    /*align-self: flex-end;*/
 }
 
 .balance {
@@ -32,14 +33,14 @@
 }
 
 .amountDiv {
-    background: #f96b0f !important;
-    align-content: end; 
+    /*background: #f96b0f !important;*/
+    align-content: end;
 }
 
 .amountDiv input {
-    background: #28bd8d9e;
+    /*background: #28bd8d9e;*/
     border: none;
-    color: white;
+    color: red !important;
     font-size: x-large;
     font-weight: 600;
 }
@@ -50,7 +51,6 @@
 }
 
 .payment-method-selector {
-    overflow: scroll;
     margin-right: 5px;
     width: 100%;
     height: 50%;

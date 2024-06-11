@@ -1,8 +1,8 @@
 
 
 function stockFilterBySearch(searchTxt) {
-  // alert("in search");
-  // console.log("in search");
+  alert("in search");
+  console.log("in search");
   var bnInput = document.getElementById("bnInput").value;
   var pcInput = document.getElementById("pcInput").value;
   var pnInput = document.getElementById("pnInput").value;

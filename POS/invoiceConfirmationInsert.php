@@ -51,11 +51,13 @@ if (is_array($poArray) && !empty($poArray)) {
         $currentDateTime = date("Y-m-d H:i:s");
 
 
-        $conn->query("INSERT INTO test
-        VALUES('$patientName','$contactNo','$doctorName', '$regNo')");
+// Prepare the statement
+$query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
+// Execute the statement
+ $cm = runQuery($query);
 
-
-        //   !empty($code) && 
+if (empty($cm)) {
+     //   !empty($code) && 
         if (
             !empty($product_unit) && !empty($ucv) && !empty($item_price) && !empty($product_name) &&
             is_numeric($product_cost) && is_numeric($product_qty) && is_numeric($productTotal) && !empty($invoiceNumber)
@@ -74,12 +76,13 @@ if (is_array($poArray) && !empty($poArray)) {
                     $shop_id = $userData['shop_id'];
                     $productsAllTotal += $productTotal;
 
+                    
+                    
+                    
                     $conn->query("INSERT INTO invoiceitems (invoiceNumber,invoiceDate,invoiceItem,invoiceItem_qty,invoiceItem_unit,invoiceItem_price,invoiceItem_total)
                     VALUES ('$invoiceNumber','$currentDateTime','$product_name','$product_qty','$product_unit','$product_cost','$productTotal')");
 
-                    $conn->query("INSERT INTO test_table (col1, col2, col3, col4, col5, col6)
-                    VALUES('$ucv', '$product_unit', '$item_price', '$product_qty', '$product_minimum_qty', '002')");
-
+        
 
                     if ($product_unit == 'kg' || $product_unit == 'l') {
 
@@ -178,14 +181,32 @@ if (is_array($poArray) && !empty($poArray)) {
             echo "Invalid product entry";
             exit;
         }
-    }
+}else {
+    echo "DD";
+    exit;
+}
+
+       
+    }  // close for-each $poArrary 
 
 
-    $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, patient_name, contact_no, bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
-    VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$selectBillType', '$paymentmethodselector', '$productsAllTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount','$cardAmount', '$balance')");
+// Prepare the statement
+$query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
+// Execute the statement
+ $cm = runQuery($query);
+
+if (empty($cm)) {
+
+    $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
+    VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentmethodselector', '$productsAllTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount','$cardAmount', '$balance')");
 
     // $conn->query("INSERT INTO test_table (col1, col2, col3, col4, col5, col6)
     // VALUES('$ucv', '$product_unit', '$item_price', '$product_qty', '$product_minimum_qty', '003')");
+}else {
+    echo "DD2";
+    exit;
+}
+
 
 } else {
 
