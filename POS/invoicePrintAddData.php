@@ -17,6 +17,26 @@ if (is_array($inArray) && !empty($inArray)) {
     foreach ($inArray as $product) {
         if (isset($_SESSION['store_id'])) {
             $userLoginData = $_SESSION['store_id'];
+        ?>    
+            <div class="col-12">
+                    
+                    <div class="row">
+                        
+                        <div class="col-4">
+                            <span class="product_cost">U.Price</span>
+                        </div>
+                        <div class="col-4 text-center">
+                            <span class="product_qty">
+                                QTY
+                            </span>
+                        </div>
+                        <div class="col-4 text-center">
+                            <span class="productTotal">Total</span>
+                        </div>
+                    </div>
+                </div>
+                
+   <?php         
             foreach ($userLoginData as $userData) {
                 $userId = $userData['id'];
                 $shop_id = $userData['shop_id'];
@@ -58,6 +78,7 @@ if (is_array($inArray) && !empty($inArray)) {
 
 ?>
                 <div class="col-12">
+                    
                     <div class="row">
                         <div class="col-12">
                             <span class="product_name"><?= $product_name ?></span>

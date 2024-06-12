@@ -522,6 +522,8 @@ if (!isset($_SESSION['store_id'])) {
 
         var doctorNameField = document.getElementById('doctorNameField');
         var regNoField = document.getElementById('regNoField');
+
+
         
         // cash or card selector change
         var selector = document.getElementById('payment-method-selector');

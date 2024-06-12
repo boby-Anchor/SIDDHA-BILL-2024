@@ -2,7 +2,7 @@
 date_default_timezone_set("Asia/Colombo");
 $host = "localhost";
 $name = "ceylriea_ts";
-$pass = "";
+$pass = "ceylriea_ts";
 $db = "ceylriea_ts";
 //ceylriea_ts   ceylriea_nps2
 $conn = new mysqli($host, $name, $pass, $db);

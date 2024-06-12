@@ -480,138 +480,165 @@ function printInvoice() {
 }
 
 function checkout() {
+ 
   var patientName = $("#patientName").val();
   var contactNo = $("#contactNo").val();
-
-  if (patientName !== "" && contactNo !== "") {
+  
+//   Swal.mixin({
+//       toast: true,
+//       position: "top-end",
+//       showConfirmButton: false,
+//       timer: 10000,
+//     }).fire({
+//       icon: "error",
+//       title: patientName ." ". contactNo  ,
+//     });
+ 
+  if ((patientName) !== "") {
     var doctorName = $("#doctorName").val();
     var regNo = $("#regNo").val();
+ 
+  var balance = $("#balance").text().replace(/,/g, "");
+  var discountPercentage = $("#discountPercentage").val();
+  var deliveryCharges = $("#deliveryCharges").val();
+  var valueAddedServices = $("#valueAddedServices").val();
+  var cashAmount = $("#cashAmount").val();
+  var cardAmount = $("#cardAmount").val();
+  var paymentmethodselector = $("#payment-method-selector").val();
 
-    var balance = $("#balance").text().replace(/,/g, "");
-    var discountPercentage = $("#discountPercentage").val();
-    var deliveryCharges = $("#deliveryCharges").val();
-    var valueAddedServices = $("#valueAddedServices").val();
-    var cashAmount = $("#cashAmount").val();
-    var cardAmount = $("#cardAmount").val();
-    var paymentmethodselector = $("#payment-method-selector").val();
+  if (balance === "" || balance < "0") {
+    Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+    }).fire({
+      icon: "error",
+      title: "Error: Paid Amount is Not Enough",
+    });
+  } else {
+    Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+    }).fire({
+      icon: "success",
+      title: "Success: Checkout Success !",
+    });
 
-    if (balance === "" || balance < "0") {
-      Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-      }).fire({
-        icon: "error",
-        title: "Error: Paid Amount is Not Enough",
-      });
-    } else {
-      Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-      }).fire({
-        icon: "success",
-        title: "Success: Checkout Success !",
-      });
+    var invoiceNumber = $(".invoiceNumber").text();
 
-      var invoiceNumber = $(".invoiceNumber").text();
+    var poArray = [];
+    var inArray = [];
 
-      var poArray = [];
-      var inArray = [];
+    $("#barcodeResults tr").each(function () {
 
-      $("#barcodeResults tr").each(function () {
-        var code = $(this).find("#code").text();
-        var ucv = $(this).find("#ucv").text();
-        var item_price = $(this).find("#item_price").text();
-        var unit_price = $(this).find("#unit_price").text();
-        var product_name = $(this).find("#product_name").text();
-        var product_cost = parseFloat($(this).find("#product_price").text());
-        var product_qty = parseInt($(this).find("#qty").val());
-        var selectBillType = $("#selectBillType").val();
-        var product_unit = $(this).find("#unit").text();
-        var productTotal = parseFloat($(this).find("#totalprice").text());
+      var code = $(this).find("#code").text();
+      var ucv = $(this).find("#ucv").text();
+      var item_price = $(this).find("#item_price").text();
+      var unit_price = $(this).find("#unit_price").text();
+      var product_name = $(this).find("#product_name").text();
+      var product_cost = parseFloat($(this).find("#product_price").text());
+      var product_qty = parseInt($(this).find("#qty").val());
+      var selectBillType = $("#selectBillType").val();
+      var product_unit = $(this).find("#unit").text();
+      var productTotal = parseFloat($(this).find("#totalprice").text());
 
-        // alert(product_unit);
-        var productData = {
-          code: code,
-          ucv: ucv,
-          item_price: item_price,
-          unit_price: unit_price,
-          product_name: product_name,
-          product_cost: product_cost,
-          product_qty: product_qty,
-          product_unit: product_unit,
-          productTotal: productTotal,
-          invoiceNumber: invoiceNumber,
+      // alert(product_unit);
+      var productData = {
+        code: code,
+        ucv: ucv,
+        item_price: item_price,
+        unit_price: unit_price,
+        product_name: product_name,
+        product_cost: product_cost,
+        product_qty: product_qty,
+        product_unit: product_unit,
+        productTotal: productTotal,
+        invoiceNumber: invoiceNumber,
 
-          patientName: patientName,
-          contactNo: contactNo,
-          doctorName: doctorName,
-          regNo: regNo,
+        patientName: patientName,
+        contactNo: contactNo,
+        doctorName: doctorName,
+        regNo: regNo,
+        
+        balance: balance,
+        discountPercentage: discountPercentage,
+        deliveryCharges: deliveryCharges,
+        valueAddedServices: valueAddedServices,
+        cashAmount: cashAmount,
+        cardAmount: cardAmount,
+        paymentmethodselector: paymentmethodselector,
+        selectBillType: selectBillType,
+      };
+      poArray.push(productData);
+      inArray.push(productData);
+    });
 
-          balance: balance,
-          discountPercentage: discountPercentage,
-          deliveryCharges: deliveryCharges,
-          valueAddedServices: valueAddedServices,
-          cashAmount: cashAmount,
-          cardAmount: cardAmount,
-          paymentmethodselector: paymentmethodselector,
-          selectBillType: selectBillType,
-        };
-        poArray.push(productData);
-        inArray.push(productData);
-      });
 
-      $.ajax({
-        url: "invoiceConfirmationInsert.php",
-        method: "POST",
-        data: {
-          products: JSON.stringify(poArray),
-        },
-        success: function (response) {
-          console.log(response);
-          Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-          }).fire({
-            icon: "success",
-            title: "Success: Order Placed Successfully!",
-          });
-          $(".confirmPObtn").prop("disabled", false);
+    $.ajax({
+      url: "invoiceConfirmationInsert.php",
+      method: "POST",
+      data: {
+        products: JSON.stringify(poArray),
+      },
+      success: function (response) {
+        console.log(response);
+        Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        }).fire({
+          icon: "success",
+          title: "Success: Order Placed Successfully!",
+        });
+        $(".confirmPObtn").prop("disabled", false);
 
-          $.ajax({
-            url: "invoicePrintAddData.php",
-            method: "POST",
-            data: {
-              products: inArray,
-            },
-            success: function (response) {
-              document.getElementById("printInvoiceData").innerHTML = response;
-              // console.log(response);
-              printInvoice();
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr.responseText);
-            },
-          });
-        },
-        error: function (xhr, status, error) {
-          console.error(xhr.responseText);
-          Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-          }).fire({
-            icon: "error",
-            title: "Error: Something went wrong!",
-          });
-        },
-      });
-    }
+        $.ajax({
+          url: "invoicePrintAddData.php",
+          method: "POST",
+          data: {
+            products: inArray,
+          },
+          success: function (response) {
+            document.getElementById("printInvoiceData").innerHTML = response;
+            // console.log(response);
+            printInvoice();
+          },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr.responseText);
+        Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        }).fire({
+          icon: "error",
+          title: "Error: Something went wrong!",
+        });
+      },
+    });
   }
+  
+ }else{
+      Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+    }).fire({
+      icon: "error",
+      title: "Error: Enter the Patient Details",
+    });
+ }
+
+ 
+ 
 }
