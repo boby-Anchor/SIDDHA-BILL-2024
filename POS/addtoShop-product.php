@@ -61,7 +61,10 @@ if (!isset($_SESSION['store_id'])) {
                                         </div>
                                         <div class="col-8 p-2 d-flex justify-content-end">
                                             <div class="col-6">
-                                                <input type="text" class="form-control" placeholder="search..." onkeyup="searchByName(this.value);">
+                                                <input type="text" class="form-control" placeholder="Item name" onkeyup="searchByName(this.value);">
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" class="form-control" placeholder="Barcode" onkeyup="searchByCode(this.value);">
                                             </div>
 
                                         </div>
