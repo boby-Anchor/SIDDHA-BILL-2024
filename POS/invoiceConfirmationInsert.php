@@ -217,7 +217,6 @@ if (empty($cm)) {
     exit;
 }
 
-
 } else {
 
     echo "No products found or invalid data received.";

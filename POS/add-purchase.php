@@ -35,8 +35,6 @@ if (!isset($_SESSION['store_id'])) {
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
-
       <style>
         .table-wrap {
           max-height: 300px;
@@ -192,45 +190,42 @@ if (!isset($_SESSION['store_id'])) {
                             <thead>
                               <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Product Preview</th>
                                 <th scope="col">Product Name</th>
+                                <th scope="col">Brand</th>
                                 <th scope="col">Product Unit</th>
                                 <th scope="col">Product Cost</th>
                                 <th scope="col">Product Sell price</th>
-
                                 <th scope="col"></th>
                               </tr>
                             </thead>
                             <tbody id="filterBySupTable">
                               <?php
-                              $p_medicine_rs = $conn->query("SELECT * FROM producttoshop
-                          INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
-                          INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
-                          INNER JOIN stock2 ON p_medicine.code = stock2.stock_item_code
-                          WHERE producttoshop.shop_id = '$shop_id' AND productToShopStatus = 'added'");
+                              $p_medicine_rs = $conn->query("SELECT producttoshop.*, p_brand.name AS brand,
+                              p_medicine.name AS medName, medicine_unit.unit AS unit, stock2.stock_item_cost AS cost,
+                              stock2.item_s_price AS item_s_price
+                              FROM producttoshop
+                              INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
+                              INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
+                              INNER JOIN stock2 ON p_medicine.code = stock2.stock_item_code
+                              INNER JOIN p_brand ON p_medicine.brand = p_brand.id
+                              WHERE producttoshop.shop_id = '$shop_id' AND productToShopStatus = 'added'");
 
                               $tableRowCount = 1;
-
-
-
                               while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
-
-
                               ?>
                                 <tr>
                                   <th id="product_code" class="d-none"><?= $p_medicine_data['medicinId'] ?></th>
 
-
                                   <th scope="row"><?= $tableRowCount ?></th>
-                                  <td>
-                                    <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
-                                  </td>
-                                  <td id="product_name"><?= $p_medicine_data['name'] ?></td>
+
+                                  <td id="product_name"><?= $p_medicine_data['medName'] ?></td>
+                                  <td id="product_name"><?= $p_medicine_data['brand'] ?></td>
+
                                   <td id="product_unit">
                                     <label for=""><?= $p_medicine_data['unit'] ?></label>
                                   </td>
                                   <td id="product_cost">
-                                    <label for=""><?= $p_medicine_data['stock_item_cost'] ?></label>
+                                    <label for=""><?= $p_medicine_data['cost'] ?></label>
                                   </td>
                                   <td id="product_sprice">
                                     <label for=""><?= $p_medicine_data['item_s_price'] ?></label>
@@ -311,7 +306,6 @@ if (!isset($_SESSION['store_id'])) {
         </div>
 
         <!-- add new unit modal end -->
-
         <?php
         if (isset($_SESSION['store_id'])) {
 
@@ -330,7 +324,6 @@ if (!isset($_SESSION['store_id'])) {
 
         $poDate = date("Y-m-d");
         $poTime = date("H:i:s");
-
         ?>
 
         <!-- confirm po modal start -->
@@ -362,7 +355,6 @@ if (!isset($_SESSION['store_id'])) {
                             </div>
                           </div>
                         </div>
-
 
                       </div>
                       <div class="col-4 text-center">
@@ -409,16 +401,13 @@ if (!isset($_SESSION['store_id'])) {
         </div>
         <!-- confirm po modal end -->
 
-
         <!-- Footer -->
         <?php include("part/footer.php"); ?>
         <!-- Footer End -->
 
-
         <!-- Alert -->
         <?php include("part/alert.php"); ?>
         <!-- Alert end -->
-
 
         <!-- All JS -->
         <?php include("part/all-js.php"); ?>
@@ -433,7 +422,6 @@ if (!isset($_SESSION['store_id'])) {
               var product_cost = $(this).closest("tr").find("#product_cost").text();
               var product_unit = $(this).closest("tr").find("#product_unit").text();
               var product_qty = 1;
-
 
               var exists = false;
               $(".addedProTable tbody tr").each(function() {
@@ -527,8 +515,7 @@ if (!isset($_SESSION['store_id'])) {
               data: {
                 products: JSON.stringify(poArray),
               },
-              success: function(response) {
-                console.log(response);
+              success: function() {
                 Swal.mixin({
                   toast: true,
                   position: "top-end",
@@ -543,18 +530,24 @@ if (!isset($_SESSION['store_id'])) {
               },
               error: function(xhr, status, error) {
                 console.error(xhr.responseText);
-
+                Swal.mixin({
+                  toast: true,
+                  position: "top-end",
+                  showConfirmButton: false,
+                  timer: 3000,
+                }).fire({
+                  icon: "error",
+                  title: "Order Failed !",
+                });
                 $(".confirmPObtn").prop('disabled', false);
               },
             });
           });
         </script>
-
     </body>
 
     </html>
 <?php
   }
 }
-
 ?>
