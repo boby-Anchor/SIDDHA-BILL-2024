@@ -17,6 +17,24 @@ if (is_array($inArray) && !empty($inArray)) {
     foreach ($inArray as $product) {
         if (isset($_SESSION['store_id'])) {
             $userLoginData = $_SESSION['store_id'];
+?>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-4">
+                        <span class="product_cost">U.Price</span>
+                    </div>
+                    <div class="col-4 text-center">
+                        <span class="product_qty">
+                            QTY
+                        </span>
+                    </div>
+                    <div class="col-4 text-center">
+                        <span class="productTotal">Total</span>
+                    </div>
+                </div>
+            </div>
+
+            <?php
             foreach ($userLoginData as $userData) {
                 $userId = $userData['id'];
                 $shop_id = $userData['shop_id'];
@@ -55,8 +73,7 @@ if (is_array($inArray) && !empty($inArray)) {
                 if ($discountPercentage == "") {
                     $discountPercentage = 0;
                 }
-
-?>
+            ?>
                 <div class="col-12">
                     <div class="row">
                         <div class="col-12">
@@ -66,7 +83,9 @@ if (is_array($inArray) && !empty($inArray)) {
                             <span class="product_cost"><?= $product_cost ?></span>
                         </div>
                         <div class="col-4 text-center">
-                            <span class="product_qty"><?= $product_qty ?><?= $product_unit ?></span>
+                            <span class="product_qty">
+                                <?= $product_qty ?>
+                            </span>
                         </div>
                         <div class="col-4 text-center">
                             <span class="productTotal"><?= $productTotal ?></span>
@@ -80,7 +99,7 @@ if (is_array($inArray) && !empty($inArray)) {
         }
     }
     ?>
-
+    
     <div class="col-12">
         <div class="row">
             <div>
@@ -113,17 +132,6 @@ if (is_array($inArray) && !empty($inArray)) {
             </div>
         </div>
     </div>
-
-    <!-- <div class="col-12 pt-2">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center text-center">
-                <span style="font-size:9px;">*Kindly note that once the Medication has been taken away. The hospital cannot be held responsible for any issues.</span>
-            </div>
-            <div class="col-12 d-flex justify-content-center">
-                <span>Thank You !</span>
-            </div>
-        </div>
-    </div> -->
 
 <?php
 } else {

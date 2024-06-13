@@ -174,12 +174,11 @@ if (is_array($poArray) && !empty($poArray)) {
         }
     }
 
-
     $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
     VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$selectBillType', '$paymentmethodselector', '$productsAllTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount','$cardAmount', '$balance')");
 
-    $conn->query("INSERT INTO test_table (col1, col2, col3, col4, col5, col6)
-    VALUES('$ucv', '$product_unit', '$item_price', '$product_qty', '$product_minimum_qty', '003')");
+    $conn->query("INSERT INTO test
+    VALUES('$invoiceNumber', '$product_unit')");
 
 } else {
 
