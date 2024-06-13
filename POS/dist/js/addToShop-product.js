@@ -8,9 +8,10 @@ function toggleDropdown() {
     dropdownMenu.classList.add("show");
   }
 }
+
 document
-  .getElementById("dropdownButton")
-  .addEventListener("click", toggleDropdown);
+.getElementById("dropdownButton")
+.addEventListener("click", toggleDropdown);
 
 function shopSelected(productId) {
   var allShop = document.getElementById("allShop" + productId);
@@ -71,8 +72,7 @@ function oneByoneSelect(Id, productId, shopId) {
 }
 
 function searchByCategory(selectedCategoryId) {
- 
-    var req = new XMLHttpRequest();
+  var req = new XMLHttpRequest();
   req.onreadystatechange = function () {
     if (req.readyState == 4 && req.status == 200) {
       var response = req.responseText;
@@ -88,23 +88,39 @@ function searchByCategory(selectedCategoryId) {
   req.send();
 }
 
-function searchByName(productName) {
-    var form = new FormData();
-    form.append("productName",productName);    
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
-        if (req.readyState == 4 && req.status == 200) {
-            var response = req.responseText;
-            document.getElementById("productTable").innerHTML = response;
-            attachEventListeners();
-           
-        }
-    };
-    req.open("POST", "searchByName.php", true);
-    req.send(form);
+function searchByCode(productCode) {
+  console.log(productCode);
+
+  var form = new FormData();
+  form.append("productCode", productCode);
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (req.readyState == 4 && req.status == 200) {
+      var response = req.responseText;
+      document.getElementById("productTable").innerHTML = response;
+      attachEventListeners();
+    }
+  };
+  req.open("POST", "searchByBarcode.php", true);
+  req.send(form);
 }
+
+function searchByName(productName) {
+  console.log(productName);
+  var form = new FormData();
+  form.append("productName", productName);
+  var req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (req.readyState == 4 && req.status == 200) {
+      var response = req.responseText;
+      document.getElementById("productTable").innerHTML = response;
+      attachEventListeners();
+    }
+  };
+  req.open("POST", "searchByName.php", true);
+  req.send(form);
+}
+
 function saveDetails() {
   location.reload();
 }
-
-

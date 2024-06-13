@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config/db.php');
+include ('config/db.php');
 
 $poArray = json_decode($_POST['products'], true);
 
@@ -18,8 +18,8 @@ if (is_array($poArray) && !empty($poArray)) {
         $balance = $product['balance'];
         $enterAmountFiled = $product['enterAmountFiled'];
         $currentDateTime = date("Y-m-d H:i:s");
-       
-        
+
+
         if (!empty($code) && !empty($product_name) && is_numeric($product_cost) && is_numeric($product_qty) && !empty($product_unit) && is_numeric($productTotal) && !empty($invoiceNumber)) {
 
             if (isset($_SESSION['store_id'])) {
@@ -50,7 +50,7 @@ if (is_array($poArray) && !empty($poArray)) {
             $shop_id = $userData['shop_id'];
             $conn->query("INSERT INTO invoices (invoice_id,user_id,total_amount,payment_method,created,balance,paidAmount) VALUES ('$invoiceNumber','$userId','$productsAllTotal','1','$currentDateTime','$balance','$enterAmountFiled')");
         }
-      
+
     }
 } else {
 

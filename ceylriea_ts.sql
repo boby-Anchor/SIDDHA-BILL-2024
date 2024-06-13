@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jun 05, 2024 at 05:29 AM
--- Server version: 10.6.17-MariaDB-cll-lve-log
--- PHP Version: 8.1.27
+-- Host: 127.0.0.1:3306
+-- Generation Time: Jun 07, 2024 at 12:40 AM
+-- Server version: 5.7.21
+-- PHP Version: 7.1.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -27,10 +28,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `bill_type`
 --
 
-CREATE TABLE `bill_type` (
-  `bill_type_id` int(11) NOT NULL,
-  `bill_type_name` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `bill_type`;
+CREATE TABLE IF NOT EXISTS `bill_type` (
+  `bill_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bill_type_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`bill_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `bill_type`
@@ -48,12 +51,14 @@ INSERT INTO `bill_type` (`bill_type_id`, `bill_type_name`) VALUES
 -- Table structure for table `customizable_data`
 --
 
-CREATE TABLE `customizable_data` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `customizable_data`;
+CREATE TABLE IF NOT EXISTS `customizable_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `position` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `customizable_data`
@@ -75,17 +80,19 @@ INSERT INTO `customizable_data` (`id`, `position`, `title`, `description`) VALUE
 -- Table structure for table `customize_bills`
 --
 
-CREATE TABLE `customize_bills` (
-  `customize_bills_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `customize_bills`;
+CREATE TABLE IF NOT EXISTS `customize_bills` (
+  `customize_bills_id` int(11) NOT NULL AUTO_INCREMENT,
   `customize_bills_logo` varchar(45) DEFAULT NULL,
   `customize_bills_mobile` varchar(45) DEFAULT NULL,
   `customize_bills_address` varchar(45) DEFAULT NULL,
   `print_meta_status` int(11) DEFAULT NULL,
   `print_paper_size` varchar(45) DEFAULT NULL,
   `discount_section-status` varchar(45) DEFAULT NULL,
-  `bill_note` text DEFAULT NULL,
-  `customize_bill_shop-id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `bill_note` text,
+  `customize_bill_shop-id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`customize_bills_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `customize_bills`
@@ -102,13 +109,15 @@ INSERT INTO `customize_bills` (`customize_bills_id`, `customize_bills_logo`, `cu
 -- Table structure for table `grn`
 --
 
-CREATE TABLE `grn` (
-  `grn_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `grn`;
+CREATE TABLE IF NOT EXISTS `grn` (
+  `grn_id` int(11) NOT NULL AUTO_INCREMENT,
   `grn_number` varchar(45) DEFAULT NULL,
   `grn_date` datetime DEFAULT NULL,
   `grn_sub_total` varchar(45) DEFAULT NULL,
-  `grn_shop_id` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `grn_shop_id` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`grn_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `grn`
@@ -526,16 +535,18 @@ INSERT INTO `grn` (`grn_id`, `grn_number`, `grn_date`, `grn_sub_total`, `grn_sho
 -- Table structure for table `grn_item`
 --
 
-CREATE TABLE `grn_item` (
-  `grn_item_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `grn_item`;
+CREATE TABLE IF NOT EXISTS `grn_item` (
+  `grn_item_id` int(11) NOT NULL AUTO_INCREMENT,
   `grn_number` varchar(45) DEFAULT NULL,
   `grn_p_id` varchar(45) DEFAULT NULL,
   `grn_p_qty` varchar(45) DEFAULT NULL,
   `grn_p_cost` varchar(45) DEFAULT NULL,
   `grn_p_price` varchar(45) DEFAULT NULL,
   `p_plus_discount` int(11) DEFAULT NULL,
-  `p_free_qty` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `p_free_qty` int(11) DEFAULT NULL,
+  PRIMARY KEY (`grn_item_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `grn_item`
@@ -953,8 +964,9 @@ INSERT INTO `grn_item` (`grn_item_id`, `grn_number`, `grn_p_id`, `grn_p_qty`, `g
 -- Table structure for table `hub_order`
 --
 
-CREATE TABLE `hub_order` (
-  `hub_order_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `hub_order`;
+CREATE TABLE IF NOT EXISTS `hub_order` (
+  `hub_order_id` int(11) NOT NULL AUTO_INCREMENT,
   `HO_number` varchar(45) DEFAULT NULL,
   `HO_date` datetime DEFAULT NULL,
   `HO_item` varchar(45) DEFAULT NULL,
@@ -962,8 +974,9 @@ CREATE TABLE `hub_order` (
   `hub_order_unit` varchar(45) DEFAULT NULL,
   `HO_price` varchar(45) DEFAULT NULL,
   `HO_total` varchar(45) DEFAULT NULL,
-  `HO_shopId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `HO_shopId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`hub_order_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -971,14 +984,16 @@ CREATE TABLE `hub_order` (
 -- Table structure for table `hub_order_details`
 --
 
-CREATE TABLE `hub_order_details` (
-  `hub_order_details_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `hub_order_details`;
+CREATE TABLE IF NOT EXISTS `hub_order_details` (
+  `hub_order_details_id` int(11) NOT NULL AUTO_INCREMENT,
   `hub_order_number` varchar(45) DEFAULT NULL,
   `hub_order_subTotal` varchar(45) DEFAULT NULL,
   `hub_order_status` int(11) DEFAULT NULL,
   `hub_order_paymentType` int(11) DEFAULT NULL,
-  `hub_order_paymentStatus` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `hub_order_paymentStatus` int(11) DEFAULT NULL,
+  PRIMARY KEY (`hub_order_details_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -986,16 +1001,18 @@ CREATE TABLE `hub_order_details` (
 -- Table structure for table `invoiceitems`
 --
 
-CREATE TABLE `invoiceitems` (
-  `invoiceItemId` int(11) NOT NULL,
+DROP TABLE IF EXISTS `invoiceitems`;
+CREATE TABLE IF NOT EXISTS `invoiceitems` (
+  `invoiceItemId` int(11) NOT NULL AUTO_INCREMENT,
   `invoiceNumber` varchar(45) DEFAULT NULL,
   `invoiceDate` datetime DEFAULT NULL,
   `invoiceItem` varchar(45) DEFAULT NULL,
   `invoiceItem_qty` int(11) DEFAULT NULL,
   `invoiceItem_unit` varchar(45) DEFAULT NULL,
   `invoiceItem_price` varchar(45) DEFAULT NULL,
-  `invoiceItem_total` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+  `invoiceItem_total` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`invoiceItemId`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `invoiceitems`
@@ -1006,7 +1023,8 @@ INSERT INTO `invoiceitems` (`invoiceItemId`, `invoiceNumber`, `invoiceDate`, `in
 (169, '000162118', '2024-06-04 14:57:11', 'Mee Thel', 1, 'ml', '190', '190'),
 (170, '000162118', '2024-06-04 14:57:11', 'Sarshapadi Thailaya', 1, 'ml', '200', '200'),
 (171, '000162119', '2024-06-04 16:31:01', 'Ashwagandha', 1, 'ml', '1600', '1600'),
-(172, '000162119', '2024-06-04 16:31:01', 'Raktha Shodaka', 30, 'ml', '2.5', '75');
+(172, '000162119', '2024-06-04 16:31:01', 'Raktha Shodaka', 30, 'ml', '2.5', '75'),
+(173, '000162120', '2024-06-06 16:54:44', 'Madhumehari Panta (MM)', 1, 'g', '180', '180');
 
 -- --------------------------------------------------------
 
@@ -1014,12 +1032,15 @@ INSERT INTO `invoiceitems` (`invoiceItemId`, `invoiceNumber`, `invoiceDate`, `in
 -- Table structure for table `invoices`
 --
 
-CREATE TABLE `invoices` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `invoices`;
+CREATE TABLE IF NOT EXISTS `invoices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `invoice_id` varchar(200) NOT NULL,
   `user_id` int(11) NOT NULL,
   `shop_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL,
+  `patient_name` varchar(30) DEFAULT NULL,
+  `contact_no` varchar(20) DEFAULT NULL,
   `bill_type_id` int(11) NOT NULL,
   `payment_method` varchar(100) NOT NULL,
   `total_amount` varchar(50) NOT NULL DEFAULT '',
@@ -1028,17 +1049,18 @@ CREATE TABLE `invoices` (
   `value_added_services` varchar(50) DEFAULT NULL,
   `paidAmount` varchar(50) NOT NULL,
   `cardPaidAmount` varchar(30) DEFAULT NULL,
-  `balance` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `balance` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `invoices`
 --
 
-INSERT INTO `invoices` (`id`, `invoice_id`, `user_id`, `shop_id`, `created`, `bill_type_id`, `payment_method`, `total_amount`, `discount_percentage`, `delivery_charges`, `value_added_services`, `paidAmount`, `cardPaidAmount`, `balance`) VALUES
-(117, '000162116', 16, 2, '2024-06-04 14:15:08', 1, '1', '200', 0, '', '', '500', '', '300'),
-(118, '000162118', 16, 2, '2024-06-04 14:57:11', 1, '1', '390', 0, '', '', '500', '', '110'),
-(119, '000162119', 16, 2, '2024-06-04 16:31:01', 1, '2', '1675', 0, '', '', '2000', '2000', '325');
+INSERT INTO `invoices` (`id`, `invoice_id`, `user_id`, `shop_id`, `created`, `patient_name`, `contact_no`, `bill_type_id`, `payment_method`, `total_amount`, `discount_percentage`, `delivery_charges`, `value_added_services`, `paidAmount`, `cardPaidAmount`, `balance`) VALUES
+(117, '000162116', 16, 2, '2024-06-04 14:15:08', NULL, NULL, 1, '1', '200', 0, '', '', '500', '', '300'),
+(118, '000162118', 16, 2, '2024-06-04 14:57:11', NULL, NULL, 1, '1', '390', 0, '', '', '500', '', '110'),
+(119, '000162119', 16, 2, '2024-06-04 16:31:01', NULL, NULL, 1, '2', '1675', 0, '', '', '2000', '2000', '325');
 
 -- --------------------------------------------------------
 
@@ -1046,11 +1068,13 @@ INSERT INTO `invoices` (`id`, `invoice_id`, `user_id`, `shop_id`, `created`, `bi
 -- Table structure for table `medicine_unit`
 --
 
-CREATE TABLE `medicine_unit` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `medicine_unit`;
+CREATE TABLE IF NOT EXISTS `medicine_unit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(50) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `medicine_unit`
@@ -1072,10 +1096,12 @@ INSERT INTO `medicine_unit` (`id`, `unit`, `date`) VALUES
 -- Table structure for table `order_status`
 --
 
-CREATE TABLE `order_status` (
-  `order_status_id` int(11) NOT NULL,
-  `order_status` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `order_status`;
+CREATE TABLE IF NOT EXISTS `order_status` (
+  `order_status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`order_status_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `order_status`
@@ -1095,10 +1121,12 @@ INSERT INTO `order_status` (`order_status_id`, `order_status`) VALUES
 -- Table structure for table `payment_status`
 --
 
-CREATE TABLE `payment_status` (
-  `payment_status_id` int(11) NOT NULL,
-  `payment_status` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `payment_status`;
+CREATE TABLE IF NOT EXISTS `payment_status` (
+  `payment_status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `payment_status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`payment_status_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `payment_status`
@@ -1114,10 +1142,12 @@ INSERT INTO `payment_status` (`payment_status_id`, `payment_status`) VALUES
 -- Table structure for table `payment_type`
 --
 
-CREATE TABLE `payment_type` (
-  `payment_type_id` int(11) NOT NULL,
-  `payment_type` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `payment_type`;
+CREATE TABLE IF NOT EXISTS `payment_type` (
+  `payment_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `payment_type` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`payment_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `payment_type`
@@ -1134,12 +1164,15 @@ INSERT INTO `payment_type` (`payment_type_id`, `payment_type`) VALUES
 -- Table structure for table `producttoshop`
 --
 
-CREATE TABLE `producttoshop` (
-  `productToShopId` int(11) NOT NULL,
+DROP TABLE IF EXISTS `producttoshop`;
+CREATE TABLE IF NOT EXISTS `producttoshop` (
+  `productToShopId` int(11) NOT NULL AUTO_INCREMENT,
   `medicinId` int(11) DEFAULT NULL,
   `shop_id` int(11) DEFAULT NULL,
-  `productToShopStatus` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `productToShopStatus` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`productToShopId`),
+  KEY `FK_producttoshop_shop` (`shop_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3063 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `producttoshop`
@@ -3972,14 +4005,16 @@ INSERT INTO `producttoshop` (`productToShopId`, `medicinId`, `shop_id`, `product
 -- Table structure for table `p_brand`
 --
 
-CREATE TABLE `p_brand` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `p_brand`;
+CREATE TABLE IF NOT EXISTS `p_brand` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `store` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `details` text DEFAULT NULL,
+  `details` text,
   `img` varchar(255) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `p_brand`
@@ -4030,19 +4065,21 @@ INSERT INTO `p_brand` (`id`, `store`, `name`, `details`, `img`, `date`) VALUES
 -- Table structure for table `p_medicine`
 --
 
-CREATE TABLE `p_medicine` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `p_medicine`;
+CREATE TABLE IF NOT EXISTS `p_medicine` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `details` text DEFAULT NULL,
+  `details` text,
   `category` int(11) NOT NULL,
   `brand` int(11) NOT NULL,
   `medicine_unit_id` int(11) DEFAULT NULL,
   `code` varchar(255) DEFAULT NULL,
   `img` varchar(255) DEFAULT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `selectedShops` varchar(50) DEFAULT NULL,
-  `unit_variation` varchar(50) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `unit_variation` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=612 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `p_medicine`
@@ -4615,13 +4652,15 @@ INSERT INTO `p_medicine` (`id`, `name`, `details`, `category`, `brand`, `medicin
 -- Table structure for table `p_medicine_category`
 --
 
-CREATE TABLE `p_medicine_category` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `p_medicine_category`;
+CREATE TABLE IF NOT EXISTS `p_medicine_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `store` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `img` varchar(255) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `p_medicine_category`
@@ -4656,16 +4695,19 @@ INSERT INTO `p_medicine_category` (`id`, `store`, `name`, `img`, `date`) VALUES
 -- Table structure for table `p_supplier`
 --
 
-CREATE TABLE `p_supplier` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `p_supplier`;
+CREATE TABLE IF NOT EXISTS `p_supplier` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `brand_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
-  `address` text DEFAULT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `store` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `address` text,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `store` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_p_supplier_p_brand` (`brand_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `p_supplier`
@@ -4680,8 +4722,9 @@ INSERT INTO `p_supplier` (`id`, `brand_id`, `name`, `email`, `phone`, `address`,
 -- Table structure for table `p_supply`
 --
 
-CREATE TABLE `p_supply` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `p_supply`;
+CREATE TABLE IF NOT EXISTS `p_supply` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `store` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `supplier` varchar(255) NOT NULL,
@@ -4689,10 +4732,11 @@ CREATE TABLE `p_supply` (
   `payable` decimal(10,2) NOT NULL,
   `paid` decimal(10,2) NOT NULL,
   `due` decimal(10,2) NOT NULL,
-  `details` text DEFAULT NULL,
+  `details` text,
   `supplydate` date NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -4700,11 +4744,12 @@ CREATE TABLE `p_supply` (
 -- Table structure for table `shop`
 --
 
-CREATE TABLE `shop` (
-  `shopId` int(11) NOT NULL,
+DROP TABLE IF EXISTS `shop`;
+CREATE TABLE IF NOT EXISTS `shop` (
+  `shopId` int(11) NOT NULL AUTO_INCREMENT,
   `shopName` varchar(45) DEFAULT NULL,
-  `shopEmail` text DEFAULT NULL,
-  `shopAddress` text DEFAULT NULL,
+  `shopEmail` text,
+  `shopAddress` text,
   `shopTel` int(11) DEFAULT NULL,
   `shopWhatsApp` int(11) DEFAULT NULL,
   `shopManagerName` varchar(45) DEFAULT NULL,
@@ -4712,9 +4757,10 @@ CREATE TABLE `shop` (
   `shopManagerAddress` varchar(45) DEFAULT NULL,
   `shopManagerTel` int(11) DEFAULT NULL,
   `shopManagerWhatsApp` int(11) DEFAULT NULL,
-  `shopImg` text DEFAULT NULL,
-  `shopStatus` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `shopImg` text,
+  `shopStatus` int(11) DEFAULT '1',
+  PRIMARY KEY (`shopId`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `shop`
@@ -4733,8 +4779,9 @@ INSERT INTO `shop` (`shopId`, `shopName`, `shopEmail`, `shopAddress`, `shopTel`,
 -- Table structure for table `stock2`
 --
 
-CREATE TABLE `stock2` (
-  `stock_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `stock2`;
+CREATE TABLE IF NOT EXISTS `stock2` (
+  `stock_id` int(11) NOT NULL AUTO_INCREMENT,
   `stock_item_code` varchar(50) DEFAULT NULL,
   `stock_item_name` varchar(50) DEFAULT NULL,
   `stock_item_qty` float DEFAULT NULL,
@@ -4746,8 +4793,9 @@ CREATE TABLE `stock2` (
   `added_discount` int(11) DEFAULT NULL,
   `item_s_price` int(11) DEFAULT NULL,
   `stock_shop_id` int(11) DEFAULT NULL,
-  `stock_minimum_unit_barcode` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `stock_minimum_unit_barcode` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`stock_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=377 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `stock2`
@@ -4801,7 +4849,7 @@ INSERT INTO `stock2` (`stock_id`, `stock_item_code`, `stock_item_name`, `stock_i
 (59, 'P0000002', 'Eranda Sapthaka (ES7) (50g) ', 59, 108, 2950, 3.6, 0, NULL, 40, 180, 2, ''),
 (60, 'P0000004', 'Danthimula Bala (50g) ', 9, 108, 450, 3.6, 0, NULL, 40, 180, 2, ''),
 (61, 'P0000056', 'Rasna 13 (R13) (50g) ', 43, 108, 2150, 3.6, 0, NULL, 40, 180, 2, ''),
-(62, 'P0000016', 'Madhumehari Panta (MM) (50g) ', 16, 108, 800, 3.6, 0, NULL, 40, 180, 2, ''),
+(62, 'P0000016', 'Madhumehari Panta (MM) (50g) ', 15, 108, 750, 3.6, 0, NULL, 40, 180, 2, ''),
 (63, 'P0000022', 'Lunu Iguru (LI) (50g) ', 23, 108, 1150, 3.6, 0, NULL, 40, 180, 2, ''),
 (64, 'P0000019', 'Medahara (MH) (50g) ', 21, 108, 1050, 3.6, 0, NULL, 40, 180, 2, ''),
 (65, 'P0000063', 'Bala Bilwa Shrutha (BBS) (50g)', 14, 108, 700, 3.6, 0, NULL, 40, 180, 2, ''),
@@ -5121,12 +5169,14 @@ INSERT INTO `stock2` (`stock_id`, `stock_item_code`, `stock_item_name`, `stock_i
 -- Table structure for table `store`
 --
 
-CREATE TABLE `store` (
-  `store_idl` int(11) NOT NULL,
+DROP TABLE IF EXISTS `store`;
+CREATE TABLE IF NOT EXISTS `store` (
+  `store_idl` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(255) DEFAULT NULL,
   `pass` varchar(255) DEFAULT NULL,
-  `name` varchar(50) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`store_idl`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `store`
@@ -5138,15 +5188,32 @@ INSERT INTO `store` (`store_idl`, `user_name`, `pass`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `test`
+--
+
+DROP TABLE IF EXISTS `test`;
+CREATE TABLE IF NOT EXISTS `test` (
+  `id` varchar(20) NOT NULL,
+  `name1` varchar(20) NOT NULL,
+  `name2` varchar(20) NOT NULL,
+  `idp` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`idp`)
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `unit_category_variation`
 --
 
-CREATE TABLE `unit_category_variation` (
-  `ucv_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `unit_category_variation`;
+CREATE TABLE IF NOT EXISTS `unit_category_variation` (
+  `ucv_id` int(11) NOT NULL AUTO_INCREMENT,
   `ucv_name` varchar(50) NOT NULL,
   `p_unit_id` int(11) DEFAULT NULL,
-  `ucv_status` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `ucv_status` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ucv_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `unit_category_variation`
@@ -5193,15 +5260,17 @@ INSERT INTO `unit_category_variation` (`ucv_id`, `ucv_name`, `p_unit_id`, `ucv_s
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   `user_name` varchar(255) NOT NULL,
   `user_pass` varchar(255) NOT NULL,
-  `date_registered` timestamp NOT NULL DEFAULT current_timestamp(),
+  `date_registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_role_id` int(11) DEFAULT NULL,
-  `shop_id` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `shop_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
@@ -5228,10 +5297,12 @@ INSERT INTO `users` (`id`, `name`, `user_name`, `user_pass`, `date_registered`, 
 -- Table structure for table `user_role`
 --
 
-CREATE TABLE `user_role` (
-  `user_role_id` int(11) NOT NULL,
-  `user_role` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `user_role`;
+CREATE TABLE IF NOT EXISTS `user_role` (
+  `user_role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_role` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`user_role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user_role`
@@ -5243,316 +5314,6 @@ INSERT INTO `user_role` (`user_role_id`, `user_role`) VALUES
 (3, 'Shop Admin'),
 (4, 'Stock Keeper'),
 (5, 'Cashier');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `bill_type`
---
-ALTER TABLE `bill_type`
-  ADD PRIMARY KEY (`bill_type_id`);
-
---
--- Indexes for table `customizable_data`
---
-ALTER TABLE `customizable_data`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `customize_bills`
---
-ALTER TABLE `customize_bills`
-  ADD PRIMARY KEY (`customize_bills_id`);
-
---
--- Indexes for table `grn`
---
-ALTER TABLE `grn`
-  ADD PRIMARY KEY (`grn_id`);
-
---
--- Indexes for table `grn_item`
---
-ALTER TABLE `grn_item`
-  ADD PRIMARY KEY (`grn_item_id`);
-
---
--- Indexes for table `hub_order`
---
-ALTER TABLE `hub_order`
-  ADD PRIMARY KEY (`hub_order_id`);
-
---
--- Indexes for table `hub_order_details`
---
-ALTER TABLE `hub_order_details`
-  ADD PRIMARY KEY (`hub_order_details_id`);
-
---
--- Indexes for table `invoiceitems`
---
-ALTER TABLE `invoiceitems`
-  ADD PRIMARY KEY (`invoiceItemId`) USING BTREE;
-
---
--- Indexes for table `invoices`
---
-ALTER TABLE `invoices`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `medicine_unit`
---
-ALTER TABLE `medicine_unit`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `order_status`
---
-ALTER TABLE `order_status`
-  ADD PRIMARY KEY (`order_status_id`);
-
---
--- Indexes for table `payment_status`
---
-ALTER TABLE `payment_status`
-  ADD PRIMARY KEY (`payment_status_id`);
-
---
--- Indexes for table `payment_type`
---
-ALTER TABLE `payment_type`
-  ADD PRIMARY KEY (`payment_type_id`);
-
---
--- Indexes for table `producttoshop`
---
-ALTER TABLE `producttoshop`
-  ADD PRIMARY KEY (`productToShopId`),
-  ADD KEY `FK_producttoshop_shop` (`shop_id`);
-
---
--- Indexes for table `p_brand`
---
-ALTER TABLE `p_brand`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `p_medicine`
---
-ALTER TABLE `p_medicine`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `p_medicine_category`
---
-ALTER TABLE `p_medicine_category`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `p_supplier`
---
-ALTER TABLE `p_supplier`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_p_supplier_p_brand` (`brand_id`);
-
---
--- Indexes for table `p_supply`
---
-ALTER TABLE `p_supply`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `shop`
---
-ALTER TABLE `shop`
-  ADD PRIMARY KEY (`shopId`);
-
---
--- Indexes for table `stock2`
---
-ALTER TABLE `stock2`
-  ADD PRIMARY KEY (`stock_id`);
-
---
--- Indexes for table `store`
---
-ALTER TABLE `store`
-  ADD PRIMARY KEY (`store_idl`);
-
---
--- Indexes for table `unit_category_variation`
---
-ALTER TABLE `unit_category_variation`
-  ADD PRIMARY KEY (`ucv_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_role`
---
-ALTER TABLE `user_role`
-  ADD PRIMARY KEY (`user_role_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `bill_type`
---
-ALTER TABLE `bill_type`
-  MODIFY `bill_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `customizable_data`
---
-ALTER TABLE `customizable_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=257;
-
---
--- AUTO_INCREMENT for table `customize_bills`
---
-ALTER TABLE `customize_bills`
-  MODIFY `customize_bills_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `grn`
---
-ALTER TABLE `grn`
-  MODIFY `grn_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=405;
-
---
--- AUTO_INCREMENT for table `grn_item`
---
-ALTER TABLE `grn_item`
-  MODIFY `grn_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=405;
-
---
--- AUTO_INCREMENT for table `hub_order`
---
-ALTER TABLE `hub_order`
-  MODIFY `hub_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `hub_order_details`
---
-ALTER TABLE `hub_order_details`
-  MODIFY `hub_order_details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT for table `invoiceitems`
---
-ALTER TABLE `invoiceitems`
-  MODIFY `invoiceItemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
-
---
--- AUTO_INCREMENT for table `invoices`
---
-ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
-
---
--- AUTO_INCREMENT for table `medicine_unit`
---
-ALTER TABLE `medicine_unit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `order_status`
---
-ALTER TABLE `order_status`
-  MODIFY `order_status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `payment_status`
---
-ALTER TABLE `payment_status`
-  MODIFY `payment_status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `payment_type`
---
-ALTER TABLE `payment_type`
-  MODIFY `payment_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `producttoshop`
---
-ALTER TABLE `producttoshop`
-  MODIFY `productToShopId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3063;
-
---
--- AUTO_INCREMENT for table `p_brand`
---
-ALTER TABLE `p_brand`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
-
---
--- AUTO_INCREMENT for table `p_medicine`
---
-ALTER TABLE `p_medicine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=612;
-
---
--- AUTO_INCREMENT for table `p_medicine_category`
---
-ALTER TABLE `p_medicine_category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
---
--- AUTO_INCREMENT for table `p_supplier`
---
-ALTER TABLE `p_supplier`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `p_supply`
---
-ALTER TABLE `p_supply`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `shop`
---
-ALTER TABLE `shop`
-  MODIFY `shopId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `stock2`
---
-ALTER TABLE `stock2`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=377;
-
---
--- AUTO_INCREMENT for table `store`
---
-ALTER TABLE `store`
-  MODIFY `store_idl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `unit_category_variation`
---
-ALTER TABLE `unit_category_variation`
-  MODIFY `ucv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT for table `user_role`
---
-ALTER TABLE `user_role`
-  MODIFY `user_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
