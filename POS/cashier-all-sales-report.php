@@ -29,7 +29,12 @@ if (!isset($_SESSION['store_id'])) {
             font-size: 50px;
             font-weight: bold;
         }
-    </style>
+
+.labInvo {
+    font-weight: bold;
+    color: #3E8F0C;
+}
+</style>
 
 </head>
 
@@ -119,7 +124,7 @@ if (!isset($_SESSION['store_id'])) {
                         while ($row = mysqli_fetch_assoc($sql)) {
                         ?>
                             <tr>
-                                <td><?php echo $row['invoice_id']; ?></td>
+                                <td><?php echo $row['invoice_id']; ?> <br><?php echo $row['created']; ?></td>
                                 <td><?php echo $row['p_name']; ?></td>
                                 <td><?php echo $row['contact_no']; ?></td>
                                 <td><?php echo $row['d_name']; ?></td>

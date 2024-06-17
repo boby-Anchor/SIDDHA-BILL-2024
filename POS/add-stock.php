@@ -191,13 +191,13 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="filterBySearch(this.value);" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs(this.value);" id="bnInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="filterBySearch(this.value);" id="pcInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs(this.value);" id="pcInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="filterBySearch(this.value);" id="pnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs(this.value);" id="pnInput">
                                         </div>
                                         <div class="col-12 products-table mt-4">
                                             <table class="table table-bordered">
@@ -222,17 +222,22 @@ if (!isset($_SESSION['store_id'])) {
 
                                                         foreach ($userLoginData as $userData) {
                                                             $shop_id = $userData['shop_id'];
-
-                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS pname , `code` , p_medicine.img AS img ,
+//    p_medicine.code AS code ,
+                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS pname , 
+                                                            p_medicine.code AS code ,
+                                                            p_medicine.img AS img ,
                                                             p_medicine_category.name AS categoryname , p_brand.name AS brandname ,
-                                                            medicine_unit.unit AS unit , unit_category_variation.ucv_name FROM producttoshop
+                                                            medicine_unit.unit AS unit , unit_category_variation.ucv_name 
+                                                            FROM producttoshop
                                                             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
                                                             INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
                                                             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                                                             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
                                                             WHERE
-                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all')");
+                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
+                                                            ORDER BY p_medicine.name ASC
+                                                            ");
 
                                                             $tableRowCount = 1;
                                                             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
@@ -474,7 +479,7 @@ if (!isset($_SESSION['store_id'])) {
 
                 var exists = false;
                 $(".addedProTable tbody tr").each(function() {
-                    if ($(this).find("#addproduct_name").text() === product_name) {
+                    if ($(this).find("#product_code").text() === product_name) {
                         exists = true;
                         return false;
                     }
