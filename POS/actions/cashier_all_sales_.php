@@ -2,6 +2,15 @@
 include ('../config/db.php');
 session_start();
 
+?>
+<style>
+.labInvo {
+    font-weight: bold;
+    color: #3E8F0C;
+}
+</style>
+
+<?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode($_POST['sd'], true);
     $start_date = $data['STDATE'];
@@ -40,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $output = '';
     while ($row = mysqli_fetch_assoc($sql)) {
         $output .= '<tr>
-                        <td>' . $row['invoice_id'] . '</td>
+                        <td><lable class="labInvo"> ' . $row['invoice_id'] .'</lable> <br> '. $row['created']. '</td>
                         <td>' . $row['p_name'] . '</td>
                         <td>' . $row['contact_no'] . '</td>
                         <td>' . $row['d_name'] . '</td>

@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 if (!isset($_SESSION['store_id'])) {
@@ -131,6 +132,11 @@ if (!isset($_SESSION['store_id'])) {
           font-weight: 500;
           cursor: pointer;
         }
+        
+        .labQty{
+            color:red;
+            font-size: 18px;
+        }
       </style>
 
     </head>
@@ -201,14 +207,14 @@ if (!isset($_SESSION['store_id'])) {
                             <tbody id="filterBySupTable">
                               <?php
                               $p_medicine_rs = $conn->query("SELECT producttoshop.*, p_brand.name AS brand,
-                              p_medicine.name AS medName, medicine_unit.unit AS unit, stock2.stock_item_cost AS cost,
+                              p_medicine.name AS medName, medicine_unit.unit AS unit, stock2.stock_item_cost AS cost,stock2.stock_item_qty AS siq,
                               stock2.item_s_price AS item_s_price
                               FROM producttoshop
                               INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
                               INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
                               INNER JOIN stock2 ON p_medicine.code = stock2.stock_item_code
                               INNER JOIN p_brand ON p_medicine.brand = p_brand.id
-                              WHERE producttoshop.shop_id = '$shop_id' AND productToShopStatus = 'added'");
+                              WHERE producttoshop.shop_id = '$shop_id' AND productToShopStatus = 'added' ORDER BY stock2.stock_id ASC");
 
                               $tableRowCount = 1;
                               while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
@@ -219,10 +225,12 @@ if (!isset($_SESSION['store_id'])) {
                                   <th scope="row"><?= $tableRowCount ?></th>
 
                                   <td id="product_name"><?= $p_medicine_data['medName'] ?></td>
-                                  <td id="product_name"><?= $p_medicine_data['brand'] ?></td>
+                                  <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
 
                                   <td id="product_unit">
                                     <label for=""><?= $p_medicine_data['unit'] ?></label>
+                                    <br>
+                                     <lable class="labQty"><?= $p_medicine_data['siq'] ?></lable>
                                   </td>
                                   <td id="product_cost">
                                     <label for=""><?= $p_medicine_data['cost'] ?></label>
@@ -260,6 +268,7 @@ if (!isset($_SESSION['store_id'])) {
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Product Name</th>
+                       <th scope="col">Brand</th>
                       <th scope="col">Product Cost</th>
                       <th scope="col">Qty</th>
                       <th scope="col"></th>
@@ -269,6 +278,7 @@ if (!isset($_SESSION['store_id'])) {
                     <tr>
                       <th scope="row" id="addproduct_code"></th>
                       <td id="addproduct_name"></td>
+                      <td id="addproduct_brand"></td>
                       <td id="addproduct_cost"></td>
                       <td></td>
                     </tr>
@@ -367,6 +377,7 @@ if (!isset($_SESSION['store_id'])) {
                             <tr>
                               <th scope="col">#</th>
                               <th scope="col">Order Item</th>
+                              <th scope="col">Brand</th>
                               <th scope="col">Price</th>
                               <th scope="col">Qty</th>
                               <th scope="col">Total Price</th>
@@ -375,6 +386,7 @@ if (!isset($_SESSION['store_id'])) {
                           <tbody id="orderConfirmationTableBody">
                             <tr>
                               <th scope="row"></th>
+                              <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
@@ -419,6 +431,7 @@ if (!isset($_SESSION['store_id'])) {
             $(document).on("click", ".add-btn", function() {
               var product_code = $(this).closest("tr").find("#product_code").text();
               var product_name = $(this).closest("tr").find("#product_name").text();
+               var product_brand = $(this).closest("tr").find("#product_brand").text();
               var product_cost = $(this).closest("tr").find("#product_cost").text();
               var product_unit = $(this).closest("tr").find("#product_unit").text();
               var product_qty = 1;
@@ -436,6 +449,7 @@ if (!isset($_SESSION['store_id'])) {
                   "<tr>" +
                   "<th scope='row'>" + product_code + "</th>" +
                   "<td id='addproduct_name'>" + product_name + "</td>" +
+                  "<td id='addproduct_brand'>" + product_brand + "</td>" +
                   "<td id='addproduct_cost'>" + product_cost + "</td>" +
                   "<td>" +
                   "<div class='medi_uni'>" +
@@ -492,6 +506,7 @@ if (!isset($_SESSION['store_id'])) {
             $("#orderConfirmationTableBody tr").each(function() {
               var product_code = $(this).find(".product_code").text();
               var product_name = $(this).find(".product_name").text();
+              var product_brand = $(this).find(".product_brand").text();
               var product_cost = $(this).find(".product_cost").text();
               var product_qty = $(this).find(".product_qty").text();
               var qty_unit = $(this).find(".qty_unit").text();
@@ -499,6 +514,7 @@ if (!isset($_SESSION['store_id'])) {
               var productData = {
                 product_code: product_code,
                 product_name: product_name,
+                product_brand: product_brand,
                 product_cost: product_cost,
                 product_qty: product_qty,
                 qty_unit: qty_unit,

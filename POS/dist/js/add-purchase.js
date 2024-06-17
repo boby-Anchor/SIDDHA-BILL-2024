@@ -162,7 +162,8 @@ function filterBySearch(searchTxt) {
       document.getElementById("filterBySupTable").innerHTML = response;
     }
   };
-  req.open("POST", "filterBySearch.php", true);
+//   req.open("POST", "filterBySearch.php", true); 
+req.open("POST", "filterBySearch-PO.php", true); 
   req.send(form);
 }
 

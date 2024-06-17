@@ -222,17 +222,22 @@ if (!isset($_SESSION['store_id'])) {
 
                                                         foreach ($userLoginData as $userData) {
                                                             $shop_id = $userData['shop_id'];
-
-                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS pname , `code` , p_medicine.img AS img ,
+//    p_medicine.code AS code ,
+                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS pname , 
+                                                            p_medicine.code AS code ,
+                                                            p_medicine.img AS img ,
                                                             p_medicine_category.name AS categoryname , p_brand.name AS brandname ,
-                                                            medicine_unit.unit AS unit , unit_category_variation.ucv_name FROM producttoshop
+                                                            medicine_unit.unit AS unit , unit_category_variation.ucv_name 
+                                                            FROM producttoshop
                                                             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
                                                             INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
                                                             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                                                             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
                                                             WHERE
-                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all')");
+                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
+                                                            ORDER BY p_medicine.name ASC
+                                                            ");
 
                                                             $tableRowCount = 1;
                                                             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
