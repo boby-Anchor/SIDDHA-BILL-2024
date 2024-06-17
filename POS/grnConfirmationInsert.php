@@ -54,31 +54,37 @@ if (isset($_POST['products'])) {
                 $oneItemCost = $cost_input / ((int)$product_qty - (int)$free_qty);
                 $productsAllTotal += $cost_input;
 
-
-                $stock_result = $conn->query("SELECT * FROM  stock2 WHERE stock_item_code = '$product_code' AND stock_item_name = '$product_name' AND stock_item_cost = '$oneItemCost' AND added_discount = '$item_discount' ");
-
                 if (isset($_SESSION['store_id'])) {
 
                     $userLoginData = $_SESSION['store_id'];
 
                     foreach ($userLoginData as $userData) {
                         $shop_id = $userData['shop_id'];
-                        $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_p_cost, grn_p_price, p_plus_discount, p_free_qty) VALUES ('$grn_number', '$product_code','$product_qty','$cost_input','$item_sale_price','$item_discount','$p_free_qty')");
-$conn->query("INSERT INTO test (c1,c2) VALUES ('1', '1')");
+
+                        $stock_result = $conn->query("SELECT * FROM  stock2 WHERE stock_item_code = '$product_code'
+                        AND stock_item_name = '$product_name' AND stock_item_cost = '$oneItemCost' AND added_discount = '$item_discount' AND stock_shop_id = '$shop_id' ");
+
+                        $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_p_cost, grn_p_price, p_plus_discount, p_free_qty)
+                        VALUES ('$grn_number', '$product_code','$product_qty','$cost_input','$item_sale_price','$item_discount','$p_free_qty')");
+
+                        $conn->query("INSERT INTO test (c1,c2) VALUES ('1', '1')");
 
                         if ($stock_result && $stock_result->num_rows > 0) {
-$conn->query("INSERT INTO test (c1,c2) VALUES ('2', '2')");
+                            $conn->query("INSERT INTO test (c1,c2) VALUES ('2', '2')");
                             $stock_data = $stock_result->fetch_assoc();
                             $update_qty = $stock_data["stock_item_qty"] + $product_qty;
                             $update_minimun_unit_qty = $stock_data["stock_mu_qty"] + (int)$minimum_qty;
 
-                            $conn->query("UPDATE stock2 SET stock_item_qty = '$update_qty' , stock_mu_qty = '$update_minimun_unit_qty', stock_shop_id = '$shop_id' WHERE stock_item_code = '$product_code' AND stock_item_name = '$product_name' AND stock_item_cost = '$oneItemCost' AND stock_shop_id = '$shop_id'");
-$conn->query("INSERT INTO test (c1,c2) VALUES ('$update_qty', '$product_code')");
+                            $conn->query("UPDATE stock2 SET stock_item_qty = '$update_qty' , stock_mu_qty = '$update_minimun_unit_qty',
+                            WHERE stock_item_code = '$prod uct_code' AND stock_item_name = '$product_name' AND stock_item_cost = '$oneItemCost' AND stock_shop_id = '$shop_id'");
+
+                            $conn->query("INSERT INTO test (c1,c2) VALUES ('$update_qty', '$product_code')");
                             echo "Stock Update Successfully !";
                         } else {
-$conn->query("INSERT INTO test (c1,c2) VALUES ('3', '3')");
+                            $conn->query("INSERT INTO test (c1,c2) VALUES ('3', '3')");
+
                             $conn->query("INSERT INTO stock2 (stock_item_code,stock_item_name,stock_item_qty,stock_item_cost,stock_mu_qty,unit_cost,unit_s_price,added_discount,item_s_price,stock_shop_id,stock_minimum_unit_barcode)
-                                                        VALUES ('$product_code','$product_name','$product_qty','$oneItemCost','$minimum_qty','$cost_per_unit','$unit_s_price','$item_discount','$item_sale_price','$shop_id','$unit_barcode')");
+                            VALUES ('$product_code','$product_name','$product_qty','$oneItemCost','$minimum_qty','$cost_per_unit','$unit_s_price','$item_discount','$item_sale_price','$shop_id','$unit_barcode')");
                             echo "successfully insert new stock";
                             // echo $unit_barcode;
                             echo $productsAllTotal;
@@ -95,7 +101,7 @@ $conn->query("INSERT INTO test (c1,c2) VALUES ('3', '3')");
 
             foreach ($userLoginData as $userData) {
                 $shop_id = $userData['shop_id'];
-$conn->query("INSERT INTO test (c1,c2) VALUES ('4', '4')");
+                $conn->query("INSERT INTO test (c1,c2) VALUES ('4', '4')");
                 $conn->query("INSERT INTO grn (grn_number,grn_date,grn_sub_total,grn_shop_id) VALUES ('$grn_number','$newDateTime','$productsAllTotal','$shop_id')");
             }
         }

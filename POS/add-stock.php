@@ -191,13 +191,13 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="filterBySearch(this.value);" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs(this.value);" id="bnInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="filterBySearch(this.value);" id="pcInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs(this.value);" id="pcInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="filterBySearch(this.value);" id="pnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs(this.value);" id="pnInput">
                                         </div>
                                         <div class="col-12 products-table mt-4">
                                             <table class="table table-bordered">
@@ -479,7 +479,7 @@ if (!isset($_SESSION['store_id'])) {
 
                 var exists = false;
                 $(".addedProTable tbody tr").each(function() {
-                    if ($(this).find("#addproduct_name").text() === product_name) {
+                    if ($(this).find("#product_code").text() === product_name) {
                         exists = true;
                         return false;
                     }
