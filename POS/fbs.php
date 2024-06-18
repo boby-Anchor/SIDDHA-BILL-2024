@@ -18,12 +18,14 @@ if (isset($_SESSION['store_id'])) {
             $p_medicine_rs = $conn->query("SELECT p_medicine.code AS code, p_medicine.name AS p_name,
             p_medicine_category.name AS category, p_medicine.img AS image_url, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name
+             , `stock2`.`item_s_price` AS itemSprice
             FROM producttoshop
             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
             INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+             INNER JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
             WHERE shop_id = '$shop_id' AND productToShopStatus = 'added' AND p_medicine.code LIKE '%$bnInput%'");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
 ?>
@@ -36,6 +38,7 @@ if (isset($_SESSION['store_id'])) {
                 <td id="product_name"><?= $p_medicine_data['p_name'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>) </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
+                <td id="itemsprice"><?= $p_medicine_data['itemSprice'] ?></td>
                 <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
                 <td><button class="btn btn-outline-success add-btn">Add</button></td>
                 </tr>
@@ -53,12 +56,14 @@ if (isset($_SESSION['store_id'])) {
             $p_medicine_rs = $conn->query("SELECT p_medicine.code AS code, p_medicine.name AS p_name,
             p_medicine_category.name AS category, p_medicine.img AS image_url, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name
+            , `stock2`.`item_s_price` AS itemSprice
             FROM producttoshop
             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
             INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+             INNER JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
             WHERE shop_id = '$shop_id' AND productToShopStatus = 'added' AND p_medicine.name LIKE '%$pcInput%'");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
             ?>
@@ -71,6 +76,7 @@ if (isset($_SESSION['store_id'])) {
                 <td id="product_name"><?= $p_medicine_data['p_name'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>) </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
+                <td id="itemsprice"><?= $p_medicine_data['itemSprice'] ?></td>
                 <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
                 <td><button class="btn btn-outline-success add-btn">Add</button></td>
                 </tr>
@@ -88,12 +94,14 @@ if (isset($_SESSION['store_id'])) {
             $p_medicine_rs = $conn->query("SELECT p_medicine.code AS code, p_medicine.name AS p_name,
             p_medicine_category.name AS category, p_medicine.img AS image_url, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name
+            , `stock2`.`item_s_price` AS itemSprice
             FROM producttoshop
             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
             INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+             INNER JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
             WHERE shop_id = '$shop_id' AND productToShopStatus = 'added' AND p_medicine.name LIKE  '%$pnInput%'");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
             ?>
@@ -109,6 +117,7 @@ if (isset($_SESSION['store_id'])) {
                 </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
+                <td id="itemsprice"><?= $p_medicine_data['itemSprice'] ?></td>
                 <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
                 <td><button class="btn btn-outline-success add-btn">Add</button></td>
                 </tr>
@@ -123,12 +132,14 @@ if (isset($_SESSION['store_id'])) {
             $p_medicine_rs = $conn->query("SELECT p_medicine.code AS code, p_medicine.name AS p_name,
             p_medicine_category.name AS category, p_medicine.img AS image_url, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name
+            , `stock2`.`item_s_price` AS itemSprice
             FROM producttoshop
             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
             INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+             INNER JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
             WHERE shop_id = '$shop_id' AND productToShopStatus = 'added'");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
             ?>
@@ -141,6 +152,7 @@ if (isset($_SESSION['store_id'])) {
                 <td id="product_name"><?= $p_medicine_data['p_name'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>) </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
+                <td id="itemsprice"><?= $p_medicine_data['itemSprice'] ?></td>
                 <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
                 <td><button class="btn btn-outline-success add-btn">Add</button></td>
                 </tr>

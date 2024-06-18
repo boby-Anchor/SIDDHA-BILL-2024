@@ -155,7 +155,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <th>Balance</th>
                                                             <th>Payment Type</th>
                                                             <th>Bill Type</th>
-                                                        </tr>
+                                                        </tr> 
                                                     </thead>
                                                     <tbody>
                                                         <?php

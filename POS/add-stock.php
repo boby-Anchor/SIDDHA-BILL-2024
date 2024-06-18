@@ -208,6 +208,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         <th scope="col">Product Name</th>
                                                         <th scope="col">Product Category</th>
                                                         <th scope="col">Product Brand</th>
+                                                        <th scope="col">Sell Price</th>
                                                         <th scope="col">Product Unit</th>
                                                         <th scope="col"></th>
                                                     </tr>
@@ -228,12 +229,14 @@ if (!isset($_SESSION['store_id'])) {
                                                             p_medicine.img AS img ,
                                                             p_medicine_category.name AS categoryname , p_brand.name AS brandname ,
                                                             medicine_unit.unit AS unit , unit_category_variation.ucv_name 
+                                                             , `stock2`.`item_s_price` AS itemSprice
                                                             FROM producttoshop
                                                             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
                                                             INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
                                                             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                                                             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                                                            INNER JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
                                                             WHERE
                                                             shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
                                                             ORDER BY p_medicine.name ASC
@@ -256,6 +259,9 @@ if (!isset($_SESSION['store_id'])) {
                                                                     </td>
                                                                     <td id="product_brand">
                                                                         <label for=""><?= $p_medicine_data['brandname'] ?></label>
+                                                                    </td>
+                                                                    <td id="itemsprice">
+                                                                        <label for=""><?= $p_medicine_data['itemSprice'] ?></label>
                                                                     </td>
                                                                     <td id="product_unit"><label for=""><?= $p_medicine_data['unit'] ?></label></td>
                                                                     <td><button class="btn btn-outline-success add-btn">Add</button></td>
@@ -448,7 +454,7 @@ if (!isset($_SESSION['store_id'])) {
     <!-- All JS -->
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
-
+    
     <script>
         $(document).ready(function() {
             var ucv_name;
@@ -479,7 +485,7 @@ if (!isset($_SESSION['store_id'])) {
 
                 var exists = false;
                 $(".addedProTable tbody tr").each(function() {
-                    if ($(this).find("#product_code").text() === product_name) {
+                    if ($(this).find("#addproduct_name").text() === product_code) {
                         exists = true;
                         return false;
                     }

@@ -391,7 +391,7 @@ if (!isset($_SESSION['store_id'])) {
 
         foreach ($userLoginData as $userData) {
           $shop_id = $userData['shop_id'];
-          $user_name = $userData['user_name'];
+          $user_name = $userData['name'];
 
           $invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'invoices'");
           $invoiceId_row = $invoiceId_rs->fetch_assoc();

@@ -13828,3 +13828,540 @@ Stack trace:
 [17-Jun-2024 03:41:35 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
 [17-Jun-2024 03:41:35 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
 [17-Jun-2024 03:41:35 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 10:12:46 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 10:12:53 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 10:14:37 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 83
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 84
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 85
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Notice:  Array to string conversion in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:20 Asia/Colombo] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/ceylriea/s.ceylonhospitals.com/POS/daily-report.php on line 86
+[17-Jun-2024 10:16:43 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 10:28:12 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 10:31:33 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 05:02:37 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 05:02:39 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 10:32:45 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 10:53:28 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 11:04:49 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 11:12:53 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 11:13:20 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 11:31:04 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 12:56:41 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 07:33:20 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 13:03:27 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 13:22:08 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php:165
+Stack trace:
+#0 {main}
+  thrown in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php on line 165
+[17-Jun-2024 13:22:08 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php:165
+Stack trace:
+#0 {main}
+  thrown in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php on line 165
+[17-Jun-2024 13:22:08 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php:165
+Stack trace:
+#0 {main}
+  thrown in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php on line 165
+[17-Jun-2024 13:22:14 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 13:55:21 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 08:32:47 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:32:47 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:32:48 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:32:48 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 14:02:54 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 08:35:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:35:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:35:29 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:35:29 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 14:05:34 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 08:36:59 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:36:59 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 14:07:05 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 08:40:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:40:57 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 14:11:03 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 14:19:19 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 08:51:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:51:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:51:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 08:51:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 14:22:02 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 14:28:39 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 09:06:42 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 09:06:43 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 14:36:49 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 15:02:55 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 09:33:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 09:33:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 15:04:03 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 09:35:57 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 09:36:02 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 15:06:08 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 15:35:22 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php:165
+Stack trace:
+#0 {main}
+  thrown in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php on line 165
+[17-Jun-2024 15:35:24 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php:165
+Stack trace:
+#0 {main}
+  thrown in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php on line 165
+[17-Jun-2024 15:35:29 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php:165
+Stack trace:
+#0 {main}
+  thrown in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php on line 165
+[17-Jun-2024 15:35:32 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to a member function fetch_assoc() on bool in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php:165
+Stack trace:
+#0 {main}
+  thrown in /home/ceylriea/s.ceylonhospitals.com/POS/filterBySearch-PO.php on line 165
+[17-Jun-2024 16:00:26 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 10:32:38 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 10:32:38 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[17-Jun-2024 16:02:45 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 16:03:25 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[17-Jun-2024 16:27:04 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 09:07:51 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 09:08:36 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 03:40:01 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 03:40:02 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 09:10:08 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 09:29:38 Asia/Colombo] PHP Notice:  Undefined index: products in /home/ceylriea/s.ceylonhospitals.com/POS/invoiceConfirmation.php on line 5
+[18-Jun-2024 10:08:29 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 10:08:42 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 04:47:31 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 04:48:33 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 04:48:45 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 10:18:50 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 10:23:47 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 04:57:45 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 04:57:50 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 10:28:02 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 10:28:48 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 10:45:44 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 05:17:34 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:17:38 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 10:47:51 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 10:50:19 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:43:46 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 11:14:00 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 05:44:14 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:44:14 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:44:17 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 05:44:17 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 11:14:50 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 05:46:17 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:41 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:41 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:41 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:41 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:41 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:41 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:41 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:04:55 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 11:35:04 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 06:08:38 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:08:38 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:08:43 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 11:47:45 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 11:56:24 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 12:02:42 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 12:03:30 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 12:06:46 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 12:11:06 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 12:11:17 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 358
+[18-Jun-2024 12:12:09 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 363
+[18-Jun-2024 12:13:07 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 06:43:49 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:43:49 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:43:49 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:43:49 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:43:49 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:43:49 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:44:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:44:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:44:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:44:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:44:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:44:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 12:14:39 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 12:16:06 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 12:20:15 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 06:50:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:28 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:42 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:42 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:42 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:47 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:47 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:50:47 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 12:20:54 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 06:58:50 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:50 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:50 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:50 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:50 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:58:56 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:03 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:03 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:03 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:03 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:03 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:16 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:16 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:16 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:16 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:16 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 12:29:24 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 06:59:35 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:35 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:35 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:35 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:40 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:40 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:40 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:40 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:45 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:45 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:45 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:45 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:52 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:52 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:52 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 06:59:52 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 12:29:58 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 07:06:14 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:06:14 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:06:18 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:06:18 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:06:22 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:06:22 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:06:33 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:06:33 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 12:36:44 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 07:11:00 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:00 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:00 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:01 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:01 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:02 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:06 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:06 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:06 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:17 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:17 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:11:17 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 12:41:42 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 07:23:11 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:23:11 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:23:11 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:23:11 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:23:13 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:23:13 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:23:13 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:23:13 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 12:53:26 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 07:38:06 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:06 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:06 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:07 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:07 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:07 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:13 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:13 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:38:13 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 13:08:28 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 07:51:25 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:51:25 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:51:25 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:51:30 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:51:30 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 07:51:30 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 13:21:41 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 14:26:12 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 14:27:39 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 09:04:51 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 09:04:51 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 09:04:51 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 09:04:53 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 09:04:53 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 09:04:53 UTC] PHP Notice:  Undefined variable: p_minimum_qty in /home/ceylriea/s.ceylonhospitals.com/POS/addToGrnConfirmation.php on line 37
+[18-Jun-2024 14:35:04 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
+[18-Jun-2024 14:35:36 Asia/Colombo] PHP Notice:  Trying to access array offset on value of type null in /home/ceylriea/s.ceylonhospitals.com/POS/add-stock.php on line 364
