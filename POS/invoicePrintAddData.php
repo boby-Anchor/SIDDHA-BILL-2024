@@ -63,8 +63,7 @@ if (is_array($inArray) && !empty($inArray)) {
                 $invoiceNumber = isset($product['invoiceNumber']) ? $product['invoiceNumber'] : '';
 
                 $vas_delivery = doubleval($valueAddedServices) + doubleval($deliveryCharges);
-
-
+                
                 $productTotal = doubleval($product_cost) * doubleval($product_qty);
                 $productsAllTotal += $productTotal;
 
@@ -75,7 +74,6 @@ if (is_array($inArray) && !empty($inArray)) {
                     $net_total = $productsAllTotal  * (1 - doubleval($discountPercentage) / 100);
                     $net_total += doubleval($vas_delivery);
                 }
-
                 if ($cardAmount == "") {
                     $cardAmount = 0;
                 }
@@ -84,6 +82,7 @@ if (is_array($inArray) && !empty($inArray)) {
                 }
 
 ?>
+    <!-- items of the invoice -->
                 <div class="col-12">
                     
                     <div class="row">
@@ -112,6 +111,7 @@ if (is_array($inArray) && !empty($inArray)) {
     }
     ?>
     <!-- total amount tika set krnwa -->
+    <!-- footer for amounts -->
     <div class="col-12">
         <div class="row">
             <div>
@@ -144,17 +144,6 @@ if (is_array($inArray) && !empty($inArray)) {
             </div>
         </div>
     </div>
-
-    <!-- <div class="col-12 pt-2">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center text-center">
-                <span style="font-size:9px;">*Kindly note that once the Medication has been taken away. The hospital cannot be held responsible for any issues.</span>
-            </div>
-            <div class="col-12 d-flex justify-content-center">
-                <span>Thank You !</span>
-            </div>
-        </div>
-    </div> -->
 
 <?php
 } else {
