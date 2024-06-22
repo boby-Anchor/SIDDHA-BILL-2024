@@ -17,20 +17,47 @@
   <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  
+  <style>
+     .body-box, .login-page{
+          background-color:#1B8F08;
+      }
+      .body-box{
+          background-color:#105704;
+      }
+      .main-name{
+          color:black !important;
+          font-size:60px;
+          font-weight: bold;
+      }
+      
+      .lable-wight{
+          color:#fff !important;
+          font-size:20px;
+      }
+      
+      .text-feld{
+          color:black !important;
+          font-size:20px !important;
+      }
+      
+  </style>
+  
 </head>
+
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="#"><b>Siddha.lk</b></a>
+    <a href="#" class="main-name"><b>Siddha.lk</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start Your Day</p>
+    <div class="card-body login-card-body body-box">
+      <p class="login-box-msg lable-wight">Sign in to start Your Day</p>
 
       <form action="actions/login.php" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="User ID" name="userid" value="<?php if(isset($_GET['adminlog'])){ echo base64_decode($_GET['user']); }?>" required>
+          <input type="text" class="form-control" class="text-feld" placeholder="User ID" name="userid" value="<?php if(isset($_GET['adminlog'])){ echo base64_decode($_GET['user']); }?>" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -38,7 +65,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="pwd" value="<?php if(isset($_GET['adminlog'])){ echo base64_decode($_GET['pass']); }?>" required>
+          <input type="password" class="form-control" class="text-feld" placeholder="Password" name="pwd" value="<?php if(isset($_GET['adminlog'])){ echo base64_decode($_GET['pass']); }?>" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>

@@ -236,7 +236,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                                                             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                            INNER JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
+                                                            LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
                                                             WHERE
                                                             shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
                                                             ORDER BY p_medicine.name ASC

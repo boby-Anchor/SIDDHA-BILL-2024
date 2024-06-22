@@ -148,7 +148,7 @@ if (isset($_SESSION['store_id'])) {
             </li>
 
 
-            >
+           
 
             <li class="nav-header">REPORTS</li>
             <li class="nav-item">
@@ -169,6 +169,9 @@ if (isset($_SESSION['store_id'])) {
             <!--    <p>Summary Report</p>-->
             <!--  </a>-->
             <!--</li>-->
+            
+            
+            
             <li class="nav-item">
               <a href="daily-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
@@ -193,6 +196,14 @@ if (isset($_SESSION['store_id'])) {
                 <p>Today Cashiers</p>
                 </a>
             </li>
+            
+            <li class="nav-item">
+               <a href="ac-cashier-today-report.php" class="nav-link">
+            <i class="nav-icon fas fa-copy"></i>
+                <p>Today Sale</p>
+                </a>
+            </li>
+            
             <!--<li class="nav-item">-->
             <!--  <a href="top-customer.php" class="nav-link">-->
             <!--    <i class="nav-icon fas fa-copy"></i>-->

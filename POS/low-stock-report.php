@@ -80,6 +80,7 @@ if (!isset($_SESSION['store_id'])) {
                         <!-- <th>#</th> -->
                         <th>Image</th>
                         <th>Product</th>
+                        <th>Brand</th>
                         <th>Category</th>
                         <th>Cost</th>
                         <th>Price</th>
@@ -102,6 +103,7 @@ if (!isset($_SESSION['store_id'])) {
                           $sql = "SELECT 
                           p_medicine.name AS pname,
                           p_medicine.img,
+                          p_brand.name AS brandN,
                           p_medicine_category.name AS category,
                           stock2.stock_item_cost AS cost,
                           stock2.item_s_price AS price,
@@ -112,6 +114,8 @@ if (!isset($_SESSION['store_id'])) {
                           p_medicine ON p_medicine.code = stock2.stock_id
                       INNER JOIN 
                           p_medicine_category ON p_medicine_category.id = p_medicine.category
+                      INNER JOIN 
+                          p_brand ON p_brand.id = p_medicine.brand
                       WHERE 
                           stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty <= 50000;
                       ";
@@ -128,6 +132,7 @@ if (!isset($_SESSION['store_id'])) {
                                   <img src="dist/img/product/<?php echo $row['img']; ?>" width="50" alt="Image">
                                 </td>
                                 <td><?php echo $row['pname']; ?></td>
+                                <td><?php echo $row['brandN']; ?></td>
                                 <td><?php echo $row['category']; ?></td>
                                 <td><?php echo $row['cost']; ?></td>
                                 <td><?php echo $row['price']; ?></td>

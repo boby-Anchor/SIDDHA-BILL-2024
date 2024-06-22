@@ -6,6 +6,9 @@ if (!isset($_SESSION['store_id'])) {
 } else {
   include('config/db.php');
 }
+
+$totalRows = 0;
+    $totalValue = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,6 +51,7 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="card-body overflow-auto">
                   <table id="stockTable" class="table table-bordered">
                     <thead>
+        
                       <tr class="bg-info">
                         <th> </th>
                         <th>Product</th>
@@ -56,12 +60,14 @@ if (!isset($_SESSION['store_id'])) {
                         <th>Cost</th>
                         <th>Price</th>
                         <th>Available Stock</th>
+                        <th>Value</th>
+                        
                       </tr>
                     </thead>
                     <tbody>
                       <?php
                       if (isset($_SESSION['store_id'])) {
-
+ 
                         $userLoginData = $_SESSION['store_id'];
 
                         foreach ($userLoginData as $userData) {
@@ -76,9 +82,11 @@ if (!isset($_SESSION['store_id'])) {
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock2.stock_shop_id = '$shop_id' ORDER BY `stock2`.`stock_id` ASC");
+                          WHERE stock2.stock_shop_id = '$shop_id' ORDER BY p_medicine.name ASC");
                           while ($row = mysqli_fetch_assoc($sql)) {
-
+ $totalRows++;
+            $productValue = $row['p_a_stock'] * $row['p_s_price'];
+            $totalValue += $productValue;
                       ?>
                             <tr>
                               <td style="padding:5px" class="text-center">
@@ -94,12 +102,27 @@ if (!isset($_SESSION['store_id'])) {
                               <td> <?php echo $row['p_cost']; ?>.00</td>
                               <td class="text-center"> <label for="" class="product-selling-price"><?php echo $row['p_s_price']; ?></label> </td>
                               <td> <?php echo $row['p_a_stock']; ?> </td>
+                              <td> <?php echo $row['p_a_stock'] * $row['p_s_price']; ?> </td>
+                               <!--<td> <?php  //echo $productValue; ?> </td>-->
                             </tr>
+                            
                       <?php }
                         }
-                      }
+             }
                       ?>
+                      
                     </tbody>
+
+<tfoot>
+        <tr>
+            <td colspan="7" class="text-right"><strong>Total Rows:</strong></td>
+            <td><?php echo $totalRows; ?></td>
+        </tr>
+        <tr>
+            <td colspan="7" class="text-right"><strong>Total Value:</strong></td>
+            <td><?php echo $totalValue; ?></td>
+        </tr>
+    </tfoot>
 
                   </table>
                 </div>

@@ -69,7 +69,7 @@ if (!isset($_SESSION['store_id'])) {
                               <th class="adThText">Items</th>
                               <th class="adThText">Order Placed Date</th>
                               <th class="adThText">Total Price</th>
-                              <th class="adThText">Action</th>
+                              <th class="adThText"></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -91,15 +91,18 @@ if (!isset($_SESSION['store_id'])) {
                               <tr>
                                 <th><?= $hub_order_details_data["hub_order_number"] ?></th>
                                 <th><?= $hub_order_details_data["shopName"] ?></th>
-                            <th>
+                                <th>
                                   <?php
-                                  $itemCount_result = $conn->query("SELECT COUNT(hub_order_id) AS itemCount  
+                                  $itemCount_result = $conn->query("SELECT COUNT(hub_order_id) AS itemCount , HO_date AS orderDate 
                                   FROM hub_order WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'");
                                   $itemCount_data = $itemCount_result->fetch_assoc();
                                   ?>
-                <button class="btn dropdown-toggle badge badge-info " type="button" 
-                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['itemCount'] ?> </button>
-                                <ul class="dropdown-menu">
+                                  <button class="btn dropdown-toggle badge badge-info " type="button" 
+                                  data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['itemCount'] ?> </button>
+                                  <?php
+                                  ?>
+
+                                  <ul class="dropdown-menu">
                                     <table class="table" id="poItemsTable<?= $hub_order_details_data['hub_order_number'] ?>">
                                       <thead>
                                         <tr>
@@ -124,8 +127,8 @@ if (!isset($_SESSION['store_id'])) {
                                           <tr>
                                             <th scope="row">1</th>
                                             <td><?= $poItems_data["code"] ?></td>
-                                            <td><?= $poItems_data["name"] ?> <?= $poItems_data["hub_order_unit"] ?></td>
-                                            <td><?= $poItems_data["HO_qty"] ?></td>
+                                            <td><?= $poItems_data["name"] ?></td>
+                                            <td><?= $poItems_data["HO_qty"] ?><?= $poItems_data["hub_order_unit"] ?></td>
                                             <td><?= $poItems_data["HO_price"] ?>.00</td>
                                           </tr>
 
@@ -136,9 +139,8 @@ if (!isset($_SESSION['store_id'])) {
                                     </table>
                                     <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['hub_order_number'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
                                   </ul>
-                                  
-                                </th>    
-                                <th><?= $hub_order_details_data['HO_date'] ?></th>
+                                </th>
+                                <th><?= $itemCount_data['orderDate'] ?></th>
                                 <th><?= $hub_order_details_data["hub_order_subTotal"] ?>.00</th>
                                 <th>
                                   <?php
@@ -195,8 +197,6 @@ if (!isset($_SESSION['store_id'])) {
 
                           </tbody>
                         </table>
-
- 
 
                       </div>
                     </div>

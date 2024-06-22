@@ -23,6 +23,10 @@ if (isset($_SESSION['store_id'])) {
     } elseif ($userRoleId == '5') {
       echo "<script>window.location='pos.php';</script>";
       exit; // Exit the loop after redirection
+    } elseif ($userRoleId == '6') {
+      echo "<script>window.location='ac.php';</script>";
+      exit; // Exit the loop after redirection
     }
+    
   }
 }

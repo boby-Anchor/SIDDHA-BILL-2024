@@ -138,6 +138,8 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
             
+            
+            
             <li class="nav-item">
               <a href="cashier-sales-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
@@ -153,7 +155,14 @@ if (isset($_SESSION['store_id'])) {
             </li>
             
             
-            <li class="nav-header"></li>
+            <li class="nav-header">Return</li>
+
+    <li class="nav-item">
+              <a href="return-invoice.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Return Invoice</p>
+              </a>
+            </li>
 
           </ul>
         </nav>

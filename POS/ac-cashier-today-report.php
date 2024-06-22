@@ -72,12 +72,13 @@ if (!isset($_SESSION['store_id'])) {
                                                     <div class="card card-body bg-success">
                                                         <h2 class="text-white text-uppercase">Sell Amount</h2>
                                                         <?php $currentDate = date('Y-m-d'); ?>
-                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
+                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' ")); ?>
                                                         <p class="totalAmount"><?php echo $result['total_amount']; ?> LKR</p>
                                                     </div>
                                                 </div>
 
                                                 <?php
+                                                // AND user_id = '$user_id'
                                                 // $invoiceItemQty_rs = $conn->query("SELECT * FROM invoiceitems
                                                 //     INNER JOIN p_medicine ON  invoiceitems.invoiceItem = p_medicine.name
                                                 //         WHERE DATE(`invoiceDate`) = '$currentDate'");
@@ -113,21 +114,21 @@ if (!isset($_SESSION['store_id'])) {
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-info">
                                                         <h2 class="text-white text-uppercase">Cash Payments</h2>
-                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
+                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount FROM invoices WHERE DATE(`created`) = '$currentDate' ")); ?>
                                                         <p class="totalAmount"><?php echo $result['cash_amount']; ?> LKR</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-primary">
                                                         <h2 class="text-white text-uppercase">Card Payments</h2>
-                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
+                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount FROM invoices WHERE DATE(`created`) = '$currentDate' ")); ?>
                                                         <p class="totalAmount"><?php echo $result['cardPaidAmount']; ?> LKR</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-danger">
                                                         <h2 class="text-white text-uppercase">Cash Out</h2>
-                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
+                                                        <?php $result = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout FROM invoices WHERE DATE(`created`) = '$currentDate' ")); ?>
                                                         <p class="totalAmount">-<?php echo $result['cashout']; ?> LKR</p>
                                                     </div>
                                                 </div>
@@ -161,8 +162,8 @@ if (!isset($_SESSION['store_id'])) {
     </thead>
     <tbody>
         <?php
-        $sql = $conn->query("SELECT * FROM invoices INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'");
-        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
+        $sql = $conn->query("SELECT * FROM invoices INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id WHERE DATE(`created`) = '$currentDate' ");
+        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' "));
         while ($row = mysqli_fetch_assoc($sql)) {
         ?>
         <tr>

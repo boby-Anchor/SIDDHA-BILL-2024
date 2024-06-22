@@ -17,6 +17,8 @@ if (isset($_SESSION['store_id'])) {
       require 'stock_keeper_sidebar.php';
     } elseif ($userRoleId == '5') {
       require 'cashier_sidebar.php';
+    } elseif ($userRoleId == '6') {
+      require 'ac_sidebar.php';
     }
   }
 }

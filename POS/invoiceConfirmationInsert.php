@@ -76,9 +76,7 @@ if (empty($cm)) {
                     $shop_id = $userData['shop_id'];
                     $productsAllTotal += $productTotal;
 
-                    
-                    
-                    
+               
                     $conn->query("INSERT INTO invoiceitems (invoiceNumber,invoiceDate,invoiceItem,invoiceItem_qty,invoiceItem_unit,invoiceItem_price,invoiceItem_total)
                     VALUES ('$invoiceNumber','$currentDateTime','$product_name','$product_qty','$product_unit','$product_cost','$productTotal')");
 
@@ -93,10 +91,10 @@ if (empty($cm)) {
                                 WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND item_s_price = '$product_cost'");
                              
-                            $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty -  '$product_qty') ,
-                            stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
-                                WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                                AND item_s_price = '$product_cost'");
+                            // $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty -  '$product_qty') ,
+                            // stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
+                            //     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                            //     AND item_s_price = '$product_cost'");
                                 
         //                     $conn->query("UPDATE stock23 SET
                             
@@ -115,9 +113,9 @@ if (empty($cm)) {
                             WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                             AND unit_s_price = '$product_cost' ");
                             
-                             $conn->query("UPDATE stock23 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
-                            WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                            AND unit_s_price = '$product_cost' ");
+                            //  $conn->query("UPDATE stock23 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
+                            // WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                            // AND unit_s_price = '$product_cost' ");
                             
                         }
                     } else if ($product_unit == 'pieces') {
@@ -127,8 +125,8 @@ if (empty($cm)) {
                          WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' ");
                          
                         
-                        $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty - '$product_qty')
-                         WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' ");
+                        // $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty - '$product_qty')
+                        //  WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' ");
                          
                     } else if ($product_unit == 'g' || $product_unit == 'ml') {
 
@@ -143,9 +141,9 @@ if (empty($cm)) {
                                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                         AND item_s_price = '$product_cost'");
                                         
-                                    $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty -  '$product_qty') , stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
-                                        WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                                        AND item_s_price = '$product_cost'");
+                                    // $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty -  '$product_qty') , stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
+                                    //     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                                    //     AND item_s_price = '$product_cost'");
                                         
                             } else { //unit s price
                                     //stock_item_qty = (stock_item_qty -  '$product_qty')
@@ -158,9 +156,9 @@ if (empty($cm)) {
                                     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                     AND unit_s_price = '$product_cost' ");
                                     
-                                    $conn->query("UPDATE stock23 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
-                                    WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                                    AND unit_s_price = '$product_cost' ");
+                                    // $conn->query("UPDATE stock23 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
+                                    // WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                                    // AND unit_s_price = '$product_cost' ");
                                     
                                 }
                     } else if ($product_unit == 'cm') {
@@ -174,9 +172,9 @@ if (empty($cm)) {
                                 WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND item_s_price = '$product_cost'");
                                 
-                            $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty -  '$product_qty') , stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
-                                WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                                AND item_s_price = '$product_cost'");
+                            // $conn->query("UPDATE stock23 SET stock_item_qty = (stock_item_qty -  '$product_qty') , stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
+                            //     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                            //     AND item_s_price = '$product_cost'");
                                 
                         } else { //unit s price
                             $product_minimum_qty = $product_qty;
@@ -184,9 +182,9 @@ if (empty($cm)) {
                             WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                             AND unit_s_price = '$product_cost' ");
                             
-                            $conn->query("UPDATE stock23 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
-                            WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                            AND unit_s_price = '$product_cost' ");
+                            // $conn->query("UPDATE stock23 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
+                            // WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                            // AND unit_s_price = '$product_cost' ");
                             
                         }
                     } else if ($product_unit == 'pack / bottle') {
@@ -210,10 +208,10 @@ if (empty($cm)) {
                                         AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
                                         
                                         
-                        $conn->query("UPDATE stock23 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty) ,
-                                        stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
-                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                                        AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");                
+                        // $conn->query("UPDATE stock23 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty) ,
+                        //                 stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
+                        //  WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                        //                 AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");                
                         
                                         
                     } else {
@@ -240,8 +238,8 @@ if (empty($cm)) {
                         $conn->query("UPDATE stock2 SET stock_item_qty = '$new_stock_item_qty' , stock_mu_qty = (stock_mu_qty - '$product_qty')
                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code') AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
                    
-                   $conn->query("UPDATE stock23 SET stock_item_qty = '$new_stock_item_qty' , stock_mu_qty = (stock_mu_qty - '$product_qty')
-                        WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code') AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
+                //   $conn->query("UPDATE stock23 SET stock_item_qty = '$new_stock_item_qty' , stock_mu_qty = (stock_mu_qty - '$product_qty')
+                //         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code') AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
                     
                    
                     }

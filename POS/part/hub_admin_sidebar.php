@@ -440,6 +440,13 @@ if (isset($_SESSION['store_id'])) {
                         </li>
                     </ul>
                         </li>
+                        
+            <li class="nav-item">
+               <a href="ac-cashier-today-report.php" class="nav-link">
+            <i class="nav-icon fas fa-copy"></i>
+                <p>Today Sale</p>
+                </a>
+            </li>
                     
                     
                         <!--<li class="nav-item">-->

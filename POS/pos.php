@@ -422,8 +422,11 @@ if (!isset($_SESSION['store_id'])) {
                           id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
                       </div>
                       <div class="col-12 d-flex justify-content-center center">
-                        <label id="addresspreview"
-                          class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?></label>
+                       <center>
+                           <label id="addresspreview"
+                          class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
+                          </label>
+                       </center> 
                       </div>
                     </td>
                   </tr>
