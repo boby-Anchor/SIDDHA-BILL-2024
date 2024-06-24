@@ -9,7 +9,7 @@ if (isset($_SESSION['store_id'])) {
 
     $user_shop_rs = $conn->query("SELECT * FROM users INNER JOIN shop ON shop.shopId = users.shop_id INNER JOIN user_role ON user_role.user_role_id = users.user_role_id WHERE id = '$userId'");
     $user_shop_data = $user_shop_rs->fetch_assoc();
-?>
+    ?>
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <div class="shopLogoMain">
@@ -73,6 +73,12 @@ if (isset($_SESSION['store_id'])) {
                     <p>Order List</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="po.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>PO bill</p>
+                  </a>
+                </li>
               </ul>
             </li>
 
@@ -117,8 +123,8 @@ if (isset($_SESSION['store_id'])) {
 
 
             <?php
-            if ($user_shop_data['user_role']  == "Stock Keeper" && $user_shop_data['shop_id'] == 1) {
-            ?>
+            if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 1) {
+              ?>
               <li class="nav-header">PRODUCT INFORMATION</li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -150,7 +156,7 @@ if (isset($_SESSION['store_id'])) {
                   </li>
                 </ul>
               </li>
-            <?php
+              <?php
             }
             ?>
 
@@ -267,7 +273,7 @@ if (isset($_SESSION['store_id'])) {
       </div>
 
     </aside>
-<?php
+    <?php
   }
 } else {
   echo "  ";

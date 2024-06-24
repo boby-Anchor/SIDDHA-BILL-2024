@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config/db.php');
+include ('config/db.php');
 
 $poArray = json_decode($_POST['products'], true);
 
@@ -50,11 +50,11 @@ if (is_array($poArray) && !empty($poArray)) {
         $selectBillType = $product['selectBillType'];
         $currentDateTime = date("Y-m-d H:i:s");
 
-        $conn->query("INSERT INTO test (c1, c2) VALUES('$selectBillType', '1')");
+        // $conn->query("INSERT INTO test (name1, name2, idp) VALUES('$selectBillType', '1', '3')");
 
         switch ($selectBillType) {
 
-                // Normal Invoice
+            // Normal Invoice
             case '1':
                 $query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
                 $cm = runQuery($query);
@@ -188,8 +188,6 @@ if (is_array($poArray) && !empty($poArray)) {
                                 } else if ($product_unit == 'pack / bottle') {
                                     //stock_item_qty = (stock_item_qty -  '$product_qty')
 
-
-
                                     $qty_rs = $conn->query("SELECT * FROM stock2 WHERE (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND stock_shop_id = '$shop_id' AND (unit_s_price = '$product_cost' OR item_s_price = '$product_cost' )");
                                     $qty_data = $qty_rs->fetch_assoc();
@@ -198,8 +196,7 @@ if (is_array($poArray) && !empty($poArray)) {
 
                                     //   $conn->query("INSERT INTO `test`(`id`, `c1`, `c2`) VALUES ('$product_unit','$qd','$si')");
 
-
-                                    $minimum_new_qty =  $product_qty;
+                                    $minimum_new_qty = $product_qty;
                                     $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty) ,
                                                 stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
                                  WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
@@ -253,9 +250,9 @@ if (is_array($poArray) && !empty($poArray)) {
                 }
                 break;
 
-                // Online
+            // Online
 
-                // Online Invoice
+            // Online Invoice
             case '2':
                 $query = "SELECT invoice_id  FROM `onlineinvoices` WHERE invoice_id = '$invoiceNumber'";
                 $cm = runQuery($query);
@@ -400,7 +397,7 @@ if (is_array($poArray) && !empty($poArray)) {
                                     //   $conn->query("INSERT INTO `test`(`id`, `c1`, `c2`) VALUES ('$product_unit','$qd','$si')");
 
 
-                                    $minimum_new_qty =  $product_qty;
+                                    $minimum_new_qty = $product_qty;
                                     $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty) ,
                                                 stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
                                  WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
@@ -454,10 +451,7 @@ if (is_array($poArray) && !empty($poArray)) {
                 }
                 break;
 
-
-                // PO
-
-                // PO Invoice
+            // PO Invoice
             case '3':
                 $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoiceNumber'";
                 $cm = runQuery($query);
@@ -602,7 +596,7 @@ if (is_array($poArray) && !empty($poArray)) {
                                     //   $conn->query("INSERT INTO `test`(`id`, `c1`, `c2`) VALUES ('$product_unit','$qd','$si')");
 
 
-                                    $minimum_new_qty =  $product_qty;
+                                    $minimum_new_qty = $product_qty;
                                     $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty) ,
                                                 stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
                                  WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
@@ -656,9 +650,9 @@ if (is_array($poArray) && !empty($poArray)) {
                 }
                 break;
 
-                // CH Medicine
+            // CH Medicine
 
-                // CH Invoice
+            // CH Invoice
             case '4':
                 $query = "SELECT invoice_id  FROM `chinvoices` WHERE invoice_id = '$invoiceNumber'";
                 $cm = runQuery($query);
@@ -803,7 +797,7 @@ if (is_array($poArray) && !empty($poArray)) {
                                     //   $conn->query("INSERT INTO `test`(`id`, `c1`, `c2`) VALUES ('$product_unit','$qd','$si')");
 
 
-                                    $minimum_new_qty =  $product_qty;
+                                    $minimum_new_qty = $product_qty;
                                     $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty) ,
                                                 stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
                                  WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
@@ -1060,7 +1054,7 @@ if (is_array($poArray) && !empty($poArray)) {
 
     switch ($selectBillType) {
 
-            // Normal Invoice
+        // Normal Invoice
         case '1':
             $query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
             $cm = runQuery($query);
@@ -1078,7 +1072,7 @@ if (is_array($poArray) && !empty($poArray)) {
             }
             break;
 
-            // online Invoice
+        // online Invoice
         case '2':
             $query = "SELECT invoice_id  FROM `onlineinvoices` WHERE invoice_id = '$invoiceNumber'";
             $cm = runQuery($query);
@@ -1096,7 +1090,7 @@ if (is_array($poArray) && !empty($poArray)) {
             }
             break;
 
-            // PO Invoice
+        // PO Invoice
         case '3':
             $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoiceNumber'";
             $cm = runQuery($query);
@@ -1114,7 +1108,7 @@ if (is_array($poArray) && !empty($poArray)) {
             }
             break;
 
-            // CH Invoice
+        // CH Invoice
         case '4':
             $query = "SELECT invoice_id  FROM `chinvoices` WHERE invoice_id = '$invoiceNumber'";
             $cm = runQuery($query);
