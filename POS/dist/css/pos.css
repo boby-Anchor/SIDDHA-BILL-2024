@@ -4,8 +4,8 @@
 }
 
 .netTotal {
-    font-size: xx-large; 
-     /*xx-large;*/
+    font-size: xx-large;
+    /*xx-large;*/
     /*align-self: flex-end;*/
 }
 
@@ -54,6 +54,21 @@
     margin-right: 5px;
     width: 100%;
     height: 50%;
+    border-radius: 10px;
+    padding-left: 10px;
+    font-size: larger;
+    font-weight: 600;
+    background: #17954f;
+    border: none;
+    color: white;
+    outline: none;
+    display: block;
+}
+
+.po-shop-selector {
+    margin-right: 5px;
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
     padding-left: 10px;
     font-size: larger;

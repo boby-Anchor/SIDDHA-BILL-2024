@@ -57,7 +57,7 @@ if (isset($_SESSION['store_id'])) {
                 <p>
                   Purchase
                   <i class="fas fa-angle-left right"></i>
-                  <span class="badge badge-info right">2</span>
+                  <span class="badge badge-info right">4</span>
                 </p>
               </a>
               <ul class="nav nav-treeview">
@@ -79,6 +79,12 @@ if (isset($_SESSION['store_id'])) {
                     <p>PO bill</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="po.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Return to Supplier</p>
+                  </a>
+                </li>
               </ul>
             </li>
 
@@ -86,8 +92,10 @@ if (isset($_SESSION['store_id'])) {
 
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
-                <p>Stock</p>
-                <i class="fas fa-angle-left right"></i>
+                <p>Stock
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-info right">4</span>
+                </p>
               </a>
               <ul class="nav nav-treeview">
 
@@ -132,7 +140,7 @@ if (isset($_SESSION['store_id'])) {
                   <p>
                     Products
                     <i class="fas fa-angle-left right"></i>
-                    <span class="badge badge-info right">2</span>
+                    <span class="badge badge-info right">3</span>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
@@ -216,7 +224,7 @@ if (isset($_SESSION['store_id'])) {
                 <p>
                   Unit Variation
                   <i class="fas fa-angle-left right"></i>
-                  <span class="badge badge-info right">2</span>
+                  <span class="badge badge-info right">1</span>
                 </p>
               </a>
               <ul class="nav nav-treeview">
@@ -234,7 +242,7 @@ if (isset($_SESSION['store_id'])) {
                 <p>
                   Suppliers
                   <i class="fas fa-angle-left right"></i>
-                  <span class="badge badge-info right">2</span>
+                  <span class="badge badge-info right">3</span>
                 </p>
               </a>
               <ul class="nav nav-treeview">

@@ -4,7 +4,7 @@ if (!isset($_SESSION['store_id'])) {
     header("location:login.php");
     exit();
 } else {
-    include('config/db.php');
+    include ('config/db.php');
 }
 
 ?>
@@ -21,9 +21,8 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Product -->
     <link rel="stylesheet" href="dist/css/product.css">
     <!-- All CSS -->
-    <?php include("part/all-css.php"); ?>
+    <?php include ("part/all-css.php"); ?>
     <!-- All CSS end -->
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -135,11 +134,11 @@ if (!isset($_SESSION['store_id'])) {
     <div class="wrapper">
 
         <!-- Navbar -->
-        <?php include("part/navbar.php"); ?>
+        <?php include ("part/navbar.php"); ?>
         <!-- Navbar end -->
 
         <!-- Sidebar -->
-        <?php include("part/sidebar.php"); ?>
+        <?php include ("part/sidebar.php"); ?>
         <!--  Sidebar end -->
 
         <!-- Content Wrapper. Contains page content -->
@@ -175,7 +174,7 @@ if (!isset($_SESSION['store_id'])) {
                                         WHERE producttoshop.shop_id = '$shop_id'
                                         ");
                                                 while ($supplier_data = $supplier_rs->fetch_assoc()) {
-                                        ?>
+                                                    ?>
                                                     <option value="<?= $supplier_data["id"] ?>"><?= $supplier_data["name"] ?></option>
                                         <?php
                                                 }
@@ -191,13 +190,16 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs(this.value);" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number"
+                                                onkeyup="fbs(this.value);" id="bnInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs(this.value);" id="pcInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Code"
+                                                onkeyup="fbs(this.value);" id="pcInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs(this.value);" id="pnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Name"
+                                                onkeyup="fbs(this.value);" id="pnInput">
                                         </div>
                                         <div class="col-12 products-table mt-4">
                                             <table class="table table-bordered">
@@ -223,7 +225,7 @@ if (!isset($_SESSION['store_id'])) {
 
                                                         foreach ($userLoginData as $userData) {
                                                             $shop_id = $userData['shop_id'];
-//    p_medicine.code AS code ,
+                                                            //    p_medicine.code AS code ,
                                                             $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS pname , 
                                                             p_medicine.code AS code ,
                                                             p_medicine.img AS img ,
@@ -244,18 +246,27 @@ if (!isset($_SESSION['store_id'])) {
 
                                                             $tableRowCount = 1;
                                                             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
-                                                    ?>
+                                                                ?>
 
                                                                 <tr>
-                                                                    <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
-                                                                    <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
+                                                                    <th id="product_code" class="d-none">
+                                                                        <?= $p_medicine_data['code'] ?>
+                                                                    </th>
+                                                                    <th id="ucv_name" class="d-none">
+                                                                        <?= $p_medicine_data['ucv_name'] ?>
+                                                                    </th>
                                                                     <th scope="row"><?= $tableRowCount ?></th>
                                                                     <td>
-                                                                        <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
+                                                                        <div class="product-img"
+                                                                            style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');">
+                                                                        </div>
                                                                     </td>
-                                                                    <td id="product_name"><?= $p_medicine_data['pname'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>)</td>
+                                                                    <td id="product_name"><?= $p_medicine_data['pname'] ?>
+                                                                        (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>)
+                                                                    </td>
                                                                     <td id="product_category">
-                                                                        <label for=""><?= $p_medicine_data['categoryname'] ?></label>
+                                                                        <label
+                                                                            for=""><?= $p_medicine_data['categoryname'] ?></label>
                                                                     </td>
                                                                     <td id="product_brand">
                                                                         <label for=""><?= $p_medicine_data['brandname'] ?></label>
@@ -263,10 +274,12 @@ if (!isset($_SESSION['store_id'])) {
                                                                     <td id="itemsprice">
                                                                         <label for=""><?= $p_medicine_data['itemSprice'] ?></label>
                                                                     </td>
-                                                                    <td id="product_unit"><label for=""><?= $p_medicine_data['unit'] ?></label></td>
-                                                                    <td><button class="btn btn-outline-success add-btn">Add</button></td>
+                                                                    <td id="product_unit"><label
+                                                                            for=""><?= $p_medicine_data['unit'] ?></label></td>
+                                                                    <td><button class="btn btn-outline-success add-btn">Add</button>
+                                                                    </td>
                                                                 </tr>
-                                                    <?php
+                                                                <?php
                                                                 $tableRowCount++;
                                                             }
                                                         }
@@ -318,7 +331,8 @@ if (!isset($_SESSION['store_id'])) {
 
                     </div>
                     <div class="po_btn col-6 d-none flex-column">
-                        <a type="button" class="btn btn-outline-success proceed-grn" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
+                        <a type="button" class="btn btn-outline-success proceed-grn" id="proceedGrnBtn">Proceed Order <i
+                                class="fas fa-arrow-right"></i></a>
                     </div>
                     <!-- right side desing end -->
                 </div>
@@ -394,7 +408,8 @@ if (!isset($_SESSION['store_id'])) {
                                                     <label for="grnDate">Date</label>
                                                 </div>
                                                 <div class="col-8">
-                                                    <span class="fs-2 text-dark fw-bold" name="grnDate" id="grnDate"><?= $grnDate ?></span>
+                                                    <span class="fs-2 text-dark fw-bold" name="grnDate"
+                                                        id="grnDate"><?= $grnDate ?></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -403,7 +418,8 @@ if (!isset($_SESSION['store_id'])) {
                                     </div>
                                     <div class="col-4 text-center">
                                         <label for="grnTime">Added time</label>
-                                        <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
+                                        <span class="fs-2 text-dark fw-bold" name="grnTime"
+                                            id="grnTime"><?= $grnTime ?></span>
                                     </div>
                                     <div class="orderItem col-12 mt-4 mb-3">
                                         <table class="table table-bordered">
@@ -442,27 +458,27 @@ if (!isset($_SESSION['store_id'])) {
 
 
     <!-- Footer -->
-    <?php include("part/footer.php"); ?>
+    <?php include ("part/footer.php"); ?>
     <!-- Footer End -->
 
 
     <!-- Alert -->
-    <?php include("part/alert.php"); ?>
+    <?php include ("part/alert.php"); ?>
     <!-- Alert end -->
 
 
     <!-- All JS -->
-    <?php include("part/all-js.php"); ?>
+    <?php include ("part/all-js.php"); ?>
     <!-- All JS end -->
-    
+
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var ucv_name;
             var product_unit;
 
             // Function to adjust visibility based on product_unit
             function adjustVisibilityForPackRows() {
-                $(".addedProTable tbody tr").each(function() {
+                $(".addedProTable tbody tr").each(function () {
                     var rowProductUnit = $(this).find("#product_unit").text();
                     if (rowProductUnit === 'pack / bottle') {
                         $(this).find(".auto-generate-m-unit").addClass("d-none");
@@ -474,17 +490,17 @@ if (!isset($_SESSION['store_id'])) {
                 });
             }
 
-            $(document).on("click", ".add-btn", function() {
+            $(document).on("click", ".add-btn", function () {
                 // Fetch necessary data
                 var product_code = $(this).closest("tr").find("#product_code").text();
                 var product_name = $(this).closest("tr").find("#product_name").text();
                 ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
-               
+
                 product_unit = $(this).closest("tr").find("#product_unit").text();
                 var product_qty = 1;
 
                 var exists = false;
-                $(".addedProTable tbody tr").each(function() {
+                $(".addedProTable tbody tr").each(function () {
                     if ($(this).find("#addproduct_name").text() === product_code) {
                         exists = true;
                         return false;
@@ -548,7 +564,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // Event listener for clicking the delete button
-            $(document).on("click", ".cus-delete", function() {
+            $(document).on("click", ".cus-delete", function () {
                 $(this).closest("tr").remove();
                 $("#proceedGrnBtn").removeAttr("data-toggle data-target");
                 $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
@@ -556,13 +572,13 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // Convert to minimum unit based on product_unit
-            $(document).on("input", ".qty-input", function() {
+            $(document).on("input", ".qty-input", function () {
                 if (product_unit === 'l') {
                     var liters = parseFloat($(this).val());
                     var milliliters = ucv_name * liters * 1000;
-                   
+
                     console.log(ucv_name);
-                   
+
                     $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
 
                 }
@@ -595,7 +611,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // free qty input for auto generate minimum qty
-            $(document).on("input", ".free-qty-input", function() {
+            $(document).on("input", ".free-qty-input", function () {
                 if (product_unit === 'l') {
                     var liters = parseFloat($(this).val());
                     var milliliters = ucv_name * liters * 1000;
@@ -631,7 +647,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // add minimum qty manuel for generate cost per unit
-            $(document).on("input", ".cost-input", function() {
+            $(document).on("input", ".cost-input", function () {
                 if ($(this).closest("tr").find(".auto-generate-m-unit").hasClass("d-none")) {
                     var cost = parseFloat($(this).val());
                     var manual_unit_input = parseFloat($(this).closest("tr").find(".manual_unit_input").val());
@@ -641,14 +657,14 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // Calculate cost per unit based on product_unit
-            $(document).on("input", ".cost-input", function() {
+            $(document).on("input", ".cost-input", function () {
                 if (product_unit === "l") {
                     var cost = parseFloat($(this).val());
                     var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
                     var cost_per_unit = cost / milliliters;
-                   
+
                     console.log(ucv_name);
-                   
+
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
@@ -708,18 +724,18 @@ if (!isset($_SESSION['store_id'])) {
             //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
             // });
 
-    $(document).on("input", ".itemdicount", function() {
+            $(document).on("input", ".itemdicount", function () {
                 var add_discount = parseFloat($(this).val());
                 var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
                 var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-               
+
                 var item_sell_price = cost_input / qty;
-               
-              //  var discount =   100 - add_discount;
-               //  var item_cost = cost_input / qty;
-               // var item_sell_price = item_cost / 100 * discount;
-           
-            $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
+
+                //  var discount =   100 - add_discount;
+                //  var item_cost = cost_input / qty;
+                // var item_sell_price = item_cost / 100 * discount;
+
+                $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
             });
 
 
@@ -730,13 +746,13 @@ if (!isset($_SESSION['store_id'])) {
     </script>
 
     <script>
-        $('#myModal').on('shown.bs.modal', function() {
+        $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
         })
     </script>
 
     <script>
-        $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
+        $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function () {
             var grnNumber = document.getElementById("grnNumber").innerText;
             var grnDate = document.getElementById("grnDate").innerText;
             var grnTime = document.getElementById("grnTime").innerText;
@@ -744,21 +760,21 @@ if (!isset($_SESSION['store_id'])) {
 
             var poArray = [];
 
-            $("#grnConfirmationTableBody tr").each(function() {
+            $("#grnConfirmationTableBody tr").each(function () {
                 var product_code = $(this).find(".product_code").text();
                 var product_name = $(this).find(".product_name").text();
                 var product_qty = $(this).find(".product_qty").text();
                 var minimum_qty = $(this).find(".minimum_qty").text();
-                 var item_discount = $(this).find(".item_discount").text();
+                var item_discount = $(this).find(".item_discount").text();
                 var cost_input = $(this).find(".cost_input").text();
-                 if(item_discount > 0){
-                    cost_input = cost_input / 100 * (100- item_discount)
-                   
+                if (item_discount > 0) {
+                    cost_input = cost_input / 100 * (100 - item_discount)
+
                 }
-               
+
                 var cost_per_unit = $(this).find(".cost_per_unit").text();
                 var unit_s_price = $(this).find(".unit_s_price").text();
-               
+
                 var item_sale_price = $(this).find(".item_sale_price").text();
                 var free_qty = $(this).find(".free_qty").text();
                 var free_minimum_qty = $(this).find(".free_minimum_qty").text();
@@ -788,7 +804,7 @@ if (!isset($_SESSION['store_id'])) {
                 data: {
                     products: JSON.stringify(poArray),
                 },
-                success: function(response) {
+                success: function (response) {
                     console.log(response);
                     Swal.mixin({
                         toast: true,
@@ -810,7 +826,7 @@ if (!isset($_SESSION['store_id'])) {
                     });
                     $(".confirmPObtn").prop('disabled', false);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                     $(".confirmPObtn").prop('disabled', false);
                 },

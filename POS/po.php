@@ -84,7 +84,6 @@ if (!isset($_SESSION['store_id'])) {
                                 </div>
                             </div>
 
-                            <!--"payment-method-selector"--> <!--balance--> <!--checkoutBtn-->
                             <div class="col-12 " style="background: #0000004a;">
                                 <div class="row">
                                     <!--class="balance" id="balance"-->
@@ -94,7 +93,6 @@ if (!isset($_SESSION['store_id'])) {
                                             <label class="balance" id="balance">000</label>
                                         </div>
                                     </div>
-                                    <!--name="payment-method-selector" id="payment-method-selector" class="payment-method-selector"-->
                                     <div class="col-6 d-flex justify-content-end align-items-center">
                                         <!--id="checkoutBtn"-->
                                         <button class="btn check-outBtn col-6" id="checkoutBtn"
@@ -110,8 +108,8 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="row">
                             <div class="d-flex justify-content-evenly">
                                 <div class="p-2 p-x-2">
-                                    <select name="payment-method-selector" id="payment-method-selector"
-                                        class="payment-method-selector h-auto">
+                                    <select name="po-shop-selector" id="po-shop-selector"
+                                        class="po-shop-selector h-auto">
                                         <?php
                                         $payment_type_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
                                         while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
@@ -173,14 +171,14 @@ if (!isset($_SESSION['store_id'])) {
                                         foreach ($userLoginData as $userData) {
                                             $shop_id = $userData['shop_id'];
 
-                                            $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name ,
-                        medicine_unit.unit AS unit , unit_category_variation.ucv_name 
-                      FROM stock2
-                      INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-                      INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                      INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                      INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0 ORDER BY p_medicine.name ASC");
+                                            $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
+                                            medicine_unit.unit AS unit , unit_category_variation.ucv_name
+                                            FROM stock2
+                                            INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
+                                            INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                                            INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+                                            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                                            WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0 ORDER BY p_medicine.name ASC");
 
                                             if (!empty($cm)) {
                                                 foreach ($cm as $v) {

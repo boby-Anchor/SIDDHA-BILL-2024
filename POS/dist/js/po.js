@@ -180,7 +180,7 @@ function checkNetTotal() {
             // online no discount
 
             var netTotal = subTotal + vas + dc;
-            $("#netTotal").text(netTotal.toLocaleString());
+            $("#netTotal").text(netTotal.toLocaleString().trim());
         } else {
             // online with discount
 
@@ -188,12 +188,12 @@ function checkNetTotal() {
                 // online with discount no vas
                 var discountedTotal = subTotal * (1 - discountPercentage / 100);
                 var netTotal = discountedTotal + dc;
-                $("#netTotal").text(netTotal.toLocaleString());
+                $("#netTotal").text(netTotal.toLocaleString().trim());
             } else {
                 // online with discount and vas
                 var discountedTotal = subTotal * (1 - discountPercentage / 100);
                 var netTotal = discountedTotal + dc + vas;
-                $("#netTotal").text(netTotal.toLocaleString());
+                $("#netTotal").text(netTotal.toLocaleString().trim());
             }
         }
     }
@@ -387,7 +387,11 @@ function printInvoice() {
 
 function checkout() {
 
-    var invoiceNumber = $(".invoiceNumber").text();
+    var po_shop_id = document.getElementById("po-shop-selector").value;
+    var invoice_number = $(".invoiceNumber").text();
+    var sub_total = $("#subTotal").text().trim();
+    var discount_percentage = $("#discountPercentage").val();
+    var net_total = $("#netTotal").text();
 
     var poArray = [];
     var inArray = [];
@@ -402,7 +406,7 @@ function checkout() {
         var product_cost = parseFloat($(this).find("#product_price").text());
         var product_qty = parseInt($(this).find("#qty").val());
         var product_unit = $(this).find("#unit").text();
-        var productTotal = parseFloat($(this).find("#totalprice").text());
+        var product_total = parseFloat($(this).find("#totalprice").text());
 
         // alert(product_unit);
         var productData = {
@@ -414,8 +418,13 @@ function checkout() {
             product_cost: product_cost,
             product_qty: product_qty,
             product_unit: product_unit,
-            productTotal: productTotal,
-            invoiceNumber: invoiceNumber,
+            product_total: product_total,
+            invoice_number: invoice_number,
+
+            po_shop_id: po_shop_id,
+            sub_total: sub_total,
+            discount_percentage: discount_percentage,
+            net_total: net_total,
 
         };
         poArray.push(productData);
@@ -429,7 +438,6 @@ function checkout() {
             products: JSON.stringify(poArray),
         },
         success: function (response) {
-            console.log(response);
             Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -453,12 +461,19 @@ function checkout() {
                     printInvoice();
                 },
                 error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
+                    Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).fire({
+                        icon: "error",
+                        title: "Bill print error!",
+                    });
                 },
             });
         },
         error: function (xhr, status, error) {
-            console.error(xhr.responseText);
             Swal.mixin({
                 toast: true,
                 position: "top-end",
