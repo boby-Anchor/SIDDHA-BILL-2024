@@ -34,7 +34,6 @@ function getBarcode3() {
 
     req.open("GET", url, true);
     req.send();
-    // alert($("#barcodeResults tr").length);
     $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
     $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
@@ -49,7 +48,6 @@ function getBarcode2(barcode) {
     };
     req.open("GET", "search_barcode2.php?barcode=" + barcode, true);
     req.send();
-    // alert($("#barcodeResults tr").length);
     $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
     $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
@@ -77,7 +75,6 @@ function getBarcode(barcode, stock_s_price) {
 
             document.getElementById("barcodeInput").value = "";
             document.getElementById("barcodeInput").focus();
-            // calculateSubTotal();
             calculateSubTotal();
         }
     };
@@ -90,7 +87,6 @@ function getBarcode(barcode, stock_s_price) {
 
     req.open("GET", url, true);
     req.send();
-    // alert($("#barcodeResults tr").length);
     $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
     $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
@@ -450,7 +446,7 @@ function checkout() {
             $(".confirmPObtn").prop("disabled", false);
 
             $.ajax({
-                url: "invoicePrintAddData.php",
+                url: "poPrintAddData.php",
                 method: "POST",
                 data: {
                     products: inArray,

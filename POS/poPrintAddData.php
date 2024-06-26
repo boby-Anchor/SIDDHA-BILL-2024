@@ -5,10 +5,7 @@ $inArray = $_POST['products'];
 // print_r($inArray);
 $productsAllTotal = 0;
 $balance = 0; // Initialize balance outside of the loop
-$discountPercentage = 0;
-$deliveryCharges = 0;
-$valueAddedServices = 0;
-$cashAmount = 0;
+$discount_percentage = 0;
 $cardAmount = 0;
 $invoiceNumber = "";
 
@@ -36,13 +33,11 @@ if (is_array($inArray) && !empty($inArray)) {
     </div>
 
     <?php
-    foreach ($inArray as $product) {
-        if (isset($_SESSION['store_id'])) {
-            $userLoginData = $_SESSION['store_id'];
-    ?>
+    if (isset($_SESSION['store_id'])) {
+        $userLoginData = $_SESSION['store_id'];
 
+        foreach ($inArray as $product) {
 
-            <?php
             //time tika set krn eka
             foreach ($userLoginData as $userData) {
                 $userId = $userData['id'];
@@ -54,34 +49,21 @@ if (is_array($inArray) && !empty($inArray)) {
                 $product_qty = isset($product['product_qty']) ? $product['product_qty'] : '';
                 $product_unit = isset($product['product_unit']) ? $product['product_unit'] : '';
 
-                $balance = isset($product['balance']) ? $product['balance'] : 0;
-                $discountPercentage = isset($product['discountPercentage']) ? $product['discountPercentage'] : 0;
-                $deliveryCharges = isset($product['deliveryCharges']) ? $product['deliveryCharges'] : 0;
-                $valueAddedServices = isset($product['valueAddedServices']) ? $product['valueAddedServices'] : 0;
-                $cashAmount = isset($product['cashAmount']) ? $product['cashAmount'] : 0;
-                $cardAmount = isset($product['cardAmount']) ? $product['cardAmount'] : 0;
-                $invoiceNumber = isset($product['invoiceNumber']) ? $product['invoiceNumber'] : '';
-
-                $vas_delivery = doubleval($valueAddedServices) + doubleval($deliveryCharges);
+                $sub_total = isset($product['sub_total']) ? $product['sub_total'] : 0;
+                $discount_percentage = isset($product['discount_percentage']) ? $product['discount_percentage'] : 0;
+                $net_total = isset($product['net_total']) ? $product['net_total'] : 0;
 
                 $productTotal = doubleval($product_cost) * doubleval($product_qty);
                 $productsAllTotal += $productTotal;
 
-                if ($discountPercentage == 0) {
-                    $discountPercentage = 0;
-                    $net_total = $productsAllTotal + doubleval($vas_delivery);
-                } else {
-                    $net_total = $productsAllTotal  * (1 - doubleval($discountPercentage) / 100);
-                    $net_total += doubleval($vas_delivery);
+                if ($discount_percentage != 0) {
+                    $net_total = $productsAllTotal  * (1 - doubleval($discount_percentage) / 100);
                 }
-                if ($cardAmount == "") {
-                    $cardAmount = 0;
-                }
-                if ($discountPercentage == "") {
-                    $discountPercentage = 0;
+                if ($discount_percentage == "") {
+                    $discount_percentage = 0;
                 }
 
-            ?>
+    ?>
                 <!-- items of the invoice -->
                 <div class="col-12">
 
@@ -104,10 +86,11 @@ if (is_array($inArray) && !empty($inArray)) {
                 </div>
     <?php
             }
-        } else {
-            echo "Session Expired !";
         }
+    } else {
+        echo "Session Expired !";
     }
+
     ?>
     <!-- total amount tika set krnwa -->
     <!-- footer for amounts -->
@@ -120,26 +103,11 @@ if (is_array($inArray) && !empty($inArray)) {
             </div>
 
             <div class="col-12 d-flex justify-content-end pt-2">
-                <span class="productsAllTotal">Discount %: <?= $discountPercentage ?></span>
-            </div>
-
-            <div class="col-12 d-flex justify-content-end pt-2">
-                <span class="productsAllTotal">VAS & delivery: <?= $vas_delivery ?></span>
+                <span class="productsAllTotal">Discount %: <?= $discount_percentage ?></span>
             </div>
 
             <div class="col-12 d-flex justify-content-end pt-2">
                 <span class="productsAllTotal">Net Total : <?= $net_total ?></span>
-            </div>
-
-            <div class="col-12 d-flex justify-content-end pt-2">
-                <span class="enterAmountFiled">Cash Amount :<?= $cashAmount ?></span>
-            </div>
-            <div class="col-12 d-flex justify-content-end pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
-                <span class="enterAmountFiled">Card Amount :<?= $cardAmount ?></span>
-            </div>
-
-            <div class="col-12 d-flex justify-content-end pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
-                <span class="balance">Balance : <?= $balance ?></span>
             </div>
         </div>
     </div>
