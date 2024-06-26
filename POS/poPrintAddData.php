@@ -18,15 +18,18 @@ if (is_array($inArray) && !empty($inArray)) {
 
         <div class="row">
 
-            <div class="col-4">
+            <div class="col-3">
                 <span class="product_cost">U.Price</span>
             </div>
-            <div class="col-4 text-center">
+            <div class="col-3 text-center">
                 <span class="product_qty">
                     QTY
                 </span>
             </div>
-            <div class="col-4 text-center">
+            <div class="col-3 text-center">
+                <span class="productTotal">D.%</span>
+            </div>
+            <div class="col-3 text-center">
                 <span class="productTotal">Total</span>
             </div>
         </div>
@@ -45,6 +48,8 @@ if (is_array($inArray) && !empty($inArray)) {
 
                 $product_code = isset($product['code']) ? $product['code'] : '';
                 $product_name = isset($product['product_name']) ? $product['product_name'] : '';
+                $product_brand = isset($product['brand']) ? $product['brand'] : '';
+                $product_discount = isset($product['discount']) ? $product['discount'] : '';
                 $product_cost = isset($product['product_cost']) ? $product['product_cost'] : '';
                 $product_qty = isset($product['product_qty']) ? $product['product_qty'] : '';
                 $product_unit = isset($product['product_unit']) ? $product['product_unit'] : '';
@@ -68,18 +73,27 @@ if (is_array($inArray) && !empty($inArray)) {
                 <div class="col-12">
 
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
                             <span class="product_name"><?= $product_name ?></span>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
+                            <span class="product_cost"><?= $product_brand ?></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        
+                        <div class="col-3">
                             <span class="product_cost"><?= $product_cost ?></span>
                         </div>
-                        <div class="col-4 text-center">
+                        <div class="col-3 text-center">
                             <span class="product_qty">
                                 <?= $product_qty ?>
                             </span>
                         </div>
-                        <div class="col-4 text-center">
+                        <div class="col-3 text-center">
+                            <span class="productTotal"><?= $product_discount ?></span>
+                        </div>
+                        <div class="col-3 text-center">
                             <span class="productTotal"><?= $productTotal ?></span>
                         </div>
                     </div>
