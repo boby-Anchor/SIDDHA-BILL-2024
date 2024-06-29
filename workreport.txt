@@ -1,0 +1,38 @@
+16/05/24 - oldSys, pos.php refer, and basic understandings of the system, requirements, and its usage and started working on pos.php
+17/05/24 - started redesigning of pos.php
+18/0524 - completed the designing part and started logic implementation (discount, subtotal, nettotal values calculation)
+20/05/24 - completed logic part.
+21/05/24 - selling type with three words Rewrite queries accordingly in pos.php.
+22/05/24 - Added items in the store to the system
+25/05/24 - Added items in the store to the system
+27/05/24 - manage-purchase.php ui modifications (table data). add-stock.php modifications(search result modified, query edit and table redesign[filterBySearch.php,dist/js/add-purchase.js]), barcodes generated for cashiers use, made pos.php side grid item search functional
+28/05/24 - New requirement pos.php CH Medicine bill type (completed the field display of both bill type[9.25] and payment type[9:50]). Add qty field bug fix. Tried adding item qts to db. and bug fixes.
+29/05/24 - InvoiceConfirmationInsert.php file modifications (identify selling item or min. qty)
+30/05/24 - Rewrite queries and logic part to identify item type and deduct it from DB.
+31/05/24 - Add item qts to the DB at siddha.
+01/06/24 - Add item qts to the DB at siddha.
+03/06/24 - Add item qts to the DB at siddha.
+04/06/24 - Flood holiday (WFH)
+05/06/24 - (WFH GIT set upped in the evening) pos.php added new 4 fields(patient name, contact no, doctor name, reg.no)
+06/06/24 -  Pass data of new fields to the db. Invoice modifications. Item list search fix(Not displaying item prices in dropdown)
+07/06/24 - Modifications(Frontend table overflow) and bill print test. Trained Nethmi and Thilothma to use cashier and storekeeper interfaces.
+08/06/24 - Further frontend modifications and query edits to prevent duplicate invoice entries.
+09/06/24 - System launch. Worked well. Added some missing items to stock, made a new user account for Krishan, and guided Nethmi and Krishan to use the cashier interface and print bills.
+10/06/24 - New two report interfaces for cashiers to view bills sorted by date and daily sales.Tried to make a function to add existing data from stock2 to add-stock.php. Changed duplicate barcodes in different items.
+11/06/24 - Troubleshoot two PCs (No sound output device detection, not turning on [sound port was damaged, fuse in charger burnet and the battery was dead]). Added a new function to check if the patient name and contact no. are inserted.
+12/06/24 - Trained and supervised cashier while working with the system to make sure it functions well. Removed patient phone number check part before checkout from the host. Created some items and added qtys at siddha. New search by qr and name functions to addtoShop-product.php
+13/06/24 - Added brand column and query edit to sort by supplier in add-purchase.php. filterBySupplier.php query rewrite and data set to table. trained thilothma to use the po, and yudeesha the system.
+14/06/24 - Make po and save (add-purchase.php, poConfirmationInsert.php) query editions. admin- online_patient_view_cc_.php online APS table color changes. Hub item qty count. google sheets created and gave access to pharmacy.
+15/06/24 - add-stock.php. adding items to stock2 with item barcode, and with item code when searched. Restord it back beacause item should need to be saved with bacode instead of item code.
+17/06/24 - Fixed the item search in add-stock.php to set only the item barcode. Added some items into stock at hub. Fixed a error not adding items into stock because of item stock check in grnConfirmationInsert.php (wasnt checking in the stock table for shopid).
+18/06/24 - Trained Nethmi to use storekeeper and add stocks. Cashier username print on bill fix.
+19/06/24 - Added stock qty to system in hub. Set up and trained the cashier to put two bills simultaneously with firefox and waterfox.
+20/06/24 - Added stock qty to system in hub.
+22/06/24 - 
+24/06/24 - 
+25/06/24 - 
+
+26/06/24 - Made the PO invoice. new barcode search for po (poSearchBarcode), po print, invoice modifications.
+27/06/24 - Held a morning meeting at 10 a.m. in 54, Inserted recounted stock in the pharmacy. 
+28/06/24 - Inserted recounted stock in the pharmacy.
+29/06/24 - Inserted new stock in pharmacy. Made monthly plan for july. Started making online order cashier interface.

@@ -60,9 +60,9 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="row">
 
                   <!--id="deliveryCharges" amountDiv-->
-                  <div class="col-2 p-2 " id="deliveryChargesField">
+                  <nam class="col-2 p-2 " id="deliveryChargesField">
                     <input type="text" placeholder="DC" class="form-control col-10" id="deliveryCharges" name="deliveryCharges" onkeyup="checkNetTotal()">
-                  </div>
+                  </nam>
 
                   <!--id="valueAddedServices" name="valueAddedServices"-->
                   <div class="col-2 p-2 " id="ServiceChargesField">
@@ -190,7 +190,6 @@ if (!isset($_SESSION['store_id'])) {
 
               </div>
 
-
             </div>
           </div>
 
@@ -208,7 +207,7 @@ if (!isset($_SESSION['store_id'])) {
               <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
                 <form action="" method="post" onkeyup="searchProducts(); return false;">
                   <!-- Added method attribute -->
-                  <input type="search" class="form-control" name="search21" id="search21" placeholder="Search...">
+                  <input type="search" class="form-control" name="search21" id="search21" placeholder="Search. online..">
                 </form>
                 <div class="row" id="productGrid" class="productGrid">
                   <?php
@@ -233,14 +232,7 @@ if (!isset($_SESSION['store_id'])) {
                   ?>
                           <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
                             <div class="product-grid h-100">
-                              <!-- <div class="product-image">
-                                <a href="#" class="image">
-                                  <img src="dist/img/product/
-                                  <?php #echo $v['img']; 
-                                  ?> -->
-                              <!-- " width="50" alt="Image"> -->
-                              <!-- </a> -->
-                              <!-- </div> -->
+
                               <div class="product-content">
                                 <div class="name" style="color: #fff;"><?php echo $v['name']; ?> <br> <?= $v['code']; ?></div>
                                 <div class="name" style="color: #f67019; font-size:20px;"><?php echo $v['bName']; ?></div>
@@ -424,8 +416,8 @@ if (!isset($_SESSION['store_id'])) {
                   <div class="row">
                     <div class="col-12" style="text-align: center;">
                       <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
-
-                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoiceNumber" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span>
+                        <span class="invoiceNumber" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
                     </div>
                   </div>
                 </div>
@@ -444,7 +436,7 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="col-12 d-flex justify-content-center">
                           <span>Thank You !</span>
                         </div>
-                        
+
                         <div class="col-12 d-flex justify-content-center">
                           <div class="check-by-box">
                             <center>
@@ -479,7 +471,6 @@ if (!isset($_SESSION['store_id'])) {
       });
     </script>
 
-
     <script>
       $(document).on('keyup', function(e) {
         if (e.which == 9) {
@@ -497,38 +488,10 @@ if (!isset($_SESSION['store_id'])) {
         }
       });
 
-
-      // <?php
-
-          //   if (isset($_SESSION['store_id'])) {
-
-          //     $userLoginData = $_SESSION['store_id'];
-
-          //     foreach ($userLoginData as $userData) {
-          //       $shop_id = $userData['shop_id'];
-
-          //       $conn->query("INSERT INTO test (id, name1, name2) VALUES ('$shop_id','$shop_id','test1')");
-          //       echo '<script> setFields();</script>';
-
-          //       if ($shop_id == '2') {
-          //         echo '<script> setFields();</script>';
-          //       }
-
-
-          //     }
-          //   }
-
-          //   
-          ?>
-
-
-
       document.addEventListener('DOMContentLoaded', function() {
 
         var doctorNameField = document.getElementById('doctorNameField');
         var regNoField = document.getElementById('regNoField');
-
-
 
         // cash or card selector change
         var selector = document.getElementById('payment-method-selector');
@@ -571,7 +534,8 @@ if (!isset($_SESSION['store_id'])) {
         event.preventDefault();
       }
     </script>
-    <script src="dist/js/pos.js"></script>
+
+    <script src="dist/js/onlineBill.js"></script>
 
   </div>
 </body>

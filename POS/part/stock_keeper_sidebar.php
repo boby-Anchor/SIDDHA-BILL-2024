@@ -85,6 +85,12 @@ if (isset($_SESSION['store_id'])) {
                     <p>Return to Supplier</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="onlineBill.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Online Bill Test</p>
+                  </a>
+                </li>
               </ul>
             </li>
 
