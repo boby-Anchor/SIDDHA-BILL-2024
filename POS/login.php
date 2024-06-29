@@ -41,6 +41,37 @@
           font-size:20px !important;
       }
       
+   .main-h1 {
+    font-weight: bold;
+    font-size: 150px !important;
+    font-size: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+  }
+  
+ .main-h1 span {
+    display: inline-block;
+    animation: shine 3s infinite;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3), 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f;
+    color: #05540D; /* Change text color to blue */
+    transform: perspective(500px) rotateX(15deg) rotateY(0deg) rotateZ(0deg);
+    margin: 0 5px; /* Adjust margin as needed */
+}
+
+  
+  @keyframes shine {
+    0% {
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3), 0 0 10px #ff6, 0 0 20px #ff6, 0 0 30px #ff6, 0 0 40px #ff6;
+    }
+    50% {
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3), 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700, 0 0 40px #ffd700;
+    }
+    100% {
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3), 0 0 10px #ff6, 0 0 20px #ff6, 0 0 30px #ff6, 0 0 40px #ff6;
+    }
+      
   </style>
   
 </head>
@@ -48,7 +79,19 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="#" class="main-name"><b>Siddha.lk</b></a>
+    <!--<a href="#" class="main-name"><b>Siddha.lk</b></a>-->
+<div class="main-h1">
+  <span>S</span>
+  <span>I</span>
+  <span>D</span>
+  <span>D</span>
+  <span>H</span>
+  <span>A</span>
+   <span>.</span>
+  <span>L</span>
+  <span>K</span>
+</div>
+    
   </div>
   <!-- /.login-logo -->
   <div class="card">

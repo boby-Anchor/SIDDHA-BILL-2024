@@ -108,8 +108,8 @@ if (!isset($_SESSION['store_id'])) {
                                                 FROM p_medicine
                                                 JOIN p_brand ON p_brand.id = p_medicine.brand
                                                 INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                                                INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                LIMIT $start_from, $records_per_page";
+                                                INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation ORDER BY p_medicine.name
+                                                LIMIT $start_from, $records_per_page  ";
                                                
                                                 $record_per_page_result = $conn->query($record_per_page_sql);
                                                 if ($record_per_page_result->num_rows > 0) {

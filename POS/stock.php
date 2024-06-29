@@ -9,6 +9,7 @@ if (!isset($_SESSION['store_id'])) {
 
 $totalRows = 0;
     $totalValue = 0;
+    $price = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,11 +83,11 @@ $totalRows = 0;
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock2.stock_shop_id = '$shop_id' ORDER BY p_medicine.name ASC");
+                          WHERE stock2.stock_shop_id = '$shop_id' AND  stock2.stock_item_qty > 0  ORDER BY p_medicine.name ASC     ")  ;
                           while ($row = mysqli_fetch_assoc($sql)) {
  $totalRows++;
-            $productValue = $row['p_a_stock'] * $row['p_s_price'];
-            $totalValue += $productValue;
+            
+            $totalValue += $price;
                       ?>
                             <tr>
                               <td style="padding:5px" class="text-center">
@@ -102,7 +103,23 @@ $totalRows = 0;
                               <td> <?php echo $row['p_cost']; ?>.00</td>
                               <td class="text-center"> <label for="" class="product-selling-price"><?php echo $row['p_s_price']; ?></label> </td>
                               <td> <?php echo $row['p_a_stock']; ?> </td>
-                              <td> <?php echo $row['p_a_stock'] * $row['p_s_price']; ?> </td>
+<td>
+    <?php
+    if ($row['unit'] == "ml") {
+        // Price per unit for ml
+        $price = $row['p_s_price'] / $row['ucv_name'] * $row['p_a_stock'];
+    } else if ($row['unit'] == "l") {
+        // Convert unit capacity value from liters to milliliters before calculating
+        $price = $row['p_s_price'] / ($row['ucv_name'] * 1000) * $row['p_a_stock'];
+    } else {
+        // Default calculation for other units
+        $price = $row['p_a_stock'] * $row['p_s_price'];
+    }
+    // Round to 2 decimal points
+    echo number_format($price, 2);
+    ?>
+</td>
+
                                <!--<td> <?php  //echo $productValue; ?> </td>-->
                             </tr>
                             
@@ -120,7 +137,7 @@ $totalRows = 0;
         </tr>
         <tr>
             <td colspan="7" class="text-right"><strong>Total Value:</strong></td>
-            <td><?php echo $totalValue; ?></td>
+            <td><?php echo  number_format($totalValue, 2); ?></td>
         </tr>
     </tfoot>
 

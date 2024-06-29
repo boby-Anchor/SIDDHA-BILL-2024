@@ -58,7 +58,7 @@ if (is_array($poArray) && !empty($poArray)) {
                         $shop_id = $userData['shop_id'];
                         $productsAllTotal += $product_total;
 
-                        $conn->query("INSERT INTO poinvoiceitems (invoiceNumber, item_code, invoiceItem, invoiceItem_qty, invoiceItem_unit, invoiceItem_price, invoiceItem_total)
+                        $conn->query("INSERT INTO poinvoiceitems (invoiceNumber,item_code,invoiceItem,invoiceItem_qty,invoiceItem_unit,invoiceItem_price,invoiceItem_total)
                         VALUES ('$invoice_number','$code','$product_name','$product_qty','$product_unit','$product_cost','$product_total')");
 
                         if ($product_unit == 'kg' || $product_unit == 'l') {
@@ -167,8 +167,25 @@ if (is_array($poArray) && !empty($poArray)) {
 
     }  // close for-each $poArrary 
 
+    // $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'";
+    // $cm = runQuery($query);
+
+    // if (empty($cm)) {
+    // $conn->query("INSERT INTO test (id, name1, name2) VALUES('test1','$po_shop_id','$invoice_number')");
+
+    // $conn->query("INSERT INTO test (id, name1, name2) VALUES('$user_id','$shop_id','$currentDateTime')");
+
+    // $conn->query("INSERT INTO test (id, name1, name2) VALUES('$sub_total','$discount_percentage','$net_total')");
+
     $conn->query("INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total) 
  VALUES ('$invoice_number', '$user_id', '$shop_id','$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')");
+
+    // $conn->query("INSERT INTO test (id, name1, name2) VALUES('7','7','7')");
+
+    // } else {
+    //     echo "DD2";
+    //     exit;
+    // }
 
 } else {
 

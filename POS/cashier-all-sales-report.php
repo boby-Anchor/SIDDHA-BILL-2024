@@ -92,6 +92,8 @@ if (!isset($_SESSION['store_id'])) {
                 </form>
             </div>
             <div class="card-body">
+                 <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button>
+       
                 <table id="mytable" class="table table-bordered table-hover">
                     <thead>
                         <tr class="bg-info">
@@ -116,7 +118,7 @@ if (!isset($_SESSION['store_id'])) {
                                              INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id 
                                              INNER JOIN users ON users.id = invoices.user_id 
                          INNER JOIN shop ON shop.shopId = invoices.shop_id 
-                                             WHERE DATE(`created`) = '$currentDate' ");
+                                             WHERE DATE(`created`) = '$currentDate'    ORDER BY  created DESC");
                         $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount 
                                                                    FROM invoices 
                                                                    WHERE DATE(`created`) = '$currentDate' 

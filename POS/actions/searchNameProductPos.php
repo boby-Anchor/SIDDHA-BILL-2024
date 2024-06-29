@@ -44,8 +44,8 @@ if (isset($_SESSION['store_id'])) {
                         <div class="product-grid h-100">
                             
                             <div class="product-content">
-                                <div class="name" style="color: #f67019;">' . $v['name'] . '<br>' . $v['code'] . '</div>
-                                <div class="name" style="color: #f67019;">' . $v['bName'] . '</div>
+                                <div class="name" style="color: #fff;">' . $v['name'] . '<br>' . $v['code'] . '</div>
+                                <div class="name" style="color: #f67019; font-size:20px;">' . $v['bName'] . '</div>
                                 <div class="price" style="color: #3dce12;">I:- RS ' . $v['item_s_price'] . '</div>
                                 <div class="price" style="color: #d8f13b;">U:- RS ' . $v['unit_s_price'] . '</div>
                                <div class="title" style="color: #fff;">' . $v['ucv_name2'] . ' -' . $v['unit2'] . '</div>                               

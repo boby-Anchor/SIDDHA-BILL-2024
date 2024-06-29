@@ -79,13 +79,13 @@ if (!isset($_SESSION['store_id'])) {
 
                                                 foreach ($userLoginData as $userData) {
                                                     $shop_id = $userData['shop_id'];
-
-                                                    if ($shop_id == '1') {
-                                                        $sql = $conn->query("SELECT * FROM `shop` WHERE shopStatus='1'");
-                                                    } else {
-                                                        $sql = $conn->query("SELECT * FROM `shop` WHERE shopStatus='1' AND shop.shopId = '$shop_id'");
+                                                    
+                                                    if($shop_id=='1'){
+                                                         $sql = $conn->query("SELECT * FROM `shop` WHERE shopStatus='1'");
+                                                    }else{
+                                                         $sql = $conn->query("SELECT * FROM `shop` WHERE shopStatus='1' AND shop.shopId = '$shop_id'");
                                                     }
-
+                                                    
                                                     $n = 0;
                                                     // $sql = $conn->query("SELECT * FROM `shop` WHERE shopStatus='1' AND shop.shopId = '$shop_id'");
                                                     while ($row = mysqli_fetch_assoc($sql)) {
@@ -107,9 +107,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                             <a class="btn btn-info btn-sm" data-toggle="modal" data-target="#editeShop<?= $row["shopId"] ?>"><i class="fa fa-edit"></i></a>
                                                                         </div>
                                                                         <div class="col-6">
-                                                                            <a href="actions/remove.php?removeshop&code=<?php echo base64_encode($row['shopId']); ?>&wr=<?php echo base64_encode("shop"); ?>" class="btn btn-danger btn-sm delete" onclick="return confirm('Are you sure to delete?')">
-                                                                                <i class="fa fa-trash"></i>
-                                                                            </a>
+                                                                            <a href="actions/remove.php?removeshop&code=<?php echo base64_encode($row['shopId']); ?>&wr=<?php echo base64_encode("shop"); ?>" class="btn btn-danger btn-sm delete" onclick="return confirm('Are you sure to delete?')"> <i class="fa fa-trash"></i> </a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
