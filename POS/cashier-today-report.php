@@ -144,92 +144,92 @@ if (!isset($_SESSION['store_id'])) {
                                                 <h4>Top Sell Product</h4>
                                             </div>
                                             <div class="card-body">
-                                                
-                                                
-                                                
-                        <table id="mytable" class="table table-bordered table-hover">
-    <thead>
-        <tr class="bg-info">
-            <th>Invoice Number</th>
-            <th>Total Amount <span class="caret"></span></th>
-            <th>Cash Amount</th>
-            <th>Card Amount</th>
-            <th>Balance</th>
-            <th>Payment Type</th>
-            <th>Bill Type</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $sql = $conn->query("SELECT * FROM invoices INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'");
-        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
-        while ($row = mysqli_fetch_assoc($sql)) {
-        ?>
-        <tr>
-            <td><?php echo $row['invoice_id']; ?><br><?php echo $row['p_name']; ?></td>
-            <td>
-                <?php echo $row['total_amount']; ?>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <table class="table" id="poItemsTable<?php echo $row['invoice_id']; ?>">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Item Code</th>
-                                    <th scope="col">Item Name</th>
-                                    <th scope="col">Qty</th>
-                                    <th scope="col">Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $currentDate = date("d-m-Y");
-                                
-                                // SELECT `invoiceItemId`, `invoiceNumber`, `invoiceDate`, `invoiceItem`, `invoiceItem_qty`, `invoiceItem_unit`, `invoiceItem_price`, `invoiceItem_total` 
-                                // FROM `invoiceitems` WHERE 1
-                                
-                                $poItems_query = "
+
+
+
+                                                <table id="mytable" class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr class="bg-info">
+                                                            <th>Invoice Number</th>
+                                                            <th>Total Amount <span class="caret"></span></th>
+                                                            <th>Cash Amount</th>
+                                                            <th>Card Amount</th>
+                                                            <th>Balance</th>
+                                                            <th>Payment Type</th>
+                                                            <th>Bill Type</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        $sql = $conn->query("SELECT * FROM invoices INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'");
+                                                        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
+                                                        while ($row = mysqli_fetch_assoc($sql)) {
+                                                        ?>
+                                                            <tr>
+                                                                <td><?php echo $row['invoice_id']; ?><br><?php echo $row['p_name']; ?></td>
+                                                                <td>
+                                                                    <?php echo $row['total_amount']; ?>
+                                                                    <div class="dropdown">
+                                                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                                                                            <span class="caret"></span>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu">
+                                                                            <table class="table" id="poItemsTable<?php echo $row['invoice_id']; ?>">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th scope="col">#</th>
+                                                                                        <th scope="col">Item Code</th>
+                                                                                        <th scope="col">Item Name</th>
+                                                                                        <th scope="col">Qty</th>
+                                                                                        <th scope="col">Cost</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <?php
+                                                                                    $currentDate = date("d-m-Y");
+
+                                                                                    // SELECT `invoiceItemId`, `invoiceNumber`, `invoiceDate`, `invoiceItem`, `invoiceItem_qty`, `invoiceItem_unit`, `invoiceItem_price`, `invoiceItem_total` 
+                                                                                    // FROM `invoiceitems` WHERE 1
+
+                                                                                    $poItems_query = "
                                     SELECT invoiceitems.* FROM invoiceitems INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber 
                                     WHERE   invoices.invoice_id = '" . $row['invoice_id'] . "' ";
-                                $poItems_result = $conn->query($poItems_query);
-                                while ($poItems_data = $poItems_result->fetch_assoc()) {
-                                ?>
-                                <tr>
-                                    <td></td>
-                                    <td><?php echo $poItems_data['invoiceItem']; ?></td>
-                                    <td><?php echo $poItems_data['invoiceItem_qty']; ?></td>
-                                    <td><?php echo $poItems_data['invoiceItem_unit']; ?></td>
-                                    <td><?php echo $poItems_data['invoiceItem_price']; ?></td>
-                                </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                        <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?php echo $row['invoice_id']; ?>');">
-                            <i class="nav-icon fas fa-copy"></i> PRINT
-                        </button>
-                    </ul>
-                </div>
-            </td>
-            <td><?php echo $row['paidAmount']; ?></td>
-            <td><?php echo $row['cardPaidAmount']; ?></td>
-            <td><?php echo $row['balance']; ?></td>
-            <td><?php echo $row['payment_type']; ?></td>
-            <td><?php echo $row['bill_type_name']; ?></td>
-        </tr>
-        <?php } ?>
-        <tr class="bg-dark">
-            <td></td>
-            <td class="fw-bold" style="font-size: larger;">Total Sales</td>
-            <td class="fw-bold" style="font-size: larger;"><?php echo $result['total_amount']; ?> LKR</td>
-        </tr>
-    </tbody>
-</table>
+                                                                                    $poItems_result = $conn->query($poItems_query);
+                                                                                    while ($poItems_data = $poItems_result->fetch_assoc()) {
+                                                                                    ?>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td><?php echo $poItems_data['invoiceItem']; ?></td>
+                                                                                            <td><?php echo $poItems_data['invoiceItem_qty']; ?></td>
+                                                                                            <td><?php echo $poItems_data['invoiceItem_unit']; ?></td>
+                                                                                            <td><?php echo $poItems_data['invoiceItem_price']; ?></td>
+                                                                                        </tr>
+                                                                                    <?php } ?>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?php echo $row['invoice_id']; ?>');">
+                                                                                <i class="nav-icon fas fa-copy"></i> PRINT
+                                                                            </button>
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+                                                                <td><?php echo $row['paidAmount']; ?></td>
+                                                                <td><?php echo $row['cardPaidAmount']; ?></td>
+                                                                <td><?php echo $row['balance']; ?></td>
+                                                                <td><?php echo $row['payment_type']; ?></td>
+                                                                <td><?php echo $row['bill_type_name']; ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                        <tr class="bg-dark">
+                                                            <td></td>
+                                                            <td class="fw-bold" style="font-size: larger;">Total Sales</td>
+                                                            <td class="fw-bold" style="font-size: larger;"><?php echo $result['total_amount']; ?> LKR</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
 
-                                                
-                                        
+
+
                                             </div>
                                         </div>
                                     </div>

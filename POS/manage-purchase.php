@@ -60,8 +60,8 @@ if (!isset($_SESSION['store_id'])) {
                         <h3 class="card-title">Order</h3>
                       </div>
                       <div class="card-body">
-                        
-<table class="table table-bordered table-hover">
+
+                        <table class="table table-bordered table-hover">
                           <thead>
                             <tr class="bg-info">
                               <th class="adThText">Order Number</th>
@@ -91,15 +91,14 @@ if (!isset($_SESSION['store_id'])) {
                               <tr>
                                 <th><?= $hub_order_details_data["hub_order_number"] ?></th>
                                 <th><?= $hub_order_details_data["shopName"] ?></th>
-                            <th>
+                                <th>
                                   <?php
                                   $itemCount_result = $conn->query("SELECT COUNT(hub_order_id) AS itemCount  
                                   FROM hub_order WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'");
                                   $itemCount_data = $itemCount_result->fetch_assoc();
                                   ?>
-                <button class="btn dropdown-toggle badge badge-info " type="button" 
-                    data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['itemCount'] ?> </button>
-                                <ul class="dropdown-menu">
+                                  <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['itemCount'] ?> </button>
+                                  <ul class="dropdown-menu">
                                     <table class="table" id="poItemsTable<?= $hub_order_details_data['hub_order_number'] ?>">
                                       <thead>
                                         <tr>
@@ -118,7 +117,7 @@ if (!isset($_SESSION['store_id'])) {
                                         $poItems_result = $conn->query("SELECT * FROM hub_order 
                                         INNER JOIN p_medicine ON p_medicine.id = hub_order.HO_item 
                                         WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'  ");
-                                        
+
                                         while ($poItems_data = $poItems_result->fetch_array()) {
                                         ?>
                                           <tr>
@@ -136,8 +135,8 @@ if (!isset($_SESSION['store_id'])) {
                                     </table>
                                     <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['hub_order_number'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
                                   </ul>
-                                  
-                                </th>    
+
+                                </th>
                                 <th><?= $hub_order_details_data['HO_date'] ?></th>
                                 <th><?= $hub_order_details_data["hub_order_subTotal"] ?>.00</th>
                                 <th>
@@ -196,7 +195,7 @@ if (!isset($_SESSION['store_id'])) {
                           </tbody>
                         </table>
 
- 
+
 
                       </div>
                     </div>

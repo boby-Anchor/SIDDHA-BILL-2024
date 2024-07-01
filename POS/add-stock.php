@@ -223,7 +223,7 @@ if (!isset($_SESSION['store_id'])) {
 
                                                         foreach ($userLoginData as $userData) {
                                                             $shop_id = $userData['shop_id'];
-//    p_medicine.code AS code ,
+                                                            //    p_medicine.code AS code ,
                                                             $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS pname , 
                                                             p_medicine.code AS code ,
                                                             p_medicine.img AS img ,
@@ -327,7 +327,7 @@ if (!isset($_SESSION['store_id'])) {
 
         <!-- add new unit modal start -->
 
-        <div class="container">
+        <!-- <div class="container">
             <div class="modal fade" id="addunitmodal" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -343,7 +343,7 @@ if (!isset($_SESSION['store_id'])) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- add new unit modal end -->
@@ -454,7 +454,7 @@ if (!isset($_SESSION['store_id'])) {
     <!-- All JS -->
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
-    
+
     <script>
         $(document).ready(function() {
             var ucv_name;
@@ -479,7 +479,7 @@ if (!isset($_SESSION['store_id'])) {
                 var product_code = $(this).closest("tr").find("#product_code").text();
                 var product_name = $(this).closest("tr").find("#product_name").text();
                 ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
-               
+
                 product_unit = $(this).closest("tr").find("#product_unit").text();
                 var product_qty = 1;
 
@@ -560,9 +560,9 @@ if (!isset($_SESSION['store_id'])) {
                 if (product_unit === 'l') {
                     var liters = parseFloat($(this).val());
                     var milliliters = ucv_name * liters * 1000;
-                   
+
                     console.log(ucv_name);
-                   
+
                     $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
 
                 }
@@ -646,9 +646,9 @@ if (!isset($_SESSION['store_id'])) {
                     var cost = parseFloat($(this).val());
                     var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
                     var cost_per_unit = cost / milliliters;
-                   
+
                     console.log(ucv_name);
-                   
+
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
@@ -708,18 +708,18 @@ if (!isset($_SESSION['store_id'])) {
             //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
             // });
 
-    $(document).on("input", ".itemdicount", function() {
+            $(document).on("input", ".itemdicount", function() {
                 var add_discount = parseFloat($(this).val());
                 var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
                 var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-               
+
                 var item_sell_price = cost_input / qty;
-               
-              //  var discount =   100 - add_discount;
-               //  var item_cost = cost_input / qty;
-               // var item_sell_price = item_cost / 100 * discount;
-           
-            $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
+
+                //  var discount =   100 - add_discount;
+                //  var item_cost = cost_input / qty;
+                // var item_sell_price = item_cost / 100 * discount;
+
+                $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
             });
 
 
@@ -749,16 +749,16 @@ if (!isset($_SESSION['store_id'])) {
                 var product_name = $(this).find(".product_name").text();
                 var product_qty = $(this).find(".product_qty").text();
                 var minimum_qty = $(this).find(".minimum_qty").text();
-                 var item_discount = $(this).find(".item_discount").text();
+                var item_discount = $(this).find(".item_discount").text();
                 var cost_input = $(this).find(".cost_input").text();
-                 if(item_discount > 0){
-                    cost_input = cost_input / 100 * (100- item_discount)
-                   
+                if (item_discount > 0) {
+                    cost_input = cost_input / 100 * (100 - item_discount)
+
                 }
-               
+
                 var cost_per_unit = $(this).find(".cost_per_unit").text();
                 var unit_s_price = $(this).find(".unit_s_price").text();
-               
+
                 var item_sale_price = $(this).find(".item_sale_price").text();
                 var free_qty = $(this).find(".free_qty").text();
                 var free_minimum_qty = $(this).find(".free_minimum_qty").text();

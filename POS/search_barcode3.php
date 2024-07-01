@@ -70,7 +70,7 @@ if (isset($_GET['barcode'])) {
                                             <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
                                         </div>
                                         <div class="col-4">
-                                            <input class="form-control text-center" id="qty" type="number" min="1" value="1" onchange="updateTotal(this)" data-price="<?= $barcodeData['item_s_price'] ?>">
+                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" onchange="updateTotal(this)" data-price="<?= $barcodeData['item_s_price'] ?>">
                                         </div>
                                         <div class="col-2 d-flex justify-content-center">
                                             <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
@@ -107,7 +107,7 @@ if (isset($_GET['barcode'])) {
                                             <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
                                         </div>
                                         <div class="col-4">
-                                            <input class="form-control text-center" id="qty" type="number" min="1" value="1" onchange="updateTotal(this)" data-price="<?= $barcodeData['unit_s_price'] ?>">
+                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" onchange="updateTotal(this)" data-price="<?= $barcodeData['unit_s_price'] ?>">
                                             
                                         </div>
                                         <div class="col-2 d-flex justify-content-center">

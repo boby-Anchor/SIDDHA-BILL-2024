@@ -4,7 +4,7 @@ if (!isset($_SESSION['store_id'])) {
     header("location:login.php");
     exit();
 } else {
-    include ('config/db.php');
+    include('config/db.php');
 }
 // include('actions/cart-pos.php');
 //   include('actions/cart.php');
@@ -22,10 +22,10 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Product -->
     <link rel="stylesheet" href="dist/css/product.css">
     <!-- Data Table CSS -->
-    <?php include ("part/data-table-css.php"); ?>
+    <?php include("part/data-table-css.php"); ?>
     <!-- Data Table CSS end -->
     <!-- All CSS -->
-    <?php include ("part/all-css.php"); ?>
+    <?php include("part/all-css.php"); ?>
     <!-- All CSS end -->
 
     <!-- bootstrap icon link -->
@@ -38,11 +38,11 @@ if (!isset($_SESSION['store_id'])) {
     <div class="wrapper">
 
         <!-- Navbar -->
-        <?php include ("part/navbar.php"); ?>
+        <?php include("part/navbar.php"); ?>
         <!-- Navbar end -->
 
         <!-- Sidebar -->
-        <?php include ("part/sidebar.php"); ?>
+        <?php include("part/sidebar.php"); ?>
         <!--  Sidebar end -->
 
         <div class="content-wrapper bg-dark">
@@ -76,10 +76,8 @@ if (!isset($_SESSION['store_id'])) {
                             <div class="col-12 p-1" style="background: #000;">
                                 <div class="row" style="background: #000;">
                                     <!--id="discountPercentage"-->
-                                    <div class="col-4 p-2 " id="discountField"
-                                        style="color:#000 !important; background: #000;">
-                                        <input type="text" placeholder="Discount %" class="form-control col-8"
-                                            id="discountPercentage" name="discountPercentage" onkeyup="addDiscount()">
+                                    <div class="col-4 p-2 " id="discountField" style="color:#000 !important; background: #000;">
+                                        <input type="text" placeholder="Discount %" class="form-control col-8" id="discountPercentage" name="discountPercentage" onkeyup="addDiscount()">
                                     </div>
                                 </div>
                             </div>
@@ -95,9 +93,7 @@ if (!isset($_SESSION['store_id'])) {
                                     </div>
                                     <div class="col-6 d-flex justify-content-end align-items-center">
                                         <!--id="checkoutBtn"-->
-                                        <button class="btn check-outBtn col-6" id="checkoutBtn"
-                                            onclick="checkout()">Checkout <i
-                                                class="bi bi-arrow-right-circle-fill"></i></button>
+                                        <button class="btn check-outBtn col-6" id="checkoutBtn" onclick="checkout()">Checkout <i class="bi bi-arrow-right-circle-fill"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -108,16 +104,15 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="row">
                             <div class="d-flex justify-content-evenly">
                                 <div class="p-2 p-x-2">
-                                    <select name="po-shop-selector" id="po-shop-selector"
-                                        class="po-shop-selector h-auto">
+                                    <select name="po-shop-selector" id="po-shop-selector" class="po-shop-selector h-auto">
                                         <?php
                                         $payment_type_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
                                         while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
-                                            ?>
+                                        ?>
                                             <option value="<?= $payment_type_row['shopId'] ?>">
                                                 <?= $payment_type_row['shopName'] ?>
                                             </option>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </select>
@@ -126,12 +121,10 @@ if (!isset($_SESSION['store_id'])) {
                             <br>
 
                             <div class="col-4 mb-2 p-2 p-x-2">
-                                <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
-                                    onchange="getBarcode2(this.value);">
+                                <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..." onchange="getBarcode2(this.value);">
                             </div>
                             <div class="col-4 mb-2 p-2 p-x-2">
-                                <select class="form-control" name="" id="selectPrices"
-                                    onchange="getBarcode3()"></select>
+                                <select class="form-control" name="" id="selectPrices" onchange="getBarcode3()"></select>
                             </div>
 
                             <!--auto-->
@@ -159,8 +152,7 @@ if (!isset($_SESSION['store_id'])) {
                             <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
                                 <form action="" method="post" onkeyup="searchProducts(); return false;">
                                     <!-- Added method attribute -->
-                                    <input type="search" class="form-control" name="search21" id="search21"
-                                        placeholder="Search...">
+                                    <input type="search" class="form-control" name="search21" id="search21" placeholder="Search...">
                                 </form>
                                 <div class="row" id="productGrid" class="productGrid">
                                     <?php
@@ -182,7 +174,7 @@ if (!isset($_SESSION['store_id'])) {
 
                                             if (!empty($cm)) {
                                                 foreach ($cm as $v) {
-                                                    ?>
+                                    ?>
                                                     <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
                                                         <div class="product-grid h-100">
                                                             <div class="product-content">
@@ -201,7 +193,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                <?php }
+                                    <?php }
                                             }
                                         }
                                     } ?>
@@ -218,7 +210,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 data: {
                                                     searchName: searchInput
                                                 },
-                                                success: function (response) {
+                                                success: function(response) {
                                                     $('#productGrid').html(response);
                                                     //console.log(response)
                                                 },
@@ -226,7 +218,6 @@ if (!isset($_SESSION['store_id'])) {
                                             });
                                         }
                                     }
-
                                 </script>
                             </div>
 
@@ -241,16 +232,16 @@ if (!isset($_SESSION['store_id'])) {
         <!-- confirm po modal end -->
 
         <!-- Footer -->
-        <?php include ("part/footer.php"); ?>
+        <?php include("part/footer.php"); ?>
         <!-- Footer End -->
         <!-- Alert -->
-        <?php include ("part/alert.php"); ?>
+        <?php include("part/alert.php"); ?>
         <!-- Alert end -->
         <!-- All JS -->
-        <?php include ("part/all-js.php"); ?>
+        <?php include("part/all-js.php"); ?>
         <!-- All JS end -->
         <!-- Data Table JS -->
-        <?php include ("part/data-table-js.php"); ?>
+        <?php include("part/data-table-js.php"); ?>
         <!-- Data Table JS end -->
 
         <!-- select2 input field -->
@@ -279,7 +270,7 @@ if (!isset($_SESSION['store_id'])) {
                     $bill_data_rs = $conn->query("SELECT * FROM `customize_bills` WHERE `customize_bill_shop-id` = '$shop_id'");
                     $bill_data = $bill_data_rs->fetch_assoc();
 
-                    ?>
+            ?>
                     <div class="d-flex justify-content-center">
                         <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
                             <div class="row gap-1">
@@ -287,8 +278,7 @@ if (!isset($_SESSION['store_id'])) {
                                     <tr>
                                         <td colspan="3">
                                             <div class="col-12 d-flex justify-content-center p-2">
-                                                <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>"
-                                                    style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');">
+                                                <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>" style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');">
                                                 </div>
                                             </div>
                                         </td>
@@ -297,13 +287,11 @@ if (!isset($_SESSION['store_id'])) {
                                     <tr>
                                         <td>
                                             <div class="col-12 d-flex justify-content-center">
-                                                <label class="contactNumber"
-                                                    id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
+                                                <label class="contactNumber" id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
                                             </div>
                                             <div class="col-12 d-flex justify-content-center center">
                                                 <center>
-                                                    <label id="addresspreview"
-                                                        class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
+                                                    <label id="addresspreview" class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
                                                     </label>
                                                 </center>
                                             </div>
@@ -314,11 +302,10 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col-12" style="text-align: center;">
-                                            <span style="font-size: 10px;"><?= $currentDate ?>         <?= $currentTime ?></span> <br>
+                                            <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
 
                                             <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO -
-                                                </span> <span class="invoiceNumber"
-                                                    id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                                                </span> <span class="invoiceNumber" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -332,8 +319,7 @@ if (!isset($_SESSION['store_id'])) {
                                         <div class="col-12 pt-2">
                                             <div class="row">
                                                 <div class="col-12 d-flex justify-content-center text-center">
-                                                    <span id="billnotepreview"
-                                                        style="font-size:9px;"><?= $bill_data['bill_note'] ?></span>
+                                                    <span id="billnotepreview" style="font-size:9px;"><?= $bill_data['bill_note'] ?></span>
                                                 </div>
                                                 <div class="col-12 d-flex justify-content-center">
                                                     <span>Thank You !</span>
@@ -345,7 +331,7 @@ if (!isset($_SESSION['store_id'])) {
                             </table>
                         </div>
                     </div>
-                    <?php
+            <?php
                 }
             }
             ?>
@@ -354,7 +340,7 @@ if (!isset($_SESSION['store_id'])) {
         <!-- ========================================== -->
 
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $("#barcodeInput").focus();
             });
         </script>

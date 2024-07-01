@@ -1,6 +1,6 @@
 <?php
 session_start();
-include ('config/db.php');
+include('config/db.php');
 
 $poArray = json_decode($_POST['products'], true);
 
@@ -36,6 +36,13 @@ if (is_array($poArray) && !empty($poArray)) {
         $net_total = $product['net_total'];
         $currentDateTime = date("Y-m-d H:i:s");
 
+
+        $conn->query("INSERT INTO test (id, name1, name2) VALUES('test1','$product_unit','$ucv')");
+
+        $conn->query("INSERT INTO test (id, name1, name2) VALUES('$item_price','$product_name','$product_cost')");
+
+        $conn->query("INSERT INTO test (id, name1, name2) VALUES('$product_qty','$product_total','$invoice_number')");
+
         // $conn->query("INSERT INTO 'test' (id, name1, name2) VALUES ('5','$si','$product_qty')");
 
 
@@ -69,21 +76,18 @@ if (is_array($poArray) && !empty($poArray)) {
                             stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
                                 WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND item_s_price = '$product_cost'");
-
                             } else { //unit s price
                                 // ((stock_mu_qty - '$product_minimum_qty') / '$ucv')
                                 $product_minimum_qty = $product_qty;
                                 $conn->query("UPDATE stock2 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
                             WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                             AND unit_s_price = '$product_cost' ");
-
                             }
                         } else if ($product_unit == 'pieces') {
 
                             //stock_item_qty = (stock_item_qty -  '$product_qty')
                             $conn->query("UPDATE stock2 SET stock_item_qty = (stock_item_qty - '$product_qty')
                          WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' ");
-
                         } else if ($product_unit == 'g' || $product_unit == 'ml') {
 
                             if ($item_price == $product_cost) { // item s price
@@ -92,7 +96,6 @@ if (is_array($poArray) && !empty($poArray)) {
                                 $conn->query("UPDATE stock2 SET stock_item_qty = (stock_item_qty -  '$product_qty') , stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
                                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                         AND item_s_price = '$product_cost'");
-
                             } else {
 
                                 // ((stock_mu_qty - '$product_minimum_qty') / '$ucv')
@@ -100,7 +103,6 @@ if (is_array($poArray) && !empty($poArray)) {
                                 $conn->query("UPDATE stock2 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
                                     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                     AND unit_s_price = '$product_cost' ");
-
                             }
                         } else if ($product_unit == 'cm') {
 
@@ -109,13 +111,11 @@ if (is_array($poArray) && !empty($poArray)) {
                                 $conn->query("UPDATE stock2 SET stock_item_qty = (stock_item_qty -  '$product_qty') , stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
                                 WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND item_s_price = '$product_cost'");
-
                             } else { //unit s price
                                 $product_minimum_qty = $product_qty;
                                 $conn->query("UPDATE stock2 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
                             WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                             AND unit_s_price = '$product_cost' ");
-
                             }
                         } else if ($product_unit == 'pack / bottle') {
                             //stock_item_qty = (stock_item_qty -  '$product_qty')
@@ -131,7 +131,6 @@ if (is_array($poArray) && !empty($poArray)) {
                                         stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
                          WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                         AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
-
                         } else {
 
                             $qty_rs = $conn->query("SELECT * FROM stock2 WHERE (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
@@ -152,7 +151,6 @@ if (is_array($poArray) && !empty($poArray)) {
 
                             $conn->query("UPDATE stock2 SET stock_item_qty = '$new_stock_item_qty' , stock_mu_qty = (stock_mu_qty - '$product_qty')
                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code') AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
-
                         }
                     }
                 }
@@ -164,7 +162,6 @@ if (is_array($poArray) && !empty($poArray)) {
             echo "DD";
             exit;
         }
-
     }  // close for-each $poArrary 
 
     // $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'";
@@ -177,8 +174,24 @@ if (is_array($poArray) && !empty($poArray)) {
 
     // $conn->query("INSERT INTO test (id, name1, name2) VALUES('$sub_total','$discount_percentage','$net_total')");
 
-    $conn->query("INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total) 
- VALUES ('$invoice_number', '$user_id', '$shop_id','$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')");
+    //     $conn->query("INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total) 
+    //  VALUES ('$invoice_number', '$user_id', '$shop_id','$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')");
+
+    $query = "INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total) 
+          VALUES ('$invoice_number', '$user_id', '$shop_id', '$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')";
+
+    if ($conn->query($query)) {
+        // Query executed successfully
+        echo "Invoice inserted successfully.";
+    } else {
+        // Query execution failed
+        $error = $conn->error;
+        // Log the error somewhere, such as a file or database
+        error_log("Error in inserting invoice: " . $error);
+        echo "Error: " . $error;
+    }
+
+
 
     // $conn->query("INSERT INTO test (id, name1, name2) VALUES('7','7','7')");
 

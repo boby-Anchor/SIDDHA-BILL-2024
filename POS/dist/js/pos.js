@@ -82,8 +82,8 @@ function getBarcode(barcode, stock_s_price) {
     }
   };
 
-  var url =
-    "search_barcode.php?barcode=" +
+  var url = 
+  "search_barcode.php?barcode=" +
     encodeURIComponent(barcode) +
     "&stock_s_price=" +
     encodeURIComponent(stock_s_price);

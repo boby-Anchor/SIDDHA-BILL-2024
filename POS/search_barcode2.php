@@ -16,7 +16,10 @@ if (isset($_GET['barcode'])) {
 
             $barcodeResult = $conn->query("SELECT * FROM stock2
             INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-            WHERE stock_shop_id = '$shop_id' AND  ( p_medicine.code = '$barcode'  OR stock2.stock_minimum_unit_barcode = '$barcode' ) ");
+            WHERE stock_shop_id = '$shop_id'
+            AND ( p_medicine.code = '$barcode'  OR stock2.stock_minimum_unit_barcode = '$barcode' )
+            AND stock2.stock_item_qty > '0'");
+
             if ($barcodeResult->num_rows > 0) {
 
                 $displayedProducts = array();
@@ -28,12 +31,12 @@ if (isset($_GET['barcode'])) {
 
                     // if ($barcode == $barcodeData['code']) {
                 ?>
-                    echo '<option value="<?= $barcodeData['stock_id']  . "-" . $barcodeData['item_s_price'] . "_" ."ip"  ?>"><?= $barcodeData['item_s_price'] ?></option>';
+                    echo '<option value="<?= $barcodeData['stock_id']  . "-" . $barcodeData['item_s_price'] . "_" . "ip"  ?>"><?= $barcodeData['item_s_price'] ?></option>';
 
                     <?php
                     // } else {
                     ?>
-                    echo '<option value="<?= $barcodeData['stock_id']  . "-" . $barcodeData['unit_s_price'] . "_" ."up" ?>"><?= $barcodeData['unit_s_price'] ?></option>';
+                    echo '<option value="<?= $barcodeData['stock_id']  . "-" . $barcodeData['unit_s_price'] . "_" . "up" ?>"><?= $barcodeData['unit_s_price'] ?></option>';
 <?php
                     // }
                 }
