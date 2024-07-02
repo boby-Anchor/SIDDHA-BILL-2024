@@ -219,14 +219,15 @@ if (!isset($_SESSION['store_id'])) {
                     foreach ($userLoginData as $userData) {
                       $shop_id = $userData['shop_id'];
 
-                      $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name ,
-                        medicine_unit.unit AS unit , unit_category_variation.ucv_name 
+                      $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
+                      medicine_unit.unit AS unit , unit_category_variation.ucv_name
                       FROM stock2
                       INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
                       INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                       INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                       INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0 ORDER BY p_medicine.name ASC");
+                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0 
+                      ORDER BY p_medicine.name ASC");
 
                       if (!empty($cm)) {
                         foreach ($cm as $v) {
@@ -444,7 +445,7 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="col-12 d-flex justify-content-center">
                           <span>Thank You !</span>
                         </div>
-                        
+
                         <div class="col-12 d-flex justify-content-center">
                           <div class="check-by-box">
                             <center>
