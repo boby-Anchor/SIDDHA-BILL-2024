@@ -83,11 +83,6 @@ if (is_array($poArray) && !empty($poArray)) {
 
                             if ($item_price == $product_cost) {
 
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$product_qty')");
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('whole','kg / l')");
-
-
-
                                 $total_qty = $product_qty * 1000;
                                 $sell_p_qty = ($total_qty / $ucv);
 
@@ -98,62 +93,39 @@ if (is_array($poArray) && !empty($poArray)) {
                                 OR stock_minimum_unit_barcode = '$code')
                                 AND (item_s_price = '$product_cost'
                                 OR unit_s_price = '$product_cost')");
-                                
                             } else {
-
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$product_qty')");
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('loose','kg / l')");
-
-
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$product_qty')");
-
 
                                 $conn->query("UPDATE stock2 SET
                                 stock_item_qty = ROUND(stock_item_qty - ('$product_qty' / ('$ucv' * 1000)), 3),
                                 stock_mu_qty = (stock_mu_qty - '$product_qty')
                                 WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND unit_s_price = '$product_cost' ");
-
-
                             }
-
-
                         } else if ($product_unit == 'pieces') {
 
-                            $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$product_qty')");
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('pieces','pieces')");
 
                             $conn->query("UPDATE stock2 SET stock_item_qty = (stock_item_qty - '$product_qty')
                          WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' ");
-
-
                         } else if ($product_unit == 'g' || $product_unit == 'ml') {
-                           
+
 
                             if ($item_price == $product_cost) {
 
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('whole','g / ml')");
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$product_qty')");
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$ucv')");
+                                // $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('whole','g / ml')");
+                                // $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$product_qty')");
+                                // $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$ucv')");
 
                                 $total_qty = $product_qty * $ucv;
                                 $sell_p_qty = ($total_qty / $ucv);
-    
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$ucv','$sell_p_qty')");
-    
+
+
                                 $conn->query("UPDATE stock2 SET
                                 stock_item_qty = (stock_item_qty - $sell_p_qty),
                                 stock_mu_qty = (stock_mu_qty - $total_qty)
                                 WHERE stock_shop_id = '$shop_id'
                                 AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost') ");
-
-
-                            }else{
-
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('loose','g / ml')");
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$product_qty')");
-                                $conn->query("INSERT INTO test (`c1`, `c2`) VALUES ('$product_unit','$ucv')");
+                            } else {
 
                                 $total_qty = $product_qty * 1000;
                                 $sell_p_qty = ($total_qty / $ucv);
@@ -163,28 +135,7 @@ if (is_array($poArray) && !empty($poArray)) {
                                 stock_mu_qty = (stock_mu_qty - '$product_qty')
                                 WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                 AND unit_s_price = '$product_cost' ");
-
-
                             }
-
-                            
-
-                           
-
-
-                            // if ($item_price == $product_cost) { // item s price
-                            //     $conn->query("UPDATE stock2 SET
-                            // stock_item_qty = ROUND(stock_item_qty - ('$product_qty' / ('$ucv' * 1000)), 3),
-                            // stock_mu_qty = (stock_mu_qty - '$product_qty')
-                            // WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                            // AND unit_s_price = '$product_cost' ");
-                            // } else { //unit s price
-
-                            //     $product_minimum_qty = $product_qty;
-                            //     $conn->query("UPDATE stock2 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
-                            //         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                            //         AND unit_s_price = '$product_cost' ");
-                            // }
                         } else if ($product_unit == 'cm') {
 
                             if ($item_price == $product_cost) { // item s price
@@ -233,7 +184,7 @@ if (is_array($poArray) && !empty($poArray)) {
                             WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                             AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
 
-                            $conn->query("INSERT INTO `test`(`c1`, `c2`) VALUES ('final','else eka')");
+                            // $conn->query("INSERT INTO `test`(`c1`, `c2`) VALUES ('final','else eka')");
                         }
                     }
                 }

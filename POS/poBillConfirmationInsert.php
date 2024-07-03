@@ -37,13 +37,15 @@ if (is_array($poArray) && !empty($poArray)) {
         $currentDateTime = date("Y-m-d H:i:s");
 
 
-        $conn->query("INSERT INTO test (id, name1, name2) VALUES('test1','$product_unit','$ucv')");
+        // $conn->query("INSERT INTO test (id, name1, name2) VALUES('test1','$product_unit','$ucv')");
 
-        $conn->query("INSERT INTO test (id, name1, name2) VALUES('$item_price','$product_name','$product_cost')");
+        $conn->query("INSERT INTO test (c1, c2) VALUES('$product_unit','$ucv')");
 
-        $conn->query("INSERT INTO test (id, name1, name2) VALUES('$product_qty','$product_total','$invoice_number')");
+        $conn->query("INSERT INTO test (c1, c2) VALUES('$item_price','$product_name')");
 
-        // $conn->query("INSERT INTO 'test' (id, name1, name2) VALUES ('5','$si','$product_qty')");
+        $conn->query("INSERT INTO test (c1, c2) VALUES('$product_cost','$product_qty')");
+
+        $conn->query("INSERT INTO test (c1, c2) VALUES('$product_total','$invoice_number')");
 
 
         $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'";
@@ -164,18 +166,13 @@ if (is_array($poArray) && !empty($poArray)) {
         }
     }  // close for-each $poArrary 
 
-    // $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'";
-    // $cm = runQuery($query);
+    $conn->query("INSERT INTO test (c1, c2) VALUES('$invoice_number','$user_id')");
 
-    // if (empty($cm)) {
-    // $conn->query("INSERT INTO test (id, name1, name2) VALUES('test1','$po_shop_id','$invoice_number')");
+    $conn->query("INSERT INTO test (c1, c2) VALUES('$shop_id','$po_shop_id')");
 
-    // $conn->query("INSERT INTO test (id, name1, name2) VALUES('$user_id','$shop_id','$currentDateTime')");
+    $conn->query("INSERT INTO test (c1, c2) VALUES('$currentDateTime','$sub_total')");
 
-    // $conn->query("INSERT INTO test (id, name1, name2) VALUES('$sub_total','$discount_percentage','$net_total')");
-
-    //     $conn->query("INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total) 
-    //  VALUES ('$invoice_number', '$user_id', '$shop_id','$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')");
+    $conn->query("INSERT INTO test (c1, c2) VALUES('$discount_percentage','$net_total')");
 
     $query = "INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total) 
           VALUES ('$invoice_number', '$user_id', '$shop_id', '$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')";

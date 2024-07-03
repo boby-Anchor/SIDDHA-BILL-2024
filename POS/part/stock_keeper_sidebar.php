@@ -91,6 +91,18 @@ if (isset($_SESSION['store_id'])) {
                     <p>Online Bill Test</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="poView.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>PO view</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="report-ItemOutQty.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Item Out Qty</p>
+                  </a>
+                </li>
               </ul>
             </li>
 
