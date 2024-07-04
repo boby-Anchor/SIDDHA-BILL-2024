@@ -36,7 +36,8 @@ if (isset($_GET['barcode'])) {
             stock2.stock_item_cost AS stock_item_cost,
             p_medicine.id AS id,
             medicine_unit.unit AS unit,
-            p_medicine.code AS code
+            p_medicine.code AS code,
+            unit_category_variation.ucv_name AS ucv_name
             
             FROM stock2
             INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code

@@ -36,3 +36,7 @@
 27/06/24 - Held a morning meeting at 10 a.m. in 54, Inserted recounted stock in the pharmacy. 
 28/06/24 - Inserted recounted stock in the pharmacy.
 29/06/24 - Inserted new stock in pharmacy. Made monthly plan for july. Started making online order cashier interface.
+01/07/24 - qty insert in pharmacy.  po item out invoice redesign. invoiceConfirmationInsert.php qty deduction corrected, kg/l.
+02/07/24 - New office opening ceremony. Migrated into old call center, then marketing. qty deduction corrected, g/ml.
+03/07/24 - Corrected some errors in stock at pharmacy. Three old destops checked and troubleshoot.(Two turend on one has unknown password. Other one unlocked with pw.) Fixed items out po not saving in db.
+04/07/24 - Disassemble, clean, repaired and setup one working desktop and gave it to HR. (Old pw- 0159 new pw Tharani1998). 
