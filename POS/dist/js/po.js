@@ -384,7 +384,7 @@ function checkout() {
   var invoice_number = $(".invoiceNumber").text();
   var sub_total = $("#subTotal").text().trim();
   var discount_percentage = $("#discountPercentage").val();
-  var net_total = $("#netTotal").text();
+  var net_total = $("#netTotal").text().replace(/,/g, "");
 
   var poArray = [];
   var inArray = [];
@@ -411,7 +411,7 @@ function checkout() {
       unit_price: unit_price,
       product_name: product_name,
       brand: brand,
-      discount:discount,
+      discount: discount,
       product_cost: product_cost,
       product_qty: product_qty,
       product_unit: product_unit,

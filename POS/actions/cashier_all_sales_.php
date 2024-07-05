@@ -1,13 +1,13 @@
 <?php
-include ('../config/db.php');
+include('../config/db.php');
 session_start();
 
 ?>
 <style>
-.labInvo {
-    font-weight: bold;
-    color: #3E8F0C;
-}
+    .labInvo {
+        font-weight: bold;
+        color: #3E8F0C;
+    }
 </style>
 
 <?php
@@ -16,17 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $start_date = $data['STDATE'];
     $end_date = $data['ENDDATE'];
     // Ensure user_id is set in the session  
-     $user_id ;
-     $shop_id ;
-     
-     if (isset($_SESSION['store_id'])) {
-            $userLoginData = $_SESSION['store_id'];
-            foreach ($userLoginData as $userData) {
-                $user_id = $userData['id'];
-                $shop_id = $userData['shop_id'];
-            }
-     }        
-     
+    $user_id;
+    $shop_id;
+
+    if (isset($_SESSION['store_id'])) {
+        $userLoginData = $_SESSION['store_id'];
+        foreach ($userLoginData as $userData) {
+            $user_id = $userData['id'];
+            $shop_id = $userData['shop_id'];
+        }
+    }
+
     //  $conn->query("INSERT INTO `test`(`c1`, `c2`) VALUES ('$user_id','$shop_id')");
     //  $conn->query("INSERT INTO `test`(`c1`, `c2`) VALUES ('$start_date','$end_date')");
 
@@ -45,11 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                FROM invoices 
                                                WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' 
                                                "));
-    
+
     $output = '';
     while ($row = mysqli_fetch_assoc($sql)) {
         $output .= '<tr>
-                        <td><lable class="labInvo"> ' . $row['invoice_id'] .'</lable> <br> '. $row['created']. '</td>
+                        <td><lable class="labInvo"> ' . $row['invoice_id'] . '</lable> <br> ' . $row['created'] . '</td>
                         <td>' . $row['p_name'] . '</td>
                         <td>' . $row['contact_no'] . '</td>
                         <td>' . $row['d_name'] . '</td>

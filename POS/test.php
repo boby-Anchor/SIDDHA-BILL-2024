@@ -1,219 +1,149 @@
-<script>
-    $(document).ready(function() {
-        var ucv_name;
-        var product_unit;
+<?php
+include('../config/db.php');
+session_start();
 
-        // Function to adjust visibility based on product_unit
-        function adjustVisibility() {
-            if (product_unit === 'pack') {
-                $(".auto-generate-m-unit").addClass("d-none");
-                $(".manual-enter-m-unit").removeClass("d-none");
-            } else {
-                $(".auto-generate-m-unit").removeClass("d-none");
-                $(".manual-enter-m-unit").addClass("d-none");
-            }
+?>
+<style>
+    .labInvo {
+        font-weight: bold;
+        color: #3E8F0C;
+    }
+</style>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $data = json_decode($_POST['sd'], true);
+    $start_date = $data['STDATE'];
+    $end_date = $data['ENDDATE'];
+    // Ensure user_id is set in the session  
+    $user_id;
+    $shop_id;
+    $output = '';
+    $currentDate = date('Y-m-d');
+
+    if (isset($_SESSION['store_id'])) {
+        $userLoginData = $_SESSION['store_id'];
+        foreach ($userLoginData as $userData) {
+            $user_id = $userData['id'];
+            $shop_id = $userData['shop_id'];
         }
+    }
+$sellAmountResult = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount)
+        AS total_amount FROM invoices
+        WHERE DATE(`created`) = '.$currentDate.' AND user_id = '.$user_id.'"));
 
-        $(document).on("click", ".add-btn", function() {
-            // Fetch necessary data
-            var product_code = $(this).closest("tr").find("#product_code").text();
-            var product_name = $(this).closest("tr").find("#product_name").text();
-            ucv_name = parseInt($(this).closest("tr").find("#ucv_name").text());
-            product_unit = $(this).closest("tr").find("#product_unit").text();
-            var product_qty = 1;
+$cashPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount
+        FROM invoices
+        WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
 
-            var exists = false;
-            $(".addedProTable tbody tr").each(function() {
-                if ($(this).find("#addproduct_name").text() === product_name) {
-                    exists = true;
-                    return false;
-                }
-            });
+$cardPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount
+        FROM invoices
+        WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
 
-            if (!exists) {
-                // Append new row to the table
-                var markup =
-                    "<tr>" +
-                    "<th scope='row' id='product_code'>" + product_code + "</th>" +
-                    "<td id='addproduct_name'>" + product_name + "</td>" +
-                    "<td>" +
-                    "<input id='qty_input' type='text' class='bg-dark form-control text-center qty-input' value=''>" +
-                    "<input id='free_qty' placeholder='free of qty..' type='text' class='bg-dark form-control text-center free-qty-input' value=''>" +
-                    "</td>" +
-                    "<td class='text-center auto-generate-m-unit '>" +
-                    "<label id='minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
-                    "<label id='free_minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
-                    "</td>" +
-                    "<td class='text-center manual-enter-m-unit d-none'>" +
-                    "<label id='minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
-                    "<label id='free_minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
-                    "</td>" +
-                    "<td>" + "<input type='text' id='cost_input' class='bg-dark form-control text-center cost-input' value=''></td>" +
-                    "<td>" + "<label id='cost_per_unit'></label>" + "</td>" +
-                    "<td>" + "<input id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input' value=''></td>" +
-                    "<td>" + "<input id='item_discount' type='text' class='bg-dark form-control text-center itemdicount' value=''>" + "</td>" +
-                    "<td>" + "<label id='item_sale_price'></label>" + "</td>" +
-                    "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
-                    "</tr>";
+$cashoutResult = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout
+        FROM invoices
+        WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
 
-                $(".addedProTable tbody").append(markup);
+    $output .= '<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-body bg-success">
+                        <h2 class="text-white text-uppercase">Sell Amount</h2>
+                        <p class="totalAmount">'; echo($sellAmountResult['total_amount']); ' LKR</p>
+                    </div>
+                </div>
 
-                $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
-                $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
+                <div class="col-md-3">
+                    <div class="card card-body bg-info">
+                        <h2 class="text-white text-uppercase">Cash Payments</h2>
+                        <p class="totalAmount">'; echo $cashPaymentResult['cash_amount'];'LKR</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-body bg-primary">
+                        <h2 class="text-white text-uppercase">Card Payments</h2>
+                       <p class="totalAmount">'; echo $cardPaymentResult['cardPaidAmount']; 'LKR</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-body bg-danger">
+                        <h2 class="text-white text-uppercase">Cash Out</h2>
+                        <p class="totalAmount">-'; echo $cashoutResult['cashout']; 'LKR</p>
+                    </div>
+                </div>
 
-                // Update visibility based on product_unit
-                adjustVisibility();
-            } else {
-                alert("Product already exists in the list!");
-            }
-        });
+            </div>
+        </div>
+    </div>
+</div>
 
-        // Event listener for clicking the delete button
-        $(document).on("click", ".cus-delete", function() {
-            $(this).closest("tr").remove();
-            $("#proceedGrnBtn").removeAttr("data-toggle data-target");
-            $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
-            $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
-        });
+<div class="col-12">
+    <div class="card">
 
-        // Convert to minimum unit based on product_unit
-        $(document).on("input", ".qty-input", function() {
-            if (product_unit === 'l') {
-                var liters = parseFloat($(this).val());
-                var milliliters = ucv_name * liters * 1000;
-                $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
+        <div class="card-body">
+            <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button>
+';
 
-            }
-            if (product_unit === 'kg') {
-                var kilo = parseFloat($(this).val());
-                var grams = ucv_name * kilo * 1000;
-                $(this).closest("tr").find("#minimum_qty").text(grams + "g");
-            }
-            if (product_unit === 'm') {
-                var meter = parseFloat($(this).val());
-                var centimete = ucv_name * meter * 100;
-                $(this).closest("tr").find("#minimum_qty").text(centimete + "cm");
 
-            }
-            if (product_unit === 'ml') {
-                var ml = parseFloat($(this).val());
-                var mililiters = ucv_name * ml;
-                $(this).closest("tr").find("#minimum_qty").text(mililiters + "ml");
-            }
-            if (product_unit === 'g') {
-                var g = parseFloat($(this).val());
-                var grams = ucv_name * g;
-                $(this).closest("tr").find("#minimum_qty").text(grams + "g");
-            }
-            if (product_unit === 'cm') {
-                var cm = parseFloat($(this).val());
-                var centimeters = ucv_name * cm;
-                $(this).closest("tr").find("#minimum_qty").text(centimeters + "cm");
-            }
-        });
 
-        $(document).on("input", ".free-qty-input", function() {
-            if (product_unit === 'l') {
-                var liters = parseFloat($(this).val());
-                var milliliters = ucv_name * liters * 1000;
-                $(this).closest("tr").find("#free_minimum_qty").text(milliliters + "ml");
+    $output .= '<table id="mytable" class="table table-bordered table-hover">
+                <thead>
+                    <tr class="bg-info">
+                        <th>Invoice Number</th>
+                        <th>Patient Name</th>
+                        <th>Tell</th>
+                        <th>Doctor Name</th>
+                        <th>REG Number</th>
+                        <th>Total Amount</th>
+                        <th>Payment Type</th>
+                        <th>Bill Type</th>
+                        <th>Cashier</th>
+                        <th>SHOP</th>
+                    </tr>
+                </thead>';
 
-            }
-            if (product_unit === 'kg') {
-                var kilo = parseFloat($(this).val());
-                var grams = ucv_name * kilo * 1000;
-                $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-            }
-            if (product_unit === 'm') {
-                var meter = parseFloat($(this).val());
-                var centimete = ucv_name * meter * 100;
-                $(this).closest("tr").find("#free_minimum_qty").text(centimete + "cm");
+    $sql = $conn->query("SELECT invoices.*, payment_type.payment_type, bill_type.bill_type_name ,users.name ,shop.shopName
+                         FROM invoices 
+                         INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method 
+                         INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id 
+                         INNER JOIN users ON users.id = invoices.user_id 
+                         INNER JOIN shop ON shop.shopId = invoices.shop_id 
+                         WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' 
+                         AND invoices.shop_id = '$shop_id' 
+                         ORDER BY invoices.created
+                         ");
 
-            }
-            if (product_unit === 'ml') {
-                var ml = parseFloat($(this).val());
-                var mililiters = ucv_name * ml;
-                $(this).closest("tr").find("#free_minimum_qty").text(mililiters + "ml");
-            }
-            if (product_unit === 'g') {
-                var g = parseFloat($(this).val());
-                var grams = ucv_name * g;
-                $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-            }
-            if (product_unit === 'cm') {
-                var cm = parseFloat($(this).val());
-                var centimeters = ucv_name * cm;
-                $(this).closest("tr").find("#free_minimum_qty").text(centimeters + "cm");
-            }
-        });
+    $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount 
+                                               FROM invoices 
+                                               WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' 
+                                               "));
 
-        // Calculate cost per unit based on product_unit
-        $(document).on("input", ".cost-input", function() {
-            if (product_unit === "l") {
-                var cost = parseFloat($(this).val());
-                var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
-                var cost_per_unit = cost / milliliters;
-                $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            }
+    while ($row = mysqli_fetch_assoc($sql)) {
+        $output .= '<tr>
+                        <td><lable class="labInvo"> ' . $row['invoice_id'] . '</lable> <br> ' . $row['created'] . '</td>
+                        <td>' . $row['p_name'] . '</td>
+                        <td>' . $row['contact_no'] . '</td>
+                        <td>' . $row['d_name'] . '</td>
+                        <td>' . $row['reg'] . '</td>
+                        <td>' . $row['total_amount'] . '</td>
+                        <td>' . $row['payment_type'] . '</td>
+                        <td>' . $row['bill_type_name'] . '</td>
+                        <td>' . $row['name'] . '</td>
+                        <td>' . $row['shopName'] . '</td>
+                    </tr>';
+    }
+    $output .= '<tr class="bg-dark">
+                    <td></td>
+                    <td class="fw-bold" style="font-size:larger;">Total Sales</td>
+                    <td class="fw-bold" style="font-size:larger;">' . $result['total_amount'] . ' LKR</td>
+                </tr>
+                </table>
+                </div>
+            </div>
+        </div>';
 
-            if (product_unit === "kg") {
-                var cost = parseFloat($(this).val());
-                var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
-                var cost_per_unit = cost / milliliters;
-                $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            }
-
-            if (product_unit === "m") {
-                var cost = parseFloat($(this).val());
-                var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 100;
-                var cost_per_unit = cost / milliliters;
-                $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            }
-
-            if (product_unit === "ml") {
-                var cost = parseFloat($(this).val());
-                var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                var cost_per_unit = cost / milliliters;
-                $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            }
-
-            if (product_unit === "g") {
-                var cost = parseFloat($(this).val());
-                var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                var cost_per_unit = cost / milliliters;
-                $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            }
-
-            if (product_unit === "cm") {
-                var cost = parseFloat($(this).val());
-                var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                var cost_per_unit = cost / milliliters;
-                $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            }
-        });
-
-        // Calculate discounted price
-        $(document).on("input", ".itemdicount", function() {
-            var add_discount = parseFloat($(this).val());
-
-            var discount = add_discount + 100;
-            console.log(discount);
-
-            var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
-            console.log(qty);
-
-            var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-            var item_cost = cost_input / qty;
-            console.log(item_cost);
-
-            var item_sell_price = item_cost / 100 * discount;
-            console.log(item_sell_price);
-
-            $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
-        });
-
-        // Initial adjustment of visibility
-        adjustVisibility();
-
-    });
-</script>
+    echo $output;
+}
+?>

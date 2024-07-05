@@ -71,7 +71,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <th class="adThText">Items</th>
                                                             <th class="adThText">Order Placed Date</th>
                                                             <th class="adThText">Sub Total</th>
-                                                            <th class="adThText">Discount</th>
+                                                            <th class="adThText">Discount %</th>
                                                             <th class="adThText">Net Total</th>
                                                         </tr>
                                                     </thead>
@@ -126,6 +126,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                                     <th scope="col">#</th>
                                                                                     <th scope="col">Barcode</th>
                                                                                     <th scope="col">Item Name</th>
+                                                                                    <th scope="col">Item Price</th>
                                                                                     <th scope="col">Qty</th>
                                                                                     <th scope="col">Cost</th>
                                                                                 </tr>
@@ -145,6 +146,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                                         <th scope="row">1</th>
                                                                                         <td><?= $poItems_data["code"] ?></td>
                                                                                         <td><?= $poItems_data["name"] ?></td>
+                                                                                        <td><?= $poItems_data["invoiceItem_price"] ?></td>
                                                                                         <td><?= $poItems_data["invoiceItem_qty"] ?></td>
                                                                                         <td><?= $poItems_data["invoiceItem_total"] ?>.00</td>
                                                                                     </tr>
