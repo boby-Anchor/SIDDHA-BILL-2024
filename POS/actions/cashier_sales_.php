@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <td>' . $row['contact_no'] . '</td>
                         <td>' . $row['d_name'] . '</td>
                         <td>' . $row['reg'] . '</td>
-                        <td>' . $row['total_amount'] . '</td>
+                        <td>' . number_format($row['total_amount'],0) . '</td>
                         <td>' . $row['payment_type'] . '</td>
                         <td>' . $row['bill_type_name'] . '</td>
                     </tr>';
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $output .= '<tr class="bg-dark">
                     <td></td>
                     <td class="fw-bold" style="font-size:larger;">Total Sales</td>
-                    <td class="fw-bold" style="font-size:larger;">' . $result['total_amount'] . ' LKR</td>
+                    <td class="fw-bold" style="font-size:larger;">' . number_format($result['total_amount'],0) . ' LKR</td>
                 </tr>';
 
     echo $output;

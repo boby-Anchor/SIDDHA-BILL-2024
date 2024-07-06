@@ -57,7 +57,7 @@ if (!isset($_SESSION['store_id'])) {
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h3 class="card-title">Order</h3>
+                                                <h3 class="card-title">Purchase Orders</h3>
                                             </div>
                                             <div class="card-body">
 
@@ -94,12 +94,21 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN shop AS shop2 ON shop2.shopId = poinvoices.po_shop_id
                                                             ");
                                                         } else {
-                                                            $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id
-                                                            FROM hub_order_details
-                                                            INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
-                                                            INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
-                                                            INNER JOIN shop ON shop.shopId = hub_order.HO_shopId
-                                                            WHERE shop.shopId = '$shop_id'");
+                                                            $hub_order_details_result = $conn->query("SELECT 
+                                                            poinvoices.invoice_id AS invoice_id,
+                                                            poinvoices.shop_id AS shop_id,
+                                                            users.name AS user_name,
+                                                            shop1.shopName AS shop_name,
+                                                            shop2.shopName AS po_shop_name,
+                                                            poinvoices.created AS po_date,
+                                                            Round(poinvoices.sub_total,2) AS sub_total,
+                                                            poinvoices.discount_percentage AS discount,
+                                                            poinvoices.net_total AS net_total
+                                                            FROM poinvoices
+                                                            INNER JOIN users ON users.id = poinvoices.user_id
+                                                            INNER JOIN shop AS shop1 ON shop1.shopId = poinvoices.shop_id
+                                                            INNER JOIN shop AS shop2 ON shop2.shopId = poinvoices.po_shop_id
+                                                            WHERE shop1.shopId = '$shop_id'");
                                                         }
 
                                                         while ($hub_order_details_data = $hub_order_details_result->fetch_assoc()) {

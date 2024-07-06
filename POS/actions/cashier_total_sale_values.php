@@ -30,19 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 $sellAmountResult = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount)
         AS total_amount FROM invoices
-        WHERE DATE(`created`) = '.$currentDate.' AND user_id = '.$user_id.'"));
+        WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
 $cashPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount
         FROM invoices
-        WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
+        WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
 $cardPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount
         FROM invoices
-        WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
+        WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
 $cashoutResult = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout
         FROM invoices
-        WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
+        WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
     $output .= '<div class="col-12">
     <div class="card">
@@ -51,20 +51,20 @@ $cashoutResult = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) 
                 <div class="col-md-3">
                     <div class="card card-body bg-success">
                         <h2 class="text-white text-uppercase">Sell Amount</h2>
-                        <p class="totalAmount">'.$sellAmountResult['total_amount'].' LKR</p>
+                        <p class="totalAmount">'.number_format($sellAmountResult['total_amount'],0).' LKR</p>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="card card-body bg-info">
                         <h2 class="text-white text-uppercase">Cash Payments</h2>
-                        <p class="totalAmount">'.$cashPaymentResult['cash_amount'].'LKR</p>
+                        <p class="totalAmount">'.number_format($cashPaymentResult['cash_amount'],0).'LKR</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card card-body bg-primary">
                         <h2 class="text-white text-uppercase">Card Payments</h2>
-                       <p class="totalAmount">' .$cardPaymentResult['cardPaidAmount'].'LKR</p>
+                       <p class="totalAmount">' .number_format($cardPaymentResult['cardPaidAmount'],0).'LKR</p>
                     </div>
                 </div>
                 <div class="col-md-3">

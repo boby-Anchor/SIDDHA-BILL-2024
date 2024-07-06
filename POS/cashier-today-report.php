@@ -73,55 +73,21 @@ if (!isset($_SESSION['store_id'])) {
                                                         <h2 class="text-white text-uppercase">Sell Amount</h2>
                                                         <?php $currentDate = date('Y-m-d'); ?>
                                                         <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
-                                                        <p class="totalAmount"><?php echo $result['total_amount']; ?> LKR</p>
+                                                        <p class="totalAmount"><?php echo number_format($result['total_amount'], 2); ?> LKR</p>
                                                     </div>
                                                 </div>
-
-                                                <?php
-                                                // $invoiceItemQty_rs = $conn->query("SELECT * FROM invoiceitems
-                                                //     INNER JOIN p_medicine ON  invoiceitems.invoiceItem = p_medicine.name
-                                                //         WHERE DATE(`invoiceDate`) = '$currentDate'");
-
-                                                // $total_profit = 0; // Initialize total profit
-                                                // $total_cost = 0;
-
-                                                // while ($invoiceItemQty_data = $invoiceItemQty_rs->fetch_assoc()) {
-                                                //     $stock_price_rs = $conn->query("SELECT * FROM stock2 WHERE stock2.stock_item_id = '" . $invoiceItemQty_data['code'] . "'");
-                                                //     $stock_price_data = $stock_price_rs->fetch_assoc();
-
-                                                //     if ($stock_price_data !== null) {
-                                                //         $stock_cost = $stock_price_data['stock_item_cost'];
-                                                //         $total_cost += $stock_cost * $invoiceItemQty_data['invoiceItem_qty']; // Add today's selling cost to total cost
-                                                //     }
-
-                                                //     // Check if $stock_price_data is not null before accessing its elements
-                                                //     if ($stock_price_data !== null) {
-                                                //         $stock_profit = $stock_price_data['stock_s_price'] - $stock_price_data['stock_item_cost'];
-                                                //         $today_profit = $stock_profit * $invoiceItemQty_data['invoiceItem_qty'];
-                                                //         $total_profit += $today_profit; // Add today's profit to total profit
-
-
-                                                //     } else {
-                                                //         // Handle the case where $stock_price_data is null (optional)
-                                                //         // For example, you can display an error message or skip this item
-                                                //         echo "Error: Stock data not found for item with code " . $invoiceItemQty_data['code'];
-                                                //     }
-                                                // }
-
-
-                                                ?>
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-info">
                                                         <h2 class="text-white text-uppercase">Cash Payments</h2>
                                                         <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
-                                                        <p class="totalAmount"><?php echo $result['cash_amount']; ?> LKR</p>
+                                                        <p class="totalAmount"><?php echo number_format($result['cash_amount'], 2); ?> LKR</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-primary">
                                                         <h2 class="text-white text-uppercase">Card Payments</h2>
                                                         <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
-                                                        <p class="totalAmount"><?php echo $result['cardPaidAmount']; ?> LKR</p>
+                                                        <p class="totalAmount"><?php echo number_format($result['cardPaidAmount'], 2); ?> LKR</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -157,8 +123,17 @@ if (!isset($_SESSION['store_id'])) {
                                                     </thead>
                                                     <tbody>
                                                         <?php
-                                                        $sql = $conn->query("SELECT * FROM invoices INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'");
-                                                        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'"));
+                                                        $sql = $conn->query("SELECT * FROM invoices
+                                                        INNER JOIN payment_type
+                                                        ON payment_type.payment_type_id = invoices.payment_method
+                                                        INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id
+                                                        WHERE DATE(`created`) = '$currentDate'
+                                                        AND user_id = '$user_id'
+                                                        ");
+                                                        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount
+                                                        FROM invoices WHERE DATE(`created`) = '$currentDate'
+                                                        AND user_id = '$user_id'
+                                                        "));
                                                         while ($row = mysqli_fetch_assoc($sql)) {
                                                         ?>
                                                             <tr>
@@ -188,17 +163,20 @@ if (!isset($_SESSION['store_id'])) {
                                                                                     // FROM `invoiceitems` WHERE 1
 
                                                                                     $poItems_query = "
-                                    SELECT invoiceitems.* FROM invoiceitems INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber 
-                                    WHERE   invoices.invoice_id = '" . $row['invoice_id'] . "' ";
+                                                                                    SELECT invoiceitems.* FROM invoiceitems INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
+                                                                                    WHERE   invoices.invoice_id = '" . $row['invoice_id'] . "' ";
+                                                                                    $rowCount = 0;
                                                                                     $poItems_result = $conn->query($poItems_query);
                                                                                     while ($poItems_data = $poItems_result->fetch_assoc()) {
+                                                                                        $rowCount++;
                                                                                     ?>
+                                                                                        
                                                                                         <tr>
-                                                                                            <td></td>
+                                                                                            <td><?php echo $rowCount; ?></td>
+                                                                                            <td><?php echo $poItems_data['invoiceNumber']; ?></td>
                                                                                             <td><?php echo $poItems_data['invoiceItem']; ?></td>
                                                                                             <td><?php echo $poItems_data['invoiceItem_qty']; ?></td>
-                                                                                            <td><?php echo $poItems_data['invoiceItem_unit']; ?></td>
-                                                                                            <td><?php echo $poItems_data['invoiceItem_price']; ?></td>
+                                                                                            <td><?php echo number_format($poItems_data['invoiceItem_price'],0); ?></td>
                                                                                         </tr>
                                                                                     <?php } ?>
                                                                                 </tbody>
@@ -209,9 +187,9 @@ if (!isset($_SESSION['store_id'])) {
                                                                         </ul>
                                                                     </div>
                                                                 </td>
-                                                                <td><?php echo $row['paidAmount']; ?></td>
-                                                                <td><?php echo $row['cardPaidAmount']; ?></td>
-                                                                <td><?php echo $row['balance']; ?></td>
+                                                                <td><?php echo number_format($row['paidAmount'],0); ?></td>
+                                                                <td><?php echo number_format((float)$row['cardPaidAmount'],0); ?></td>
+                                                                <td><?php echo number_format($row['balance'],0); ?></td>
                                                                 <td><?php echo $row['payment_type']; ?></td>
                                                                 <td><?php echo $row['bill_type_name']; ?></td>
                                                             </tr>
@@ -219,7 +197,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         <tr class="bg-dark">
                                                             <td></td>
                                                             <td class="fw-bold" style="font-size: larger;">Total Sales</td>
-                                                            <td class="fw-bold" style="font-size: larger;"><?php echo $result['total_amount']; ?> LKR</td>
+                                                            <td class="fw-bold" style="font-size: larger;"><?php echo number_format($result['total_amount'],0); ?> LKR</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

@@ -39,4 +39,6 @@
 01/07/24 - qty insert in pharmacy.  po item out invoice redesign. invoiceConfirmationInsert.php qty deduction corrected, kg/l.
 02/07/24 - New office opening ceremony. Migrated into old call center, then marketing. qty deduction corrected, g/ml.
 03/07/24 - Corrected some errors in stock at pharmacy. Three old destops checked and troubleshoot.(Two turend on one has unknown password. Other one unlocked with pw.) Fixed items out po not saving in db.
-04/07/24 - Disassemble, clean, repaired and setup one working desktop and gave it to HR. (Old pw- 0159 new pw Tharani1998). 
+04/07/24 - Disassemble, clean, repaired and setup one working desktop and gave it to HR. (Old pw- 0159 new pw Tharani1998). Started working on two reports. (poView.php, report-ItemOutQty.php) completed poView.php.
+05/07/24 - Fiexed error in item out po (po.php) where total value is not correct.(Cause - #netTotal lable seperates thousands with a comma). Cashier reports designed (cashier-all-sales-report.php). Installed windows 10 on a desktop and gave it to hub.
+06/07/24 - poView query edit to view from all shops. Cashier reports designed (cashier-today-report.php, cashier-sales-report.php, cashier-all-sales-report.php)

@@ -65,7 +65,7 @@ if (!isset($_SESSION['store_id'])) {
                     <section class="content">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-12">
+                                <div id="totalValuesFilterData" class="col-12">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
@@ -74,7 +74,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         <h2 class="text-white text-uppercase">Sell Amount</h2>
                                                         <?php $currentDate = date('Y-m-d'); ?>
                                                         <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
-                                                        <p class="totalAmount"><?php echo $result['total_amount']; ?> LKR</p>
+                                                        <p class="totalAmount"><?php echo number_format($result['total_amount'], 0); ?> LKR</p>
                                                     </div>
                                                 </div>
 
@@ -115,21 +115,21 @@ if (!isset($_SESSION['store_id'])) {
                                                     <div class="card card-body bg-info">
                                                         <h2 class="text-white text-uppercase">Cash Payments</h2>
                                                         <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
-                                                        <p class="totalAmount"><?php echo $result['cash_amount']; ?> LKR</p>
+                                                        <p class="totalAmount"><?php echo number_format($result['cash_amount'], 0); ?> LKR</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-primary">
                                                         <h2 class="text-white text-uppercase">Card Payments</h2>
                                                         <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
-                                                        <p class="totalAmount"><?php echo $result['cardPaidAmount']; ?> LKR</p>
+                                                        <p class="totalAmount"><?php echo number_format($result['cardPaidAmount'], 0); ?> LKR</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-danger">
                                                         <h2 class="text-white text-uppercase">Cash Out</h2>
                                                         <?php $result = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout FROM invoices WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'")); ?>
-                                                        <p class="totalAmount">-<?php echo $result['cashout']; ?> LKR</p>
+                                                        <p class="totalAmount">-<?php echo number_format($result['cashout'], 0); ?> LKR</p>
                                                     </div>
                                                 </div>
 
@@ -138,71 +138,71 @@ if (!isset($_SESSION['store_id'])) {
                                         </div>
                                     </div>
                                 </div>
-                               <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h4>Top Sell Product</h4>
-                <form method="POST" id="filterForm">
-                    <label for="start_date">Start Date:</label>
-                    <input type="date" id="start_date" name="start_date" required>
-                    <label for="end_date">End Date:</label>
-                    <input type="date" id="end_date" name="end_date" required>
-                    <br>
-                    <button type="submit">Filter</button>
-                </form>
-            </div>
-            <div class="card-body">
-                <table id="mytable" class="table table-bordered table-hover">
-                    <thead>
-                        <tr class="bg-info">
-                            <th>Invoice Number</th>
-                            <th>Patient Name</th>
-                            <th>Tell</th>
-                            <th>Doctor Name</th>
-                            <th>REG Number</th>
-                            <th>Total Amount</th>
-                            <th>Payment Type</th>
-                            <th>Bill Type</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cash-sale">
-                        <?php
-                        $currentDate = date("Y-m-d");
-                        $sql = $conn->query("SELECT invoices.*, payment_type.payment_type, bill_type.bill_type_name 
+
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+
+                                            <form method="POST" id="filterForm">
+                                                <label class="ml-2" for="start_date">Start Date:</label>
+                                                <input type="date" class="mr-5" id="start_date" name="start_date" required>
+                                                <label for="end_date">End Date:</label>
+                                                <input type="date" class="mr-4" id="end_date" name="end_date" required>
+                                                <button type="submit" class="btn btn-outline-dark">Filter</button>
+                                            </form>
+                                        </div>
+                                        <div class="card-body">
+                                            <table id="mytable" class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr class="bg-info">
+                                                        <th>Invoice Number</th>
+                                                        <th>Patient Name</th>
+                                                        <th>Tell</th>
+                                                        <th>Doctor Name</th>
+                                                        <th>REG Number</th>
+                                                        <th>Total Amount</th>
+                                                        <th>Payment Type</th>
+                                                        <th>Bill Type</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="cash-sale">
+                                                    <?php
+                                                    $currentDate = date("Y-m-d");
+                                                    $sql = $conn->query("SELECT invoices.*, payment_type.payment_type, bill_type.bill_type_name 
                                              FROM invoices 
                                              INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method 
                                              INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id 
-                                             WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'");
-                        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount 
+                                             WHERE DATE(`created`) = '$currentDate' AND user_id = '$user_id'
+                                             ");
+                                                    $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount 
                                                                    FROM invoices 
                                                                    WHERE DATE(`created`) = '$currentDate' 
                                                                    AND user_id = '$user_id'"));
-                        while ($row = mysqli_fetch_assoc($sql)) {
-                        ?>
-                            <tr>
-                                <td><?php echo $row['invoice_id']; ?></td>
-                                <td><?php echo $row['p_name']; ?></td>
-                                <td><?php echo $row['contact_no']; ?></td>
-                                <td><?php echo $row['d_name']; ?></td>
-                                <td><?php echo $row['reg']; ?></td>
-                                <td><?php echo $row['total_amount']; ?></td>
-                                <td><?php echo $row['payment_type']; ?></td>
-                                <td><?php echo $row['bill_type_name']; ?></td>
-                            </tr>
-                        <?php
-                        } ?>
-                        <tr class="bg-dark">
-                            <td></td>
-                            <td class="fw-bold" style="font-size:larger;">Total Sales</td>
-                            <td class="fw-bold" style="font-size:larger;"><?php echo $result['total_amount']; ?> LKR</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+                                                    while ($row = mysqli_fetch_assoc($sql)) {
+                                                    ?>
+                                                        <tr>
+                                                            <td><?php echo $row['invoice_id']; ?></td>
+                                                            <td><?php echo $row['p_name']; ?></td>
+                                                            <td><?php echo $row['contact_no']; ?></td>
+                                                            <td><?php echo $row['d_name']; ?></td>
+                                                            <td><?php echo $row['reg']; ?></td>
+                                                            <td><?php echo number_format($row['total_amount'], 0); ?></td>
+                                                            <td><?php echo $row['payment_type']; ?></td>
+                                                            <td><?php echo $row['bill_type_name']; ?></td>
+                                                        </tr>
+                                                    <?php
+                                                    } ?>
+                                                    <tr class="bg-dark">
+                                                        <td></td>
+                                                        <td class="fw-bold" style="font-size:larger;">Total Sales</td>
+                                                        <td class="fw-bold" style="font-size:larger;"><?php echo number_format($result['total_amount'], 0); ?> LKR</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                             </div>
                     </section>
@@ -230,58 +230,78 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
- <!-- send data SearchSalesFilterDate -->
-<script>
-   document.getElementById('filterForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    SearchSalesFilterDate();
-});
+    <!-- send data SearchSalesFilterDate -->
+    <script>
+        document.getElementById('filterForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            SearchSalesFilterDate();
+        });
 
-function SearchSalesFilterDate() {
-    var STDATE = $("#start_date").val();
-    var ENDDATE = $("#end_date").val();
+        function SearchSalesFilterDate() {
+            var STDATE = $("#start_date").val();
+            var ENDDATE = $("#end_date").val();
 
-    var soteDate = {
-        STDATE: STDATE,
-        ENDDATE: ENDDATE
-    };
+            var soteDate = {
+                STDATE: STDATE,
+                ENDDATE: ENDDATE
+            };
 
-    $.ajax({
-        url: "actions/cashier_sales_.php",
-        method: "POST",
-        data: {
-            sd: JSON.stringify(soteDate),
-        },
-        success: function (response) {
-            Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-            }).fire({
-                icon: "success",
-                title: "Success: Filtered!",
+            $.ajax({
+                url: "actions/cashier_total_sale_values.php",
+                method: "POST",
+                data: {
+                    sd: JSON.stringify(soteDate)
+                },
+                success: function(data) {
+                    document.getElementById("totalValuesFilterData").innerHTML = data;
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).fire({
+                        icon: "error",
+                        title: "Error: Something went wrong!" + xhr.responseText,
+                    });
+                },
             });
+            $.ajax({
+                url: "actions/cashier_sales_.php",
+                method: "POST",
+                data: {
+                    sd: JSON.stringify(soteDate),
+                },
+                success: function(response) {
+                    Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).fire({
+                        icon: "success",
+                        title: "Success: Filtered!",
+                    });
 
-            document.getElementById("cash-sale").innerHTML = response;
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-            }).fire({
-                icon: "error",
-                title: "Error: Something went wrong!" + xhr.responseText,
+                    document.getElementById("cash-sale").innerHTML = response;
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).fire({
+                        icon: "error",
+                        title: "Error: Something went wrong!" + xhr.responseText,
+                    });
+                },
             });
-        },
-    });
-}
-
-
-</script>
+        }
+    </script>
     <!-- Page specific script -->
     <script>
         $(function() {
