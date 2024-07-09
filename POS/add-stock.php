@@ -170,10 +170,10 @@ if (!isset($_SESSION['store_id'])) {
                                             foreach ($userLoginData as $userData) {
                                                 $shop_id = $userData['shop_id'];
                                                 $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
-                                        INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
-                                        INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
-                                        WHERE producttoshop.shop_id = '$shop_id'
-                                        ");
+                                                INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
+                                                INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
+                                                WHERE producttoshop.shop_id = '$shop_id'
+                                                ");
                                                 while ($supplier_data = $supplier_rs->fetch_assoc()) {
                                         ?>
                                                     <option value="<?= $supplier_data["id"] ?>"><?= $supplier_data["name"] ?></option>
@@ -224,7 +224,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         foreach ($userLoginData as $userData) {
                                                             $shop_id = $userData['shop_id'];
                                                             //    p_medicine.code AS code ,
-                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS pname , 
+                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS p_name , 
                                                             p_medicine.code AS code ,
                                                             p_medicine.img AS img ,
                                                             p_medicine_category.name AS categoryname , p_brand.name AS brandname ,
@@ -253,7 +253,12 @@ if (!isset($_SESSION['store_id'])) {
                                                                     <td>
                                                                         <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
                                                                     </td>
-                                                                    <td id="product_name"><?= $p_medicine_data['pname'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>)</td>
+                                                                    <td>
+                                                                        <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
+                                                                        (<?= $p_medicine_data['ucv_name'] ?>
+                                                                        <?= $p_medicine_data['unit'] ?>)
+                                                                    </td>
+
                                                                     <td id="product_category">
                                                                         <label for=""><?= $p_medicine_data['categoryname'] ?></label>
                                                                     </td>
@@ -344,99 +349,99 @@ if (!isset($_SESSION['store_id'])) {
                     </div>
                 </div>
             </div> -->
-        </div>
+    </div>
 
-        <!-- add new unit modal end -->
+    <!-- add new unit modal end -->
 
-        <?php
-        if (isset($_SESSION['store_id'])) {
+    <?php
+    if (isset($_SESSION['store_id'])) {
 
-            $userLoginData = $_SESSION['store_id'];
+        $userLoginData = $_SESSION['store_id'];
 
-            foreach ($userLoginData as $userData) {
-                $userId = $userData['id'];
-                $shop_id = $userData['shop_id'];
-            }
+        foreach ($userLoginData as $userData) {
+            $userId = $userData['id'];
+            $shop_id = $userData['shop_id'];
         }
+    }
 
-        $orderId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = 'siddhahub' AND table_name = 'stock2'");
-        $orderId_row = $orderId_rs->fetch_assoc();
-        $grnId = $orderId_row['AUTO_INCREMENT'];
-        $grnNumber = "ST-$userId$shop_id" . "00" . $grnId;
+    $orderId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'stock2'");
+    $orderId_row = $orderId_rs->fetch_assoc();
+    $grnId = $orderId_row['AUTO_INCREMENT'];
+    $grnNumber = "ST-$userId$shop_id" . "00" . $grnId;
 
-        $grnDate = date("Y-m-d");
-        $grnTime = date("H:i:s");
+    $grnDate = date("Y-m-d");
+    $grnTime = date("H:i:s");
 
-        ?>
+    ?>
 
-        <!-- confirm po modal start -->
-        <div class="container">
-            <div class="modal fade bg-success" id="confirmGRN" role="dialog">
-                <div class="modal-dialog d-flex justify-content-between ">
-                    <div class="modal-content bg-dark align-items-center vw-100">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Stock Confirmation</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="grnId">
-                                <div class="row">
-                                    <div class="col-4 text-center text-black fw-bold">
-                                        <label for="grnNumber">Stock Number</label>
-                                        <?php
-                                        echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
-                                        ?>
+    <!-- confirm po modal start -->
+    <div class="container">
+        <div class="modal fade bg-success" id="confirmGRN" role="dialog">
+            <div class="modal-dialog d-flex justify-content-between ">
+                <div class="modal-content bg-dark align-items-center vw-100">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Stock Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grnId">
+                            <div class="row">
+                                <div class="col-4 text-center text-black fw-bold">
+                                    <label for="grnNumber">Stock Number</label>
+                                    <?php
+                                    echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
+                                    ?>
 
-                                    </div>
-                                    <div class="col-4 text-center">
-                                        <div class="col-12">
-                                            <div class="row">
-                                                <div class="col-3">
-                                                    <label for="grnDate">Date</label>
-                                                </div>
-                                                <div class="col-8">
-                                                    <span class="fs-2 text-dark fw-bold" name="grnDate" id="grnDate"><?= $grnDate ?></span>
-                                                </div>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <label for="grnDate">Date</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <span class="fs-2 text-dark fw-bold" name="grnDate" id="grnDate"><?= $grnDate ?></span>
                                             </div>
                                         </div>
+                                    </div>
 
 
-                                    </div>
-                                    <div class="col-4 text-center">
-                                        <label for="grnTime">Added time</label>
-                                        <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
-                                    </div>
-                                    <div class="orderItem col-12 mt-4 mb-3">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">B-CODE</th>
-                                                    <th scope="col">P-Name</th>
-                                                    <th scope="col">Qty</th>
-                                                    <th scope="col">MU-Qty</th>
-                                                    <th scope="col">Total Cost</th>
-                                                    <th scope="col">Unit Cost</th>
-                                                    <th scope="col">Unit S-Price</th>
-                                                    <th scope="col">Discount(%)</th>
-                                                    <th scope="col">Item S-Price</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="grnConfirmationTableBody">
-
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
+                                <div class="col-4 text-center">
+                                    <label for="grnTime">Added time</label>
+                                    <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
+                                </div>
+                                <div class="orderItem col-12 mt-4 mb-3">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">B-CODE</th>
+                                                <th scope="col">P-Name</th>
+                                                <th scope="col">Qty</th>
+                                                <th scope="col">MU-Qty</th>
+                                                <th scope="col">Total Cost</th>
+                                                <th scope="col">Unit Cost</th>
+                                                <th scope="col">Unit S-Price</th>
+                                                <th scope="col">Discount(%)</th>
+                                                <th scope="col">Item S-Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="grnConfirmationTableBody">
 
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success confirmPObtn">Save</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success confirmPObtn">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- confirm po modal end -->
 
@@ -476,8 +481,8 @@ if (!isset($_SESSION['store_id'])) {
 
             $(document).on("click", ".add-btn", function() {
                 // Fetch necessary data
-                var product_code = $(this).closest("tr").find("#product_code").text();
-                var product_name = $(this).closest("tr").find("#product_name").text();
+                var product_code = $(this).closest("tr").find("#product_code").text().trim();
+                var product_name = $(this).closest("tr").find("#product_name").text().trim();
                 ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
 
                 product_unit = $(this).closest("tr").find("#product_unit").text();
@@ -485,7 +490,7 @@ if (!isset($_SESSION['store_id'])) {
 
                 var exists = false;
                 $(".addedProTable tbody tr").each(function() {
-                    if ($(this).find("#addproduct_name").text() === product_code) {
+                    if ($(this).find("#product_code").text() === product_code) {
                         exists = true;
                         return false;
                     }

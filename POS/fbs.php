@@ -35,7 +35,11 @@ if (isset($_SESSION['store_id'])) {
                 <td>
                     <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['image_url'] ?>');"></div>
                 </td>
-                <td id="product_name"><?= $p_medicine_data['p_name'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>) </td>
+                <td>
+                    <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
+                    (<?= $p_medicine_data['ucv_name'] ?>
+                    <?= $p_medicine_data['unit'] ?>)
+                </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
                 <td id="itemsprice"><?= $p_medicine_data['itemSprice'] ?></td>
@@ -73,7 +77,11 @@ if (isset($_SESSION['store_id'])) {
                 <td>
                     <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['image_url'] ?>');"></div>
                 </td>
-                <td id="product_name"><?= $p_medicine_data['p_name'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>) </td>
+                <td>
+                    <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
+                    (<?= $p_medicine_data['ucv_name'] ?>
+                    <?= $p_medicine_data['unit'] ?>)
+                </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
                 <td id="itemsprice"><?= $p_medicine_data['itemSprice'] ?></td>
@@ -111,9 +119,10 @@ if (isset($_SESSION['store_id'])) {
                 <td>
                     <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['image_url'] ?>');"></div>
                 </td>
-                <td id="product_name"><?= $p_medicine_data['p_name'] ?>
-                        <br>
-                        (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>)
+                <td>
+                    <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
+                    (<?= $p_medicine_data['ucv_name'] ?>
+                    <?= $p_medicine_data['unit'] ?>)
                 </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
@@ -149,7 +158,11 @@ if (isset($_SESSION['store_id'])) {
                 <td>
                     <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['image_url'] ?>');"></div>
                 </td>
-                <td id="product_name"><?= $p_medicine_data['p_name'] ?> (<?= $p_medicine_data['ucv_name'] ?><?php echo $p_medicine_data['unit']; ?>) </td>
+                <td>
+                    <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
+                    (<?= $p_medicine_data['ucv_name'] ?>
+                    <?= $p_medicine_data['unit'] ?>)
+                </td>
                 <td id="product_category"><?= $p_medicine_data['category'] ?></td>
                 <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
                 <td id="itemsprice"><?= $p_medicine_data['itemSprice'] ?></td>

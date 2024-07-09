@@ -105,7 +105,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                                     <td><?= $poItems_data["grn_p_id"] ?></td>
                                                                                     <td><?= $poItems_data["name"] ?></td>
                                                                                     <td><?= $poItems_data["grn_p_qty"] ?></td>
-                                                                                    <td><?= $poItems_data["grn_p_cost"] ?>.00</td>
+                                                                                    <td><?= number_format($poItems_data["grn_p_cost"],0) ?></td>
                                                                                 </tr>
                                                                             <?php } ?>
                                                                         </tbody>
@@ -114,7 +114,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                 </ul>
                                                             </td>
                                                             <td><?= $grn_details_data["grn_date"] ?></td>
-                                                            <td><?= $grn_details_data["grn_sub_total"] ?>.00</td>
+                                                            <td><?= number_format($grn_details_data["grn_sub_total"],0) ?></td>
                                                         </tr>
                                                     <?php } ?>
                                             <?php

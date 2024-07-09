@@ -11,13 +11,10 @@ if (is_array($poArray) && !empty($poArray)) {
         $product_qty = isset($product['product_qty']) ? $product['product_qty'] : '';
         $minimum_qty = isset($product['minimum_qty']) ? $product['minimum_qty'] : '';
         $cost_input = isset($product['cost_input']) ? $product['cost_input'] : '';
-        $cost_per_unit = isset($product['cost_per_unit']) ? $product['cost_per_unit'] : '';
-        // $unit_s_price = isset($product['unit_s_price']) ? $product['unit_s_price'] : '';
+        $cost_per_unit = isset($product['cost_per_unit']) ? $product['cost_per_unit'] : 0.0;
         $unit_s_price = isset($product['unit_s_price']) ? doubleval($product['unit_s_price']) : 0.0;
 
-
         $item_discount = isset($product['item_discount']) ? $product['item_discount'] : '';
-        // $item_sale_price = isset($product['item_sale_price']) ? $product['item_sale_price'] : '';
         $item_sale_price = isset($product['item_sale_price']) ? doubleval($product['item_sale_price']) : '';
 
         $free_qty = isset($product['free_qty']) ? $product['free_qty'] : '';

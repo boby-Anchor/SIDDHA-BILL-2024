@@ -73,11 +73,13 @@ if (!isset($_SESSION['store_id'])) {
 
                                                 // Fetch data from the stock table
                                                 $sql = $conn->query("
-            SELECT stock2.* ,shop.*,p_medicine.*, p_brand.name AS bName FROM stock2
-            INNER JOIN shop ON shop.shopId = stock2.stock_shop_id
-            INNER JOIN p_medicine ON stock2.stock_item_code = p_medicine.code
-            INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-            ORDER BY p_medicine.name DESC");
+                                                SELECT stock2.*, shop.*, p_medicine.*, p_brand.name AS bName
+                                                FROM stock2
+                                                INNER JOIN shop ON shop.shopId = stock2.stock_shop_id
+                                                INNER JOIN p_medicine ON stock2.stock_item_code = p_medicine.code
+                                                INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                                                ORDER BY p_medicine.name DESC
+                                                ");
 
                                                 // Initialize an array to store product data indexed by product ID
                                                 $products = array();
@@ -115,7 +117,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                 <img src="dist/img/product/<?php echo $product['img']; ?>" width="50" alt="Image">
                                                             </td>
                                                             <td><?php echo $product['name']; ?></td>
-                                                             <td><?php echo $product['bName']; ?></td>
+                                                            <td><?php echo $product['bName']; ?></td>
                                                             <td><?php echo $product['cost']; ?></td>
                                                             <td><?php echo $price; ?></td>
                                                             <?php

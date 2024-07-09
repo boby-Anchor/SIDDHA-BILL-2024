@@ -282,7 +282,7 @@ if (!isset($_SESSION['store_id'])) {
       }
     }
 
-    $orderId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = 'siddhahub' AND table_name = 'hub_order'");
+    $orderId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'hub_order'");
     $orderId_row = $orderId_rs->fetch_assoc();
     $orderId = $orderId_row['AUTO_INCREMENT'];
     $orderNumber = "PO-$userId$shop_id" . "0000" . $orderId;
