@@ -25,7 +25,7 @@ if (is_array($poArray) && !empty($poArray)) {
 
                 $productsAllTotal += $productTotal;
 
-                $invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = 'siddhahub' AND table_name = 'invoices'");
+                $invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'invoices'");
                 $invoiceId_row = $invoiceId_rs->fetch_assoc();
                 $invoiceId = $invoiceId_row['AUTO_INCREMENT'];
                 $invoiceNumber = "000" . $userId . $shop_id .  $invoiceId;

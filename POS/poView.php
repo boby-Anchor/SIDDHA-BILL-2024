@@ -155,9 +155,9 @@ if (!isset($_SESSION['store_id'])) {
                                                                                         <th scope="row">1</th>
                                                                                         <td><?= $poItems_data["code"] ?></td>
                                                                                         <td><?= $poItems_data["name"] ?></td>
-                                                                                        <td><?= $poItems_data["invoiceItem_price"] ?></td>
-                                                                                        <td><?= $poItems_data["invoiceItem_qty"] ?></td>
-                                                                                        <td><?= $poItems_data["invoiceItem_total"] ?>.00</td>
+                                                                                        <td><?= number_format($poItems_data["invoiceItem_price"], 0) ?></td>
+                                                                                        <td><?= number_format($poItems_data["invoiceItem_qty"], 0) ?></td>
+                                                                                        <td><?= number_format($poItems_data["invoiceItem_total"], 0) ?></td>
                                                                                     </tr>
 
                                                                                 <?php
@@ -170,9 +170,9 @@ if (!isset($_SESSION['store_id'])) {
 
                                                                 </th>
                                                                 <th><?= $hub_order_details_data['po_date'] ?></th>
-                                                                <th><?= $hub_order_details_data["sub_total"] ?></th>
-                                                                <th><?= $hub_order_details_data['discount'] ?></th>
-                                                                <th><?= $hub_order_details_data['net_total'] ?></th>
+                                                                <th><?= number_format($hub_order_details_data["sub_total"], 0) ?></th>
+                                                                <th><?= number_format($hub_order_details_data['discount'], 0) ?></th>
+                                                                <th><?= number_format($hub_order_details_data['net_total'], 0) ?></th>
 
                                                             </tr>
                                                     <?php

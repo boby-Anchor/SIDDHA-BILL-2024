@@ -390,9 +390,12 @@ if (!isset($_SESSION['store_id'])) {
           $invoiceId = $invoiceId_row['AUTO_INCREMENT'];
           $invoiceNumber = "000" . $userId . $shop_id . $invoiceId;
 
-          $bill_data_rs = $conn->query("SELECT * FROM `customize_bills` WHERE `customize_bill_shop-id` = '$shop_id'");
+          $bill_data_rs = $conn->query("SELECT shop.shopName AS shopName, customize_bills.*
+          FROM `customize_bills`
+          INNER JOIN shop ON shopId = customize_bills.`customize_bill_shop-id`
+          WHERE `customize_bill_shop-id` = '$shop_id'
+          ");
           $bill_data = $bill_data_rs->fetch_assoc();
-
       ?>
           <div class="d-flex justify-content-center">
             <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
@@ -401,7 +404,15 @@ if (!isset($_SESSION['store_id'])) {
                   <tr>
                     <td colspan="3">
                       <div class="col-12 d-flex justify-content-center p-2">
-                        <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>" style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');"></div>
+                        <div class="">
+                          <label style="font-size: large; font-weight: 100;">
+                            <h3>
+                              <b>
+                                <?=$bill_data['shopName']?>
+                              </b>
+                            </h3>
+                          </label>
+                        </div>
                       </div>
                     </td>
                   </tr>
