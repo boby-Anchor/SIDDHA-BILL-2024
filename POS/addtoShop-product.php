@@ -66,7 +66,6 @@ if (!isset($_SESSION['store_id'])) {
                                             <div class="col-6">
                                                 <input type="text" class="form-control" placeholder="Barcode" onkeyup="searchByCode(this.value);">
                                             </div>
-
                                         </div>
                                     </div>
 
@@ -79,7 +78,6 @@ if (!isset($_SESSION['store_id'])) {
                                                             <div class="col-1 d-flex align-items-center">
                                                                 #
                                                             </div>
-
                                                             <div class="col-8">
                                                                 <select name="records_per_page" id="records_per_page" class="record_per_page_sele form-control">
                                                                     <option value="0">Filter Row Count</option>
@@ -89,7 +87,6 @@ if (!isset($_SESSION['store_id'])) {
                                                                 </select>
                                                             </div>
                                                         </div>
-
                                                     </th>
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col">Brand</th>
@@ -101,16 +98,16 @@ if (!isset($_SESSION['store_id'])) {
                                                 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
                                                 $records_per_page = isset($_SESSION['records_per_page']) ? $_SESSION['records_per_page'] : 20;
                                                 $start_from = ($page - 1) * $records_per_page;
-                                               
-                                                 //PRODUCT NAME, BRAND, SHOP     p_medicine.name AS pName,  selectedShops
-                                               
+
+                                                //PRODUCT NAME, BRAND, SHOP     p_medicine.name AS pName,  selectedShops
+
                                                 $record_per_page_sql = "SELECT p_medicine.*, p_brand.name AS bName , medicine_unit.unit AS unit , unit_category_variation.ucv_name
                                                 FROM p_medicine
                                                 JOIN p_brand ON p_brand.id = p_medicine.brand
                                                 INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                                                 INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation ORDER BY p_medicine.name
                                                 LIMIT $start_from, $records_per_page  ";
-                                               
+
                                                 $record_per_page_result = $conn->query($record_per_page_sql);
                                                 if ($record_per_page_result->num_rows > 0) {
                                                     while ($record_per_page_row = $record_per_page_result->fetch_assoc()) {
@@ -120,9 +117,9 @@ if (!isset($_SESSION['store_id'])) {
                                                         <tr>
                                                             <th scope="row"><?= $record_per_page_row["id"] ?></th>
                                                             <td><?= $record_per_page_row["name"] ?>
-                                                            (<?= $record_per_page_row['ucv_name'] ?><?php echo $record_per_page_row['unit']; ?>)
-                                                            <br>
-                                                            <?= $record_per_page_row["code"] ?>
+                                                                (<?= $record_per_page_row['ucv_name'] ?><?php echo $record_per_page_row['unit']; ?>)
+                                                                <br>
+                                                                <?= $record_per_page_row["code"] ?>
                                                             </td>
                                                             <td><?= $record_per_page_row["bName"] ?></td>
                                                             <td>
@@ -169,29 +166,26 @@ if (!isset($_SESSION['store_id'])) {
                                                 }
                                                 ?>
                                             </tbody>
-
                                         </table>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-center">
+                                        <?php
+                                        $pagination_sql = "SELECT COUNT(*) AS total FROM p_medicine";
+                                        $pagination_result = $conn->query($pagination_sql);
+                                        $pagination_row = $pagination_result->fetch_assoc();
+                                        $total_records = $pagination_row['total'];
+                                        $total_pages = ceil($total_records / $records_per_page);
+
+                                        echo "<ul class='pagination'>";
+                                        for ($i = 1; $i <= $total_pages; $i++) {
+                                            $active_class = $page == $i ? 'active' : '';
+                                            echo "<li class='page-item $active_class'><a class='page-link' href='?page=$i'>$i</a></li>";
+                                        }
+                                        echo "</ul>";
+                                        ?>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 d-flex justify-content-center">
-                            <?php
-                            $pagination_sql = "SELECT COUNT(*) AS total FROM p_medicine";
-                            $pagination_result = $conn->query($pagination_sql);
-                            $pagination_row = $pagination_result->fetch_assoc();
-                            $total_records = $pagination_row['total'];
-                            $total_pages = ceil($total_records / $records_per_page);
-
-                            echo "<ul class='pagination'>";
-                            for ($i = 1; $i <= $total_pages; $i++) {
-                               
-                                $active_class = $page == $i ? 'active' : '';
-
-                                echo "<li class='page-item $active_class'><a class='page-link' href='?page=$i'>$i</a></li>";
-                            }
-                            echo "</ul>";
-                            ?>
                         </div>
 
                         <div class="col-12 d-flex justify-content-end">
