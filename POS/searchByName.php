@@ -17,8 +17,9 @@ if (isset($_POST["productName"])) {
             <?php
             //  $sql = $conn->query("SELECT * FROM p_medicine WHERE `name` LIKE '%$productName%'");
             $sql = $conn->query("SELECT p_medicine.*, p_brand.name AS bName FROM p_medicine
-                                                JOIN p_brand ON p_brand.id = p_medicine.brand WHERE p_medicine.code LIKE '%$productName%'");
-            
+            JOIN p_brand ON p_brand.id = p_medicine.brand
+            WHERE p_medicine.name LIKE '%$productName%'");
+
             while ($row = mysqli_fetch_assoc($sql)) {
                 $medicine_id = $row["id"];
             ?>
@@ -87,7 +88,7 @@ if (isset($_POST["productName"])) {
         </tbody>
     </table>
     <!-- </div> -->
-   
+
 <?php
 }
 ?>
