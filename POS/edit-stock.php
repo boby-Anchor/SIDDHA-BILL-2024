@@ -185,26 +185,6 @@ if (!isset($_SESSION['store_id'])) {
 
                                                 foreach ($userLoginData as $userData) {
                                                     $shop_id = $userData['shop_id'];
-                                                    //    p_medicine.code AS code ,
-                                                    // $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS p_name , 
-                                                    // p_medicine.code AS code ,
-                                                    // p_medicine.img AS img ,
-                                                    // p_medicine_category.name AS categoryname , p_brand.name AS brandname ,
-                                                    // medicine_unit.unit AS unit , unit_category_variation.ucv_name 
-                                                    //  , `stock2`.`item_s_price` AS itemSprice
-                                                    // FROM producttoshop
-                                                    // INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
-                                                    // INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
-                                                    // INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                                                    // INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                                                    // INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                    // LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-                                                    // WHERE
-                                                    // shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
-                                                    // ORDER BY p_medicine.name ASC
-                                                    // ");
-
-
 
                                                     $p_medicine_rs = $conn->query("SELECT unit_category_variation.ucv_name AS ucv_name,
                                                             medicine_unit.unit AS unit, p_medicine_category.name AS categoryname,
@@ -236,6 +216,7 @@ if (!isset($_SESSION['store_id'])) {
                                                     while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
                                             ?>
                                                         <tr>
+                                                            <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
                                                             <td scope="row"><?= $tableRowCount ?></td>
                                                             <td scope="row">
                                                                 <label id="stock_id"><?= $p_medicine_data['stock_id'] ?></label>
@@ -269,6 +250,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <td id="item_s_price">
                                                                 <label for=""><?= $p_medicine_data['item_s_price'] ?></label>
                                                             </td>
+                                                            <td id="product_unit"><label for=""><?= $p_medicine_data['unit'] ?></label></td>
                                                             <td><button class="btn btn-outline-success add-btn">Add</button></td>
                                                         </tr>
                                             <?php
@@ -303,7 +285,11 @@ if (!isset($_SESSION['store_id'])) {
                         <thead class="text-center">
                             <tr>
                                 <th scope="col">stock id</th>
+                                <th scope="col">shop id</th>
                                 <th scope="col">Barcode</th>
+                                <th scope="col">Old UP</th>
+                                <th scope="col">Old Dsc</th>
+                                <th scope="col">Old SP</th>
                                 <th scope="col">Product Name</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Minimum Unit Qty </th>
@@ -351,7 +337,7 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/alert.php"); ?>
     <!-- Alert end -->
 
-    <!-- All JS end -->
+
 
     <script>
         $(document).ready(function() {
@@ -376,6 +362,9 @@ if (!isset($_SESSION['store_id'])) {
                 // Fetch necessary data
                 var stock_id = $(this).closest("tr").find("#stock_id").text().trim();
                 var stock_shop_id = $(this).closest("tr").find("#stock_shop_id").text().trim();
+                var old_unit_cost = $(this).closest("tr").find("#unit_cost").text().trim();
+                var old_added_discount = $(this).closest("tr").find("#added_discount").text().trim();
+                var old_item_s_price = $(this).closest("tr").find("#item_s_price").text().trim();
 
                 var product_code = $(this).closest("tr").find("#product_code").text().trim();
                 var product_name = $(this).closest("tr").find("#product_name").text().trim();
@@ -386,7 +375,7 @@ if (!isset($_SESSION['store_id'])) {
 
                 var exists = false;
                 $(".addedProTable tbody tr").each(function() {
-                    if ($(this).find("#product_code").text().trim() === product_code) {
+                    if ($(this).find("#product_code").text() === product_code) {
                         exists = true;
                         return false;
                     }
@@ -396,24 +385,23 @@ if (!isset($_SESSION['store_id'])) {
                     // Append new row to the table
                     var markup =
                         "<tr>" +
-                        "<th scope='row' id='product_code'>" + stock_id + "</th>" +
+                        "<th scope='row' id='stock_id'>" + stock_id + "</th>" +
+                        "<th scope='row' id='shop_id'>" + stock_shop_id + "</th>" +
                         "<th scope='row' id='product_code'>" + product_code + "</th>" +
-                        "<td id='addproduct_name'>" + product_name + "</td>" +
+
+                        "<th scope='row' id='old_unit_cost'>" + old_unit_cost + "</th>" +
+                        "<th scope='row' id='old_added_discount'>" + old_added_discount + "</th>" +
+                        "<th scope='row' id='old_item_s_price'>" + old_item_s_price + "</th>" +
+
+                        "<td id='product_name'>" + product_name + "</td>" +
                         "<td id='product_unit' class='d-none' >" + product_unit + "</td>" +
 
                         "<td>" +
                         "<input id='qty_input' type='text' class='bg-dark form-control text-center qty-input mb-2' value=''>" +
-                        "<input id='free_qty' placeholder='free of qty..' type='text' class='bg-dark form-control text-center free-qty-input' value=''>" +
                         "</td>" +
 
                         "<td class='text-center auto-generate-m-unit '>" +
                         "<label id='minimum_qty' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
-                        "<label id='free_minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
-                        "</td>" +
-
-                        "<td class='text-center manual-enter-m-unit d-none'>" +
-                        "<input type='text' id='manual_unit_input' class='bg-dark form-control text-center manual_unit_input mb-2' value=''>" +
-                        "<input type='text' id='free_manual_unit_input' class='bg-dark form-control text-center free_manual_unit_input' value=''>" +
                         "</td>" +
 
                         "<td>" + "<input type='text' id='cost_input' class='bg-dark form-control text-center cost-input' value=''></td>" +
@@ -424,12 +412,9 @@ if (!isset($_SESSION['store_id'])) {
 
                         "<td>" + "<label id='cost_per_unit'></label>" + "</td>" +
 
-
                         "<td>" +
                         "<input placeholder='unit price' id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input mb-2' value=''>" +
-                        "<input placeholder='barcode' id='unit_barcode' type='text' class='bg-dark form-control text-center unit_barcode' value=''>" +
                         "</td>" +
-
 
                         "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
 
@@ -523,7 +508,7 @@ if (!isset($_SESSION['store_id'])) {
                 }
             });
 
-            // add minimum qty manuel for generate cost per unit
+            // add minimum qty manually to generate cost per unit
             $(document).on("input", ".cost-input", function() {
                 if ($(this).closest("tr").find(".auto-generate-m-unit").hasClass("d-none")) {
                     var cost = parseFloat($(this).val());
@@ -577,16 +562,14 @@ if (!isset($_SESSION['store_id'])) {
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
             });
+            
+            // Calculate Discount
             $(document).on("input", ".itemdicount", function() {
                 var add_discount = parseFloat($(this).val());
                 var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
                 var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
 
                 var item_sell_price = cost_input / qty;
-
-                //  var discount =   100 - add_discount;
-                //  var item_cost = cost_input / qty;
-                // var item_sell_price = item_cost / 100 * discount;
 
                 $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
             });
@@ -604,88 +587,8 @@ if (!isset($_SESSION['store_id'])) {
         })
     </script>
 
-    <script>
-        $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
-            var grnNumber = document.getElementById("grnNumber").innerText;
-            var grnDate = document.getElementById("grnDate").innerText;
-            var grnTime = document.getElementById("grnTime").innerText;
-            $(this).prop('disabled', true);
+<script src="dist/js/edit-stock.js"></script>
 
-            var poArray = [];
-
-            $("#grnConfirmationTableBody tr").each(function() {
-                var product_code = $(this).find(".product_code").text();
-                var product_name = $(this).find(".product_name").text();
-                var product_qty = $(this).find(".product_qty").text();
-                var minimum_qty = $(this).find(".minimum_qty").text();
-                var item_discount = $(this).find(".item_discount").text();
-                var cost_input = $(this).find(".cost_input").text();
-                if (item_discount > 0) {
-                    cost_input = cost_input / 100 * (100 - item_discount)
-
-                }
-
-                var cost_per_unit = $(this).find(".cost_per_unit").text();
-                var unit_s_price = $(this).find(".unit_s_price").text();
-
-                var item_sale_price = $(this).find(".item_sale_price").text();
-                var free_qty = $(this).find(".free_qty").text();
-                var free_minimum_qty = $(this).find(".free_minimum_qty").text();
-                var unit_barcode = $(this).find(".unit_barcode").text();
-
-                var productData = {
-                    product_code: product_code,
-                    product_name: product_name,
-                    product_qty: product_qty,
-                    minimum_qty: minimum_qty,
-                    cost_input: cost_input,
-                    cost_per_unit: cost_per_unit,
-                    unit_s_price: unit_s_price,
-                    item_discount: item_discount,
-                    item_sale_price: item_sale_price,
-                    free_qty: free_qty,
-                    free_minimum_qty: free_minimum_qty,
-                    unit_barcode: unit_barcode,
-
-                };
-                poArray.push(productData);
-            });
-
-            $.ajax({
-                url: "grnConfirmationInsert.php",
-                method: "POST",
-                data: {
-                    products: JSON.stringify(poArray),
-                },
-                success: function(response) {
-                    Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true, // Show progress bar during timer
-                        didOpen: (toast) => {
-                            // Pause timer when mouse hover
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire({
-                        icon: "success",
-                        title: "Success: " + response, // Concatenate response text with "Success"
-                    }).then(() => {
-                        // Reload the page after the message is shown
-                        location.reload(true);
-                    });
-                    $(".confirmPObtn").prop('disabled', false);
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    $(".confirmPObtn").prop('disabled', false);
-                },
-            });
-
-        });
-    </script>
 
 </body>
 
