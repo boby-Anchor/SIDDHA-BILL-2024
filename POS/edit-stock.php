@@ -401,7 +401,8 @@ if (!isset($_SESSION['store_id'])) {
                         "</td>" +
 
                         "<td class='text-center auto-generate-m-unit '>" +
-                        "<label id='minimum_qty' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
+                        "<label id='minimum_qty' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
+                        "<label id='unit_id' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
                         "</td>" +
 
                         "<td>" + "<input type='text' id='cost_input' class='bg-dark form-control text-center cost-input' value=''></td>" +
@@ -448,27 +449,33 @@ if (!isset($_SESSION['store_id'])) {
                 switch (product_unit) {
                     case 'l':
                         result = ucv_name * value * 1000;
-                        $(this).closest("tr").find("#minimum_qty").text(result + "ml");
+                        $(this).closest("tr").find("#minimum_qty").text(result);
+                        $(this).closest("tr").find("#unit_id").text("ml");
                         break;
                     case 'kg':
                         result = ucv_name * value * 1000;
-                        $(this).closest("tr").find("#minimum_qty").text(result + "g");
+                        $(this).closest("tr").find("#minimum_qty").text(result);
+                        $(this).closest("tr").find("#unit_id").text("g");
                         break;
                     case 'm':
                         result = ucv_name * value * 100;
-                        $(this).closest("tr").find("#minimum_qty").text(result + "cm");
+                        $(this).closest("tr").find("#minimum_qty").text(result);
+                        $(this).closest("tr").find("#unit_id").text("cm");
                         break;
                     case 'ml':
                         result = ucv_name * value;
-                        $(this).closest("tr").find("#minimum_qty").text(result + "ml");
+                        $(this).closest("tr").find("#minimum_qty").text(result);
+                        $(this).closest("tr").find("#unit_id").text("ml");
                         break;
                     case 'g':
                         result = ucv_name * value;
-                        $(this).closest("tr").find("#minimum_qty").text(result + "g");
+                        $(this).closest("tr").find("#minimum_qty").text(result);
+                        $(this).closest("tr").find("#unit_id").text("g");
                         break;
                     case 'cm':
                         result = ucv_name * value;
-                        $(this).closest("tr").find("#minimum_qty").text(result + "cm");
+                        $(this).closest("tr").find("#minimum_qty").text(result);
+                        $(this).closest("tr").find("#unit_id").text("cm");
                         break;
                 }
             });
