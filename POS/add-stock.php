@@ -481,7 +481,7 @@ if (!isset($_SESSION['store_id'])) {
 
             $(document).on("click", ".add-btn", function() {
                 // Fetch necessary data
-                var product_code = $(this).closest("tr").find("#product_code").text().trim();
+                var product_code = $(this).closest("tr").find("#product_code").text();
                 var product_name = $(this).closest("tr").find("#product_name").text().trim();
                 ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
 

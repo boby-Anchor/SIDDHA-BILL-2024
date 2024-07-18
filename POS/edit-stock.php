@@ -198,7 +198,6 @@ if (!isset($_SESSION['store_id'])) {
                                                                 HAVING COUNT(*) > 1
                                                             ) d 
                                                             ON t.stock_item_code = d.stock_item_code
-                                                            AND t.stock_item_name = d.stock_item_name
                                                             AND t.stock_item_cost = d.stock_item_cost
                                                             AND t.unit_s_price = d.unit_s_price
                                                             AND t.added_discount = d.added_discount
@@ -209,13 +208,17 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                                                             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                            ORDER BY t.stock_item_code ASC, t.stock_shop_id ASC, t.stock_id ASC;
+                                                            WHERE t.stock_shop_id = '1'
+                                                            ORDER BY t.stock_item_code ASC, t.stock_id ASC;
                                                             ");
+
+                                                            //ORDER BY t.stock_item_code ASC, t.stock_shop_id ASC, t.stock_id ASC;
 
                                                     $tableRowCount = 1;
                                                     while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
                                             ?>
                                                         <tr>
+                                                            <th id="product_code" class="d-none"><?= $p_medicine_data['stock_item_code'] ?></th>
                                                             <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
                                                             <td scope="row"><?= $tableRowCount ?></td>
                                                             <td scope="row">
@@ -224,7 +227,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <td>
                                                                 <label id="stock_shop_id"><?= $p_medicine_data['stock_shop_id'] ?></label>
                                                             </td>
-                                                            <th id="product_code">
+                                                            <th>
                                                                 <label><?= $p_medicine_data['stock_item_code'] ?></label>
                                                             </th>
                                                             <td>
@@ -366,7 +369,7 @@ if (!isset($_SESSION['store_id'])) {
                 var old_added_discount = $(this).closest("tr").find("#added_discount").text().trim();
                 var old_item_s_price = $(this).closest("tr").find("#item_s_price").text().trim();
 
-                var product_code = $(this).closest("tr").find("#product_code").text().trim();
+                var product_code = $(this).closest("tr").find("#product_code").text();
                 var product_name = $(this).closest("tr").find("#product_name").text().trim();
                 ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
 
@@ -385,9 +388,10 @@ if (!isset($_SESSION['store_id'])) {
                     // Append new row to the table
                     var markup =
                         "<tr>" +
+                        "<th scope='row' class='d-none' id='product_code'>" + product_code + "</th>" +
                         "<th scope='row' id='stock_id'>" + stock_id + "</th>" +
                         "<th scope='row' id='shop_id'>" + stock_shop_id + "</th>" +
-                        "<th scope='row' id='product_code'>" + product_code + "</th>" +
+                        "<th scope='row'>" + product_code + "</th>" +
 
                         "<th scope='row' id='old_unit_cost'>" + old_unit_cost + "</th>" +
                         "<th scope='row' id='old_added_discount'>" + old_added_discount + "</th>" +
@@ -569,7 +573,7 @@ if (!isset($_SESSION['store_id'])) {
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
             });
-            
+
             // Calculate Discount
             $(document).on("input", ".itemdicount", function() {
                 var add_discount = parseFloat($(this).val());
@@ -594,7 +598,7 @@ if (!isset($_SESSION['store_id'])) {
         })
     </script>
 
-<script src="dist/js/edit-stock.js"></script>
+    <script src="dist/js/edit-stock.js"></script>
 
 
 </body>
