@@ -321,7 +321,6 @@ if (!isset($_SESSION['store_id'])) {
                     for (var i = 0; i < data.length; i++) {
                         totalAmount += parseFloat(data[i][4]);
                     }
-                    // console.log(totalAmount);
                     $("#totalSales").text(totalAmount);
                 }
             });
@@ -333,12 +332,10 @@ if (!isset($_SESSION['store_id'])) {
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
                 "footerCallback": function(row, data, start, end, display) {
                     //Get data here
-                    // console.log(data);
                     var totalAmount = 0;
                     for (var i = 0; i < data.length; i++) {
                         totalAmount += parseFloat(data[i][4]);
                     }
-                    // console.log(totalAmount);
                     $("#totalExpense").text(totalAmount);
                 }
             });
@@ -350,12 +347,10 @@ if (!isset($_SESSION['store_id'])) {
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
                 "footerCallback": function(row, data, start, end, display) {
                     //Get data here
-                    // console.log(data);
                     var totalAmount = 0;
                     for (var i = 0; i < data.length; i++) {
                         totalAmount += parseFloat(data[i][3]);
                     }
-                    // console.log(totalAmount);
                     $("#totalPurchase").text(totalAmount);
                 }
             });
@@ -367,12 +362,10 @@ if (!isset($_SESSION['store_id'])) {
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
                 "footerCallback": function(row, data, start, end, display) {
                     //Get data here
-                    // console.log(data);
                     var totalAmount = 0;
                     for (var i = 0; i < data.length; i++) {
                         totalAmount += parseFloat(data[i][4]);
                     }
-                    // console.log(totalAmount);
                     $("#totalReceived").text(totalAmount);
                 }
             });
