@@ -22,7 +22,7 @@ if (isset($_SESSION['store_id'])) {
           <!--   <div class="image">
                <img src="dist/img/user1.jpg" class="img-circle elevation-2" alt="User Image" />
             </div>-->
-            <div class="info userNameMain">
+          <div class="info userNameMain">
             <a href="#" class="d-block userName">
               <?= $userName; ?>
             </a>
@@ -31,8 +31,8 @@ if (isset($_SESSION['store_id'])) {
             <a href="#" class="d-block userRole">
               <?= $user_shop_data['user_role'] ?>
             </a>
-          </div> 
-          
+          </div>
+
         </div>
 
         <!-- SidebarSearch Form -->
@@ -54,7 +54,32 @@ if (isset($_SESSION['store_id'])) {
             <li class="nav-item">
               <a href="pos.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
-                <p>POS</p>
+                <p>POS 1</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="../pos1/pos.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>POS 2</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../pos2/pos.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>POS 3</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../pos3/pos.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>POS 4</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="../pos1/pos.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>POS 5</p>
               </a>
             </li>
 
@@ -137,27 +162,27 @@ if (isset($_SESSION['store_id'])) {
                 <p>Today Sales Report</p>
               </a>
             </li>
-            
-            
-            
+
+
+
             <li class="nav-item">
               <a href="cashier-sales-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>Sales Report</p>
               </a>
             </li>
-            
+
             <li class="nav-item">
               <a href="cashier-all-sales-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>All Sales Report</p>
               </a>
             </li>
-            
-            
+
+
             <li class="nav-header">Return</li>
 
-    <li class="nav-item">
+            <li class="nav-item">
               <a href="return-invoice.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>Return Invoice</p>

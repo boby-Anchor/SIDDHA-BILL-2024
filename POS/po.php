@@ -202,7 +202,6 @@ if (!isset($_SESSION['store_id'])) {
                                 <script>
                                     function searchProducts() {
                                         var searchInput = document.getElementById('search21').value.trim();
-                                        console.log(searchInput);
                                         if (searchInput !== '') {
                                             $.ajax({
                                                 type: 'POST',
@@ -212,9 +211,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 },
                                                 success: function(response) {
                                                     $('#productGrid').html(response);
-                                                    //console.log(response)
                                                 },
-
                                             });
                                         }
                                     }

@@ -15,7 +15,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home | Pharmacy</title>
+  <title>Home | Inv 1</title>
 
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -74,7 +74,6 @@ if (!isset($_SESSION['store_id'])) {
                     <input type="text" class="form-control col-10" id="packingChargesField" name="packingChargesField" placeholder="PC" onkeyup="checkNetTotal()">
                   </div>
 
-
                   <!--id="subTotal"-->
                   <div class="col-3   justify-content-end ">
                     <label class="subTotal" id="subTotal"></label>
@@ -91,23 +90,22 @@ if (!isset($_SESSION['store_id'])) {
 
               <div class="col-12 p-1" style="background: #000;">
                 <div class="row" style="background: #000;">
-                  <!--id="discountPercentage"-->
+                  <!-- discountPercentage -->
                   <div class="col-4 p-2 " id="discountField" style="color:#000 !important; background: #000;">
                     <input type="text" placeholder="Discount %" class="form-control col-8" id="discountPercentage" name="discountPercentage" onkeyup="addDiscount()">
                   </div>
 
-                  <!--id="cashAmount"-->
+                  <!-- cashAmount -->
                   <div class="col-4 p-2 " id="cashAmountField">
                     <input type="text" placeholder="Enter Cash Amount" class="form-control col-10" id="cashAmount" name="cashAmount" onkeyup="checkBalance(this)">
                   </div>
 
-                  <!--id="cardAmount"-->
+                  <!-- cardAmount -->
                   <div class="col-4 p-2  d-none" id="cardAmountField">
                     <input type="text" placeholder="Enter Card Amount" class="form-control col-10" id="cardAmount" name="cardAmount" onkeyup="checkBalance(this)">
                   </div>
                 </div>
               </div>
-
 
               <!--"payment-method-selector"--> <!--balance--> <!--checkoutBtn-->
               <div class="col-12 " style="background: #0000004a;">
@@ -187,10 +185,7 @@ if (!isset($_SESSION['store_id'])) {
                     <tbody id="barcodeResults"></tbody>
                   </table>
                 </div>
-
               </div>
-
-
             </div>
           </div>
 
@@ -234,14 +229,6 @@ if (!isset($_SESSION['store_id'])) {
                   ?>
                           <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
                             <div class="product-grid h-100">
-                              <!-- <div class="product-image">
-                                <a href="#" class="image">
-                                  <img src="dist/img/product/
-                                  <?php #echo $v['img']; 
-                                  ?> -->
-                              <!-- " width="50" alt="Image"> -->
-                              <!-- </a> -->
-                              <!-- </div> -->
                               <div class="product-content">
                                 <div class="name" style="color: #fff;"><?php echo $v['name']; ?> <br> <?= $v['code']; ?></div>
                                 <div class="name" style="color: #f67019; font-size:20px;"><?php echo $v['bName']; ?></div>
@@ -260,7 +247,6 @@ if (!isset($_SESSION['store_id'])) {
                 <script>
                   function searchProducts() {
                     var searchInput = document.getElementById('search21').value.trim();
-                    console.log(searchInput);
                     if (searchInput !== '') {
                       $.ajax({
                         type: 'POST',
@@ -270,7 +256,6 @@ if (!isset($_SESSION['store_id'])) {
                         },
                         success: function(response) {
                           $('#productGrid').html(response);
-                          //console.log(response)
                         },
 
                       });
@@ -325,17 +310,14 @@ if (!isset($_SESSION['store_id'])) {
 
                     switch (selectedValue) {
                       case "1":
-                        console.log(selectedValue);
                         cashAmountField.classList.remove('d-none')
                         break;
 
                       case "2":
-                        console.log(selectedValue);
                         cardAmountField.classList.remove('d-none');
                         break;
 
                       case "3":
-                        console.log(selectedValue);
                         cardAmountField.classList.remove('d-none');
                         cashAmountField.classList.remove('d-none');
                         break;
@@ -370,7 +352,6 @@ if (!isset($_SESSION['store_id'])) {
     <!-- select2 input field -->
 
     <!-- ========================================== -->
-
     <div id="invoice-POS" class="d-none">
 
       <?php
@@ -408,7 +389,7 @@ if (!isset($_SESSION['store_id'])) {
                           <label style="font-size: large; font-weight: 100;">
                             <h3>
                               <b>
-                                <?=$bill_data['shopName']?>
+                                <?= $bill_data['shopName'] ?>
                               </b>
                             </h3>
                           </label>
@@ -482,110 +463,77 @@ if (!isset($_SESSION['store_id'])) {
       }
       ?>
     </div>
-
     <!-- ========================================== -->
-
-    <script>
-      $(document).ready(function() {
-        $("#barcodeInput").focus();
-      });
-    </script>
-
-
-    <script>
-      $(document).on('keyup', function(e) {
-        if (e.which == 9) {
-          var selector = document.getElementById('payment-method-selector');
-          var enterAmountField = document.getElementById('cashAmount');
-          if (selector.value === '3' && enterAmountField.value.trim() !== "") {
-            var cardAmountField = document.getElementById('cardAmount');
-            if (cardAmountField) {
-              cardAmountField.focus();
-              e.preventDefault();
-            }
-          } else {
-            $(".cashAmount").focus();
-          }
-        }
-      });
-
-
-      // <?php
-
-          //   if (isset($_SESSION['store_id'])) {
-
-          //     $userLoginData = $_SESSION['store_id'];
-
-          //     foreach ($userLoginData as $userData) {
-          //       $shop_id = $userData['shop_id'];
-
-          //       $conn->query("INSERT INTO test (id, name1, name2) VALUES ('$shop_id','$shop_id','test1')");
-          //       echo '<script> setFields();</script>';
-
-          //       if ($shop_id == '2') {
-          //         echo '<script> setFields();</script>';
-          //       }
-
-
-          //     }
-          //   }
-
-          //   
-          ?>
-
-
-
-      document.addEventListener('DOMContentLoaded', function() {
-
-        var doctorNameField = document.getElementById('doctorNameField');
-        var regNoField = document.getElementById('regNoField');
-
-
-
-        // cash or card selector change
-        var selector = document.getElementById('payment-method-selector');
-        var billTypeSelector = document.getElementById('selectBillType');
-
-        billTypeSelector.selectedIndex = 0;
-
-        var event = new Event('change');
-        billTypeSelector.dispatchEvent(event);
-        event.preventDefault();
-
-        document.addEventListener('keydown', function(event) {
-          if (event.key === "ArrowDown") {
-            moveSelectorDown(selector);
-          } else if (event.key === "ArrowUp") {
-            moveSelectorUp(selector);
-          }
-        });
-      });
-
-      function moveSelectorDown(selector) {
-        var selectedIndex = selector.selectedIndex;
-        if (selectedIndex < selector.options.length - 1) {
-          selectedIndex++;
-        }
-        selector.selectedIndex = selectedIndex;
-        var event = new Event('change');
-        selector.dispatchEvent(event);
-        event.preventDefault();
-      }
-
-      function moveSelectorUp(selector) {
-        var selectedIndex = selector.selectedIndex;
-        if (selectedIndex > 0) {
-          selectedIndex--;
-        }
-        selector.selectedIndex = selectedIndex;
-        var event = new Event('change');
-        selector.dispatchEvent(event);
-        event.preventDefault();
-      }
-    </script>
-    <script src="dist/js/pos.js"></script>
 
   </div>
 </body>
+
+<script>
+  $(document).ready(function() {
+    $("#barcodeInput").focus();
+  });
+
+  $(document).on('keyup', function(e) {
+    if (e.which == 9) {
+      var selector = document.getElementById('payment-method-selector');
+      var enterAmountField = document.getElementById('cashAmount');
+      if (selector.value === '3' && enterAmountField.value.trim() !== "") {
+        var cardAmountField = document.getElementById('cardAmount');
+        if (cardAmountField) {
+          cardAmountField.focus();
+          e.preventDefault();
+        }
+      } else {
+        $(".cashAmount").focus();
+      }
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var doctorNameField = document.getElementById('doctorNameField');
+    var regNoField = document.getElementById('regNoField');
+
+    // cash or card selector change
+    var selector = document.getElementById('payment-method-selector');
+    var billTypeSelector = document.getElementById('selectBillType');
+
+    billTypeSelector.selectedIndex = 0;
+
+    var event = new Event('change');
+    billTypeSelector.dispatchEvent(event);
+    event.preventDefault();
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "ArrowDown") {
+        moveSelectorDown(selector);
+      } else if (event.key === "ArrowUp") {
+        moveSelectorUp(selector);
+      }
+    });
+  });
+
+  function moveSelectorDown(selector) {
+    var selectedIndex = selector.selectedIndex;
+    if (selectedIndex < selector.options.length - 1) {
+      selectedIndex++;
+    }
+    selector.selectedIndex = selectedIndex;
+    var event = new Event('change');
+    selector.dispatchEvent(event);
+    event.preventDefault();
+  }
+
+  function moveSelectorUp(selector) {
+    var selectedIndex = selector.selectedIndex;
+    if (selectedIndex > 0) {
+      selectedIndex--;
+    }
+    selector.selectedIndex = selectedIndex;
+    var event = new Event('change');
+    selector.dispatchEvent(event);
+    event.preventDefault();
+  }
+</script>
+<script src="dist/js/pos.js"></script>
 
 </html>
