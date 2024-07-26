@@ -539,36 +539,7 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="col-12" style="border-bottom: #0e0e0e 0.2rem solid;"></div>
               </div>
               <div class="printInvoiceData" id="printInvoiceData"> </div>
-              <table>
-                <tr style="font-weight: 600;">
-                  <td>
-                    <div class="col-12 pt-2">
-                      <div class="row">
-                        <div class="col-12 d-flex justify-content-center text-center">
-                          <span id="billnotepreview" style="font-size:9px;"><?= $bill_data['bill_note'] ?></span>
-                        </div>
-                        <div class="col-12 d-flex justify-content-center">
-                          <span>Thank You !</span>
-                        </div>
-
-                        <div class="col-12 d-flex justify-content-center">
-                          <div class="check-by-box">
-                            <center>
-                              <label style="font-weight:bold; margin-bottom:3px;">Check By</label>
-                            </center>
-
-                            <label for="date">Date: <?= $currentDate ?><?= $currentTime ?></label>
-
-                            <label for="emp-no">EMP No:.............................</label>
-
-                            <label for="signature">Signature:..........................</label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </table>
+              
             </div>
           </div>
       <?php

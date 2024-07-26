@@ -1,5 +1,5 @@
 <?php
-include('../config/db.php');
+include ('../config/db.php');
 session_start();
 $inArray = $_POST['products'];
 // print_r($inArray);
@@ -15,35 +15,35 @@ $invoiceNumber = "";
 
 if (is_array($inArray) && !empty($inArray)) {
     ?>
-    
-     <!--//table header eka set krnwa-->
-            <div class="col-12">
-                    
-                    <div class="row">
-                        
-                        <div class="col-4">
-                            <span class="product_cost">U.Price</span>
-                        </div>
-                        <div class="col-4 text-center">
-                            <span class="product_qty">
-                                QTY
-                            </span>
-                        </div>
-                        <div class="col-4 text-center">
-                            <span class="productTotal">Total</span>
-                        </div>
-                    </div>
-                </div>
-    
+
+    <!--//table header eka set krnwa-->
+    <div class="col-12">
+
+        <div class="row">
+
+            <div class="col-4">
+                <span class="product_cost">U.Price</span>
+            </div>
+            <div class="col-4 text-center">
+                <span class="product_qty">
+                    QTY
+                </span>
+            </div>
+            <div class="col-4 text-center">
+                <span class="productTotal">Total</span>
+            </div>
+        </div>
+    </div>
+
     <?php
     foreach ($inArray as $product) {
         if (isset($_SESSION['store_id'])) {
             $userLoginData = $_SESSION['store_id'];
-        ?>  
-       
-                
-   <?php      
-   //time tika set krn eka
+            ?>
+
+
+            <?php
+            //time tika set krn eka
             foreach ($userLoginData as $userData) {
                 $userId = $userData['id'];
                 $shop_id = $userData['shop_id'];
@@ -72,7 +72,7 @@ if (is_array($inArray) && !empty($inArray)) {
                     $discountPercentage = 0;
                     $net_total = $productsAllTotal + doubleval($vas_delivery);
                 } else {
-                    $net_total = $productsAllTotal  * (1 - doubleval($discountPercentage) / 100);
+                    $net_total = $productsAllTotal * (1 - doubleval($discountPercentage) / 100);
                     $net_total += doubleval($vas_delivery);
                 }
 
@@ -83,9 +83,9 @@ if (is_array($inArray) && !empty($inArray)) {
                     $discountPercentage = 0;
                 }
 
-?>
+                ?>
                 <div class="col-12">
-                    
+
                     <div class="row">
                         <div class="col-12">
                             <span class="product_name"><?= $product_name ?></span>
@@ -96,15 +96,15 @@ if (is_array($inArray) && !empty($inArray)) {
                         <div class="col-4 text-center">
                             <span class="product_qty">
                                 <?= $product_qty ?>
-                            <!-- <?= $product_unit ?> -->
-                        </span>
+                                <!-- <?= $product_unit ?> -->
+                            </span>
                         </div>
                         <div class="col-4 text-center">
                             <span class="productTotal"><?= $productTotal ?></span>
                         </div>
                     </div>
                 </div>
-    <?php
+                <?php
             }
         } else {
             echo "Session Expired !";
@@ -145,6 +145,37 @@ if (is_array($inArray) && !empty($inArray)) {
         </div>
     </div>
 
+    <table>
+        <tr style="font-weight: 600;">
+            <td>
+                <div class="col-12 pt-2">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center text-center">
+                            <span id="billnotepreview" style="font-size:9px;"><?= $bill_data['bill_note'] ?></span>
+                        </div>
+                        <div class="col-12 d-flex justify-content-center">
+                            <span>Thank You !</span>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center">
+                            <div class="check-by-box">
+                                <center>
+                                    <label style="font-weight:bold; margin-bottom:3px;">Check By</label>
+                                </center>
+
+                                <label for="date">Date: <?= $currentDate ?><?= $currentTime ?></label>
+
+                                <label for="emp-no">EMP No:.............................</label>
+
+                                <label for="signature">Signature:..........................</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
     <!-- <div class="col-12 pt-2">
         <div class="row">
             <div class="col-12 d-flex justify-content-center text-center">
@@ -156,7 +187,7 @@ if (is_array($inArray) && !empty($inArray)) {
         </div>
     </div> -->
 
-<?php
+    <?php
 } else {
     echo "No products found or invalid data received.";
 }
