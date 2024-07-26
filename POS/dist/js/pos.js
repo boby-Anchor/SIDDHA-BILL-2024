@@ -605,7 +605,7 @@ function checkout() {
       timer: 3000,
     }).fire({
       icon: "error",
-      title: "Error: Enter the Patient Details",
+      title: "Error: Enter Patient's Details",
     });
   }
 }

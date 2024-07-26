@@ -28,17 +28,20 @@ if (!isset($_SESSION['store_id'])) {
             font-size: 50px;
             font-weight: bold;
         }
-        .cashier-cash , .cashier-card , .cashier-out{
-           font-weight: bold;
-  padding: 10px;
+
+        .cashier-cash,
+        .cashier-card,
+        .cashier-out {
+            font-weight: bold;
+            padding: 10px;
         }
-        .cashier-cash{
+        .cashier-cash {
             background: #4b8c9f;
         }
-        .cashier-card{
+        .cashier-card {
             background: #0070ff;
         }
-        .cashier-out{
+        .cashier-out {
             background: #e35151;
         }
     </style>
@@ -82,33 +85,35 @@ if (!isset($_SESSION['store_id'])) {
                                         <div class="card-body">
                                             <div class="row">
                                                 <?php
-                                               $cashiers_rs= $conn->query("SELECT SUM(total_amount) AS total_amount , SUM(paidAmount) AS cashPayments ,
-                                               SUM(cardPaidAmount) AS cardPayments ,SUM(balance) AS cashOut, users.name AS name , shop.shopName AS shopName 
-                                                                FROM `invoices` 
-                                                                INNER JOIN users ON users.id = invoices.user_id
-                                                                INNER JOIN shop ON shop.shopId = invoices.shop_id
-                                                                GROUP BY user_id;");
-                                                                while($cashiers_data=$cashiers_rs->fetch_assoc()){
-                                                                    ?>
-                                                                      <div class="col-md-3">
-                                                    <div class="card card-body text-white" style="background-color:#15b580 !important" >
-                                                        <h2 class="text-white text-uppercase"><?= $cashiers_data['name'] ?></h2>
-                                                       <lable><?= $cashiers_data['shopName'] ?></lable>
-                                                        <p class="totalAmount"><?= $cashiers_data['total_amount'] ?> LKR</p>
-                                                        <p class="cashier-cash" >Card Payments : <?= $cashiers_data['cardPayments'] ?> LKR</p>
-                                                        <p class="cashier-card" >Cash Payments : <?= $cashiers_data['cashPayments'] ?> LKR</p>
-                                                        <p class="cashier-out" >Cash Out : -<?= $cashiers_data['cashOut'] ?> LKR</p>
-                                                    </div>
-                                                </div>
-                                                                    <?php
-                                                                }
+                                                $cashiers_rs = $conn->query("SELECT SUM(total_amount) AS total_amount,
+                                                SUM(paidAmount) AS cashPayments,
+                                                SUM(cardPaidAmount) AS cardPayments,
+                                                SUM(balance) AS cashOut,
+                                                users.name AS name,
+                                                shop.shopName AS shopName
+                                                FROM `invoices`
+                                                INNER JOIN users ON users.id = invoices.user_id
+                                                INNER JOIN shop ON shop.shopId = invoices.shop_id
+                                                GROUP BY user_id;");
+                                                while ($cashiers_data = $cashiers_rs->fetch_assoc()) {
                                                 ?>
-                                              
+                                                    <div class="col-md-3">
+                                                        <div class="card card-body text-white" style="background-color:#15b580 !important">
+                                                            <h2 class="text-white text-uppercase"><?= $cashiers_data['name'] ?></h2>
+                                                            <lable><?= $cashiers_data['shopName'] ?></lable>
+                                                            <p class="totalAmount"><?= number_format($cashiers_data['total_amount'], 0) ?> LKR</p>
+                                                            <p class="cashier-cash">Card Payments : <?= number_format($cashiers_data['cardPayments'], 0) ?> LKR</p>
+                                                            <p class="cashier-card">Cash Payments : <?= number_format($cashiers_data['cashPayments'], 0) ?> LKR</p>
+                                                            <p class="cashier-out">Cash Out : -<?= number_format($cashiers_data['cashOut'], 0) ?> LKR</p>
+                                                        </div>
+                                                    </div>
+                                                <?php
+                                                }
+                                                ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                              
                             </div>
                     </section>
             <?php
