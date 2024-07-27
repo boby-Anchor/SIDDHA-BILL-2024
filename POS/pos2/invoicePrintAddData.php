@@ -14,7 +14,7 @@ $invoiceNumber = "";
 
 
 if (is_array($inArray) && !empty($inArray)) {
-    ?>
+?>
 
     <!--//table header eka set krnwa-->
     <div class="col-12">
@@ -39,10 +39,7 @@ if (is_array($inArray) && !empty($inArray)) {
     foreach ($inArray as $product) {
         if (isset($_SESSION['store_id'])) {
             $userLoginData = $_SESSION['store_id'];
-            ?>
-
-
-            <?php
+            
             //time tika set krn eka
             foreach ($userLoginData as $userData) {
                 $userId = $userData['id'];
@@ -82,8 +79,7 @@ if (is_array($inArray) && !empty($inArray)) {
                 if ($discountPercentage == "") {
                     $discountPercentage = 0;
                 }
-
-                ?>
+            ?>
                 <div class="col-12">
 
                     <div class="row">

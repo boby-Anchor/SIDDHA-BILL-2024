@@ -347,86 +347,7 @@ if (!isset($_SESSION['store_id'])) {
                   } ?>
 
                 </div>
-                <script>
-                  function searchProducts() {
-                    var searchInput = document.getElementById('search21').value.trim();
-                    if (searchInput !== '') {
-                      $.ajax({
-                        type: 'POST',
-                        url: 'searchNameProductPos.php',
-                        data: {
-                          searchName: searchInput
-                        },
-                        success: function(response) {
-                          $('#productGrid').html(response);
-                        },
 
-                      });
-                    }
-                  }
-
-                  //payment type online select //
-                  document.getElementById('selectBillType').addEventListener('change', function() {
-                    var selectedValue = this.value;
-
-                    var discountPercentageElement = document.getElementById('discountField');
-                    var deliveryChargesElement = document.getElementById('deliveryChargesField');
-                    var serviceChargesElement = document.getElementById('ServiceChargesField');
-                    var packingChargesElement = document.getElementById('packingChargesField');
-
-                    discountPercentageElement.classList.add('d-none');
-                    deliveryChargesElement.classList.add('d-none');
-                    serviceChargesElement.classList.add('d-none');
-                    packingChargesElement.classList.add('d-none');
-
-                    switch (selectedValue) {
-                      case "1":
-                        discountPercentageElement.classList.remove('d-none');
-                        break;
-
-                      case "2":
-                        discountPercentageElement.classList.remove('d-none');
-                        deliveryChargesElement.classList.remove('d-none');
-                        serviceChargesElement.classList.remove('d-none');
-                        break;
-
-                      case "3":
-                        discountPercentageElement.classList.remove('d-none');
-                        break;
-
-                      case "4":
-                        deliveryChargesElement.classList.remove('d-none');
-                        packingChargesElement.classList.remove('d-none');
-                        break;
-                    }
-                  });
-
-                  // if select cash + card //
-                  document.getElementById('payment-method-selector').addEventListener('change', function() {
-
-                    var selectedValue = this.value;
-                    var cashAmountField = document.getElementById('cashAmountField');
-                    var cardAmountField = document.getElementById('cardAmountField');
-
-                    cashAmountField.classList.add('d-none');
-                    cardAmountField.classList.add('d-none');
-
-                    switch (selectedValue) {
-                      case "1":
-                        cashAmountField.classList.remove('d-none')
-                        break;
-
-                      case "2":
-                        cardAmountField.classList.remove('d-none');
-                        break;
-
-                      case "3":
-                        cardAmountField.classList.remove('d-none');
-                        cashAmountField.classList.remove('d-none');
-                        break;
-                    }
-                  });
-                </script>
               </div>
 
               <!-- Company Product list end -->
@@ -446,7 +367,6 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("alert.php"); ?>
     <!-- Alert end -->
 
-
     <!-- All JS -->
     <script src="../plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -459,19 +379,16 @@ if (!isset($_SESSION['store_id'])) {
     <script src="../dist/js/customize_bill.js"></script>
     <!-- All JS end -->
 
-
     <!-- Data Table JS -->
     <?php include("../part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
     <!-- select2 input field -->
 
-
     <!-- Invoice print -->
     <!-- ========================================== -->
 
     <div id="invoice-POS" class="d-none">
-
       <?php
       if (isset($_SESSION['store_id'])) {
 
@@ -556,9 +473,86 @@ if (!isset($_SESSION['store_id'])) {
   $(document).ready(function() {
     $("#barcodeInput").focus();
   });
-</script>
 
-<script>
+  function searchProducts() {
+    var searchInput = document.getElementById('search21').value.trim();
+    if (searchInput !== '') {
+      $.ajax({
+        type: 'POST',
+        url: 'searchNameProductPos.php',
+        data: {
+          searchName: searchInput
+        },
+        success: function(response) {
+          $('#productGrid').html(response);
+        },
+
+      });
+    }
+  }
+
+  //payment type online select //
+  document.getElementById('selectBillType').addEventListener('change', function() {
+    var selectedValue = this.value;
+
+    var discountPercentageElement = document.getElementById('discountField');
+    var deliveryChargesElement = document.getElementById('deliveryChargesField');
+    var serviceChargesElement = document.getElementById('ServiceChargesField');
+    var packingChargesElement = document.getElementById('packingChargesField');
+
+    discountPercentageElement.classList.add('d-none');
+    deliveryChargesElement.classList.add('d-none');
+    serviceChargesElement.classList.add('d-none');
+    packingChargesElement.classList.add('d-none');
+
+    switch (selectedValue) {
+      case "1":
+        discountPercentageElement.classList.remove('d-none');
+        break;
+
+      case "2":
+        discountPercentageElement.classList.remove('d-none');
+        deliveryChargesElement.classList.remove('d-none');
+        serviceChargesElement.classList.remove('d-none');
+        break;
+
+      case "3":
+        discountPercentageElement.classList.remove('d-none');
+        break;
+
+      case "4":
+        deliveryChargesElement.classList.remove('d-none');
+        packingChargesElement.classList.remove('d-none');
+        break;
+    }
+  });
+
+  // if select cash + card //
+  document.getElementById('payment-method-selector').addEventListener('change', function() {
+
+    var selectedValue = this.value;
+    var cashAmountField = document.getElementById('cashAmountField');
+    var cardAmountField = document.getElementById('cardAmountField');
+
+    cashAmountField.classList.add('d-none');
+    cardAmountField.classList.add('d-none');
+
+    switch (selectedValue) {
+      case "1":
+        cashAmountField.classList.remove('d-none')
+        break;
+
+      case "2":
+        cardAmountField.classList.remove('d-none');
+        break;
+
+      case "3":
+        cardAmountField.classList.remove('d-none');
+        cashAmountField.classList.remove('d-none');
+        break;
+    }
+  });
+
   $(document).on('keyup', function(e) {
     if (e.which == 9) {
       var selector = document.getElementById('payment-method-selector');
@@ -576,7 +570,6 @@ if (!isset($_SESSION['store_id'])) {
   });
 
   document.addEventListener('DOMContentLoaded', function() {
-    var doctorNameField = document.getElementById('doctorNameField');
     var regNoField = document.getElementById('regNoField');
 
     // cash or card selector change
@@ -1036,6 +1029,7 @@ if (!isset($_SESSION['store_id'])) {
       window.location.reload();
       // Reload the pos.php file in the main window
     };
+    location.reload();
   }
 
   function checkout() {
@@ -1064,7 +1058,7 @@ if (!isset($_SESSION['store_id'])) {
           icon: "error",
           title: "Error: Paid Amount is Not Enough",
         });
-      } else {
+      } else { //checkout (balance >0)
         Swal.mixin({
           toast: true,
           position: "top-end",
@@ -1075,18 +1069,6 @@ if (!isset($_SESSION['store_id'])) {
           title: "Success: Checkout Success !",
         });
 
-        $.ajax({
-          url: "invoiceConfirmation.php",
-          method: "POST",
-          success: function(response) {
-            document.getElementById("invoiceNumber").innerHTML = response.trim();
-          },
-          error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-          },
-        });
-
-        var invoiceNumber =  $(".invoiceNumber").text().trim();
         var poArray = [];
         var inArray = [];
 
@@ -1133,6 +1115,20 @@ if (!isset($_SESSION['store_id'])) {
         });
 
         $.ajax({
+          url: "invoiceConfirmation.php",
+          method: "POST",
+          data: {
+            products: JSON.stringify(inArray),
+          },
+          success: function(response) {
+            document.getElementById("invoice-POS").innerHTML = response.trim();
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+          },
+        });
+
+        $.ajax({
           url: "invoiceConfirmationInsert.php",
           method: "POST",
           data: {
@@ -1150,21 +1146,7 @@ if (!isset($_SESSION['store_id'])) {
               title: "Success: Order Placed Successfully!",
             });
             $(".confirmPObtn").prop("disabled", false);
-
-            $.ajax({
-              url: "invoicePrintAddData.php",
-              method: "POST",
-              data: {
-                products: inArray,
-              },
-              success: function(response) {
-                document.getElementById("printInvoiceData").innerHTML = response;
-                printInvoice();
-              },
-              error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-              },
-            });
+            printInvoice();
           },
           error: function(xhr, status, error) {
             console.error(xhr.responseText);
@@ -1180,7 +1162,7 @@ if (!isset($_SESSION['store_id'])) {
           },
         });
       }
-    } else {
+    } else { // empty patient name
       Swal.mixin({
         toast: true,
         position: "top-end",
