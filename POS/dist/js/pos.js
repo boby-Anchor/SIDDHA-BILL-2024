@@ -1,3 +1,7 @@
+$(document).ready(function () {
+  $("#barcodeInput").focus();
+});
+
 function getBarcode3() {
   var selectPrices = document.getElementById("selectPrices").value;
 
@@ -24,8 +28,6 @@ function getBarcode3() {
       document.getElementById("barcodeInput").value = "";
       document.getElementById("barcodeInput").focus();
       document.getElementById("selectPrices").selectedIndex = -1;
-
-      // calculateSubTotal();
       calculateSubTotal();
     }
   };
@@ -93,6 +95,150 @@ function getBarcode(barcode, stock_s_price) {
   $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
 
+function searchProducts() {
+  var searchInput = document.getElementById("search21").value.trim();
+  if (searchInput !== "") {
+    $.ajax({
+      type: "POST",
+      url: "actions/searchNameProductPos.php",
+      data: {
+        searchName: searchInput,
+      },
+      success: function (response) {
+        $("#productGrid").html(response);
+      },
+    });
+  }
+}
+
+//payment type online select //
+document
+  .getElementById("selectBillType")
+  .addEventListener("change", function () {
+    var selectedValue = this.value;
+
+    var discountPercentageElement = document.getElementById("discountField");
+    var deliveryChargesElement = document.getElementById(
+      "deliveryChargesField"
+    );
+    var serviceChargesElement = document.getElementById("ServiceChargesField");
+    var packingChargesElement = document.getElementById("packingChargesField");
+
+    discountPercentageElement.classList.add("d-none");
+    deliveryChargesElement.classList.add("d-none");
+    serviceChargesElement.classList.add("d-none");
+    packingChargesElement.classList.add("d-none");
+
+    switch (selectedValue) {
+      case "1":
+        discountPercentageElement.classList.remove("d-none");
+        break;
+
+      case "2":
+        discountPercentageElement.classList.remove("d-none");
+        deliveryChargesElement.classList.remove("d-none");
+        serviceChargesElement.classList.remove("d-none");
+        break;
+
+      case "3":
+        discountPercentageElement.classList.remove("d-none");
+        break;
+
+      case "4":
+        deliveryChargesElement.classList.remove("d-none");
+        packingChargesElement.classList.remove("d-none");
+        break;
+    }
+  });
+
+// if select cash + card //
+document
+  .getElementById("payment-method-selector")
+  .addEventListener("change", function () {
+    var selectedValue = this.value;
+    var cashAmountField = document.getElementById("cashAmountField");
+    var cardAmountField = document.getElementById("cardAmountField");
+
+    cashAmountField.classList.add("d-none");
+    cardAmountField.classList.add("d-none");
+
+    switch (selectedValue) {
+      case "1":
+        cashAmountField.classList.remove("d-none");
+        break;
+
+      case "2":
+        cardAmountField.classList.remove("d-none");
+        break;
+
+      case "3":
+        cardAmountField.classList.remove("d-none");
+        cashAmountField.classList.remove("d-none");
+        break;
+    }
+  });
+
+$(document).on("keyup", function (e) {
+  if (e.which == 9) {
+    var selector = document.getElementById("payment-method-selector");
+    var enterAmountField = document.getElementById("cashAmount");
+    if (selector.value === "3" && enterAmountField.value.trim() !== "") {
+      var cardAmountField = document.getElementById("cardAmount");
+      if (cardAmountField) {
+        cardAmountField.focus();
+        e.preventDefault();
+      }
+    } else {
+      $(".cashAmount").focus();
+    }
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  var doctorNameField = document.getElementById("doctorNameField");
+  var regNoField = document.getElementById("regNoField");
+
+  // cash or card selector change
+  var selector = document.getElementById("payment-method-selector");
+  var billTypeSelector = document.getElementById("selectBillType");
+
+  billTypeSelector.selectedIndex = 0;
+
+  var event = new Event("change");
+  billTypeSelector.dispatchEvent(event);
+  event.preventDefault();
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "ArrowDown") {
+      moveSelectorDown(selector);
+    } else if (event.key === "ArrowUp") {
+      moveSelectorUp(selector);
+    }
+  });
+});
+
+function moveSelectorDown(selector) {
+  var selectedIndex = selector.selectedIndex;
+  if (selectedIndex < selector.options.length - 1) {
+    selectedIndex++;
+  }
+  selector.selectedIndex = selectedIndex;
+  var event = new Event("change");
+  selector.dispatchEvent(event);
+  event.preventDefault();
+}
+
+function moveSelectorUp(selector) {
+  var selectedIndex = selector.selectedIndex;
+  if (selectedIndex > 0) {
+    selectedIndex--;
+  }
+  selector.selectedIndex = selectedIndex;
+  var event = new Event("change");
+  selector.dispatchEvent(event);
+  event.preventDefault();
+}
+
 // update total by qty
 function updateTotal(input) {
   var quantity = parseInt(input.value);
@@ -112,7 +258,6 @@ function decreaseQuantity(button) {
     quantity--;
     input.value = quantity;
     updateTotal(input);
-    // calculateSubTotal();
   }
 }
 
@@ -124,7 +269,6 @@ function increaseQuantity(button) {
   quantity++;
   input.value = quantity;
   updateTotal(input);
-  // calculateSubTotal();
 }
 
 // product remove
@@ -192,20 +336,14 @@ function checkNetTotal() {
 
 // subTotal Calculation display
 function calculateSubTotal() {
-  var balance = $("#balance").text().replace(/,/g, "");
-  var enterAmountFiled = $("#enterAmountFiled").val();
-  var invoiceNumber = $("#invoiceNumber").text();
-  var poArray = [];
-  var inArray = [];
+  var productsAllTotal = 0;
 
   var ajaxRequests = [];
 
   $(".barcodeResults tbody tr").each(function () {
-    var product_name = $(this).find("#product_name").text();
-    var code = $(this).find("#code").text();
     var product_cost = $(this).find("#product_price").text();
     var product_qty = $(this).find("#qty").val();
-    var product_unit = $(this).find("#unit").text();
+
     if (product_qty === "" || product_qty === "0") {
       Swal.mixin({
         toast: true,
@@ -218,46 +356,11 @@ function calculateSubTotal() {
       });
       $("#checkoutBtn").removeAttr("data-toggle data-target");
     } else {
-      var productData = {
-        product_name: product_name,
-        code: code,
-        product_cost: product_cost,
-        product_qty: product_qty,
-        product_unit: product_unit,
-        balance: balance,
-        // enterAmountFiled: enterAmountFiled,
-        invoiceNumber: invoiceNumber,
-      };
-
-      poArray.push(productData);
-      inArray.push(productData);
+      var productTotal = product_cost * product_qty;
+      productsAllTotal += productTotal;
+      document.getElementById("subTotal").innerHTML = productsAllTotal;
+      addDiscount();
     }
-  });
-
-  $.when.apply($, ajaxRequests).then(function () {
-    // Update subtotal
-    var poAjaxRequest = $.ajax({
-      url: "invoiceConfirmation.php",
-      method: "POST",
-      data: {
-        products: poArray,
-      },
-      success: function (response) {
-        document.getElementById("subTotal").innerHTML = response;
-        addDiscount();
-        // console.log(response);
-      },
-      error: function (xhr, status, error) {
-        console.error(xhr.responseText);
-      },
-    });
-
-    ajaxRequests.push(poAjaxRequest);
-    // Enable checkout button
-    $("#checkoutBtn").attr({
-      "data-toggle": "modal",
-      "data-target": "#confirmPO",
-    });
   });
 }
 
@@ -465,6 +568,20 @@ function printInvoice() {
 }
 
 function checkout() {
+  $.ajax({
+    url: "invoiceConfirmation.php",
+    method: "POST",
+    data: {
+      products: inArray,
+    },
+    success: function (response) {
+      document.getElementById("invoiceNumber").innerHTML = response;
+    },
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
+    },
+  });
+
   var patientName = $("#patientName").val();
   var contactNo = $("#contactNo").val();
 

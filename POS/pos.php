@@ -244,93 +244,11 @@ if (!isset($_SESSION['store_id'])) {
                   } ?>
 
                 </div>
-                <script>
-                  function searchProducts() {
-                    var searchInput = document.getElementById('search21').value.trim();
-                    if (searchInput !== '') {
-                      $.ajax({
-                        type: 'POST',
-                        url: 'actions/searchNameProductPos.php',
-                        data: {
-                          searchName: searchInput
-                        },
-                        success: function(response) {
-                          $('#productGrid').html(response);
-                        },
-
-                      });
-                    }
-                  }
-
-                  //payment type online select //
-                  document.getElementById('selectBillType').addEventListener('change', function() {
-                    var selectedValue = this.value;
-
-                    var discountPercentageElement = document.getElementById('discountField');
-                    var deliveryChargesElement = document.getElementById('deliveryChargesField');
-                    var serviceChargesElement = document.getElementById('ServiceChargesField');
-                    var packingChargesElement = document.getElementById('packingChargesField');
-
-                    discountPercentageElement.classList.add('d-none');
-                    deliveryChargesElement.classList.add('d-none');
-                    serviceChargesElement.classList.add('d-none');
-                    packingChargesElement.classList.add('d-none');
-
-                    switch (selectedValue) {
-                      case "1":
-                        discountPercentageElement.classList.remove('d-none');
-                        break;
-
-                      case "2":
-                        discountPercentageElement.classList.remove('d-none');
-                        deliveryChargesElement.classList.remove('d-none');
-                        serviceChargesElement.classList.remove('d-none');
-                        break;
-
-                      case "3":
-                        discountPercentageElement.classList.remove('d-none');
-                        break;
-
-                      case "4":
-                        deliveryChargesElement.classList.remove('d-none');
-                        packingChargesElement.classList.remove('d-none');
-                        break;
-                    }
-                  });
-
-                  // if select cash + card //
-                  document.getElementById('payment-method-selector').addEventListener('change', function() {
-
-                    var selectedValue = this.value;
-                    var cashAmountField = document.getElementById('cashAmountField');
-                    var cardAmountField = document.getElementById('cardAmountField');
-
-                    cashAmountField.classList.add('d-none');
-                    cardAmountField.classList.add('d-none');
-
-                    switch (selectedValue) {
-                      case "1":
-                        cashAmountField.classList.remove('d-none')
-                        break;
-
-                      case "2":
-                        cardAmountField.classList.remove('d-none');
-                        break;
-
-                      case "3":
-                        cardAmountField.classList.remove('d-none');
-                        cashAmountField.classList.remove('d-none');
-                        break;
-                    }
-                  });
-                </script>
               </div>
-
               <!-- Company Product list end -->
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -418,7 +336,7 @@ if (!isset($_SESSION['store_id'])) {
                     <div class="col-12" style="text-align: center;">
                       <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
 
-                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoiceNumber" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoiceNumber" id="invoiceNumber"></span></span>
                     </div>
                   </div>
                 </div>
@@ -468,72 +386,6 @@ if (!isset($_SESSION['store_id'])) {
   </div>
 </body>
 
-<script>
-  $(document).ready(function() {
-    $("#barcodeInput").focus();
-  });
-
-  $(document).on('keyup', function(e) {
-    if (e.which == 9) {
-      var selector = document.getElementById('payment-method-selector');
-      var enterAmountField = document.getElementById('cashAmount');
-      if (selector.value === '3' && enterAmountField.value.trim() !== "") {
-        var cardAmountField = document.getElementById('cardAmount');
-        if (cardAmountField) {
-          cardAmountField.focus();
-          e.preventDefault();
-        }
-      } else {
-        $(".cashAmount").focus();
-      }
-    }
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var doctorNameField = document.getElementById('doctorNameField');
-    var regNoField = document.getElementById('regNoField');
-
-    // cash or card selector change
-    var selector = document.getElementById('payment-method-selector');
-    var billTypeSelector = document.getElementById('selectBillType');
-
-    billTypeSelector.selectedIndex = 0;
-
-    var event = new Event('change');
-    billTypeSelector.dispatchEvent(event);
-    event.preventDefault();
-
-    document.addEventListener('keydown', function(event) {
-      if (event.key === "ArrowDown") {
-        moveSelectorDown(selector);
-      } else if (event.key === "ArrowUp") {
-        moveSelectorUp(selector);
-      }
-    });
-  });
-
-  function moveSelectorDown(selector) {
-    var selectedIndex = selector.selectedIndex;
-    if (selectedIndex < selector.options.length - 1) {
-      selectedIndex++;
-    }
-    selector.selectedIndex = selectedIndex;
-    var event = new Event('change');
-    selector.dispatchEvent(event);
-    event.preventDefault();
-  }
-
-  function moveSelectorUp(selector) {
-    var selectedIndex = selector.selectedIndex;
-    if (selectedIndex > 0) {
-      selectedIndex--;
-    }
-    selector.selectedIndex = selectedIndex;
-    var event = new Event('change');
-    selector.dispatchEvent(event);
-    event.preventDefault();
-  }
-</script>
 <script src="dist/js/pos.js"></script>
 
 </html>
