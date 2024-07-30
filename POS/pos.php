@@ -144,28 +144,42 @@ if (!isset($_SESSION['store_id'])) {
           <div class="col-12">
             <div class="row">
               <div class="d-flex justify-content-evenly">
-                <div class="p-2 p-x-2">
+                <div class="col-3 p-2">
                   <input type="text" id="patientName" name="patientName" class="form-control" placeholder="Patient Name">
                 </div>
-                <div class="p-2 p-x-2">
+                <div class="col-3 p-2">
                   <input type="text" id="contactNo" name="contactNo" class="form-control" placeholder="Contact No.">
                 </div>
-                <div id="doctorNameField" class="p-2 p-x-2">
-                  <input type="text" id="doctorName" name="doctorName" class="form-control" placeholder="Doctor Name">
+                <div id="doctorNameField" class="col-3 p-2">
+                  <select class="form-control select2" id="doctorName" name="doctorName">
+                    <option value="" selected>Select a doctor</option>
+                    <option value="Dr. Buddhika">Dr. Buddhika</option>
+                    <option value="Dr. Daya">Dr. Daya</option>
+                    <option value="Dr. Devinda">Dr. Devinda</option>
+                    <option value="Dr. Fathima">Dr. Fathima</option>
+                    <option value="Dr. Kusal">Dr. Kusal</option>
+                    <option value="Dr. Mithula">Dr. Mithula</option>
+                    <option value="Dr. Padmasiri">Dr. Padmasiri</option>
+                    <option value="Dr. Parakrama">Dr. Parakrama</option>
+                    <option value="Dr. Prasanga">Dr. Prasanga</option>
+                    <option value="Dr. Tharindu">Dr. Tharindu</option>
+                    <option value="Dr. Thilanka">Dr. Thilanka</option>
+                    <option value="Dr. Yashodara">Dr. Yashodara</option>
+                  </select>
                 </div>
-                <div id="regNoField" class="p-2 p-x-2">
+                <div id="regNoField" class="col-3 p-2">
                   <input type="text" id="regNo" name="regNo" class="form-control" placeholder="REG No">
                 </div>
               </div>
               <br>
 
-              <div class="col-4 mb-2 p-2 p-x-2">
+              <div class="col-4 mb-2 p-2">
                 <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..." onchange="getBarcode2(this.value);">
               </div>
-              <div class="col-4 mb-2 p-2 p-x-2">
+              <div class="col-4 mb-2 p-2">
                 <select class="form-control" name="" id="selectPrices" onchange="getBarcode3()"></select>
               </div>
-              <div class="col-4 mb-2 p-2 p-x-2">
+              <div class="col-4 mb-2 p-2">
                 <select class="form-control" name="selectBillType" id="selectBillType">
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
@@ -267,8 +281,6 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
-    <!-- select2 input field -->
-
     <!-- ========================================== -->
     <div id="invoice-POS" class="d-none">
 
@@ -283,11 +295,6 @@ if (!isset($_SESSION['store_id'])) {
         foreach ($userLoginData as $userData) {
           $shop_id = $userData['shop_id'];
           $user_name = $userData['name'];
-
-          $invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'invoices'");
-          $invoiceId_row = $invoiceId_rs->fetch_assoc();
-          $invoiceId = $invoiceId_row['AUTO_INCREMENT'];
-          $invoiceNumber = "000" . $userId . $shop_id . $invoiceId;
 
           $bill_data_rs = $conn->query("SELECT shop.shopName AS shopName, customize_bills.*
           FROM `customize_bills`
@@ -385,6 +392,22 @@ if (!isset($_SESSION['store_id'])) {
 
   </div>
 </body>
+
+<script>
+  $(function() {
+    //Initialize Select2 Elements
+    $(".select2").select2();
+
+    //Initialize Select2 Elements
+    $(".select2bs4").select2({
+      theme: "bootstrap4",
+    });
+
+    $('.medicine-unit-select').select2({
+      placeholder: "Select medicine unit"
+    });
+  });
+</script>
 
 <script src="dist/js/pos.js"></script>
 

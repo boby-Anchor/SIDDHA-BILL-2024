@@ -9,10 +9,6 @@ function toggleDropdown() {
   }
 }
 
-document
-.getElementById("dropdownButton")
-.addEventListener("click", toggleDropdown);
-
 function shopSelected(productId) {
   var allShop = document.getElementById("allShop" + productId);
 

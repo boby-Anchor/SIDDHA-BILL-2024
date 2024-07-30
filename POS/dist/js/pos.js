@@ -56,7 +56,6 @@ function getBarcode2(barcode) {
   $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
 
-// barcode reader
 function getBarcode(barcode, stock_s_price) {
   var req = new XMLHttpRequest();
   req.onreadystatechange = function () {
