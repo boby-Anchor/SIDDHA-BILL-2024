@@ -212,7 +212,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             ORDER BY t.stock_item_code ASC, t.stock_id ASC;
                                                             ");
 
-                                                            //ORDER BY t.stock_item_code ASC, t.stock_shop_id ASC, t.stock_id ASC;
+                                                    //ORDER BY t.stock_item_code ASC, t.stock_shop_id ASC, t.stock_id ASC;
 
                                                     $tableRowCount = 1;
                                                     while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {

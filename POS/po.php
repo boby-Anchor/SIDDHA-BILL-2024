@@ -199,23 +199,6 @@ if (!isset($_SESSION['store_id'])) {
                                     } ?>
 
                                 </div>
-                                <script>
-                                    function searchProducts() {
-                                        var searchInput = document.getElementById('search21').value.trim();
-                                        if (searchInput !== '') {
-                                            $.ajax({
-                                                type: 'POST',
-                                                url: 'actions/searchNameProductPos.php',
-                                                data: {
-                                                    searchName: searchInput
-                                                },
-                                                success: function(response) {
-                                                    $('#productGrid').html(response);
-                                                },
-                                            });
-                                        }
-                                    }
-                                </script>
                             </div>
 
                             <!-- Company Product list end -->
@@ -335,12 +318,6 @@ if (!isset($_SESSION['store_id'])) {
         </div>
 
         <!-- ========================================== -->
-
-        <script>
-            $(document).ready(function() {
-                $("#barcodeInput").focus();
-            });
-        </script>
 
         <!-- po JS -->
         <script src="dist/js/po.js"></script>
