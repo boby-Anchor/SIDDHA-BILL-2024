@@ -3,6 +3,9 @@ session_start();
 include('config/db.php');
 
 $poArray = json_decode($_POST['products'], true);
+$currentDate = date("Y-m-d");
+$currentTime = date("H:i:s");
+$currentdatetime = $currentDate . " " . $currentTime;
 
 $productsAllTotal = 0;
 
@@ -53,6 +56,9 @@ if (is_array($poArray) && !empty($poArray)) {
         WHERE
         stock_id = '$stock_id'
         ");
+
+        $conn->query("INSERT INTO monthly_stock (stock_id, item_code, item_name, qty, date_time)
+        VALUES ('$stock_id', '$product_code','$product_name','$product_qty','$currentdatetime')");
     }  // close for-each $poArrary 
 
 } else {

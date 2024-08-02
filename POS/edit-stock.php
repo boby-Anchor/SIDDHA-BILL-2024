@@ -165,14 +165,14 @@ if (!isset($_SESSION['store_id'])) {
                                                 <th scope="col">#</th>
                                                 <th scope="col">Stock id</th>
                                                 <th scope="col">Shop id</th>
-                                                <th scope="col">Barcode</th>
+                                                <th scope="col">Code</th>
                                                 <th scope="col">Qty</th>
-                                                <th scope="col">Product Name</th>
-                                                <th scope="col">Product Category</th>
-                                                <th scope="col">Product Brand</th>
-                                                <th scope="col">Unit Cost</th>
-                                                <th scope="col">Discount</th>
-                                                <th scope="col">Sell Price</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Category</th>
+                                                <th scope="col">Brand</th>
+                                                <th scope="col">Dis%</th>
+                                                <th scope="col">U. price</th>
+                                                <th scope="col">Item Price</th>
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
@@ -186,22 +186,44 @@ if (!isset($_SESSION['store_id'])) {
                                                 foreach ($userLoginData as $userData) {
                                                     $shop_id = $userData['shop_id'];
 
+                                                    // $p_medicine_rs = $conn->query("SELECT unit_category_variation.ucv_name AS ucv_name,
+                                                    //         medicine_unit.unit AS unit, p_medicine_category.name AS categoryname,
+                                                    //         p_brand.name AS brandname,
+                                                    //          t.*
+                                                    //         FROM stock2 t
+                                                    //         JOIN (
+                                                    //             SELECT stock_item_code, stock_item_name, stock_item_cost, unit_s_price, added_discount, item_s_price, stock_shop_id
+                                                    //             FROM stock2
+                                                    //             GROUP BY stock_item_code, stock_item_name, stock_item_cost, unit_s_price, added_discount, item_s_price, stock_shop_id
+                                                    //             HAVING COUNT(*) > 1
+                                                    //         ) d 
+                                                    //         ON t.stock_item_code = d.stock_item_code
+                                                    //         AND t.stock_item_cost = d.stock_item_cost
+                                                    //         AND t.unit_s_price = d.unit_s_price
+                                                    //         AND t.added_discount = d.added_discount
+                                                    //         AND t.item_s_price = d.item_s_price
+                                                    //         AND t.stock_shop_id = d.stock_shop_id
+                                                    //         INNER JOIN p_medicine ON t.stock_item_code = p_medicine.code
+                                                    //         INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
+                                                    //         INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                                                    //         INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+                                                    //         INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                                                    //         WHERE t.stock_shop_id = '1'
+                                                    //         ORDER BY t.stock_item_code ASC, t.stock_id ASC;
+                                                    //         ");
+
                                                     $p_medicine_rs = $conn->query("SELECT unit_category_variation.ucv_name AS ucv_name,
                                                             medicine_unit.unit AS unit, p_medicine_category.name AS categoryname,
                                                             p_brand.name AS brandname,
                                                              t.*
                                                             FROM stock2 t
                                                             JOIN (
-                                                                SELECT stock_item_code, stock_item_name, stock_item_cost, unit_s_price, added_discount, item_s_price, stock_shop_id
+                                                                SELECT stock_item_code, stock_item_name, stock_shop_id
                                                                 FROM stock2
                                                                 GROUP BY stock_item_code, stock_item_name, stock_item_cost, unit_s_price, added_discount, item_s_price, stock_shop_id
                                                                 HAVING COUNT(*) > 1
                                                             ) d 
                                                             ON t.stock_item_code = d.stock_item_code
-                                                            AND t.stock_item_cost = d.stock_item_cost
-                                                            AND t.unit_s_price = d.unit_s_price
-                                                            AND t.added_discount = d.added_discount
-                                                            AND t.item_s_price = d.item_s_price
                                                             AND t.stock_shop_id = d.stock_shop_id
                                                             INNER JOIN p_medicine ON t.stock_item_code = p_medicine.code
                                                             INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
@@ -211,6 +233,19 @@ if (!isset($_SESSION['store_id'])) {
                                                             WHERE t.stock_shop_id = '1'
                                                             ORDER BY t.stock_item_code ASC, t.stock_id ASC;
                                                             ");
+
+                                                    // $p_medicine_rs = $conn->query("SELECT unit_category_variation.ucv_name AS ucv_name,
+                                                    //         medicine_unit.unit AS unit, p_medicine_category.name AS categoryname,
+                                                    //         p_brand.name AS brandname, stock2.*
+                                                    //         FROM stock2
+                                                    //         INNER JOIN p_medicine ON stock_item_code = p_medicine.code
+                                                    //         INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
+                                                    //         INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                                                    //         INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+                                                    //         INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                                                    //         WHERE stock_shop_id = '1' AND stock_item_qty LIKE '%.9%'
+                                                    //         ORDER BY stock_id ASC;
+                                                    //         ");
 
                                                     //ORDER BY t.stock_item_code ASC, t.stock_shop_id ASC, t.stock_id ASC;
 
@@ -244,11 +279,14 @@ if (!isset($_SESSION['store_id'])) {
                                                             <td id="product_brand">
                                                                 <label for=""><?= $p_medicine_data['brandname'] ?></label>
                                                             </td>
-                                                            <td id="unit_cost">
+                                                            <td id="unit_cost" class="d-none">
                                                                 <label for=""><?= $p_medicine_data['unit_cost'] ?></label>
                                                             </td>
                                                             <td id="added_discount">
                                                                 <label for=""><?= $p_medicine_data['added_discount'] ?></label>
+                                                            </td>
+                                                            <td id="unit_s_price">
+                                                                <label for=""><?= $p_medicine_data['unit_s_price'] ?></label>
                                                             </td>
                                                             <td id="item_s_price">
                                                                 <label for=""><?= $p_medicine_data['item_s_price'] ?></label>
@@ -289,19 +327,19 @@ if (!isset($_SESSION['store_id'])) {
                             <tr>
                                 <th scope="col">stock id</th>
                                 <th scope="col">shop id</th>
-                                <th scope="col">Barcode</th>
-                                <th scope="col">Old UP</th>
+                                <th scope="col">Code</th>
+                                <th scope="col">Old UC</th>
                                 <th scope="col">Old Dsc</th>
-                                <th scope="col">Old SP</th>
+                                <th scope="col">Old UP</th>
+                                <th scope="col">Old IP</th>
                                 <th scope="col">Product Name</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Minimum Unit Qty </th>
                                 <th scope="col">Total Amount (full qty)</th>
-                                <th scope="col">Discount(%)(1 Item)</th>
+                                <th scope="col">Discount(%)</th>
                                 <th scope="col">(1 Item) Sell Price</th>
                                 <th scope="col">(1 Unit) Cost</th>
-                                <th scope="col">(1 Unit) Sell Price & Barcode</th>
-
+                                <th scope="col">(1 Unit) Sell Price</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -367,6 +405,7 @@ if (!isset($_SESSION['store_id'])) {
                 var stock_shop_id = $(this).closest("tr").find("#stock_shop_id").text().trim();
                 var old_unit_cost = $(this).closest("tr").find("#unit_cost").text().trim();
                 var old_added_discount = $(this).closest("tr").find("#added_discount").text().trim();
+                var old_unit_s_price = $(this).closest("tr").find("#unit_s_price").text().trim();
                 var old_item_s_price = $(this).closest("tr").find("#item_s_price").text().trim();
 
                 var product_code = $(this).closest("tr").find("#product_code").text();
@@ -395,6 +434,7 @@ if (!isset($_SESSION['store_id'])) {
 
                         "<th scope='row' id='old_unit_cost'>" + old_unit_cost + "</th>" +
                         "<th scope='row' id='old_added_discount'>" + old_added_discount + "</th>" +
+                        "<th scope='row' id='old_unit_s_price'>" + old_unit_s_price + "</th>" +
                         "<th scope='row' id='old_item_s_price'>" + old_item_s_price + "</th>" +
 
                         "<td id='product_name'>" + product_name + "</td>" +
