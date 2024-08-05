@@ -567,6 +567,10 @@ function printInvoice() {
 }
 
 function checkout() {
+  var patientName = $("#patientName").val().trim();
+  var contactNo = $("#contactNo").val();
+
+  document.getElementById("invoicePatientName").innerText = patientName;
   $.ajax({
     url: "invoiceConfirmation.php",
     method: "POST",
@@ -580,9 +584,6 @@ function checkout() {
       console.error(xhr.responseText);
     },
   });
-
-  var patientName = $("#patientName").val();
-  var contactNo = $("#contactNo").val();
 
   if (patientName !== "") {
     var doctorName = $("#doctorName").val();

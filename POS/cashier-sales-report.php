@@ -186,7 +186,50 @@ if (!isset($_SESSION['store_id'])) {
                                                             <td><?php echo $row['contact_no']; ?></td>
                                                             <td><?php echo $row['d_name']; ?></td>
                                                             <td><?php echo $row['reg']; ?></td>
-                                                            <td><?php echo number_format($row['total_amount'], 0); ?></td>
+                                                            <td>
+                                                                <?php echo number_format($row['total_amount'], 0); ?>
+                                                                <ul class="dropdown-menu">
+                                                                            <table class="table" id="poItemsTable<?php echo $row['invoice_id']; ?>">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th scope="col">#</th>
+                                                                                        <th scope="col">Item Code</th>
+                                                                                        <th scope="col">Item Name</th>
+                                                                                        <th scope="col">Qty</th>
+                                                                                        <th scope="col">Cost</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <?php
+                                                                                    $currentDate = date("d-m-Y");
+
+                                                                                    // SELECT `invoiceItemId`, `invoiceNumber`, `invoiceDate`, `invoiceItem`, `invoiceItem_qty`, `invoiceItem_unit`, `invoiceItem_price`, `invoiceItem_total` 
+                                                                                    // FROM `invoiceitems` WHERE 1
+
+                                                                                    $poItems_query = "
+                                                                                    SELECT invoiceitems.* FROM invoiceitems INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
+                                                                                    WHERE   invoices.invoice_id = '" . $row['invoice_id'] . "' ";
+                                                                                    $rowCount = 0;
+                                                                                    $poItems_result = $conn->query($poItems_query);
+                                                                                    while ($poItems_data = $poItems_result->fetch_assoc()) {
+                                                                                        $rowCount++;
+                                                                                    ?>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td><?php echo $rowCount; ?></td>
+                                                                                            <td><?php echo $poItems_data['invoiceNumber']; ?></td>
+                                                                                            <td><?php echo $poItems_data['invoiceItem']; ?></td>
+                                                                                            <td><?php echo $poItems_data['invoiceItem_qty']; ?></td>
+                                                                                            <td><?php echo number_format($poItems_data['invoiceItem_price'],0); ?></td>
+                                                                                        </tr>
+                                                                                    <?php } ?>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?php echo $row['invoice_id']; ?>');">
+                                                                                <i class="nav-icon fas fa-copy"></i> PRINT
+                                                                            </button>
+                                                                        </ul>
+                                                            </td>
                                                             <td><?php echo $row['payment_type']; ?></td>
                                                             <td><?php echo $row['bill_type_name']; ?></td>
                                                         </tr>
