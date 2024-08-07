@@ -328,11 +328,9 @@ if (!isset($_SESSION['store_id'])) {
                       <div class="col-12 d-flex justify-content-center">
                         <label class="contactNumber" id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
                       </div>
-                      <div class="col-12 d-flex justify-content-center center">
-                        <center>
-                          <label id="addresspreview" class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
-                          </label>
-                        </center>
+                      <div class="col-12 d-flex justify-content-center text-center center">
+                        <label id="addresspreview" class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
+                        </label>
                       </div>
                     </td>
                   </tr>
@@ -341,9 +339,9 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="col-12">
                   <div class="row">
                     <div class="col-12" style="text-align: center;">
-                      <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
+                      <span><span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <span class="invoiceNumber" id="invoiceNumber"></span></span><br>
 
-                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoiceNumber" id="invoiceNumber"></span></span>
+                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoicePatientName" id="invoicePatientName"></span></span>
                     </div>
                   </div>
                 </div>
@@ -407,6 +405,11 @@ if (!isset($_SESSION['store_id'])) {
       placeholder: "Select medicine unit"
     });
   });
+
+  function handleBlur() {
+    var pName = document.getElementById(patientName).val();
+    alert("pName");
+  }
 </script>
 
 <script src="dist/js/pos.js"></script>

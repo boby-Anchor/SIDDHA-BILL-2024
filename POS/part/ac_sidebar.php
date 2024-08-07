@@ -57,15 +57,9 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
             <li class="nav-header">REPORTS</li>
-            <li class="nav-item">
-              <a href="ac-cashier-today-report.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Today Sales Report</p>
-              </a>
-            </li>
             
             <li class="nav-item">
-              <a href="cashier-sales-report.php" class="nav-link">
+              <a href="ac-sales-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>Sales Report</p>
               </a>
