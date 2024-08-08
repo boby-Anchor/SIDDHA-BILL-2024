@@ -64,7 +64,7 @@ if (isset($_SESSION['store_id'])) {
                 <li class="nav-item">
                   <a href="add-purchase.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Add Purchaser</p>
+                    <p>Add Purchase Order</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -303,7 +303,6 @@ if (isset($_SESSION['store_id'])) {
             <?php
             if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 7) {
             ?>
-
               <!-- Testing Area -->
               <li class="nav-header"></li>
               <li class="nav-header"></li>
@@ -325,6 +324,24 @@ if (isset($_SESSION['store_id'])) {
                     </a>
                   </li>
                   <li class="nav-item">
+                    <a href="report-ItemOutQty.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Item Out Qty</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="test_dashboard.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Test dashboard</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="test_dashboard2.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Test dashboard 2</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="po.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Return to Supplier</p>
@@ -336,12 +353,7 @@ if (isset($_SESSION['store_id'])) {
                       <p>Online Bill Test</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="report-ItemOutQty.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Item Out Qty</p>
-                    </a>
-                  </li>
+
                   <li class="nav-item">
                     <a href="test.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>

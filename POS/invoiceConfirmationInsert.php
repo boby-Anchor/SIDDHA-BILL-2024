@@ -3,12 +3,12 @@ session_start();
 include('config/db.php');
 
 $poArray = json_decode($_POST['products'], true);
+$invoiceNumber = $_SESSION["invoiceNumber"];
 
 $productsAllTotal = 0;
 
 if (is_array($poArray) && !empty($poArray)) {
 
-    $invoiceNumber;
     $userId;
     $shop_id;
     $currentDateTime;
@@ -33,7 +33,6 @@ if (is_array($poArray) && !empty($poArray)) {
         $product_qty = $product['product_qty'];
         $product_unit = $product['product_unit'];
         $productTotal = $product['productTotal'];
-        $invoiceNumber = $product['invoiceNumber'];
 
         $patientName = $product['patientName'];
         $contactNo = $product['contactNo'];
@@ -51,18 +50,15 @@ if (is_array($poArray) && !empty($poArray)) {
         $currentDateTime = date("Y-m-d H:i:s");
 
 
-        // Prepare the statement
+        // check if data has inserted with the same invoiceNumber
         $query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
-        // Execute the statement
         $cm = runQuery($query);
 
         if (empty($cm)) {
-            //   !empty($code) && 
             if (
                 !empty($product_unit) && !empty($ucv) && !empty($item_price) && !empty($product_name) &&
                 is_numeric($product_cost) && is_numeric($product_qty) && is_numeric($productTotal) && !empty($invoiceNumber)
             ) {
-                // $conn->query("INSERT INTO test (c1, c2) VALUES('$product_cost', '$product_unit')");
 
                 if (isset($_SESSION['store_id'])) {
 
@@ -73,7 +69,6 @@ if (is_array($poArray) && !empty($poArray)) {
                         $userId = $userData['id'];
                         $shop_id = $userData['shop_id'];
                         $productsAllTotal += $productTotal;
-
 
                         $conn->query("INSERT INTO invoiceitems (invoiceNumber,invoiceDate,invoiceItem,invoiceItem_qty,invoiceItem_unit,invoiceItem_price,invoiceItem_total)
                     VALUES ('$invoiceNumber','$currentDateTime','$product_name','$product_qty','$product_unit','$product_cost','$productTotal')");
@@ -186,18 +181,12 @@ if (is_array($poArray) && !empty($poArray)) {
     }  // close for-each $poArrary 
 
 
-    // Prepare the statement
     $query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
-    // Execute the statement
     $cm = runQuery($query);
 
     if (empty($cm)) {
-
         $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
     VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentmethodselector', '$productsAllTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount','$cardAmount', '$balance')");
-
-        // $conn->query("INSERT INTO test_table (col1, col2, col3, col4, col5, col6)
-        // VALUES('$ucv', '$product_unit', '$item_price', '$product_qty', '$product_minimum_qty', '003')");
     } else {
         echo "DD2";
         exit;
@@ -206,3 +195,5 @@ if (is_array($poArray) && !empty($poArray)) {
 
     echo "No products found or invalid data received.";
 }
+
+unset($_SESSION["invoiceNumber"]);

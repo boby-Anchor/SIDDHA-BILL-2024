@@ -1,3 +1,23 @@
+$(document).ready(function () {
+  $("#barcodeInput").focus();
+});
+
+function searchProducts() {
+  var searchInput = document.getElementById("search21").value.trim();
+  if (searchInput !== "") {
+    $.ajax({
+      type: "POST",
+      url: "actions/searchNameProductPos.php",
+      data: {
+        searchName: searchInput,
+      },
+      success: function (response) {
+        $("#productGrid").html(response);
+      },
+    });
+  }
+}
+
 function getBarcode3() {
   var selectPrices = document.getElementById("selectPrices").value;
 
@@ -198,20 +218,11 @@ function checkNetTotal() {
 // subTotal Calculation display
 
 function calculateSubTotal() {
-  var balance = $("#balance").text().replace(/,/g, "");
-  var enterAmountFiled = $("#enterAmountFiled").val();
-  var invoiceNumber = $("#invoiceNumber").text();
-  var poArray = [];
-  var inArray = [];
-
-  var ajaxRequests = [];
-
+  var productsAllTotal = 0;
   $(".barcodeResults tbody tr").each(function () {
-    var product_name = $(this).find("#product_name").text();
-    var code = $(this).find("#code").text();
     var product_cost = $(this).find("#product_price").text();
     var product_qty = $(this).find("#qty").val();
-    var product_unit = $(this).find("#unit").text();
+
     if (product_qty === "" || product_qty === "0") {
       Swal.mixin({
         toast: true,
@@ -224,46 +235,11 @@ function calculateSubTotal() {
       });
       $("#checkoutBtn").removeAttr("data-toggle data-target");
     } else {
-      var productData = {
-        product_name: product_name,
-        code: code,
-        product_cost: product_cost,
-        product_qty: product_qty,
-        product_unit: product_unit,
-        balance: balance,
-        // enterAmountFiled: enterAmountFiled,
-        invoiceNumber: invoiceNumber,
-      };
-
-      poArray.push(productData);
-      inArray.push(productData);
+      var productTotal = product_cost * product_qty;
+      productsAllTotal += productTotal;
+      document.getElementById("subTotal").innerHTML = productsAllTotal;
+      addDiscount();
     }
-  });
-
-  $.when.apply($, ajaxRequests).then(function () {
-    // Update subtotal
-    var poAjaxRequest = $.ajax({
-      url: "invoiceConfirmation.php",
-      method: "POST",
-      data: {
-        products: poArray,
-      },
-      success: function (response) {
-        document.getElementById("subTotal").innerHTML = response;
-        addDiscount();
-        // console.log(response);
-      },
-      error: function (xhr, status, error) {
-        console.error(xhr.responseText);
-      },
-    });
-
-    ajaxRequests.push(poAjaxRequest);
-    // Enable checkout button
-    $("#checkoutBtn").attr({
-      "data-toggle": "modal",
-      "data-target": "#confirmPO",
-    });
   });
 }
 

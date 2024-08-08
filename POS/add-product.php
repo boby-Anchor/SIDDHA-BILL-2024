@@ -75,7 +75,6 @@ if (!isset($_SESSION['store_id'])) {
                         <select class="form-control select2" name="brand_product" required>
                           <option value="" selected="selected">Select Type</option>
                           <?php
-                        //   $sql = $conn->query("SELECT * FROM `p_brand` WHERE `store` = '$_SESSION[store_id]'"); //manufacturer
                         $sql = $conn->query("SELECT * FROM `p_brand` ORDER BY name ASC"); 
                           while ($row = mysqli_fetch_assoc($sql)) {
                           ?>
@@ -90,7 +89,6 @@ if (!isset($_SESSION['store_id'])) {
                         <select class="form-control select2" name="category_product" required>
                           <option value="" selected="selected">Select Type</option>
                           <?php
-                        //   $sql = $conn->query("SELECT * FROM `p_medicine_category` WHERE `store` = '$_SESSION[store_id]' ORDER BY name ASC");
                            $sql = $conn->query("SELECT * FROM `p_medicine_category` ORDER BY name ASC");
                           while ($row = mysqli_fetch_assoc($sql)) {
                           ?>

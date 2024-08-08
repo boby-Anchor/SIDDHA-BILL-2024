@@ -88,7 +88,6 @@ if (!isset($_SESSION['store_id'])) {
                                         </div>
                                     </div>
 
-
                                     <div id="totalValuesFilterData" class="col-12">
                                         <div class="card">
                                             <div class="card-body">
@@ -98,7 +97,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <h2 class="text-white text-uppercase">Sell Amount</h2>
                                                             <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount
                                                                 FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount"><?php echo number_format($result['total_amount'], 2); ?> LKR</p>
+                                                            <p class="totalAmount"><?= number_format($result['total_amount'], 2); ?> LKR</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -106,7 +105,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <h2 class="text-white text-uppercase">Cash Payments</h2>
                                                             <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount
                                                                 FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount"><?php echo number_format($result['cash_amount'], 2); ?> LKR</p>
+                                                            <p class="totalAmount"><?= number_format($result['cash_amount'], 2); ?> LKR</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -114,7 +113,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <h2 class="text-white text-uppercase">Card Payments</h2>
                                                             <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount
                                                                 FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount"><?php echo number_format($result['cardPaidAmount'], 2); ?> LKR</p>
+                                                            <p class="totalAmount"><?= number_format($result['cardPaidAmount'], 2); ?> LKR</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -122,7 +121,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <h2 class="text-white text-uppercase">Cash Out</h2>
                                                             <?php $result = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout
                                                                 FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount">-<?php echo $result['cashout']; ?> LKR</p>
+                                                            <p class="totalAmount">-<?= $result['cashout']; ?> LKR</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -132,23 +131,21 @@ if (!isset($_SESSION['store_id'])) {
 
                                     <div class="col-12">
                                         <div class="card">
-
                                             <div class="card-body">
-                                                <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button>
-
+                                                <!-- <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button> -->
                                                 <table id="mytable" class="table table-bordered table-hover">
                                                     <thead>
                                                         <tr class="bg-info">
                                                             <th>Invoice Number</th>
                                                             <th>Patient Name</th>
-                                                            <th>Tell</th>
-                                                            <th>Doctor Name</th>
                                                             <th>REG Number</th>
+                                                            <th>Contact No.</th>
+                                                            <th>Doctor Name</th>
                                                             <th>Total Amount</th>
                                                             <th>Payment Type</th>
                                                             <th>Bill Type</th>
-                                                            <th>Chachier</th>
-                                                            <th>SHOP</th>
+                                                            <th>Chashier</th>
+                                                            <th>Shop</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="cash-sale">
@@ -171,27 +168,29 @@ if (!isset($_SESSION['store_id'])) {
                                                         ?>
                                                             <tr>
                                                                 <td>
-                                                                    <label class="labInvo"><?php echo $row['invoice_id']; ?></label>
-                                                                    <br><?php echo $row['created']; ?>
+                                                                    <label class="labInvo"><?= $row['invoice_id']; ?></label>
+                                                                    <br><?= $row['created']; ?>
                                                                 </td>
-                                                                <td><?php echo $row['p_name']; ?></td>
-                                                                <td><?php echo $row['contact_no']; ?></td>
-                                                                <td><?php echo $row['d_name']; ?></td>
-                                                                <td><?php echo $row['reg']; ?></td>
-                                                                <td><?php echo $row['total_amount']; ?></td>
-                                                                <td><?php echo $row['payment_type']; ?></td>
-                                                                <td><?php echo $row['bill_type_name']; ?></td>
-                                                                <td><?php echo $row['name']; ?></td>
-                                                                <td><?php echo $row['shopName']; ?></td>
+                                                                <td><?= $row['p_name']; ?></td>
+                                                                <td><?= $row['reg']; ?></td>
+                                                                <td><?= $row['contact_no']; ?></td>
+                                                                <td><?= $row['d_name']; ?></td>
+                                                                <td><?= number_format($row['total_amount']); ?></td>
+                                                                <td><?= $row['payment_type']; ?></td>
+                                                                <td><?= $row['bill_type_name']; ?></td>
+                                                                <td><?= $row['name']; ?></td>
+                                                                <td><?= $row['shopName']; ?></td>
                                                             </tr>
                                                         <?php
                                                         } ?>
+                                                    </tbody>
+                                                    <tfoot>
                                                         <tr class="bg-dark">
                                                             <td></td>
-                                                            <td class="fw-bold" style="font-size:larger;">Total Sales</td>
-                                                            <td class="fw-bold" style="font-size:larger;"><?php echo number_format($result['total_amount'],2); ?> LKR</td>
+                                                            <td colspan="7" class="fw-bold" style="font-size:larger;">Total Sales</td>
+                                                            <td colspan="2" class="fw-bold text-right" style="font-size:larger;"><?= number_format($result['total_amount'], 2); ?> LKR</td>
                                                         </tr>
-                                                    </tbody>
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>
@@ -311,22 +310,23 @@ if (!isset($_SESSION['store_id'])) {
     <script>
         $(document).ready(function() {
             $('#mytable').DataTable({
-                order: [
-                    [0, 'desc']
-                ],
-                // pageLength : 3,
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
+                    order: [
+                        [0, 'asc']
+                    ],
+                    // pageLength : 3,
+                    dom: 'Bfrtip',
+                    aaSorting: [],
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+                    "footerCallback": function(row, data, start, end, display) {
+                        var totalAmount = 0;
+                        for (var i = 0; i < data.length; i++) {
+                            totalAmount += parseFloat(data[i][4]);
+                        }
+                        $("#totalSales").text(totalAmount);
                     }
-                    // console.log(totalAmount);
-                    $("#totalSales").text(totalAmount);
-                }
-            });
+                }).buttons()
+                .container()
+                .appendTo("#mytable_wrapper .col-md-6:eq(0)");
 
             $('#mytable2').DataTable({
                 // order: [[0, 'desc']],

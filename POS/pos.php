@@ -144,28 +144,42 @@ if (!isset($_SESSION['store_id'])) {
           <div class="col-12">
             <div class="row">
               <div class="d-flex justify-content-evenly">
-                <div class="p-2 p-x-2">
+                <div class="col-3 p-2">
                   <input type="text" id="patientName" name="patientName" class="form-control" placeholder="Patient Name">
                 </div>
-                <div class="p-2 p-x-2">
+                <div class="col-3 p-2">
                   <input type="text" id="contactNo" name="contactNo" class="form-control" placeholder="Contact No.">
                 </div>
-                <div id="doctorNameField" class="p-2 p-x-2">
-                  <input type="text" id="doctorName" name="doctorName" class="form-control" placeholder="Doctor Name">
+                <div id="doctorNameField" class="col-3 p-2">
+                  <select class="form-control select2" id="doctorName" name="doctorName">
+                    <option value="" selected>Select a doctor</option>
+                    <option value="Dr. Buddhika">Dr. Buddhika</option>
+                    <option value="Dr. Daya">Dr. Daya</option>
+                    <option value="Dr. Devinda">Dr. Devinda</option>
+                    <option value="Dr. Fathima">Dr. Fathima</option>
+                    <option value="Dr. Kusal">Dr. Kusal</option>
+                    <option value="Dr. Mithula">Dr. Mithula</option>
+                    <option value="Dr. Padmasiri">Dr. Padmasiri</option>
+                    <option value="Dr. Parakrama">Dr. Parakrama</option>
+                    <option value="Dr. Prasanga">Dr. Prasanga</option>
+                    <option value="Dr. Tharindu">Dr. Tharindu</option>
+                    <option value="Dr. Thilanka">Dr. Thilanka</option>
+                    <option value="Dr. Yashodara">Dr. Yashodara</option>
+                  </select>
                 </div>
-                <div id="regNoField" class="p-2 p-x-2">
+                <div id="regNoField" class="col-3 p-2">
                   <input type="text" id="regNo" name="regNo" class="form-control" placeholder="REG No">
                 </div>
               </div>
               <br>
 
-              <div class="col-4 mb-2 p-2 p-x-2">
+              <div class="col-4 mb-2 p-2">
                 <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..." onchange="getBarcode2(this.value);">
               </div>
-              <div class="col-4 mb-2 p-2 p-x-2">
+              <div class="col-4 mb-2 p-2">
                 <select class="form-control" name="" id="selectPrices" onchange="getBarcode3()"></select>
               </div>
-              <div class="col-4 mb-2 p-2 p-x-2">
+              <div class="col-4 mb-2 p-2">
                 <select class="form-control" name="selectBillType" id="selectBillType">
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
@@ -244,93 +258,11 @@ if (!isset($_SESSION['store_id'])) {
                   } ?>
 
                 </div>
-                <script>
-                  function searchProducts() {
-                    var searchInput = document.getElementById('search21').value.trim();
-                    if (searchInput !== '') {
-                      $.ajax({
-                        type: 'POST',
-                        url: 'actions/searchNameProductPos.php',
-                        data: {
-                          searchName: searchInput
-                        },
-                        success: function(response) {
-                          $('#productGrid').html(response);
-                        },
-
-                      });
-                    }
-                  }
-
-                  //payment type online select //
-                  document.getElementById('selectBillType').addEventListener('change', function() {
-                    var selectedValue = this.value;
-
-                    var discountPercentageElement = document.getElementById('discountField');
-                    var deliveryChargesElement = document.getElementById('deliveryChargesField');
-                    var serviceChargesElement = document.getElementById('ServiceChargesField');
-                    var packingChargesElement = document.getElementById('packingChargesField');
-
-                    discountPercentageElement.classList.add('d-none');
-                    deliveryChargesElement.classList.add('d-none');
-                    serviceChargesElement.classList.add('d-none');
-                    packingChargesElement.classList.add('d-none');
-
-                    switch (selectedValue) {
-                      case "1":
-                        discountPercentageElement.classList.remove('d-none');
-                        break;
-
-                      case "2":
-                        discountPercentageElement.classList.remove('d-none');
-                        deliveryChargesElement.classList.remove('d-none');
-                        serviceChargesElement.classList.remove('d-none');
-                        break;
-
-                      case "3":
-                        discountPercentageElement.classList.remove('d-none');
-                        break;
-
-                      case "4":
-                        deliveryChargesElement.classList.remove('d-none');
-                        packingChargesElement.classList.remove('d-none');
-                        break;
-                    }
-                  });
-
-                  // if select cash + card //
-                  document.getElementById('payment-method-selector').addEventListener('change', function() {
-
-                    var selectedValue = this.value;
-                    var cashAmountField = document.getElementById('cashAmountField');
-                    var cardAmountField = document.getElementById('cardAmountField');
-
-                    cashAmountField.classList.add('d-none');
-                    cardAmountField.classList.add('d-none');
-
-                    switch (selectedValue) {
-                      case "1":
-                        cashAmountField.classList.remove('d-none')
-                        break;
-
-                      case "2":
-                        cardAmountField.classList.remove('d-none');
-                        break;
-
-                      case "3":
-                        cardAmountField.classList.remove('d-none');
-                        cashAmountField.classList.remove('d-none');
-                        break;
-                    }
-                  });
-                </script>
               </div>
-
               <!-- Company Product list end -->
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -349,8 +281,6 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
-    <!-- select2 input field -->
-
     <!-- ========================================== -->
     <div id="invoice-POS" class="d-none">
 
@@ -365,11 +295,6 @@ if (!isset($_SESSION['store_id'])) {
         foreach ($userLoginData as $userData) {
           $shop_id = $userData['shop_id'];
           $user_name = $userData['name'];
-
-          $invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'invoices'");
-          $invoiceId_row = $invoiceId_rs->fetch_assoc();
-          $invoiceId = $invoiceId_row['AUTO_INCREMENT'];
-          $invoiceNumber = "000" . $userId . $shop_id . $invoiceId;
 
           $bill_data_rs = $conn->query("SELECT shop.shopName AS shopName, customize_bills.*
           FROM `customize_bills`
@@ -403,11 +328,9 @@ if (!isset($_SESSION['store_id'])) {
                       <div class="col-12 d-flex justify-content-center">
                         <label class="contactNumber" id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
                       </div>
-                      <div class="col-12 d-flex justify-content-center center">
-                        <center>
-                          <label id="addresspreview" class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
-                          </label>
-                        </center>
+                      <div class="col-12 d-flex justify-content-center text-center center">
+                        <label id="addresspreview" class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
+                        </label>
                       </div>
                     </td>
                   </tr>
@@ -416,9 +339,9 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="col-12">
                   <div class="row">
                     <div class="col-12" style="text-align: center;">
-                      <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
+                      <span><span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <span class="invoiceNumber" id="invoiceNumber"></span></span><br>
 
-                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoiceNumber" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoicePatientName" id="invoicePatientName"></span></span>
                     </div>
                   </div>
                 </div>
@@ -469,71 +392,26 @@ if (!isset($_SESSION['store_id'])) {
 </body>
 
 <script>
-  $(document).ready(function() {
-    $("#barcodeInput").focus();
-  });
+  $(function() {
+    //Initialize Select2 Elements
+    $(".select2").select2();
 
-  $(document).on('keyup', function(e) {
-    if (e.which == 9) {
-      var selector = document.getElementById('payment-method-selector');
-      var enterAmountField = document.getElementById('cashAmount');
-      if (selector.value === '3' && enterAmountField.value.trim() !== "") {
-        var cardAmountField = document.getElementById('cardAmount');
-        if (cardAmountField) {
-          cardAmountField.focus();
-          e.preventDefault();
-        }
-      } else {
-        $(".cashAmount").focus();
-      }
-    }
-  });
+    //Initialize Select2 Elements
+    $(".select2bs4").select2({
+      theme: "bootstrap4",
+    });
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var doctorNameField = document.getElementById('doctorNameField');
-    var regNoField = document.getElementById('regNoField');
-
-    // cash or card selector change
-    var selector = document.getElementById('payment-method-selector');
-    var billTypeSelector = document.getElementById('selectBillType');
-
-    billTypeSelector.selectedIndex = 0;
-
-    var event = new Event('change');
-    billTypeSelector.dispatchEvent(event);
-    event.preventDefault();
-
-    document.addEventListener('keydown', function(event) {
-      if (event.key === "ArrowDown") {
-        moveSelectorDown(selector);
-      } else if (event.key === "ArrowUp") {
-        moveSelectorUp(selector);
-      }
+    $('.medicine-unit-select').select2({
+      placeholder: "Select medicine unit"
     });
   });
 
-  function moveSelectorDown(selector) {
-    var selectedIndex = selector.selectedIndex;
-    if (selectedIndex < selector.options.length - 1) {
-      selectedIndex++;
-    }
-    selector.selectedIndex = selectedIndex;
-    var event = new Event('change');
-    selector.dispatchEvent(event);
-    event.preventDefault();
-  }
-
-  function moveSelectorUp(selector) {
-    var selectedIndex = selector.selectedIndex;
-    if (selectedIndex > 0) {
-      selectedIndex--;
-    }
-    selector.selectedIndex = selectedIndex;
-    var event = new Event('change');
-    selector.dispatchEvent(event);
-    event.preventDefault();
+  function handleBlur() {
+    var pName = document.getElementById(patientName).val();
+    alert("pName");
   }
 </script>
+
 <script src="dist/js/pos.js"></script>
 
 </html>

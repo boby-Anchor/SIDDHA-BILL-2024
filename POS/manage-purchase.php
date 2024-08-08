@@ -33,9 +33,6 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
-
       </head>
 
       <body class="hold-transition sidebar-mini layout-fixed">
@@ -57,7 +54,7 @@ if (!isset($_SESSION['store_id'])) {
                   <div class="col-12">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Order</h3>
+                        <h3 class="card-title">Purchase Orders</h3>
                       </div>
                       <div class="card-body">
 
@@ -75,12 +72,14 @@ if (!isset($_SESSION['store_id'])) {
                           <tbody>
                             <?php
                             if ($shop_id == "1") {
-                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id FROM hub_order_details 
+                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id
+                              FROM hub_order_details 
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
                               INNER JOIN shop ON shop.shopId = hub_order.HO_shopId");
                             } else {
-                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id FROM hub_order_details 
+                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id
+                              FROM hub_order_details 
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
                               INNER JOIN shop ON shop.shopId = hub_order.HO_shopId WHERE shop.shopId = '$shop_id'");
@@ -112,39 +111,46 @@ if (!isset($_SESSION['store_id'])) {
                                       <tbody>
                                         <?php
 
-                                        // $poItems_result = $conn->query("SELECT * FROM hub_order INNER JOIN p_medicine ON p_medicine.code = hub_order.HO_item WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'");
-
                                         $poItems_result = $conn->query("SELECT * FROM hub_order 
                                         INNER JOIN p_medicine ON p_medicine.id = hub_order.HO_item 
                                         WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'  ");
 
+                                        $rowId = 0;
+                                        $billTotal = 0;
                                         while ($poItems_data = $poItems_result->fetch_array()) {
+                                          $rowId++;
+                                          $billTotal += $poItems_data["HO_price"];
                                         ?>
                                           <tr>
-                                            <th scope="row">1</th>
+                                            <th scope="row"><?= $rowId ?></th>
                                             <td><?= $poItems_data["code"] ?></td>
                                             <td><?= $poItems_data["name"] ?> <?= $poItems_data["hub_order_unit"] ?></td>
                                             <td><?= $poItems_data["HO_qty"] ?></td>
-                                            <td><?= $poItems_data["HO_price"] ?>.00</td>
+                                            <td><?= number_format($poItems_data["HO_price"], 0) ?></td>
                                           </tr>
-
                                         <?php
                                         }
                                         ?>
                                       </tbody>
+                                      <tfoot>
+                                        <tr>
+                                          <td colspan="4" class="text-right"><strong>Total Cost:</strong></td>
+                                          <td><?php echo  number_format($billTotal, 0); ?></td>
+                                        </tr>
+                                      </tfoot>
                                     </table>
-                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['hub_order_number'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
+                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['hub_order_number'] ?>');">
+                                      <i class="nav-icon fas fa-copy"></i> PRINT
+                                    </button>
                                   </ul>
-
                                 </th>
                                 <th><?= $hub_order_details_data['HO_date'] ?></th>
-                                <th><?= $hub_order_details_data["hub_order_subTotal"] ?>.00</th>
+                                <th><?= number_format($hub_order_details_data["hub_order_subTotal"], 2) ?></th>
                                 <th>
                                   <?php
                                   if ($shop_id == "1" && $hub_order_details_data["order_status_id"] == '1' || $shop_id == "1" && $hub_order_details_data["order_status_id"] == '6') {
                                   ?>
                                     <button class="btn btn-success" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '2')">Accept</button>
-
                                   <?php
                                   } else if ($shop_id == "1" && $hub_order_details_data["order_status_id"] == '2') {
                                   ?>
@@ -161,8 +167,6 @@ if (!isset($_SESSION['store_id'])) {
                                       "6" => "#bd0d0d"
                                     );
 
-
-
                                     $orderStatus = array(
                                       "1" => "Pending",
                                       "2" => "Approved",
@@ -173,7 +177,6 @@ if (!isset($_SESSION['store_id'])) {
                                     );
 
                                     $order_status_id = $hub_order_details_data["order_status_id"];
-
 
                                     $bgColor = isset($orderStatusColor[$order_status_id]) ? $orderStatusColor[$order_status_id] : "white";
                                     $statusType = isset($orderStatus[$order_status_id]) ? $orderStatus[$order_status_id] : "Unknown";
@@ -194,9 +197,6 @@ if (!isset($_SESSION['store_id'])) {
 
                           </tbody>
                         </table>
-
-
-
                       </div>
                     </div>
                   </div>
@@ -216,8 +216,6 @@ if (!isset($_SESSION['store_id'])) {
         <!-- All JS -->
         <?php include("part/all-js.php"); ?>
         <!-- All JS end -->
-
-
 
         <script>
           document.addEventListener("DOMContentLoaded", function() {
@@ -260,10 +258,8 @@ if (!isset($_SESSION['store_id'])) {
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
-
           }
         </script>
-
       </body>
 
       </html>
