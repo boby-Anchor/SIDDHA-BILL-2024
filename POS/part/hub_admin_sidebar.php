@@ -51,7 +51,7 @@ if (isset($_SESSION['store_id'])) {
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
- <!-- Manage Bills -->
+                        <!-- Manage Bills -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -74,28 +74,28 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- Manage User -->
+                        <!-- Manage User -->
                         <li class="nav-item">
                             <a href="hub-add-user.php" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Manage User</p>
                             </a>
                         </li>
-<!-- Sales -->
+                        <!-- Sales -->
                         <!--<li class="nav-item">-->
                         <!--    <a href="sales.php" class="nav-link">-->
                         <!--        <i class="nav-icon fas fa-copy"></i>-->
                         <!--        <p>Sales</p>-->
                         <!--    </a>-->
                         <!--</li>-->
-<!-- Return -->
+                        <!-- Return -->
                         <li class="nav-item">
                             <a href="return.php" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>Return</p>
                             </a>
                         </li>
-<!-- Purchase -->
+                        <!-- Purchase -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -114,7 +114,7 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- Stock -->
+                        <!-- Stock -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -143,7 +143,7 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- Damages -->
+                        <!-- Damages -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -163,7 +163,7 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- Shops -->                        
+                        <!-- Shops -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -188,7 +188,7 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- PRODUCT INFORMATION -->     
+                        <!-- PRODUCT INFORMATION -->
                         <li class="nav-header">PRODUCT INFORMATION</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
@@ -220,7 +220,7 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- Category -->                         
+                        <!-- Category -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -240,7 +240,7 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- Brands -->
+                        <!-- Brands -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -260,39 +260,39 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- EXPENSES & PAYMENT -->
+                        <!-- EXPENSES & PAYMENT -->
                         <!--<li class="nav-header">EXPENSES & PAYMENT</li>-->
-                       <!--<li class="nav-item">-->
-                       <!--     <a href="#" class="nav-link">-->
-                       <!--         <i class="nav-icon fas fa-copy"></i>-->
-                       <!--         <p>-->
-                       <!--             Expenses-->
-                       <!--             <i class="fas fa-angle-left right"></i>-->
-                       <!--             <span class="badge badge-info right">3</span>-->
-                       <!--         </p>-->
-                       <!--     </a>-->
-                       <!--     <ul class="nav nav-treeview">-->
-                       <!--         <li class="nav-item">-->
-                       <!--             <a href="expense.php" class="nav-link">-->
-                       <!--                 <i class="far fa-circle nav-icon"></i>-->
-                       <!--                 <p>Add Expenses</p>-->
-                       <!--             </a>-->
-                       <!--         </li>-->
-                       <!--         <li class="nav-item">-->
-                       <!--             <a href="manage-expense.php" class="nav-link">-->
-                       <!--                 <i class="far fa-circle nav-icon"></i>-->
-                       <!--                 <p>Manage Expenses</p>-->
-                       <!--             </a>-->
-                       <!--         </li>-->
-                       <!--         <li class="nav-item">-->
-                       <!--             <a href="expense-category.php" class="nav-link">-->
-                       <!--                 <i class="far fa-circle nav-icon"></i>-->
-                       <!--                 <p>Expenses Category</p>-->
-                       <!--             </a>-->
-                       <!--         </li>-->
-                       <!--     </ul>-->
-                       <!-- </li>-->
-<!-- Payments -->
+                        <!--<li class="nav-item">-->
+                        <!--     <a href="#" class="nav-link">-->
+                        <!--         <i class="nav-icon fas fa-copy"></i>-->
+                        <!--         <p>-->
+                        <!--             Expenses-->
+                        <!--             <i class="fas fa-angle-left right"></i>-->
+                        <!--             <span class="badge badge-info right">3</span>-->
+                        <!--         </p>-->
+                        <!--     </a>-->
+                        <!--     <ul class="nav nav-treeview">-->
+                        <!--         <li class="nav-item">-->
+                        <!--             <a href="expense.php" class="nav-link">-->
+                        <!--                 <i class="far fa-circle nav-icon"></i>-->
+                        <!--                 <p>Add Expenses</p>-->
+                        <!--             </a>-->
+                        <!--         </li>-->
+                        <!--         <li class="nav-item">-->
+                        <!--             <a href="manage-expense.php" class="nav-link">-->
+                        <!--                 <i class="far fa-circle nav-icon"></i>-->
+                        <!--                 <p>Manage Expenses</p>-->
+                        <!--             </a>-->
+                        <!--         </li>-->
+                        <!--         <li class="nav-item">-->
+                        <!--             <a href="expense-category.php" class="nav-link">-->
+                        <!--                 <i class="far fa-circle nav-icon"></i>-->
+                        <!--                 <p>Expenses Category</p>-->
+                        <!--             </a>-->
+                        <!--         </li>-->
+                        <!--     </ul>-->
+                        <!-- </li>-->
+                        <!-- Payments -->
                         <!--<li class="nav-item">-->
                         <!--    <a href="#" class="nav-link">-->
                         <!--        <i class="nav-icon fas fa-copy"></i>-->
@@ -317,7 +317,7 @@ if (isset($_SESSION['store_id'])) {
                         <!--        </li>-->
                         <!--    </ul>-->
                         <!--</li>-->
-<!-- PEOPLES -->
+                        <!-- PEOPLES -->
                         <li class="nav-header">Suppliers</li>
                         <!--<li class="nav-item">-->
                         <!--    <a href="#" class="nav-link">-->
@@ -338,7 +338,7 @@ if (isset($_SESSION['store_id'])) {
                         <!--        </li>-->
                         <!--    </ul>-->
                         <!--</li>-->
-<!-- Suppliers -->
+                        <!-- Suppliers -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -365,9 +365,9 @@ if (isset($_SESSION['store_id'])) {
                                 </li>
                             </ul>
                         </li>
-<!-- REPORTS -->
+                        <!-- REPORTS -->
                         <li class="nav-header">REPORTS</li>
-                    <li class="nav-item">
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
@@ -376,79 +376,85 @@ if (isset($_SESSION['store_id'])) {
                                     <span class="badge badge-info right">4</span>
                                 </p>
                             </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="low-stock-report.php" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>Low Stock Report</p>
-                            </a>
-                        </li>        
-                        <li class="nav-item">
-                            <a href="today-report.php" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>Today Report</p>
-                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="report-itemOutQty.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Item Out-Qty Report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="low-stock-report.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Low Stock Report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="today-report.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Today Report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="today-cashiers-shop.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Today Cashiers</p>
+                                    </a>
+                                </li>
+                                <!--<li class="nav-item">-->
+                                <!--    <a href="summary-report.php" class="nav-link">-->
+                                <!--        <i class="nav-icon fas fa-copy"></i>-->
+                                <!--        <p>Summary Report</p>-->
+                                <!--    </a>-->
+                                <!--</li>-->
+                                <li class="nav-item">
+                                    <a href="daily-report.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Daily Report</p>
+                                    </a>
+                                </li>
+
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="today-cashiers-shop.php" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>Today Cashiers</p>
-                            </a>
-                        </li>
-                        <!--<li class="nav-item">-->
-                        <!--    <a href="summary-report.php" class="nav-link">-->
-                        <!--        <i class="nav-icon fas fa-copy"></i>-->
-                        <!--        <p>Summary Report</p>-->
-                        <!--    </a>-->
-                        <!--</li>-->
-                        <li class="nav-item">
-                            <a href="daily-report.php" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>Daily Report</p>
-                            </a>
-                        </li>
-                        
-                    </ul>
-                        </li>
-                    <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                   ALL Shops
+                                    ALL Shops
                                     <i class="fas fa-angle-left right"></i>
                                     <span class="badge badge-info right">3</span>
                                 </p>
                             </a>
-                    <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="all-low-stock-report.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Low Stock Report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="all-today-report.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Today Report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="all-today-cashiers.php" class="nav-link">
+                                        <i class="nav-icon fas fa-copy"></i>
+                                        <p>Today Cashiers</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="nav-item">
-                            <a href="all-low-stock-report.php" class="nav-link">
+                            <a href="ac-cashier-today-report.php" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
-                                <p>Low Stock Report</p>
-                            </a>
-                        </li>        
-                        <li class="nav-item">
-                            <a href="all-today-report.php" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>Today Report</p>
+                                <p>Today Sale</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="all-today-cashiers.php" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>Today Cashiers</p>
-                            </a>
-                        </li>
-                    </ul>
-                        </li>
-                        
-            <li class="nav-item">
-               <a href="ac-cashier-today-report.php" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
-                <p>Today Sale</p>
-                </a>
-            </li>
-                    
-                    
+
+
                         <!--<li class="nav-item">-->
                         <!--    <a href="" class="nav-link">-->
                         <!--        <i class="nav-icon fas fa-copy"></i>-->

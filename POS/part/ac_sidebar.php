@@ -22,7 +22,7 @@ if (isset($_SESSION['store_id'])) {
           <!--   <div class="image">
                <img src="dist/img/user1.jpg" class="img-circle elevation-2" alt="User Image" />
             </div>-->
-            <div class="info userNameMain">
+          <div class="info userNameMain">
             <a href="#" class="d-block userName">
               <?= $userName; ?>
             </a>
@@ -31,8 +31,7 @@ if (isset($_SESSION['store_id'])) {
             <a href="#" class="d-block userRole">
               <?= $user_shop_data['user_role'] ?>
             </a>
-          </div> 
-          
+          </div>
         </div>
 
         <!-- SidebarSearch Form -->
@@ -57,22 +56,22 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
             <li class="nav-header">REPORTS</li>
-            
+
             <li class="nav-item">
               <a href="ac-sales-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>Sales Report</p>
               </a>
             </li>
-            
+
             <li class="nav-item">
               <a href="cashier-all-sales-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>All Sales Report</p>
               </a>
             </li>
-            
-            
+
+
             <li class="nav-header"></li>
 
           </ul>
