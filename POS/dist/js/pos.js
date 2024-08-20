@@ -11,7 +11,6 @@ function getBarcode3() {
       var txt = req.responseText;
       var barcodeResults = document.getElementById("barcodeResults");
       var existingRows = barcodeResults.querySelectorAll("tr[data-barcode]");
-      console.log(existingRows);
 
       for (var i = 0; i < existingRows.length; i++) {
         var existingBarcode = existingRows[i].getAttribute("data-barcode");
@@ -238,6 +237,73 @@ function moveSelectorUp(selector) {
   event.preventDefault();
 }
 
+// set paththu name on popup
+function setPaththu(paththuSelect) {
+  document.getElementById("paththuName").value = paththuSelect.value;
+  paththuSelect.value = 1;
+}
+
+// add paththu to bill
+function addPaththu() {
+
+  var barcodeResults = document.getElementById("barcodeResults");
+  var paththuNameElement = document.getElementById("paththuName");
+  var paththuName = paththuNameElement.value.trim();
+  var paththuPriceElement = document.getElementById("paththuPrice");
+  var paththuPrice = paththuPriceElement.value.trim();
+
+
+  if (paththuName !== "" && paththuPrice !== "") {
+    var txt = `
+  <tr data-barcode="code_price">
+  <th><input type="checkbox" class="d-none" name="isPaththu" id="isPaththu"></th>
+  
+  <td id="code" class="d-none"></td>
+  <td id="ucv" class="d-none">1</td>
+  <td id="item_price" class="d-none">${paththuPrice}</td>
+  <td id="unit_price" class="d-none">0</td>
+
+  <td id="product_name" ><label for="isPaththu">${paththuName}</label></td>
+
+  <td id="product_price">${paththuPrice}</td>
+  <td>
+      <div class="col-12">
+          <div class="row">
+              <div class="col-2 d-flex justify-content-center">
+                  <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+              </div>
+              <div class="col-4">
+                  <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" onchange="updateTotal(this)" data-price="${paththuPrice}">
+              </div>
+              <div class="col-2 d-flex justify-content-center">
+                  <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+              </div>
+              <div class="col-2">
+                  <labe id="unit">combine</labe>
+              </div>
+          </div>
+      </div>
+  </td>
+
+  <td class="total" id="totalprice">${paththuPrice}</td>
+  <td>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
+      </svg>
+  </td>
+</tr>
+`;
+
+    barcodeResults.insertAdjacentHTML("beforeend", txt);
+
+    paththuNameElement.value = "";
+    paththuPriceElement.value = "";
+
+    $('#addPaththu').modal('hide');
+    calculateSubTotal();
+  }
+}
+
 // update total by qty
 function updateTotal(input) {
   var quantity = parseInt(input.value);
@@ -336,12 +402,14 @@ function checkNetTotal() {
 // subTotal Calculation display
 function calculateSubTotal() {
   var productsAllTotal = 0;
+  var paththuTotal = 0;
 
-  var ajaxRequests = [];
+  // var ajaxRequests = [];
 
   $(".barcodeResults tbody tr").each(function () {
     var product_cost = $(this).find("#product_price").text();
     var product_qty = $(this).find("#qty").val();
+    var isPaththu = $(this).find("#isPaththu").prop("checked");
 
     if (product_qty === "" || product_qty === "0") {
       Swal.mixin({
@@ -356,8 +424,13 @@ function calculateSubTotal() {
       $("#checkoutBtn").removeAttr("data-toggle data-target");
     } else {
       var productTotal = product_cost * product_qty;
-      productsAllTotal += productTotal;
-      document.getElementById("subTotal").innerHTML = productsAllTotal;
+      if (isPaththu) {
+        paththuTotal += productTotal;
+        document.getElementById("paththuTotal").innerHTML = paththuTotal;
+      } else {
+        productsAllTotal += productTotal;
+        document.getElementById("subTotal").innerHTML = productsAllTotal;
+      }
       addDiscount();
     }
   });
@@ -568,9 +641,10 @@ function printInvoice() {
 
 function checkout() {
   var patientName = $("#patientName").val().trim();
-  var contactNo = $("#contactNo").val();
+  var contactNo = $("#contactNo").val().trim();
 
   document.getElementById("invoicePatientName").innerText = patientName;
+  document.getElementById("InvoiceContactNumber").innerText = contactNo;
   $.ajax({
     url: "invoiceConfirmation.php",
     method: "POST",
@@ -591,6 +665,9 @@ function checkout() {
 
     var balance = $("#balance").text().replace(/,/g, "");
     var discountPercentage = $("#discountPercentage").val();
+    var subTotal = $("#subTotal").text();
+    var netTotal = $("#netTotal").text();
+
     var deliveryCharges = $("#deliveryCharges").val();
     var valueAddedServices = $("#valueAddedServices").val();
     var cashAmount = $("#cashAmount").val();
@@ -618,12 +695,11 @@ function checkout() {
         title: "Success: Checkout Success !",
       });
 
-      var invoiceNumber = $(".invoiceNumber").text();
-
       var poArray = [];
       var inArray = [];
 
       $("#barcodeResults tr").each(function () {
+        var isPaththu = $(this).find("#isPaththu").prop("checked");
         var code = $(this).find("#code").text();
         var ucv = $(this).find("#ucv").text();
         var item_price = $(this).find("#item_price").text();
@@ -637,6 +713,7 @@ function checkout() {
 
         // alert(product_unit);
         var productData = {
+          isPaththu: isPaththu,
           code: code,
           ucv: ucv,
           item_price: item_price,
@@ -646,7 +723,6 @@ function checkout() {
           product_qty: product_qty,
           product_unit: product_unit,
           productTotal: productTotal,
-          invoiceNumber: invoiceNumber,
 
           patientName: patientName,
           contactNo: contactNo,
@@ -654,6 +730,8 @@ function checkout() {
           regNo: regNo,
 
           balance: balance,
+          subTotal: subTotal,
+          netTotal: netTotal,
           discountPercentage: discountPercentage,
           deliveryCharges: deliveryCharges,
           valueAddedServices: valueAddedServices,
@@ -673,7 +751,6 @@ function checkout() {
           products: JSON.stringify(poArray),
         },
         success: function (response) {
-          console.log(response);
           Swal.mixin({
             toast: true,
             position: "top-end",
