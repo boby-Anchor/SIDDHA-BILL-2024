@@ -54,32 +54,7 @@ if (isset($_SESSION['store_id'])) {
             <li class="nav-item">
               <a href="pos.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
-                <p>POS 1</p>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a href="pos2/pos2.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>POS 2</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="pos3/pos.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>POS 3</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="pos4/pos.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>POS 4</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="pos5/pos.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>POS 5</p>
+                <p>POS Invoice</p>
               </a>
             </li>
 

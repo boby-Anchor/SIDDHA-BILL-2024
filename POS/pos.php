@@ -85,6 +85,11 @@ if (!isset($_SESSION['store_id'])) {
                     <label class="subTotal" id="netTotal"></label>
                     <label class="subTotal">RS(NT)</label>
                   </div>
+
+                  <div class="col-3 text-right ">
+                    <label class="subTotal" id="paththuTotal"></label>
+                    <label class="subTotal">RS(PT)</label>
+                  </div>
                 </div>
               </div>
 
@@ -177,7 +182,7 @@ if (!isset($_SESSION['store_id'])) {
                 <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..." onchange="getBarcode2(this.value);">
               </div>
               <div class="col-4 mb-2 p-2">
-                <select class="form-control" name="" id="selectPrices" onchange="getBarcode3()"></select>
+                <select class="form-control" id="selectPrices" onchange="getBarcode3()"></select>
               </div>
               <div class="col-4 mb-2 p-2">
                 <select class="form-control" name="selectBillType" id="selectBillType">
@@ -215,10 +220,16 @@ if (!isset($_SESSION['store_id'])) {
 
               <!-- Company Product list -->
               <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
-                <form action="" method="post" onkeyup="searchProducts(); return false;">
-                  <!-- Added method attribute -->
-                  <input type="search" class="form-control" name="search21" id="search21" placeholder="Search...">
-                </form>
+                <!-- <div class="form-row input-group">
+                  <button class="btn btn-success ">Paththu</button>
+                  <input type="search" class="" name="search21" id="search21" onkeyup="searchProducts(); return false;" placeholder="Search...">
+                </div> -->
+
+                <div class="input-group mt-3 form-group form-row">
+                  <button class="btn btn-outline-success mx-1" data-toggle="modal" data-target="#addPaththu">Paththu</button>
+                  <input type="search" class="form-control" name="search21" id="search21" onkeyup="searchProducts(); return false;" placeholder="Search...">
+                </div>
+
                 <div class="row" id="productGrid" class="productGrid">
                   <?php
                   if (isset($_SESSION['store_id'])) {
@@ -268,6 +279,74 @@ if (!isset($_SESSION['store_id'])) {
 
     <!-- confirm po modal end -->
 
+    <!-- Paththu add -->
+
+    <div class="container">
+      <div class="modal" id="addPaththu" role="dialog">
+        <div class="modal-dialog d-flex justify-content-between ">
+          <div class="modal-content bg-dark align-items-center vw-100">
+            <div class="modal-header">
+              <h4 class="modal-title">Paththu</h4>
+            </div>
+            <div class="modal-body">
+              <div class="grnId">
+                <div class="row">
+
+                  <div class="col-12 mt-4 mb-3">
+                    <div class="form-group">
+
+                      <label for="paththuName" class="form-label">Name</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="paththuName">
+                        <br>
+                        <select class="form-control" id="paththuSelect" onchange="setPaththu(this)">
+                          <option selected>Add...</option>
+                          <option value="Agili Paththuwa">Agili Paththuwa</option>
+                          <option value="Athata Paththuwa">Athata Paththuwa</option>
+                          <option value="Badata Paththuwa">Badata Paththuwa</option>
+                          <option value="Bellata Paththuwa">Bellata Paththuwa</option>
+                          <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa Paththuwa</option>
+                          <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa</option>
+                          <option value="Danahisata Paththuwa">Danahisata Paththuwa</option>
+                          <option value="Gaath Paththuwa">Gaath Paththuwa</option>
+                          <option value="Kalawata Paththuwa">Kalawata Paththuwa</option>
+                          <option value="Kakulata Paththuwa">Kakulata Paththuwa</option>
+                          <option value="Kenda Paththuwa">Kenda Paththuwa</option>
+                          <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa</option>
+                          <option value="Pitata Paththuwa">Pitata Paththuwa</option>
+                          <option value="Thattamata Paththuwa">Thattamata Paththuwa</option>
+                          <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata Paththuwa</option>
+                          <option value="Urahisata Paththuwa">Urahisata Paththuwa</option>
+                          <option value="Walalukara Paththuwa">Walalukara Paththuwa</option>
+                          <option value="Welamitata Paththuwa">Welamitata Paththuwa</option>
+                          <option value="Wilubata Paththuwa">Wilubata Paththuwa</option>
+                          <option value="Yatipathulata Paththuwa">Yatipathulata Paththuwa</option>
+                        </select>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="paththuPrice" class="form-label">Price</label>
+                      <input type="number" class="form-control" id="paththuPrice" min="0" step="0.01" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-success addPaththuBtn" onclick="addPaththu()">Add</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paththu add end -->
+
     <!-- Footer -->
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
@@ -310,15 +389,17 @@ if (!isset($_SESSION['store_id'])) {
                   <tr>
                     <td colspan="3">
                       <div class="col-12 d-flex justify-content-center p-2">
-                        <div class="">
+                        <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>" style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');"></div>
+                        <!-- <div class="text-center">
                           <label style="font-size: large; font-weight: 100;">
                             <h3>
                               <b>
-                                <?= $bill_data['shopName'] ?>
+                                <?php //echo $bill_data['shopName'] 
+                                ?>
                               </b>
                             </h3>
                           </label>
-                        </div>
+                        </div> -->
                       </div>
                     </td>
                   </tr>
@@ -339,9 +420,11 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="col-12">
                   <div class="row">
                     <div class="col-12" style="text-align: center;">
-                      <span><span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <span class="invoiceNumber" id="invoiceNumber"></span></span><br>
-
-                      <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO - </span> <span class="invoicePatientName" id="invoicePatientName"></span></span>
+                      <span><span class="text-left" style="font-size: 10px;"><?= $currentDate ?> </span><span class="text-right"> <?= $currentTime ?></span> </span>
+                      <br>
+                      <span><span class="invoicePatientName" id="invoicePatientName"></span> <span id="InvoiceContactNumber"></span></span>
+                      <br>
+                      <span><span class="fw-bold"><?= $user_name ?> Inv.</span> <span class="fw-bolder" style="font-size: 10px;" id="invoiceNumber"></span></span>
                     </div>
                   </div>
                 </div>
@@ -406,10 +489,6 @@ if (!isset($_SESSION['store_id'])) {
     });
   });
 
-  function handleBlur() {
-    var pName = document.getElementById(patientName).val();
-    alert("pName");
-  }
 </script>
 
 <script src="dist/js/pos.js"></script>

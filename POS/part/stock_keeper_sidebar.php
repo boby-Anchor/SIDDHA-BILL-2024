@@ -137,14 +137,25 @@ if (isset($_SESSION['store_id'])) {
                 <li class="nav-item">
                   <a href="manage-grn.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Manage GRN</p>
+                    <p> GRN</p>
                   </a>
                 </li>
               </ul>
             </li>
 
-
             <?php
+            if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 9) {
+
+            ?>
+              <li class="nav-item">
+                <a href="manage-products.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Edit Barcode</p>
+                </a>
+              </li>
+            <?php
+            }
+
             if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 1) {
             ?>
               <li class="nav-header">PRODUCT INFORMATION</li>
