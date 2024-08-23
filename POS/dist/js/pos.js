@@ -263,7 +263,7 @@ function addPaththu() {
   <td id="item_price" class="d-none">${paththuPrice}</td>
   <td id="unit_price" class="d-none">0</td>
 
-  <td id="product_name" ><label for="isPaththu">${paththuName}</label></td>
+  <td id="product_name" ><label>${paththuName}</label></td>
 
   <td id="product_price">${paththuPrice}</td>
   <td>
