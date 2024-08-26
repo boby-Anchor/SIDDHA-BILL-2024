@@ -1,6 +1,5 @@
 // ==============================================================================proceed_grn
 
-{
   $(document).on("click", ".proceed-grn", function () {
     var poArray = [];
 
@@ -82,39 +81,10 @@
 
     console.log(poArray);
   });
-}
-
-// ==============================================================================
-
-// update order status start ====
-function updateOrderStatus(orderNumber, status) {
-  // alert(orderNumber);
-  var form = new FormData();
-  form.append("orderNumber", orderNumber);
-  form.append("status", status);
-
-  var req = new XMLHttpRequest();
-  req.onreadystatechange = function () {
-    if (req.readyState == 4 && req.status == 200) {
-      var txt = req.responseText; // Removed the parentheses
-      if (txt == "success") {
-        location.reload(true);
-      }
-      console.log(txt);
-    }
-  };
-  req.open("POST", "updateOrderStatusProcess.php", true);
-  req.send(form);
-}
-
-// update order status end ======
-
 
 // ==============================================================================
 
 function fbs(searchTxt) {
- // alert("in search");
-  //console.log("in search");
   var bnInput = document.getElementById("bnInput").value;
   var pcInput = document.getElementById("pcInput").value;
   var pnInput = document.getElementById("pnInput").value;
