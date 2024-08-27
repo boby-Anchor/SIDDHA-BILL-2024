@@ -82,14 +82,14 @@ if (!isset($_SESSION['store_id'])) {
             text-indent: 5px;
         }
 
-        button.add-btn.btn.btn-outline-primary,
+        /* button.add-btn.btn.btn-outline-primary,
         button.add-btn.btn.btn-outline-primary:focus,
         button.add-btn.btn.btn-outline-primary:hover {
             height: 30px;
             line-height: 15px;
             outline: 0 !important;
             box-shadow: none;
-        }
+        } */
 
         .box {
             padding: 10px 0px;
@@ -151,10 +151,9 @@ if (!isset($_SESSION['store_id'])) {
                     <div class="col-12">
                         <div class="card-body h-100 bg-dark overflow-hidden">
                             <div class="row">
-                                <div class="col-6">
-                                    <!-- <img src="dist/img/Siddha.lk (1).png" alt="" class="img-fluid"> -->
-                                </div>
-
+                                <!-- <div class="col-6"> -->
+                                <!-- <img src="dist/img/Siddha.lk (1).png" alt="" class="img-fluid"> -->
+                                <!-- </div> -->
 
                                 <!-- supplier selector start -->
                                 <!-- <div class="col-12 p-4">
@@ -163,24 +162,26 @@ if (!isset($_SESSION['store_id'])) {
                                         <option value="0">select supplier</option>
 
                                         <?php
-                                        if (isset($_SESSION['store_id'])) {
+                                        // if (isset($_SESSION['store_id'])) {
 
-                                            $userLoginData = $_SESSION['store_id'];
+                                        //     $userLoginData = $_SESSION['store_id'];
 
-                                            foreach ($userLoginData as $userData) {
-                                                $shop_id = $userData['shop_id'];
-                                                $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
-                                                INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
-                                                INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
-                                                WHERE producttoshop.shop_id = '$shop_id'
-                                                ");
-                                                while ($supplier_data = $supplier_rs->fetch_assoc()) {
+                                        //     foreach ($userLoginData as $userData) {
+                                        //         $shop_id = $userData['shop_id'];
+                                        //         $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
+                                        //         INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
+                                        //         INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
+                                        //         WHERE producttoshop.shop_id = '$shop_id'
+                                        //         ");
+                                        //         while ($supplier_data = $supplier_rs->fetch_assoc()) {
                                         ?>
-                                                    <option value="<?= $supplier_data["id"] ?>"><?= $supplier_data["name"] ?></option>
+                                                    <option value="<?php // $supplier_data["id"] 
+                                                                    ?>"><?php // $supplier_data["name"] 
+                                                                        ?></option>
                                         <?php
-                                                }
-                                            }
-                                        }
+                                        //         }
+                                        //     }
+                                        // }
 
                                         ?>
                                     </select>
@@ -204,7 +205,6 @@ if (!isset($_SESSION['store_id'])) {
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">#</th>
-                                                        <th scope="col">Product Preview</th>
                                                         <th scope="col">Product Name</th>
                                                         <th scope="col">Product Category</th>
                                                         <th scope="col">Product Brand</th>
@@ -216,7 +216,6 @@ if (!isset($_SESSION['store_id'])) {
                                                 <tbody id="filterBySupTable">
                                                     <?php
 
-
                                                     if (isset($_SESSION['store_id'])) {
 
                                                         $userLoginData = $_SESSION['store_id'];
@@ -224,12 +223,14 @@ if (!isset($_SESSION['store_id'])) {
                                                         foreach ($userLoginData as $userData) {
                                                             $shop_id = $userData['shop_id'];
                                                             //    p_medicine.code AS code ,
-                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid , p_medicine.name AS p_name , 
-                                                            p_medicine.code AS code ,
-                                                            p_medicine.img AS img ,
-                                                            p_medicine_category.name AS categoryname , p_brand.name AS brandname ,
-                                                            medicine_unit.unit AS unit , unit_category_variation.ucv_name 
-                                                             , `stock2`.`item_s_price` AS itemSprice
+                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid, p_medicine.name AS p_name, 
+                                                            p_medicine.code AS code,
+                                                            p_medicine.img AS img,
+                                                            p_medicine_category.name AS category, p_brand.name AS brand,
+                                                            medicine_unit.unit AS unit, unit_category_variation.ucv_name,
+                                                            stock2.stock_id AS stock_id,
+                                                            stock2.item_s_price AS itemSprice,
+                                                            stock2.unit_s_price AS unitSprice
                                                             FROM producttoshop
                                                             INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
                                                             INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
@@ -239,36 +240,31 @@ if (!isset($_SESSION['store_id'])) {
                                                             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
                                                             WHERE
                                                             shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
+                                                            GROUP BY p_medicine.name, itemSprice
                                                             ORDER BY p_medicine.name ASC
                                                             ");
 
                                                             $tableRowCount = 1;
                                                             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
                                                     ?>
-
                                                                 <tr>
                                                                     <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
+                                                                    <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
                                                                     <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
+                                                                    <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                                                                     <th scope="row"><?= $tableRowCount ?></th>
-                                                                    <td>
+                                                                    <!-- <td>
                                                                         <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
-                                                                    </td>
+                                                                    </td> -->
                                                                     <td>
                                                                         <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
                                                                         (<?= $p_medicine_data['ucv_name'] ?>
                                                                         <?= $p_medicine_data['unit'] ?>)
                                                                     </td>
-
-                                                                    <td id="product_category">
-                                                                        <label for=""><?= $p_medicine_data['categoryname'] ?></label>
-                                                                    </td>
-                                                                    <td id="product_brand">
-                                                                        <label for=""><?= $p_medicine_data['brandname'] ?></label>
-                                                                    </td>
-                                                                    <td id="itemsprice">
-                                                                        <label for=""><?= $p_medicine_data['itemSprice'] ?></label>
-                                                                    </td>
-                                                                    <td id="product_unit"><label for=""><?= $p_medicine_data['unit'] ?></label></td>
+                                                                    <td id="product_category"><?= $p_medicine_data['category'] ?></td>
+                                                                    <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
+                                                                    <td id="itemSprice"><?= $p_medicine_data['itemSprice'] ?></td>
+                                                                    <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
                                                                     <td><button class="btn btn-outline-success add-btn">Add</button></td>
                                                                 </tr>
                                                     <?php
@@ -276,13 +272,10 @@ if (!isset($_SESSION['store_id'])) {
                                                             }
                                                         }
                                                     }
-
                                                     ?>
 
                                                 </tbody>
                                             </table>
-
-
 
                                         </div>
                                     </div>
@@ -308,8 +301,8 @@ if (!isset($_SESSION['store_id'])) {
                                         <th scope="col">Product Name</th>
                                         <th scope="col">Qty</th>
                                         <th scope="col">Minimum Unit Qty </th>
-                                        <th scope="col">Total Amount (full qty)</th>
-                                        <th scope="col">Discount(%)(1 Item)</th>
+                                        <th scope="col">Item Price</th>
+                                        <th scope="col">Discount(%)</th>
                                         <th scope="col">(1 Item) Sell Price</th>
                                         <th scope="col">(1 Unit) Cost</th>
                                         <th scope="col">(1 Unit) Sell Price & Barcode</th>
@@ -364,14 +357,12 @@ if (!isset($_SESSION['store_id'])) {
         }
     }
 
-    $orderId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'stock2'");
-    $orderId_row = $orderId_rs->fetch_assoc();
-    $grnId = $orderId_row['AUTO_INCREMENT'];
-    $grnNumber = "ST-$userId$shop_id" . "00" . $grnId;
+    $grn_number_result = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'grn'");
+    $grn_number_data = $grn_number_result->fetch_assoc();
+    $grnNumber = "GRN-000" . $grn_number_data['AUTO_INCREMENT'];
 
     $grnDate = date("Y-m-d");
     $grnTime = date("H:i:s");
-
     ?>
 
     <!-- confirm po modal start -->
@@ -386,12 +377,12 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="grnId">
                             <div class="row">
                                 <div class="col-4 text-center text-black fw-bold">
-                                    <label for="grnNumber">Stock Number</label>
+                                    <label for="grnNumber">GRN No.</label>
                                     <?php
                                     echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
                                     ?>
-
                                 </div>
+
                                 <div class="col-4 text-center">
                                     <div class="col-12">
                                         <div class="row">
@@ -403,9 +394,8 @@ if (!isset($_SESSION['store_id'])) {
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
+
                                 <div class="col-4 text-center">
                                     <label for="grnTime">Added time</label>
                                     <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
@@ -460,6 +450,8 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
 
+    <script src="dist/js/add-stock.js"></script>
+
     <script>
         $(document).ready(function() {
             var ucv_name;
@@ -469,10 +461,7 @@ if (!isset($_SESSION['store_id'])) {
             function adjustVisibilityForPackRows() {
                 $(".addedProTable tbody tr").each(function() {
                     var rowProductUnit = $(this).find("#product_unit").text();
-                    if (rowProductUnit === 'pack / bottle') {
-                        $(this).find(".auto-generate-m-unit").addClass("d-none");
-                        $(this).find(".manual-enter-m-unit").removeClass("d-none");
-                    } else {
+                    if (rowProductUnit !== 'pack / bottle') {
                         $(this).find(".auto-generate-m-unit").removeClass("d-none");
                         $(this).find(".manual-enter-m-unit").addClass("d-none");
                     }
@@ -483,9 +472,11 @@ if (!isset($_SESSION['store_id'])) {
                 // Fetch necessary data
                 var product_code = $(this).closest("tr").find("#product_code").text();
                 var product_name = $(this).closest("tr").find("#product_name").text().trim();
+                // var itemSprice = $(this).closest("tr").find("#itemSprice").text().trim();
+                var unitSprice = $(this).closest("tr").find("#unitSprice").text().trim();
                 ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
-
                 product_unit = $(this).closest("tr").find("#product_unit").text();
+
                 var product_qty = 1;
 
                 var exists = false;
@@ -521,7 +512,7 @@ if (!isset($_SESSION['store_id'])) {
 
                         "<td>" + "<input type='text' id='cost_input' class='bg-dark form-control text-center cost-input' value=''></td>" +
 
-                        "<td>" + "<input placeholder='discount' id='item_discount' type='text' class='bg-dark form-control text-center itemdicount' value=''>" + "</td>" +
+                        "<td>" + "<input placeholder='discount' id='item_discount' type='text' class='bg-dark form-control text-center itemdiscount' value=''>" + "</td>" +
 
                         "<td>" + "<label id='item_sale_price'></label>" + "</td>" +
 
@@ -565,11 +556,7 @@ if (!isset($_SESSION['store_id'])) {
                 if (product_unit === 'l') {
                     var liters = parseFloat($(this).val());
                     var milliliters = ucv_name * liters * 1000;
-
-                    console.log(ucv_name);
-
                     $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
-
                 }
                 if (product_unit === 'kg') {
                     var kilo = parseFloat($(this).val());
@@ -640,91 +627,116 @@ if (!isset($_SESSION['store_id'])) {
                 if ($(this).closest("tr").find(".auto-generate-m-unit").hasClass("d-none")) {
                     var cost = parseFloat($(this).val());
                     var manual_unit_input = parseFloat($(this).closest("tr").find(".manual_unit_input").val());
-                    var cost_per_unit = cost / manual_unit_input;
+                    var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
             });
 
             // Calculate cost per unit based on product_unit
+            // $(document).on("input", ".cost-input", function() {
+            //     var product_unit = $(this).closest("tr").find("#product_unit").text();
+            //     var cost = parseFloat($(this).val());
+
+            //     var units = ["l", "kg", "m", "ml", "g", "cm"];
+
+            //     if (units.includes(product_unit)) {
+            //         var cost_per_unit = cost / ucv_name;
+            //         $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
+            //     }
+            // });
+
             $(document).on("input", ".cost-input", function() {
                 if (product_unit === "l") {
                     var cost = parseFloat($(this).val());
-                    var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
+                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
+                    // var cost_per_unit = cost / milliliters;
+                    var milliliters = ucv_name * 1000;
                     var cost_per_unit = cost / milliliters;
-
-                    console.log(ucv_name);
-
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "kg") {
                     var cost = parseFloat($(this).val());
-                    var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
+                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
+                    // var cost_per_unit = cost / milliliters;
+                    var milliliters = ucv_name * 1000;
                     var cost_per_unit = cost / milliliters;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "m") {
                     var cost = parseFloat($(this).val());
-                    var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 100;
-                    var cost_per_unit = cost / milliliters;
+                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 100;
+                    // var cost_per_unit = cost / milliliters;
+                    var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "ml") {
                     var cost = parseFloat($(this).val());
-                    var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    var cost_per_unit = cost / milliliters;
+                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
+                    // var cost_per_unit = cost / milliliters;
+                    var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "g") {
                     var cost = parseFloat($(this).val());
-                    var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    var cost_per_unit = cost / milliliters;
+                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
+                    // var cost_per_unit = cost / milliliters;
+                    var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "cm") {
                     var cost = parseFloat($(this).val());
-                    var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    var cost_per_unit = cost / milliliters;
+                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
+                    // var cost_per_unit = cost / milliliters;
+                    var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
             });
 
             // Calculate discounted price
-            // $(document).on("input", ".itemdicount", function() {
+            // $(document).on("input", ".itemdiscount", function() {
             //     var add_discount = parseFloat($(this).val());
 
             //     var discount = add_discount + 100;
-            //     console.log(discount);
 
             //     var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
-            //     console.log(qty);
 
             //     var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
             //     var item_cost = cost_input / qty;
-            //     console.log(item_cost);
 
             //     var item_sell_price = item_cost / 100 * discount;
-            //     console.log(item_sell_price);
 
             //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
             // });
 
-            $(document).on("input", ".itemdicount", function() {
+            // $(document).on("input", ".itemdiscount", function() {
+            //     var add_discount = parseFloat($(this).val());
+            //     var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
+
+            //     stock_cost = cost_input * qty * discount
+
+
+            //     var item_sell_price = cost_input - (cost_input * (add_discount / 100));
+
+            //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
+            // });
+
+            $(document).on("input", ".itemdiscount", function() {
                 var add_discount = parseFloat($(this).val());
-                var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
+                // var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
                 var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
 
-                var item_sell_price = cost_input / qty;
+                // var item_sell_price = cost_input / qty;
 
                 //  var discount =   100 - add_discount;
                 //  var item_cost = cost_input / qty;
                 // var item_sell_price = item_cost / 100 * discount;
 
-                $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
+                $(this).closest("tr").find("#item_sale_price").text(cost_input.toFixed(2));
             });
 
 
@@ -738,9 +750,7 @@ if (!isset($_SESSION['store_id'])) {
         $('#myModal').on('shown.bs.modal', function() {
             $('#myInput').trigger('focus')
         })
-    </script>
 
-    <script>
         $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
             var grnNumber = document.getElementById("grnNumber").innerText;
             var grnDate = document.getElementById("grnDate").innerText;
@@ -758,7 +768,6 @@ if (!isset($_SESSION['store_id'])) {
                 var cost_input = $(this).find(".cost_input").text();
                 if (item_discount > 0) {
                     cost_input = cost_input / 100 * (100 - item_discount)
-
                 }
 
                 var cost_per_unit = $(this).find(".cost_per_unit").text();
@@ -794,7 +803,6 @@ if (!isset($_SESSION['store_id'])) {
                     products: JSON.stringify(poArray),
                 },
                 success: function(response) {
-                    console.log(response);
                     Swal.mixin({
                         toast: true,
                         position: "top-end",

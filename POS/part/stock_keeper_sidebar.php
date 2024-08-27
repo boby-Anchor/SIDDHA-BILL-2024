@@ -112,6 +112,12 @@ if (isset($_SESSION['store_id'])) {
                 if ($user_shop_data['shop_id'] == 1) {
                 ?>
                   <li class="nav-item">
+                    <a href="edit-stock-new.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Edit Stock</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="view_all_stock.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>View all Stock</p>
@@ -137,7 +143,7 @@ if (isset($_SESSION['store_id'])) {
                 <li class="nav-item">
                   <a href="manage-grn.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p> GRN</p>
+                    <p>Manage GRN</p>
                   </a>
                 </li>
               </ul>
