@@ -7,24 +7,35 @@ $poArray = json_decode($_POST['products'], true);
 // $currentTime = date("H:i:s");
 // $currentdatetime = $currentDate . " " . $currentTime;
 
-// $currentdatetime =  date("Y-m-d H:i:s");
+$currentdatetime =  date("Y-m-d H:i:s");
+
+
+if (isset($_SESSION['store_id'])) {
+    $userData = $_SESSION['store_id'][0]; // Directly access the first (and only) row
+    $shop_id = $userData['shop_id'];
+}
 
 if (is_array($poArray) && !empty($poArray)) {
 
     foreach ($poArray as $product) {
 
         $stock_id = $product['stock_id'];
+        $barcode = $product['barcode'];
+        $name = $product['name'];
         $product_qty = $product['product_qty'];
         $min_qty = $product['min_qty'];
+        $price = $product['price'];
 
-        // $conn->query("INSERT INTO test (c1, c2, c3, c4)
-        // VALUES ('final', '$stock_id','$product_qty','$min_qty')");
+        $conn->query("INSERT INTO monthly_stock2 (stock_id, item_code, item_name, qty, date_time, shop_id)
+        VALUES ('$stock_id', '$barcode', '$name', '$product_qty', '$currentdatetime', '$shop_id')");
 
         $conn->query("UPDATE stock2 SET
         stock_item_qty = '$product_qty',
         stock_mu_qty = '$min_qty'
         WHERE
-        stock_id = '$stock_id'
+        stock_item_code = '$barcode' 
+        AND item_s_price ='$price'
+        AND stock_shop_id ='$shop_id'
         ");
 
         // $stock_id = $product['stock_id'];

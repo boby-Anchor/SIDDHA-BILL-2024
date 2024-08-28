@@ -5,57 +5,55 @@ include('config/db.php');
 $poArray = json_decode($_POST['products'], true);
 $invoiceNumber = $_SESSION["invoiceNumber"];
 
+$query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
+$cm = runQuery($query);
 
-if (is_array($poArray) && !empty($poArray)) {
+if (empty($cm)) {
 
-    $userId;
-    $shop_id;
-    $currentDateTime;
-    $selectBillType;
-    $paymentmethodselector;
-    $discountPercentage;
-    $deliveryCharges;
-    $valueAddedServices;
-    $cashAmount;
-    $cardAmount;
-    $balance;
-    $subTotal;
+    if (is_array($poArray) && !empty($poArray)) {
 
-    foreach ($poArray as $product) {
+        $userId;
+        $shop_id;
+        $currentDateTime;
+        $selectBillType;
+        $paymentmethodselector;
+        $discountPercentage;
+        $deliveryCharges;
+        $valueAddedServices;
+        $cashAmount;
+        $cardAmount;
+        $balance;
+        $subTotal;
 
-        $isPaththu = $product['isPaththu'];
-        $code = $product['code'];
-        $ucv = $product['ucv'];
-        $unit_price = $product['unit_price'];
-        $item_price = $product['item_price'];
-        $product_name = $product['product_name'];
-        $product_cost = $product['product_cost'];
-        $product_qty = $product['product_qty'];
-        $product_unit = $product['product_unit'];
-        $productTotal = $product['productTotal'];
+        foreach ($poArray as $product) {
 
-        $patientName = $product['patientName'];
-        $contactNo = $product['contactNo'];
-        $doctorName = $product['doctorName'];
-        $regNo = $product['regNo'];
+            $isPaththu = $product['isPaththu'];
+            $code = $product['code'];
+            $ucv = $product['ucv'];
+            $unit_price = $product['unit_price'];
+            $item_price = $product['item_price'];
+            $product_name = $product['product_name'];
+            $product_cost = $product['product_cost'];
+            $product_qty = $product['product_qty'];
+            $product_unit = $product['product_unit'];
+            $productTotal = $product['productTotal'];
 
-        $balance = $product['balance'];
-        $subTotal = $product['subTotal'];
-        $discountPercentage = $product['discountPercentage'];
-        $deliveryCharges = $product['deliveryCharges'];
-        $valueAddedServices = $product['valueAddedServices'];
-        $cashAmount = $product['cashAmount'];
-        $cardAmount = $product['cardAmount'];
-        $paymentmethodselector = $product['paymentmethodselector'];
-        $selectBillType = $product['selectBillType'];
-        $currentDateTime = date("Y-m-d H:i:s");
+            $patientName = $product['patientName'];
+            $contactNo = $product['contactNo'];
+            $doctorName = $product['doctorName'];
+            $regNo = $product['regNo'];
 
+            $balance = $product['balance'];
+            $subTotal = $product['subTotal'];
+            $discountPercentage = $product['discountPercentage'];
+            $deliveryCharges = $product['deliveryCharges'];
+            $valueAddedServices = $product['valueAddedServices'];
+            $cashAmount = $product['cashAmount'];
+            $cardAmount = $product['cardAmount'];
+            $paymentmethodselector = $product['paymentmethodselector'];
+            $selectBillType = $product['selectBillType'];
+            $currentDateTime = date("Y-m-d H:i:s");
 
-        // check if data has inserted with the same invoiceNumber
-        $query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
-        $cm = runQuery($query);
-
-        if (empty($cm)) {
             if (
                 !empty($product_unit) && !empty($ucv) && !empty($item_price) && !empty($product_name) &&
                 is_numeric($product_cost) && is_numeric($product_qty) && is_numeric($productTotal) && !empty($invoiceNumber)
@@ -184,28 +182,20 @@ if (is_array($poArray) && !empty($poArray)) {
                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code'
                         OR stock_minimum_unit_barcode = '$code')
                         AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
-
                     }
                 }
             } else {
                 exit;
             }
-        } else {
-            exit;
-        }
-    }  // close for-each $poArrary 
+        }  // close for-each $poArrary 
 
-    $query = "SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'";
-    $cm = runQuery($query);
-
-    if (empty($cm)) {
         $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
-    VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentmethodselector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
+        VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentmethodselector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
     } else {
-        exit;
+        echo "No products found or invalid data received.";
     }
 } else {
-    echo "No products found or invalid data received.";
+    exit;
 }
 
 unset($_SESSION["invoiceNumber"]);

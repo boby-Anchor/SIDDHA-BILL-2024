@@ -555,13 +555,19 @@ if (!isset($_SESSION['store_id'])) {
 
             $("#grnConfirmationTableBody tr").each(function() {
                 var stock_id = $(this).find(".stock_id").text();
+                var barcode = $(this).find(".barcode").text();
+                var name = $(this).find(".name").text();
                 var product_qty = $(this).find(".qty").text();
                 var min_qty = $(this).find(".min_qty").text();
+                var price = $(this).find(".price").text();
 
                 var productData = {
                     stock_id: stock_id,
+                    barcode: barcode,
+                    name: name,
                     product_qty: product_qty,
                     min_qty: min_qty,
+                    price:price,
                 };
                 poArray.push(productData);
             });

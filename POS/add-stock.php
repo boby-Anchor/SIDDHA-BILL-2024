@@ -744,9 +744,7 @@ if (!isset($_SESSION['store_id'])) {
             adjustVisibilityForPackRows()
 
         });
-    </script>
 
-    <script>
         $('#myModal').on('shown.bs.modal', function() {
             $('#myInput').trigger('focus')
         })
