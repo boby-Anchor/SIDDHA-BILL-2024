@@ -27,24 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    //  $conn->query("INSERT INTO `test`(`c1`, `c2`) VALUES ('$user_id','$shop_id')");
-    //  $conn->query("INSERT INTO `test`(`c1`, `c2`) VALUES ('$start_date','$end_date')");
-
     $sql = $conn->query("SELECT invoices.*, payment_type.payment_type, bill_type.bill_type_name ,users.name ,shop.shopName
-                         FROM invoices 
-                         INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method 
-                         INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id 
-                         INNER JOIN users ON users.id = invoices.user_id 
-                         INNER JOIN shop ON shop.shopId = invoices.shop_id 
-                         WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' 
-                         AND invoices.shop_id = '$shop_id' 
-                         ORDER BY invoices.created
-                         ");
-    // shop_id
-    $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount 
-                                               FROM invoices 
-                                               WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' 
-                                               "));
+    FROM invoices
+    INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method 
+    INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id
+    INNER JOIN users ON users.id = invoices.user_id
+    INNER JOIN shop ON shop.shopId = invoices.shop_id
+    WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date'
+    AND invoices.shop_id = '$shop_id'
+    ORDER BY invoices.created
+    ");
+    $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount
+    FROM invoices 
+    WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date'
+    "));
 
     $output = '';
     while ($row = mysqli_fetch_assoc($sql)) {

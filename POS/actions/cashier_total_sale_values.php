@@ -2,15 +2,6 @@
 include('../config/db.php');
 session_start();
 
-?>
-<style>
-    .labInvo {
-        font-weight: bold;
-        color: #3E8F0C;
-    }
-</style>
-
-<?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = json_decode($_POST['sd'], true);
     $start_date = $data['STDATE'];
@@ -28,19 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $shop_id = $userData['shop_id'];
         }
     }
-$sellAmountResult = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount)
+    $sellAmountResult = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount)
         AS total_amount FROM invoices
         WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
-$cashPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount
+    $cashPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount
         FROM invoices
         WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
-$cardPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount
+    $cardPaymentResult = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount
         FROM invoices
         WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
-$cashoutResult = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout
+    $cashoutResult = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout
         FROM invoices
         WHERE DATE(`created`) BETWEEN '$start_date' AND '$end_date' "));
 
@@ -51,26 +42,26 @@ $cashoutResult = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) 
                 <div class="col-md-3">
                     <div class="card card-body bg-success">
                         <h2 class="text-white text-uppercase">Sell Amount</h2>
-                        <p class="totalAmount">'.number_format($sellAmountResult['total_amount'],0).' LKR</p>
+                        <p class="totalAmount">' . number_format($sellAmountResult['total_amount'], 0) . ' LKR</p>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="card card-body bg-info">
                         <h2 class="text-white text-uppercase">Cash Payments</h2>
-                        <p class="totalAmount">'.number_format($cashPaymentResult['cash_amount'],0).'LKR</p>
+                        <p class="totalAmount">' . number_format($cashPaymentResult['cash_amount'], 0) . 'LKR</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card card-body bg-primary">
                         <h2 class="text-white text-uppercase">Card Payments</h2>
-                       <p class="totalAmount">' .number_format($cardPaymentResult['cardPaidAmount'],0).'LKR</p>
+                       <p class="totalAmount">' . number_format($cardPaymentResult['cardPaidAmount'], 0) . 'LKR</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card card-body bg-danger">
                         <h2 class="text-white text-uppercase">Cash Out</h2>
-                        <p class="totalAmount">-' .$cashoutResult['cashout'].'LKR</p>
+                        <p class="totalAmount">-' . $cashoutResult['cashout'] . 'LKR</p>
                     </div>
                 </div>
 
@@ -81,4 +72,3 @@ $cashoutResult = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) 
 
     echo $output;
 }
-?>

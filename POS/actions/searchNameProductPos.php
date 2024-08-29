@@ -1,10 +1,10 @@
 <?php
 session_start();
-include ('../config/db.php');
+include('../config/db.php');
 
 if (isset($_SESSION['store_id'])) {
     $userLoginData = $_SESSION['store_id'];
-// AND stock2.stock_item_qty > 0 ORDER BY p_medicine.name ASC
+    // AND stock2.stock_item_qty > 0 ORDER BY p_medicine.name ASC
     foreach ($userLoginData as $userData) {
         $shop_id = $userData['shop_id'];
         $searchName = !empty($_POST['searchName']) ? $_POST['searchName'] : null;
@@ -17,12 +17,11 @@ if (isset($_SESSION['store_id'])) {
         INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
         INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
         WHERE stock2.stock_shop_id = '$shop_id'
-        
         ";
-        
 
         if (!empty($searchName)) {
-            $query .= " AND p_medicine.name LIKE '%$searchName%'";
+            // $query .= " AND p_medicine.name LIKE '%$searchName%'";
+            $query .= " AND p_medicine.name LIKE '%$searchName%' ORDER BY bName ASC";
         } else if ($searchName == "") {
             $query = "SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name ,
             medicine_unit.unit AS unit2 , unit_category_variation.ucv_name AS ucv_name2 
@@ -32,7 +31,8 @@ if (isset($_SESSION['store_id'])) {
             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
             WHERE stock2.stock_shop_id = '$shop_id' 
-                   ";
+            ORDER BY bName ASC
+            ";
         }
 
         $cm = runQuery($query);
@@ -63,13 +63,11 @@ if (isset($_SESSION['store_id'])) {
 
 ?>
 
-
 <!-- <div class="product-image">
     <a href="#" class="image">
         <img src="dist/img/product/' . $v['img'] . '" width="50" alt="Image">
     </a>
 </div> -->
-
 
 <!--<h4 class="title"><a href="#" style="color: #fff;">' . $v['name'] . '<br> -->
 <!--                                 '. $v['code'] .'-->
