@@ -20,5 +20,5 @@ if (isset($_SESSION['store_id'])) {
 } else {
     echo "Session Expired !";
 }
-?>    
+?>
     <?= trim($invoiceNumber); ?>

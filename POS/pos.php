@@ -333,21 +333,17 @@ if (!isset($_SESSION['store_id'])) {
                         <option value="Athata Paththuwa">Athata Paththuwa</option>
                         <option value="Badata Paththuwa">Badata Paththuwa</option>
                         <option value="Bellata Paththuwa">Bellata Paththuwa</option>
-                        <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa
-                          Paththuwa</option>
-                        <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa
-                        </option>
+                        <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa Paththuwa</option>
+                        <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa </option>
                         <option value="Danahisata Paththuwa">Danahisata Paththuwa</option>
                         <option value="Gaath Paththuwa">Gaath Paththuwa</option>
                         <option value="Kalawata Paththuwa">Kalawata Paththuwa</option>
                         <option value="Kakulata Paththuwa">Kakulata Paththuwa</option>
                         <option value="Kenda Paththuwa">Kenda Paththuwa</option>
-                        <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa
-                        </option>
+                        <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa </option>
                         <option value="Pitata Paththuwa">Pitata Paththuwa</option>
                         <option value="Thattamata Paththuwa">Thattamata Paththuwa</option>
-                        <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata
-                          Paththuwa</option>
+                        <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata Paththuwa</option>
                         <option value="Urahisata Paththuwa">Urahisata Paththuwa</option>
                         <option value="Walalukara Paththuwa">Walalukara Paththuwa</option>
                         <option value="Welamitata Paththuwa">Welamitata Paththuwa</option>
@@ -584,7 +580,6 @@ if (!isset($_SESSION['store_id'])) {
       placeholder: "Select medicine unit"
     });
   });
-
 </script>
 
 <script src="dist/js/pos.js"></script>
