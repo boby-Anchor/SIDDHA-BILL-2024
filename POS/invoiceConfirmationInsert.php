@@ -136,10 +136,10 @@ if (isset($_SESSION['store_id'])) {
                         AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                         AND unit_s_price = '$product_cost'");
                         }
-                    } else if ($product_unit == 'cm') {
+                    } else if ($product_unit == 'm') {
 
                         if ($item_price == $product_cost) {
-                            $product_minimum_qty = $product_qty * 100 * $ucv;
+                            $product_minimum_qty = $product_qty * 100;
                             $conn->query("UPDATE stock2 SET
                         stock_item_qty = (stock_item_qty -  $product_qty), 
                         stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
@@ -149,7 +149,7 @@ if (isset($_SESSION['store_id'])) {
                         } else {
                             $product_minimum_qty = $product_qty;
                             $conn->query("UPDATE stock2 SET
-                        stock_item_qty = ROUND((stock_mu_qty - $product_minimum_qty) / $ucv, 2), 
+                        stock_item_qty = ROUND((stock_mu_qty - $product_minimum_qty) / 100, 2), 
                         stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                         AND unit_s_price = '$product_cost'");

@@ -101,7 +101,7 @@ if (is_array($poArray) && !empty($poArray)) {
                                     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                                     AND unit_s_price = '$product_cost' ");
                             }
-                        } else if ($product_unit == 'cm') {
+                        } else if ($product_unit == 'm') {
 
                             if ($item_price == $product_cost) { // item s price
                                 $product_minimum_qty = $product_qty * 100 * $ucv;
@@ -110,7 +110,7 @@ if (is_array($poArray) && !empty($poArray)) {
                                 AND item_s_price = '$product_cost'");
                             } else { //unit s price
                                 $product_minimum_qty = $product_qty;
-                                $conn->query("UPDATE stock2 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty') / '$ucv', 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
+                                $conn->query("UPDATE stock2 SET stock_item_qty = ROUND((stock_mu_qty - '$product_minimum_qty'), 2), stock_mu_qty = (stock_mu_qty - '$product_minimum_qty')
                             WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                             AND unit_s_price = '$product_cost' ");
                             }
