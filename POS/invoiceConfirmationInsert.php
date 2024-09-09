@@ -61,7 +61,7 @@ if (isset($_SESSION['store_id'])) {
                 $item_cost = $product['item_cost'];
                 $item_price = $product['item_price'];
 
-                $conn->query("INSERT INTO dmItems (invoice_id, invoiceDate, dmName, itemPrice, totalPrice)
+                $conn->query("INSERT INTO dm_items (invoice_id, invoiceDate, dmName, itemPrice, totalPrice)
                 VALUES ('$invoiceNumber', '$currentDateTime', '$product_name', '$item_cost', '$item_price')");
             }  // close for-each $dMData 
         }  // dMData[] end

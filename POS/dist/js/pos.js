@@ -336,7 +336,7 @@ function addDoctorMedicine() {
   </tr>
   `;
 
-    doctorMedicineResults.insertAdjacentHTML("beforeend", txt);
+    doctorMedicineResults.innerHTML = txt;
 
     doctorMedicineNameElement.value = "";
     doctorMedicineValueElement.value = "";
@@ -715,7 +715,7 @@ function printInvoice() {
   // After printing, reload the pos.php file
   printWindow.onafterprint = function () {
     printWindow.close(); // Close the print window
-    // window.location.reload();
+    window.location.reload();
     // Reload the pos.php file in the main window
   };
 }

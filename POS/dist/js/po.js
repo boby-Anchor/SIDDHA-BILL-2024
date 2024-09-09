@@ -111,10 +111,6 @@ function getBarcode(barcode, stock_s_price) {
   $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
 
-function testFunction() {
-  console.log("testing123");
-}
-
 // update total by qty
 function updateTotal(input) {
   var quantity = parseInt(input.value);
@@ -161,7 +157,6 @@ function removeRow(button) {
 }
 
 // add discount
-
 function addDiscount() {
   var discountPercentage = document.getElementById("discountPercentage").value;
   var productsAllTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
@@ -171,7 +166,6 @@ function addDiscount() {
 }
 
 // netTotal calculation dislay
-
 function checkNetTotal() {
   var subTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
   var billType = document.getElementById("selectBillType");
@@ -216,7 +210,6 @@ function checkNetTotal() {
 }
 
 // subTotal Calculation display
-
 function calculateSubTotal() {
   var productsAllTotal = 0;
   $(".barcodeResults tbody tr").each(function () {
@@ -243,6 +236,7 @@ function calculateSubTotal() {
   });
 }
 
+// invoice print
 function printInvoice() {
   var printWindow = window.open("", "_blank");
   printWindow.document.write("<html><head><title>Invoice</title>");
@@ -355,6 +349,7 @@ function printInvoice() {
   };
 }
 
+// checkout
 function checkout() {
   var po_shop_id = document.getElementById("po-shop-selector").value;
   var invoice_number = $(".invoiceNumber").text();
