@@ -219,7 +219,7 @@ if (!isset($_SESSION['store_id'])) {
               <div class="col-12" style="height: 40vh; overflow:auto;">
                 <div>
                   <table class="table barcodeResults">
-                    <tbody id="barcodeResults"></tbody>
+                    <tbody id="barcodeResults" class="overflow-y-auto" style="max-height: 50px !important;"></tbody>
                   </table>
                   <table class="table doctorMedicineResults">
                     <tbody id="doctorMedicineResults"></tbody>
@@ -233,7 +233,7 @@ if (!isset($_SESSION['store_id'])) {
 
         <!--item Search List Right-->
         <div class="col-12 col-md-5">
-          <div class="card-body h-100 bg-light overflow-hidden">
+          <div class="card-body bg-light">
 
             <div class="row">
 

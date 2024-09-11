@@ -51,7 +51,7 @@ if (!isset($_SESSION['store_id'])) {
 
                 <div class="col-12 col-md-7">
 
-                    <!--amount-->
+                    <!-- Bottom amounts-->
                     <div class="col-12 total_div">
 
                         <div class="row">
@@ -99,7 +99,9 @@ if (!isset($_SESSION['store_id'])) {
                             </div>
                         </div>
                     </div>
-                    <!--top-->
+                    <!-- Bottom amounts end-->
+
+                    <!--top po_shop, barcode, item price select-->
                     <div class="col-12">
                         <div class="row">
                             <div class="d-flex justify-content-evenly">
@@ -137,6 +139,7 @@ if (!isset($_SESSION['store_id'])) {
                             </div>
                         </div>
                     </div>
+                    <!-- top end -->
 
                 </div>
 
@@ -145,8 +148,6 @@ if (!isset($_SESSION['store_id'])) {
                     <div class="card-body h-100 bg-light overflow-hidden">
 
                         <div class="row">
-
-                            <!-- Company category end -->
 
                             <!-- Company Product list -->
                             <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
@@ -193,7 +194,8 @@ if (!isset($_SESSION['store_id'])) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                    <?php }
+                                    <?php
+                                                }
                                             }
                                         }
                                     } ?>

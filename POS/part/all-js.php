@@ -8,7 +8,7 @@
     <script src="dist/js/adminlte.min.js"></script>
 
     <!-- addToShop-Product JS -->
-    <script src="dist/js/addToShop-product.js"></script>
+    <!-- <script src="dist/js/addToShop-product.js"></script> -->
 
     <!-- add purch -->
     <script src="dist/js/add-purchase.js"></script>
