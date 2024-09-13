@@ -34,16 +34,16 @@ if (!isset($_SESSION['store_id'])) {
 
             <div class="content-wrapper bg-dark">
                 <div class="row w-100">
-                    
+
                     <div class="col-12 col-md-12 bg-dark customize-bar-main">
                         <div class="col-12 cbTittleMain mb-2">
                             <h1>Add Bill</h1>
                         </div>
-                       
+
                         <div class="col-12 ">
                             <table class="w-100" id="sortable">
                                 <thead></thead>
-                               
+
                                 <tr>
                                     <td colspan="3" class="">
                                         <div class="col-12 d-flex justify-content-center mb-2">
@@ -636,10 +636,9 @@ if (!isset($_SESSION['store_id'])) {
 
         <!-- select2 input field -->
 
-
-
         <!-- ========================================== -->
 
+        <script src="dist/js/customize_bill.js"></script>
 
     </body>
 
