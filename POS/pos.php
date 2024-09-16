@@ -38,7 +38,7 @@ if (!isset($_SESSION['store_id'])) {
   <div class="wrapper">
 
     <!-- Navbar -->
-    <?php //include("part/navbar.php"); 
+    <?php include("part/navbar.php");
     ?>
     <!-- Navbar end -->
 
@@ -246,7 +246,7 @@ if (!isset($_SESSION['store_id'])) {
 
                 <!-- Search and paththu button -->
                 <div class="input-group mt-3 form-group ">
-                  <input type="search" class="form-control" name="search21" id="search21"
+                  <input type="search" class="form-control mx-1" name="search21" id="search21"
                     onkeyup="searchProducts(); return false;" placeholder="Search...">
                   <button class="btn btn-outline-success mx-1" data-toggle="modal"
                     data-target="#addPaththuModal">Paththu</button>

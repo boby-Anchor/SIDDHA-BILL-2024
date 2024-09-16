@@ -55,145 +55,143 @@ if (!isset($_SESSION['store_id'])) {
 
             <div class="card-body">
 
-              <form action="actions/addProduct.php" method="POST" enctype="multipart/form-data">
-                <div class="card-body">
+              <!-- <form action="actions/addProduct.php" method="POST" enctype="multipart/form-data"> -->
+              <div class="card-body">
 
-                  <div class="form-group ">
-                    <div class="row">
-                      <div class="d-flex col-md-4">
-                        <label>Brand</label>
-                      </div>
-                      <div class="d-flex col-md-3">
-                        <label>Category</label>
-                      </div>
-                      <div class="d-flex col-md-3">
-                        <label for="name">Unit</label>
-                      </div>
+                <div class="form-group ">
+                  <div class="row">
+                    <div class="d-flex col-md-4">
+                      <label>Brand</label>
                     </div>
-                    <div class="row">
-                      <div class="d-flex col-md-4">
-                        <select class="form-control select2" name="brand_product" required>
-                          <option value="" selected="selected">Select Type</option>
-                          <?php
-                        $sql = $conn->query("SELECT * FROM `p_brand` ORDER BY name ASC"); 
-                          while ($row = mysqli_fetch_assoc($sql)) {
-                          ?>
-                            <option class="text-capitalize" value="<?php echo $row['id']; ?>"><?php echo ucfirst($row['name']); ?></option>
-                          <?php
-                          }
-                          ?>
-                        </select>
-                        <a href="add-brand.php" class="btn btn-info"><i class="fas fa-plus"></i></a>
-                      </div>
-                      <div class="d-flex col-md-3">
-                        <select class="form-control select2" name="category_product" required>
-                          <option value="" selected="selected">Select Type</option>
-                          <?php
-                           $sql = $conn->query("SELECT * FROM `p_medicine_category` ORDER BY name ASC");
-                          while ($row = mysqli_fetch_assoc($sql)) {
-                          ?>
-                            <option class="text-capitalize" value="<?php echo $row['id']; ?>"><?php echo ucfirst($row['name']); ?></option>
-                          <?php
-                          }
-                          ?>
-                        </select>
-                        <a href="add-category.php" class="btn btn-info"><i class="fas fa-plus"></i></a>
-                      </div>
-                      <div class="col-sm-4 col-md-2">
-                        <select class="form-control select2 medicine-unit-select" name="unit" required>
-                          <option value="0" selected="selected">Select Unit</option>
-                          <?php
-                          $medicine_unit_rs = $conn->query("SELECT * FROM medicine_unit");
-                          while ($medicine_unit_row = $medicine_unit_rs->fetch_assoc()) {
-                          ?>
-                            <option value="<?= $medicine_unit_row['id'] ?>"><?= $medicine_unit_row['unit'] ?></option>
-                          <?php
-                          }
-                          ?>
-                        </select>
-                      </div>
-
-                      <div class="d-flex col-md-3">
-                        <select class="form-control select2" name="unit_variation" required>
-                          <option value="" selected="selected">Select Type</option>
-                        </select>
-                        <a href="add-unit-variation.php" class="btn btn-info"><i class="fas fa-plus"></i></a>
-                      </div>
+                    <div class="d-flex col-md-3">
+                      <label>Category</label>
+                    </div>
+                    <div class="d-flex col-md-3">
+                      <label for="name">Unit</label>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <div class="row">
-                      <div class="d-flex col-md-6">
-                        <label for="name">Product Name</label>
-                      </div>
-                      <div class="d-flex col-md-4">
-                        <label for="name">Code</label>
-                      </div>
-
+                  <div class="row">
+                    <div class="d-flex col-md-4">
+                      <select class="form-control select2" id="brand_product" name="brand_product" required>
+                        <option value="" selected="selected">Select Type</option>
+                        <?php
+                        $sql = $conn->query("SELECT * FROM `p_brand` ORDER BY name ASC");
+                        while ($row = mysqli_fetch_assoc($sql)) {
+                        ?>
+                          <option class="text-capitalize" value="<?php echo $row['id']; ?>"><?php echo ucfirst($row['name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                      <a href="add-brand.php" class="btn btn-info"><i class="fas fa-plus"></i></a>
                     </div>
-                    <div class="row">
-                      <div class="col-sm-12 col-md-6">
-                        <input type="text" class="form-control" id="name" placeholder="Enter Product Name" name="product_name" required>
-                      </div>
-                      <div class="d-flex col-md-4">
-                        <input type="text" class="form-control" id="code" placeholder="Enter Product Code" name="product_code" required>
-                      </div>
+                    <div class="d-flex col-md-3">
+                      <select class="form-control select2" id="category_product" name="category_product" required>
+                        <option value="" selected="selected">Select Type</option>
+                        <?php
+                        $sql = $conn->query("SELECT * FROM `p_medicine_category` ORDER BY name ASC");
+                        while ($row = mysqli_fetch_assoc($sql)) {
+                        ?>
+                          <option class="text-capitalize" value="<?php echo $row['id']; ?>"><?php echo ucfirst($row['name']); ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                      <a href="add-category.php" class="btn btn-info"><i class="fas fa-plus"></i></a>
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                      <select class="form-control select2 medicine-unit-select" id="unit" name="unit" required>
+                        <option value="0" selected="selected">Select Unit</option>
+                        <?php
+                        $medicine_unit_rs = $conn->query("SELECT * FROM medicine_unit");
+                        while ($medicine_unit_row = $medicine_unit_rs->fetch_assoc()) {
+                        ?>
+                          <option value="<?= $medicine_unit_row['id'] ?>"><?= $medicine_unit_row['unit'] ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                    </div>
+
+                    <div class="d-flex col-md-3">
+                      <select class="form-control select2" id="unit_variation" name="unit_variation" required>
+                        <option value="" selected="selected">Select Type</option>
+                      </select>
+                      <a href="add-unit-variation.php" class="btn btn-info"><i class="fas fa-plus"></i></a>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <div class="row">
-                      <div class="d-flex col-md-4">
-                        <label>Product Details</label>
-                      </div>
-                      <div class="d-flex col-md-4">
-                        <label></label>
-                      </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="d-flex col-md-6">
+                      <label for="name">Product Name</label>
                     </div>
-                    <div class="row">
-                      <div class="d-flex col-md-4">
-                        <textarea class="form-control" rows="4" placeholder="Enter description..." name="details"></textarea>
-                      </div>
-                      <div class="d-flex col-md-6">
-                        <div class="row">
-                          <div class="col-8">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input" id="customFile" name="uploadfile" oninput="img_preview.src=window.URL.createObjectURL(this.files[0])">
-                              <label class="custom-file-label">Choose file</label><br>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-4">
-                            <img id="img_preview" src="" alt="product image" height="250px" width="250px;">
+                    <div class="d-flex col-md-4">
+                      <label for="name">Code</label>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                      <input type="text" class="form-control" id="product_name" placeholder="Enter Product Name" name="product_name" required>
+                    </div>
+                    <div class="d-flex col-md-4">
+                      <input type="text" class="form-control" id="product_code" placeholder="Enter Product Code" name="product_code" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="d-flex col-md-4">
+                      <label>Product Details</label>
+                    </div>
+                    <!-- <div class="d-flex col-md-4">
+                      <label></label>
+                    </div> -->
+                  </div>
+                  <div class="row">
+                    <div class="d-flex col-md-4">
+                      <textarea class="form-control" rows="4" id="details" placeholder="Enter description..." name="details"></textarea>
+                    </div>
+                    <!-- <div class="d-flex col-md-6">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" name="uploadfile" oninput="img_preview.src=window.URL.createObjectURL(this.files[0])">
+                            <label class="custom-file-label">Choose file</label><br>
                           </div>
                         </div>
                       </div>
-                    </div>
-
+                      <div class="row">
+                        <div class="col-4">
+                          <img id="img_preview" src="" alt="product image" height="250px" width="250px;">
+                        </div>
+                      </div>
+                    </div> -->
                   </div>
+                </div>
 
-
-                  <div class="form-group pl-3">
-                    <button type="submit" class="btn btn-info" name="submit">Submit</button>
-                  </div>
-              </form>
+                <div class="form-group pl-3">
+                  <button class="btn btn-info" id="add_item" name="add_item">Submit</button>
+                </div>
+                <!-- </form> -->
+              </div>
             </div>
+
           </div>
-
         </div>
+      </section>
+      <!-- Main content end -->
     </div>
-    </section>
-    <!-- Main content end -->
-  </div>
-  <!-- Footer -->
-  <?php include("part/footer.php"); ?>
-  <!-- Footer End -->
+    <!-- Footer -->
+    <?php include("part/footer.php"); ?>
+    <!-- Footer End -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
   </div>
   <!-- ./wrapper -->
 
@@ -221,6 +219,104 @@ if (!isset($_SESSION['store_id'])) {
   </script>
 
   <script>
+    $(document).on("click", "#add_item", function() {
+
+      var product_name = document.getElementById("product_name").value;
+      var product_code = document.getElementById("product_code").value;
+      var unit = document.getElementById("unit").value;
+      var category_product = document.getElementById("category_product").value;
+      var unit_variation = document.getElementById("unit_variation").value;
+      var brand_product = document.getElementById("brand_product").value;
+      var details = document.getElementById("details").value;
+
+      // Validation checks
+      if (brand_product === "") {
+        errorMessageDisplay("Error", "Select brand");
+        return;
+      }
+
+      if (category_product === "") {
+        errorMessageDisplay("Error", "Select category");
+        return;
+      }
+
+      if (unit === "") {
+        errorMessageDisplay("Select unit");
+        return;
+      }
+
+      if (unit_variation === "") {
+        errorMessageDisplay("Select Unit variation");
+        return;
+      }
+
+      if (product_name === "") {
+        errorMessageDisplay("Enter product name");
+        return;
+      }
+
+      if (product_code === "") {
+        errorMessageDisplay("Enter barcode");
+        return;
+      }
+
+      var productData = {
+        product_name: product_name,
+        product_code: product_code,
+        unit: unit,
+        category_product: category_product,
+        unit_variation: unit_variation,
+        brand_product: brand_product,
+        details: details
+      };
+
+      var pDataArr = [];
+      pDataArr.push(productData);
+
+      $.ajax({
+        url: "actions/addProduct.php",
+        method: "POST",
+        data: {
+          product_details: productData,
+        },
+        success: function(response) {
+
+          // console.log(response);
+
+          successMessageDisplay("Information submit successfully");
+
+          // location.reload(true);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        },
+      });
+    });
+
+    function successMessageDisplay(message) {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      }).fire({
+        icon: "success",
+        title: "Success: " + message + "!",
+      });
+    }
+
+    function errorMessageDisplay(message) {
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      }).fire({
+        icon: "error",
+        title: "Error: " + message + ".",
+      });
+    }
+
     $(document).ready(function() {
       $('.medicine-unit-select').change(function() {
         var unitId = $(this).val();

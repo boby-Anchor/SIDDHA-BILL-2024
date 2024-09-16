@@ -148,13 +148,10 @@ if (!isset($_SESSION['store_id'])) {
                     <div class="card-body h-100 bg-light overflow-hidden">
 
                         <div class="row">
-
                             <!-- Company Product list -->
                             <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
-                                <form action="" method="post" onkeyup="searchProducts(); return false;">
-                                    <!-- Added method attribute -->
-                                    <input type="search" class="form-control" name="search21" id="search21" placeholder="Search...">
-                                </form>
+                                <!-- Added method attribute -->
+                                <input type="search" class="form-control mt-2" name="search21" id="search21" onkeyup="searchProducts();" placeholder="Search...">
                                 <div class="row" id="productGrid" class="productGrid">
                                     <?php
                                     if (isset($_SESSION['store_id'])) {
