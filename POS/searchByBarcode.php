@@ -16,16 +16,23 @@ if (isset($_POST["productCode"])) {
         <tbody>
             <?php
             //  $sql = $conn->query("SELECT * FROM p_medicine WHERE `name` LIKE '%$productName%'");
-            $sql = $conn->query("SELECT p_medicine.*, p_brand.name AS bName FROM p_medicine
+            $sql = $conn->query("SELECT p_medicine.*, p_brand.name AS bName , medicine_unit.unit AS unit , unit_category_variation.ucv_name
+            FROM p_medicine
             JOIN p_brand ON p_brand.id = p_medicine.brand
-            WHERE p_medicine.code LIKE '%$productCode%'");
+            INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+            WHERE p_medicine.code ='$productCode'");
 
             while ($row = mysqli_fetch_assoc($sql)) {
                 $medicine_id = $row["id"];
             ?>
                 <tr>
                     <th scope="row"><?= $row["id"] ?></th>
-                    <td><?= $row["name"] ?></td>
+                    <td><?= $row["name"] ?>
+                        (<?= $row['ucv_name'] ?><?php echo $row['unit']; ?>)
+                        <br>
+                        <?= $row["code"] ?>
+                    </td>
                     <td><?= $row["bName"] ?></td>
                     <td>
                         <div class="" id="mydiv<?= $row["id"] ?>">
@@ -77,7 +84,6 @@ if (isset($_POST["productCode"])) {
                                 </div>
                             </div>
                         </div>
-
 
 
                     </td>
