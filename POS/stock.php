@@ -9,7 +9,9 @@ if (!isset($_SESSION['store_id'])) {
 
 $totalRows = 0;
 $totalValue = 0;
+$totalCost = 0;
 $price = 0;
+$cost = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,7 +63,8 @@ $price = 0;
                         <th>Cost</th>
                         <th>Price</th>
                         <th>Available Stock</th>
-                        <th>Value</th>
+                        <th>Total Cost</th>
+                        <th>Total Value</th>
 
                       </tr>
                     </thead>
@@ -107,6 +110,22 @@ $price = 0;
                                 <?php
                                 if ($row['unit'] == "ml") {
                                   // Price per unit for ml
+                                  $cost = $row['p_cost'] * $row['p_a_stock'];
+                                } else if ($row['unit'] == "l") {
+                                  // Convert unit capacity value from liters to milliliters before calculating
+                                  // $cost = $row['p_cost'] / ($row['ucv_name'] * 1000) * $row['p_a_stock'];
+                                } else {
+                                  // Default calculation for other units
+                                  $cost = $row['p_a_stock'] * $row['p_cost'];
+                                }
+                                $totalCost += $cost;
+                                echo number_format($cost, 0);
+                                ?>
+                              </td>
+                              <td>
+                                <?php
+                                if ($row['unit'] == "ml") {
+                                  // Price per unit for ml
                                   $price = $row['p_s_price'] * $row['p_a_stock'];
                                 } else if ($row['unit'] == "l") {
                                   // Convert unit capacity value from liters to milliliters before calculating
@@ -116,7 +135,7 @@ $price = 0;
                                   $price = $row['p_a_stock'] * $row['p_s_price'];
                                 }
                                 // Round to 2 decimal points
-                                echo number_format($price, 2);
+                                echo number_format($price, 0);
                                 ?>
                               </td>
                             </tr>
@@ -128,11 +147,15 @@ $price = 0;
                     <tfoot>
                       <tr>
                         <td colspan="7" class="text-right"><strong>Total Rows:</strong></td>
-                        <td><?= $totalRows; ?></td>
+                        <td colspan="2"><?= $totalRows; ?></td>
+                      </tr>
+                      <tr>
+                        <td colspan="7" class="text-right"><strong>Total Cost:</strong></td>
+                        <td colspan="2"><?= number_format($totalCost, 0); ?></td>
                       </tr>
                       <tr>
                         <td colspan="7" class="text-right"><strong>Total Value:</strong></td>
-                        <td><?= number_format($totalValue, 2); ?></td>
+                        <td colspan="2"><?= number_format($totalValue, 0); ?></td>
                       </tr>
                     </tfoot>
                   </table>
