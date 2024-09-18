@@ -147,13 +147,16 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs(this.value);" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number"
+                                                onkeyup="fbs(this.value);" id="bnInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs(this.value);" id="pcInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Code"
+                                                onkeyup="fbs(this.value);" id="pcInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs(this.value);" id="pnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Name"
+                                                onkeyup="fbs(this.value);" id="pnInput">
                                         </div>
                                         <div class="col-12 products-table mt-4">
                                             <table class="table table-bordered">
@@ -207,7 +210,8 @@ if (!isset($_SESSION['store_id'])) {
 
                     </div>
                     <div class="po_btn col-6 d-none flex-column">
-                        <a type="button" class="btn btn-outline-success proceed-grn" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
+                        <a type="button" class="btn btn-outline-success proceed-grn" id="proceedGrnBtn">Proceed Order <i
+                                class="fas fa-arrow-right"></i></a>
                     </div>
                     <!-- right side desing end -->
                 </div>
@@ -248,7 +252,7 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="grnId">
                             <div class="row">
                                 <div class="col-4 text-center text-black fw-bold">
-                                    <label for="grnNumber">GRN No.</label>
+                                    <label>GRN No.</label>
                                     <?php
                                     echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
                                     ?>
@@ -258,18 +262,20 @@ if (!isset($_SESSION['store_id'])) {
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-3">
-                                                <label for="grnDate">Date</label>
+                                                <label>Date</label>
                                             </div>
                                             <div class="col-8">
-                                                <span class="fs-2 text-dark fw-bold" name="grnDate" id="grnDate"><?= $grnDate ?></span>
+                                                <span class="fs-2 text-dark fw-bold" name="grnDate"
+                                                    id="grnDate"><?= $grnDate ?></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-4 text-center">
-                                    <label for="grnTime">Added time</label>
-                                    <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
+                                    <label>Added time</label>
+                                    <span class="fs-2 text-dark fw-bold" name="grnTime"
+                                        id="grnTime"><?= $grnTime ?></span>
                                 </div>
                                 <div class="orderItem col-12 mt-4 mb-3">
                                     <table class="table table-bordered">
@@ -312,13 +318,13 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Alert end -->
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var ucv_name;
             var product_unit;
 
             // Function to adjust visibility based on product_unit
             function adjustVisibilityForPackRows() {
-                $(".addedProTable tbody tr").each(function() {
+                $(".addedProTable tbody tr").each(function () {
                     var rowProductUnit = $(this).find("#product_unit").text();
                     if (rowProductUnit !== 'pack / bottle') {
                         $(this).find(".auto-generate-m-unit").removeClass("d-none");
@@ -327,7 +333,7 @@ if (!isset($_SESSION['store_id'])) {
                 });
             }
 
-            $(document).on("click", ".add-btn", function() {
+            $(document).on("click", ".add-btn", function () {
                 // Fetch necessary data
                 var product_code = $(this).closest("tr").find("#product_code").text().trim();
                 var stock_id = $(this).closest("tr").find("#stock_id").text().trim();
@@ -340,7 +346,7 @@ if (!isset($_SESSION['store_id'])) {
                 var product_qty = 1;
 
                 var exists = false;
-                $(".addedProTable tbody tr").each(function() {
+                $(".addedProTable tbody tr").each(function () {
                     if ($(this).find("#product_code").text() === product_code) {
                         exists = true;
                         return false;
@@ -388,7 +394,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // Event listener for clicking the delete button
-            $(document).on("click", ".cus-delete", function() {
+            $(document).on("click", ".cus-delete", function () {
                 $(this).closest("tr").remove();
                 $("#proceedGrnBtn").removeAttr("data-toggle data-target");
                 $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
@@ -396,7 +402,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // Convert to minimum unit based on product_unit
-            $(document).on("input", ".qty-input", function() {
+            $(document).on("input", ".qty-input", function () {
                 if (product_unit === 'l') {
                     var liters = parseFloat($(this).val());
                     var milliliters = ucv_name * liters * 1000;
@@ -431,7 +437,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // add minimum qty manuel for generate cost per unit
-            $(document).on("input", ".cost-input", function() {
+            $(document).on("input", ".cost-input", function () {
                 if ($(this).closest("tr").find(".auto-generate-m-unit").hasClass("d-none")) {
                     var cost = parseFloat($(this).val());
                     var manual_unit_input = parseFloat($(this).closest("tr").find(".manual_unit_input").val());
@@ -440,7 +446,7 @@ if (!isset($_SESSION['store_id'])) {
                 }
             });
 
-            $(document).on("input", ".cost-input", function() {
+            $(document).on("input", ".cost-input", function () {
                 if (product_unit === "l") {
                     var cost = parseFloat($(this).val());
                     var milliliters = ucv_name * 1000;
@@ -480,7 +486,7 @@ if (!isset($_SESSION['store_id'])) {
                 }
             });
 
-            $(document).on("input", ".itemdiscount", function() {
+            $(document).on("input", ".itemdiscount", function () {
                 var add_discount = parseFloat($(this).val());
                 // var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
                 var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
@@ -498,15 +504,15 @@ if (!isset($_SESSION['store_id'])) {
     </script>
 
     <script>
-        $('#myModal').on('shown.bs.modal', function() {
+        $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
         })
 
-        $(document).on("click", ".proceed-grn", function() {
+        $(document).on("click", ".proceed-grn", function () {
 
             document.getElementById("grnConfirmationTableBody").innerHTML = '';
 
-            $(".addedProTable tbody tr").each(function() {
+            $(".addedProTable tbody tr").each(function () {
                 var stock_id = $(this).find("#stock_id").text().trim();
                 var product_code = $(this).find("th").text().trim();
                 var product_name = $(this).find("#addproduct_name").text().trim();
@@ -545,7 +551,7 @@ if (!isset($_SESSION['store_id'])) {
             });
         });
 
-        $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
+        $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function () {
             var grnNumber = document.getElementById("grnNumber").innerText;
             var grnDate = document.getElementById("grnDate").innerText;
             var grnTime = document.getElementById("grnTime").innerText;
@@ -553,7 +559,7 @@ if (!isset($_SESSION['store_id'])) {
 
             var poArray = [];
 
-            $("#grnConfirmationTableBody tr").each(function() {
+            $("#grnConfirmationTableBody tr").each(function () {
                 var stock_id = $(this).find(".stock_id").text();
                 var barcode = $(this).find(".barcode").text();
                 var name = $(this).find(".name").text();
@@ -567,7 +573,7 @@ if (!isset($_SESSION['store_id'])) {
                     name: name,
                     product_qty: product_qty,
                     min_qty: min_qty,
-                    price:price,
+                    price: price,
                 };
                 poArray.push(productData);
             });
@@ -578,7 +584,7 @@ if (!isset($_SESSION['store_id'])) {
                 data: {
                     products: JSON.stringify(poArray),
                 },
-                success: function(response) {
+                success: function (response) {
                     Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -599,7 +605,7 @@ if (!isset($_SESSION['store_id'])) {
                     });
                     $(".confirmPObtn").prop('disabled', false);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                     $(".confirmPObtn").prop('disabled', false);
                 },
@@ -638,7 +644,7 @@ if (!isset($_SESSION['store_id'])) {
             form.append("searchBy", searchBy);
 
             var req = new XMLHttpRequest();
-            req.onreadystatechange = function() {
+            req.onreadystatechange = function () {
                 if (req.readyState == 4 && req.status == 200) {
                     var response = req.responseText;
                     document.getElementById("filterBySupTable").innerHTML = response;
