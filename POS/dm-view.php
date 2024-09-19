@@ -168,26 +168,4 @@ $totalValue = 0;
 
 </body>
 
-<script>
-    $(document).on("click", "#searchPoNumber", function() {
-
-        var poNumber = $("#poNumber").val();
-        $("#poNumber").val("");
-
-        $.ajax({
-            url: "add-stock-from-po-actions.php",
-            method: "POST",
-            data: {
-                poNumber: poNumber,
-            },
-            success: function(response) {
-                $("#poItemTable").html(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            },
-        });
-    });
-</script>
-
 </html>
