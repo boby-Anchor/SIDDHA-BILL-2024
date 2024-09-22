@@ -163,7 +163,7 @@ if (isset($_SESSION['store_id'])) {
                         $qty_data = $qty_rs->fetch_assoc();
                         $qd = $qty_data['stock_mu_qty'];
                         $si = $qty_data['stock_item_qty'];
-                        $minimum_new_qty =  $product_qty;
+                        $minimum_new_qty = $product_qty;
 
                         $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty)
                     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' 

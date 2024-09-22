@@ -141,7 +141,7 @@ if (isset($_SESSION['store_id'])) {
                 </li>
 
                 <li class="nav-item">
-                  <a href="add-shop-stock.php" class="nav-link">
+                  <a href="add-stock-from-po.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Add Shop Stock</p>
                   </a>

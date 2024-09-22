@@ -32,8 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $invoiceData = $invResult->fetch_all(MYSQLI_ASSOC);
 
-        $result = $conn->query("SELECT *
+        $result = $conn->query("SELECT poinvoiceitems.*, unit_category_variation.ucv_name AS invoiceItem_ucv        
         FROM poinvoiceitems
+        INNER JOIN p_medicine ON poinvoiceitems.item_code = p_medicine.code
+        INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
         WHERE invoiceNumber = '$poNumber';
         ");
         $items = $result->fetch_all(MYSQLI_ASSOC);

@@ -53,8 +53,7 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="col-4">
                             <div class="input-group">
                                 <label for="poNumber" class="form-control bg-dark">Inv. No:</label>
-                                <input type="text" id="poNumber" name="poNumber"
-                                    class="form-control col-8 bg-dark"
+                                <input type="text" id="poNumber" name="poNumber" class="form-control col-8 bg-dark"
                                     value="">
                                 <button id="searchPo" class="form-control col-2 btn btn-success ml-2"><i
                                         class="fas fa-search"></i></button>
@@ -66,10 +65,12 @@ if (!isset($_SESSION['store_id'])) {
                                 <label>Stock Keeper: <label id="stockKeeper"></label> </label>
                             </div>
                             <div class="col">
-                                <label>From: <label id="shopName"></label></label>
+                                <label>From: <label class="d-none" id="shopId"></label>
+                                    <label id="shopName"></label></label>
                             </div>
                             <div class="col">
-                                <label>Sent to: <label id="poShopName"></label></label>
+                                <label>Sent to: <label class="d-none" id="poShopId"></label>
+                                    <label id="poShopName"></label></label>
                             </div>
                             <div class="col">
                                 <label>Date: <label id="date"></label></label>
@@ -88,10 +89,10 @@ if (!isset($_SESSION['store_id'])) {
 
                     <div class="row p-4">
                         <div class="col-12">
-                            <h1 id="results"></h1>
                             <table class="table table-dark table-striped table-bordered table-hover">
                                 <thead class="">
                                     <th>#</th>
+                                    <th>Name</th>
                                     <th>code</th>
                                     <th>ucv</th>
                                     <th>Qty</th>
@@ -104,6 +105,13 @@ if (!isset($_SESSION['store_id'])) {
 
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+
+                    <div class="row p-4">
+                        <div class="col-4">
+                            <button class="btn btn-success form-control d-none" id="addStockButton">Add
+                                stock to shop</button>
                         </div>
                     </div>
 
@@ -127,7 +135,7 @@ if (!isset($_SESSION['store_id'])) {
 </body>
 
 <script>
-    $(document).on("click", "#searchPo", function() {
+    $(document).on("click", "#searchPo", function () {
 
         var poNumber = $("#poNumber").val();
 
@@ -137,7 +145,7 @@ if (!isset($_SESSION['store_id'])) {
             data: {
                 poNumber: poNumber,
             },
-            success: function(response) {
+            success: function (response) {
 
                 var poResult;
 
@@ -147,18 +155,13 @@ if (!isset($_SESSION['store_id'])) {
 
                     var rowCount = 0;
                     $("#itemDataTable").empty();
-                    $("#stockKeeper").text('');
-                    $("#shopName").text();
-                    $("#poShopName").text();
-                    $("#date").text();
-                    $("#subtotal").text();
-                    $("#discount").text();
-                    $("#nettotal").text();
 
                     poResult = result.invoiceData[0];
                     $("#stockKeeper").text(poResult.stockKeeper);
                     $("#shopName").text(poResult.shop);
+                    $("#shopId").text(poResult.shop_id);
                     $("#poShopName").text(poResult.poShop);
+                    $("#poShopId").text(poResult.po_shop_id);
                     $("#date").text(poResult.created);
                     $("#subtotal").text(poResult.sub_total);
                     $("#discount").text(poResult.discount_percentage);
@@ -166,30 +169,36 @@ if (!isset($_SESSION['store_id'])) {
 
                     if (result.items) {
 
-                        result.items.forEach(function(itemData) {
+                        $("#addStockButton").removeClass("d-none");
+
+                        result.items.forEach(function (itemData) {
                             rowCount++;
                             var row = '<tr>' +
                                 '<td>' + rowCount + '</td>' +
-                                '<td>' + itemData.invoiceItem + '</td>' +
-                                '<td>' + itemData.invoiceItem_ucv + '</td>' +
-                                '<td>' + itemData.invoiceItem_qty + '</td>' +
+                                '<td id="product_name">' + itemData.invoiceItem + '</td>' +
+                                '<td id="product_code">' + itemData.item_code + '</td>' +
+                                '<td id="ucv">' + itemData.invoiceItem_ucv + '</td>' +
+                                '<td id="product_qty">' + itemData.invoiceItem_qty + '</td>' +
                                 '<td>' + itemData.invoiceItem_unit + '</td>' +
-                                '<td>' + itemData.invoiceItem_price + '</td>' +
-                                '<td>' + itemData.invoiceItem_total + '</td>' +
-                                '<td><input type="text" class="text-center" value="' + itemData.invoiceItem_qty + '"></td>' +
+                                '<td id="item_price">' + itemData.invoiceItem_price + '</td>' +
+                                '<td id="item_total">' + itemData.invoiceItem_total + '</td>' +
+                                '<td><input type="text" class="text-center" id="manual_qty" name="manual_qty" value="' + itemData.invoiceItem_qty + '"></td>' +
                                 '</tr>';
                             document.getElementById('itemDataTable').insertAdjacentHTML('beforeend', row);
                         });
                     } else {
                         var row = '<tr colspan="8">No Data Found</tr>';
+                        document.getElementById('itemDataTable').insertAdjacentHTML('beforeend', row);
                     }
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error(xhr.responseText);
             },
         });
     });
 </script>
+
+<script src="dist/js/add-stock-from-po.js"></script>
 
 </html>
