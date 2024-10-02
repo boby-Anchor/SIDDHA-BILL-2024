@@ -34,11 +34,12 @@ if (!isset($_SESSION['store_id'])) {
 
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed" onload="focus_filed();">
+<body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
 
     <!-- Navbar -->
-    <?php include("part/navbar.php"); ?>
+    <?php include("part/navbar.php");
+    ?>
     <!-- Navbar end -->
 
     <!-- Sidebar -->
@@ -61,17 +62,20 @@ if (!isset($_SESSION['store_id'])) {
 
                   <!--id="deliveryCharges" amountDiv-->
                   <div class="col-2 p-2 " id="deliveryChargesField">
-                    <input type="text" placeholder="DC" class="form-control col-10" id="deliveryCharges" name="deliveryCharges" onkeyup="checkNetTotal()">
+                    <input type="text" placeholder="DC" class="form-control col-10"
+                      id="deliveryCharges" name="deliveryCharges" onkeyup="checkNetTotal()">
                   </div>
 
                   <!--id="valueAddedServices" name="valueAddedServices"-->
                   <div class="col-2 p-2 " id="ServiceChargesField">
-                    <input type="text" class="form-control col-10" id="valueAddedServices" name="valueAddedServices" placeholder="VAS" onkeyup="checkNetTotal()">
+                    <input type="text" class="form-control col-10" id="valueAddedServices"
+                      name="valueAddedServices" placeholder="VAS" onkeyup="checkNetTotal()">
                   </div>
 
                   <!--id="packingChargesField" name="packingChargesField"-->
                   <div class="col-2 p-2 " id="packingChargesField">
-                    <input type="text" class="form-control col-10" id="packingChargesField" name="packingChargesField" placeholder="PC" onkeyup="checkNetTotal()">
+                    <input type="text" class="form-control col-10" id="packingChargesField"
+                      name="packingChargesField" placeholder="PC" onkeyup="checkNetTotal()">
                   </div>
 
                   <!--id="subTotal"-->
@@ -96,23 +100,29 @@ if (!isset($_SESSION['store_id'])) {
               <div class="col-12 p-1" style="background: #000;">
                 <div class="row" style="background: #000;">
                   <!-- discountPercentage -->
-                  <div class="col-4 p-2 " id="discountField" style="color:#000 !important; background: #000;">
-                    <input type="text" placeholder="Discount %" class="form-control col-8" id="discountPercentage" name="discountPercentage" onkeyup="addDiscount()">
+                  <div class="col-4 p-2 " id="discountField"
+                    style="color:#000 !important; background: #000;">
+                    <input type="text" placeholder="Discount %" class="form-control col-8"
+                      id="discountPercentage" name="discountPercentage" onkeyup="addDiscount()">
                   </div>
 
                   <!-- cashAmount -->
                   <div class="col-4 p-2 " id="cashAmountField">
-                    <input type="text" placeholder="Enter Cash Amount" class="form-control col-10" id="cashAmount" name="cashAmount" onkeyup="checkBalance(this)">
+                    <input type="text" placeholder="Enter Cash Amount" class="form-control col-10"
+                      id="cashAmount" name="cashAmount" onkeyup="checkBalance(this)">
                   </div>
 
                   <!-- cardAmount -->
                   <div class="col-4 p-2  d-none" id="cardAmountField">
-                    <input type="text" placeholder="Enter Card Amount" class="form-control col-10" id="cardAmount" name="cardAmount" onkeyup="checkBalance(this)">
+                    <input type="text" placeholder="Enter Card Amount" class="form-control col-10"
+                      id="cardAmount" name="cardAmount" onkeyup="checkBalance(this)">
                   </div>
                 </div>
               </div>
 
-              <!--"payment-method-selector"--> <!--balance--> <!--checkoutBtn-->
+              <!--"payment-method-selector"-->
+              <!--balance-->
+              <!--checkoutBtn-->
               <div class="col-12 " style="background: #0000004a;">
                 <div class="row">
                   <!--class="balance" id="balance"-->
@@ -124,7 +134,8 @@ if (!isset($_SESSION['store_id'])) {
                   </div>
                   <!--name="payment-method-selector" id="payment-method-selector" class="payment-method-selector"-->
                   <div class="col-6 d-flex justify-content-end align-items-center">
-                    <select name="payment-method-selector" id="payment-method-selector" class="payment-method-selector">
+                    <select name="payment-method-selector" id="payment-method-selector"
+                      class="payment-method-selector">
                       <?php
                       $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
@@ -137,7 +148,9 @@ if (!isset($_SESSION['store_id'])) {
                       ?>
                     </select>
                     <!--id="checkoutBtn"-->
-                    <button class="btn check-outBtn col-6" id="checkoutBtn" onclick="checkBalance()">Checkout <i class="bi bi-arrow-right-circle-fill"></i></button>
+                    <button class="btn check-outBtn col-6" id="checkoutBtn"
+                      onclick="checkBalance()">Checkout <i
+                        class="bi bi-arrow-right-circle-fill"></i></button>
                   </div>
 
                 </div>
@@ -150,10 +163,12 @@ if (!isset($_SESSION['store_id'])) {
             <div class="row">
               <div class="d-flex justify-content-evenly">
                 <div class="col-3 p-2">
-                  <input type="text" id="patientName" name="patientName" class="form-control" placeholder="Patient Name">
+                  <input type="text" id="patientName" name="patientName" class="form-control"
+                    placeholder="Patient Name">
                 </div>
                 <div class="col-3 p-2">
-                  <input type="text" id="contactNo" name="contactNo" class="form-control" placeholder="Contact No.">
+                  <input type="text" id="contactNo" name="contactNo" class="form-control"
+                    placeholder="Contact No.">
                 </div>
                 <div id="doctorNameField" class="col-3 p-2">
                   <select class="form-control select2" id="doctorName" name="doctorName">
@@ -173,13 +188,15 @@ if (!isset($_SESSION['store_id'])) {
                   </select>
                 </div>
                 <div id="regNoField" class="col-3 p-2">
-                  <input type="text" id="regNo" name="regNo" class="form-control" placeholder="REG No">
+                  <input type="text" id="regNo" name="regNo" class="form-control"
+                    placeholder="REG No">
                 </div>
               </div>
               <br>
 
               <div class="col-4 mb-2 p-2">
-                <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..." onchange="getBarcode2(this.value);">
+                <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
+                  onchange="getBarcode2(this.value);">
               </div>
               <div class="col-4 mb-2 p-2">
                 <select class="form-control" id="selectPrices" onchange="getBarcode3()"></select>
@@ -190,7 +207,8 @@ if (!isset($_SESSION['store_id'])) {
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
                   while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
                   ?>
-                    <option value="<?= $bill_type_row['bill_type_id'] ?>"><?= $bill_type_row['bill_type_name'] ?>
+                    <option value="<?= $bill_type_row['bill_type_id'] ?>">
+                      <?= $bill_type_row['bill_type_name'] ?>
                     </option>
                   <?php
                   }
@@ -201,7 +219,10 @@ if (!isset($_SESSION['store_id'])) {
               <div class="col-12" style="height: 40vh; overflow:auto;">
                 <div>
                   <table class="table barcodeResults">
-                    <tbody id="barcodeResults"></tbody>
+                    <tbody id="barcodeResults" class="overflow-y-auto" style="max-height: 50px !important;"></tbody>
+                  </table>
+                  <table class="table doctorMedicineResults">
+                    <tbody id="doctorMedicineResults"></tbody>
                   </table>
                 </div>
               </div>
@@ -212,11 +233,9 @@ if (!isset($_SESSION['store_id'])) {
 
         <!--item Search List Right-->
         <div class="col-12 col-md-5">
-          <div class="card-body h-100 bg-light overflow-hidden">
+          <div class="card-body bg-light">
 
             <div class="row">
-
-              <!-- Company category end -->
 
               <!-- Company Product list -->
               <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
@@ -225,11 +244,17 @@ if (!isset($_SESSION['store_id'])) {
                   <input type="search" class="" name="search21" id="search21" onkeyup="searchProducts(); return false;" placeholder="Search...">
                 </div> -->
 
-                <div class="input-group mt-3 form-group form-row">
-                  <button class="btn btn-outline-success mx-1" data-toggle="modal" data-target="#addPaththu">Paththu</button>
-                  <input type="search" class="form-control" name="search21" id="search21" onkeyup="searchProducts(); return false;" placeholder="Search...">
+                <!-- Search and paththu button -->
+                <div class="input-group mt-3 form-group ">
+                  <input type="search" class="form-control mx-1" name="search21" id="search21"
+                    onkeyup="searchProducts(); return false;" placeholder="Search...">
+                  <button class="btn btn-outline-success mx-1" data-toggle="modal"
+                    data-target="#addPaththuModal">Paththu</button>
+                  <button class="btn btn-outline-info mx-1" data-toggle="modal"
+                    data-target="#doctorMedicineModal">Doctor Medicine</button>
                 </div>
 
+                <!-- products grid -->
                 <div class="row" id="productGrid" class="productGrid">
                   <?php
                   if (isset($_SESSION['store_id'])) {
@@ -255,11 +280,16 @@ if (!isset($_SESSION['store_id'])) {
                           <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
                             <div class="product-grid h-100">
                               <div class="product-content">
-                                <div class="name" style="color: #fff;"><?php echo $v['name']; ?> <br> <?= $v['code']; ?></div>
-                                <div class="name" style="color: #f67019; font-size:20px;"><?php echo $v['bName']; ?></div>
-                                <div class="price" style="color: #3dce12;">I:- RS <?php echo $v['item_s_price']; ?></div>
-                                <div class="price" style="color: #d8f13b;">U:- RS <?php echo $v['unit_s_price']; ?></div>
-                                <div class="price" style="color: #fff;">(<?= $v['ucv_name'] ?><?php echo $v['unit']; ?>)</div>
+                                <div class="name" style="color: #fff;"><?php echo $v['name']; ?> <br>
+                                  <?= $v['code']; ?></div>
+                                <div class="name" style="color: #f67019; font-size:20px;">
+                                  <?php echo $v['bName']; ?></div>
+                                <div class="price" style="color: #3dce12;">I:- RS
+                                  <?php echo $v['item_s_price']; ?></div>
+                                <div class="price" style="color: #d8f13b;">U:- RS
+                                  <?php echo $v['unit_s_price']; ?></div>
+                                <div class="price" style="color: #fff;">
+                                  (<?= $v['ucv_name'] ?><?php echo $v['unit']; ?>)</div>
                               </div>
                             </div>
                           </div>
@@ -280,73 +310,108 @@ if (!isset($_SESSION['store_id'])) {
     <!-- confirm po modal end -->
 
     <!-- Paththu add -->
-
     <div class="container">
-      <div class="modal" id="addPaththu" role="dialog">
+      <div class="modal" id="addPaththuModal" role="dialog">
         <div class="modal-dialog d-flex justify-content-between ">
           <div class="modal-content bg-dark align-items-center vw-100">
             <div class="modal-header">
               <h4 class="modal-title">Paththu</h4>
             </div>
             <div class="modal-body">
-              <div class="grnId">
-                <div class="row">
+              <div class="row">
 
-                  <div class="col-12 mt-4 mb-3">
-                    <div class="form-group">
+                <div class="col-12 mb-2">
+                  <!-- paththu name -->
+                  <div class="form-group">
+                    <label for="paththuName" class="form-label">Name</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="paththuName">
 
-                      <label for="paththuName" class="form-label">Name</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" id="paththuName">
-                        <br>
-                        <select class="form-control" id="paththuSelect" onchange="setPaththu(this)">
-                          <option selected>Add...</option>
-                          <option value="Agili Paththuwa">Agili Paththuwa</option>
-                          <option value="Athata Paththuwa">Athata Paththuwa</option>
-                          <option value="Badata Paththuwa">Badata Paththuwa</option>
-                          <option value="Bellata Paththuwa">Bellata Paththuwa</option>
-                          <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa Paththuwa</option>
-                          <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa</option>
-                          <option value="Danahisata Paththuwa">Danahisata Paththuwa</option>
-                          <option value="Gaath Paththuwa">Gaath Paththuwa</option>
-                          <option value="Kalawata Paththuwa">Kalawata Paththuwa</option>
-                          <option value="Kakulata Paththuwa">Kakulata Paththuwa</option>
-                          <option value="Kenda Paththuwa">Kenda Paththuwa</option>
-                          <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa</option>
-                          <option value="Pitata Paththuwa">Pitata Paththuwa</option>
-                          <option value="Thattamata Paththuwa">Thattamata Paththuwa</option>
-                          <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata Paththuwa</option>
-                          <option value="Urahisata Paththuwa">Urahisata Paththuwa</option>
-                          <option value="Walalukara Paththuwa">Walalukara Paththuwa</option>
-                          <option value="Welamitata Paththuwa">Welamitata Paththuwa</option>
-                          <option value="Wilubata Paththuwa">Wilubata Paththuwa</option>
-                          <option value="Yatipathulata Paththuwa">Yatipathulata Paththuwa</option>
-                        </select>
+                      <select class="form-control" id="paththuSelect" onchange="setPaththu(this)">
+                        <option selected>Add...</option>
+                        <option value="Agili Paththuwa">Agili Paththuwa</option>
+                        <option value="Athata Paththuwa">Athata Paththuwa</option>
+                        <option value="Badata Paththuwa">Badata Paththuwa</option>
+                        <option value="Bellata Paththuwa">Bellata Paththuwa</option>
+                        <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa Paththuwa</option>
+                        <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa </option>
+                        <option value="Danahisata Paththuwa">Danahisata Paththuwa</option>
+                        <option value="Gaath Paththuwa">Gaath Paththuwa</option>
+                        <option value="Kalawata Paththuwa">Kalawata Paththuwa</option>
+                        <option value="Kakulata Paththuwa">Kakulata Paththuwa</option>
+                        <option value="Kenda Paththuwa">Kenda Paththuwa</option>
+                        <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa </option>
+                        <option value="Pitata Paththuwa">Pitata Paththuwa</option>
+                        <option value="Thattamata Paththuwa">Thattamata Paththuwa</option>
+                        <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata Paththuwa</option>
+                        <option value="Urahisata Paththuwa">Urahisata Paththuwa</option>
+                        <option value="Walalukara Paththuwa">Walalukara Paththuwa</option>
+                        <option value="Welamitata Paththuwa">Welamitata Paththuwa</option>
+                        <option value="Wilubata Paththuwa">Wilubata Paththuwa</option>
+                        <option value="Yatipathulata Paththuwa">Yatipathulata Paththuwa</option>
+                      </select>
 
-                      </div>
                     </div>
-
-                    <div class="form-group">
-                      <label for="paththuPrice" class="form-label">Price</label>
-                      <input type="number" class="form-control" id="paththuPrice" min="0" step="0.01" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                    </div>
-
                   </div>
-                </div>
+                  <!-- price input -->
+                  <div class="form-group">
+                    <label for="paththuPrice" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="paththuPrice" min="0" step="0.01"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                  </div>
 
+                </div>
               </div>
+
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-success addPaththuBtn" onclick="addPaththu()">Add</button>
+              <button type="button" class="btn btn-success addPaththuBtn"
+                onclick="addPaththu()">Add</button>
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
     <!-- Paththu add end -->
+    <!-- doctor medicine add -->
+    <div class="container">
+      <div class="modal" id="doctorMedicineModal" role="dialog">
+        <div class="modal-dialog d-flex justify-content-between ">
+          <div class="modal-content bg-dark align-items-center vw-100">
+            <div class="modal-header">
+              <h4 class="modal-title">Doctor Medicine</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row">
 
+                <div class="col-12 mb-2">
+                  <!-- medicine name -->
+                  <div class="form-group">
+                    <label for="doctorMedicineName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="doctorMedicineName">
+                  </div>
+                  <!-- price input -->
+                  <div class="form-group">
+                    <label for="doctorMedicinePrice" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="doctorMedicinePrice" min="0"
+                      step="0.01" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-success addPaththuBtn"
+                onclick="addDoctorMedicine()">Add</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- doctor medicine add end -->
     <!-- Footer -->
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
@@ -389,7 +454,9 @@ if (!isset($_SESSION['store_id'])) {
                   <tr>
                     <td colspan="3">
                       <div class="col-12 d-flex justify-content-center p-2">
-                        <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>" style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');"></div>
+                        <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>"
+                          style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');">
+                        </div>
                         <!-- <div class="text-center">
                           <label style="font-size: large; font-weight: 100;">
                             <h3>
@@ -407,10 +474,12 @@ if (!isset($_SESSION['store_id'])) {
                   <tr>
                     <td>
                       <div class="col-12 d-flex justify-content-center">
-                        <label class="contactNumber" id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
+                        <label class="contactNumber"
+                          id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
                       </div>
                       <div class="col-12 d-flex justify-content-center text-center center">
-                        <label id="addresspreview" class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
+                        <label id="addresspreview"
+                          class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
                         </label>
                       </div>
                     </td>
@@ -420,34 +489,57 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="col-12">
                   <div class="row">
                     <div class="col-12" style="text-align: center;">
-                      <span><span class="text-left" style="font-size: 10px;"><?= $currentDate ?> </span><span class="text-right"> <?= $currentTime ?></span> </span>
+                      <span><span class="text-left" style="font-size: 10px;"><?= $currentDate ?>
+                        </span><span class="text-right"> <?= $currentTime ?></span> </span>
                       <br>
-                      <span><span class="invoicePatientName" id="invoicePatientName"></span> <span id="InvoiceContactNumber"></span></span>
+                      <span><span class="invoicePatientName" id="invoicePatientName"></span> <span
+                          id="InvoiceContactNumber"></span></span>
                       <br>
-                      <span><span class="fw-bold"><?= $user_name ?> Inv.</span> <span class="fw-bolder" style="font-size: 10px;" id="invoiceNumber"></span></span>
+                      <span><span class="fw-bold"><?= $user_name ?> Inv.</span> <span class="fw-bolder"
+                          style="font-size: 10px;" id="invoiceNumber"></span></span>
                     </div>
                   </div>
                 </div>
 
                 <div class="col-12" style="border-bottom: #0e0e0e 0.2rem solid;"></div>
               </div>
-              <div class="printInvoiceData" id="printInvoiceData"> </div>
+              <!-- table header start -->
+              <div class="row">
+                <div class="col-4">
+                  <span class="product_cost">U.Price</span>
+                </div>
+                <div class="col-4 text-center">
+                  <span class="product_qty">
+                    QTY
+                  </span>
+                </div>
+                <div class="col-4 text-center">
+                  <span class="productTotal">Total</span>
+                </div>
+              </div>
+              <!-- table header end -->
+              <div class="printInvoiceData" id="printInvoiceData">
+
+              </div>
               <table>
                 <tr style="font-weight: 600;">
                   <td>
                     <div class="col-12 pt-2">
                       <div class="row">
                         <div class="col-12 d-flex justify-content-center text-center">
-                          <span id="billnotepreview" style="font-size:9px;"><?= $bill_data['bill_note'] ?></span>
+                          <span id="billnotepreview"
+                            style="font-size:9px;"><?= $bill_data['bill_note'] ?></span>
                         </div>
                         <div class="col-12 d-flex justify-content-center">
                           <span>Thank You !</span>
                         </div>
 
+                        <!-- Checked by box -->
                         <div class="col-12 d-flex justify-content-center">
                           <div class="check-by-box">
                             <center>
-                              <label style="font-weight:bold; margin-bottom:3px;">Check By</label>
+                              <label style="font-weight:bold; margin-bottom:3px;">Checked
+                                By</label>
                             </center>
 
                             <label for="date">Date: <?= $currentDate ?><?= $currentTime ?></label>
@@ -488,7 +580,6 @@ if (!isset($_SESSION['store_id'])) {
       placeholder: "Select medicine unit"
     });
   });
-
 </script>
 
 <script src="dist/js/pos.js"></script>

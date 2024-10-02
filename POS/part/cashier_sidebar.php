@@ -124,21 +124,34 @@ if (isset($_SESSION['store_id'])) {
 
 
 
-            <li class="nav-header">REPORTS</li>
+            <li class="nav-header">Reports</li>
             <!--<li class="nav-item">-->
             <!--  <a href="today-report.php" class="nav-link">-->
             <!--    <i class="nav-icon fas fa-copy"></i>-->
             <!--    <p>Today Report</p>-->
             <!--  </a>-->
             <!--</li>-->
+
+            <li class="nav-item">
+              <a href="dm-view.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Doc Med Report</p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="report-OldInvoices.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Old Invoices</p>
+              </a>
+            </li>
+
             <li class="nav-item">
               <a href="cashier-today-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>Today Sales Report</p>
               </a>
             </li>
-
-
 
             <li class="nav-item">
               <a href="cashier-sales-report.php" class="nav-link">

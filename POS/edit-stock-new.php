@@ -82,15 +82,6 @@ if (!isset($_SESSION['store_id'])) {
             text-indent: 5px;
         }
 
-        /* button.add-btn.btn.btn-outline-primary,
-        button.add-btn.btn.btn-outline-primary:focus,
-        button.add-btn.btn.btn-outline-primary:hover {
-            height: 30px;
-            line-height: 15px;
-            outline: 0 !important;
-            box-shadow: none;
-        } */
-
         .box {
             padding: 10px 0px;
         }
@@ -151,54 +142,21 @@ if (!isset($_SESSION['store_id'])) {
                     <div class="col-12">
                         <div class="card-body h-100 bg-dark overflow-hidden">
                             <div class="row">
-                                <!-- <div class="col-6"> -->
-                                <!-- <img src="dist/img/Siddha.lk (1).png" alt="" class="img-fluid"> -->
-                                <!-- </div> -->
-
-                                <!-- supplier selector start -->
-                                <!-- <div class="col-12 p-4">
-                                    <label for="select-supplier">Select Supplier</label>
-                                    <select name="select-supplier" id="select-supplier" class="form-control bg-dark" onchange="select_suplier(this.value);">
-                                        <option value="0">select supplier</option>
-
-                                        <?php
-                                        // if (isset($_SESSION['store_id'])) {
-
-                                        //     $userLoginData = $_SESSION['store_id'];
-
-                                        //     foreach ($userLoginData as $userData) {
-                                        //         $shop_id = $userData['shop_id'];
-                                        //         $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
-                                        //         INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
-                                        //         INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
-                                        //         WHERE producttoshop.shop_id = '$shop_id'
-                                        //         ");
-                                        //         while ($supplier_data = $supplier_rs->fetch_assoc()) {
-                                        ?>
-                                                    <option value="<?php // $supplier_data["id"] 
-                                                                    ?>"><?php // $supplier_data["name"] 
-                                                                        ?></option>
-                                        <?php
-                                        //         }
-                                        //     }
-                                        // }
-
-                                        ?>
-                                    </select>
-                                </div> -->
-                                <!-- supplier selector end -->
 
                                 <!-- supplier products start -->
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs(this.value);" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number"
+                                                onkeyup="fbs(this.value);" id="bnInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs(this.value);" id="pcInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Code"
+                                                onkeyup="fbs(this.value);" id="pcInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs(this.value);" id="pnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Name"
+                                                onkeyup="fbs(this.value);" id="pnInput">
                                         </div>
                                         <div class="col-12 products-table mt-4">
                                             <table class="table table-bordered">
@@ -214,66 +172,6 @@ if (!isset($_SESSION['store_id'])) {
                                                     </tr>
                                                 </thead>
                                                 <tbody id="filterBySupTable">
-                                                    <?php
-
-                                                    if (isset($_SESSION['store_id'])) {
-
-                                                        $userLoginData = $_SESSION['store_id'];
-
-                                                        foreach ($userLoginData as $userData) {
-                                                            $shop_id = $userData['shop_id'];
-                                                            //    p_medicine.code AS code ,
-                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid, p_medicine.name AS p_name, 
-                                                            p_medicine.code AS code,
-                                                            p_medicine.img AS img,
-                                                            p_medicine_category.name AS category, p_brand.name AS brand,
-                                                            medicine_unit.unit AS unit, unit_category_variation.ucv_name,
-                                                            stock2.stock_id AS stock_id,
-                                                            stock2.item_s_price AS itemSprice,
-                                                            stock2.unit_s_price AS unitSprice
-                                                            FROM producttoshop
-                                                            INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
-                                                            INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
-                                                            INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                                                            INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                                                            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                            LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-                                                            WHERE
-                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
-                                                            GROUP BY p_medicine.name, itemSprice
-                                                            ORDER BY p_medicine.name ASC
-                                                            ");
-
-                                                            $tableRowCount = 1;
-                                                            while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
-                                                    ?>
-                                                                <tr>
-                                                                    <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
-                                                                    <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
-                                                                    <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
-                                                                    <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
-                                                                    <th scope="row"><?= $tableRowCount ?></th>
-                                                                    <!-- <td>
-                                                                        <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
-                                                                    </td> -->
-                                                                    <td>
-                                                                        <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
-                                                                        (<?= $p_medicine_data['ucv_name'] ?>
-                                                                        <?= $p_medicine_data['unit'] ?>)
-                                                                    </td>
-                                                                    <td id="product_category"><?= $p_medicine_data['category'] ?></td>
-                                                                    <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
-                                                                    <td id="itemSprice"><?= $p_medicine_data['itemSprice'] ?></td>
-                                                                    <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
-                                                                    <td><button class="btn btn-outline-success add-btn">Add</button></td>
-                                                                </tr>
-                                                    <?php
-                                                                $tableRowCount++;
-                                                            }
-                                                        }
-                                                    }
-                                                    ?>
-
                                                 </tbody>
                                             </table>
 
@@ -302,10 +200,6 @@ if (!isset($_SESSION['store_id'])) {
                                         <th scope="col">Qty</th>
                                         <th scope="col">Minimum Unit Qty </th>
                                         <th scope="col">Item Price</th>
-                                        <th scope="col">Discount(%)</th>
-                                        <th scope="col">(1 Item) Sell Price</th>
-                                        <th scope="col">(1 Unit) Cost</th>
-                                        <th scope="col">(1 Unit) Sell Price & Barcode</th>
 
                                         <th scope="col"></th>
                                     </tr>
@@ -316,32 +210,13 @@ if (!isset($_SESSION['store_id'])) {
 
                     </div>
                     <div class="po_btn col-6 d-none flex-column">
-                        <a type="button" class="btn btn-outline-success proceed-grn" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
+                        <a type="button" class="btn btn-outline-success proceed-grn" id="proceedGrnBtn">Proceed Order <i
+                                class="fas fa-arrow-right"></i></a>
                     </div>
                     <!-- right side desing end -->
                 </div>
             </div>
         </div>
-
-        <!-- add new unit modal start -->
-
-        <!-- <div class="container">
-            <div class="modal fade" id="addunitmodal" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Add New Unit</h4>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" placeholder="Unite Name..." id="newUnit">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" onclick="addNewUnit();">Save</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
     </div>
 
     <!-- add new unit modal end -->
@@ -377,7 +252,7 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="grnId">
                             <div class="row">
                                 <div class="col-4 text-center text-black fw-bold">
-                                    <label for="grnNumber">GRN No.</label>
+                                    <label>GRN No.</label>
                                     <?php
                                     echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
                                     ?>
@@ -387,32 +262,31 @@ if (!isset($_SESSION['store_id'])) {
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-3">
-                                                <label for="grnDate">Date</label>
+                                                <label>Date</label>
                                             </div>
                                             <div class="col-8">
-                                                <span class="fs-2 text-dark fw-bold" name="grnDate" id="grnDate"><?= $grnDate ?></span>
+                                                <span class="fs-2 text-dark fw-bold" name="grnDate"
+                                                    id="grnDate"><?= $grnDate ?></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-4 text-center">
-                                    <label for="grnTime">Added time</label>
-                                    <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
+                                    <label>Added time</label>
+                                    <span class="fs-2 text-dark fw-bold" name="grnTime"
+                                        id="grnTime"><?= $grnTime ?></span>
                                 </div>
                                 <div class="orderItem col-12 mt-4 mb-3">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th scope="col">B-CODE</th>
-                                                <th scope="col">P-Name</th>
+                                                <th scope="col">Stock Id</th>
+                                                <th scope="col">Barcode</th>
+                                                <th scope="col">Product name</th>
                                                 <th scope="col">Qty</th>
-                                                <th scope="col">MU-Qty</th>
-                                                <th scope="col">Total Cost</th>
-                                                <th scope="col">Unit Cost</th>
-                                                <th scope="col">Unit S-Price</th>
-                                                <th scope="col">Discount(%)</th>
-                                                <th scope="col">Item S-Price</th>
+                                                <th scope="col">Minimun Qty</th>
+                                                <th scope="col">Item Price</th>
                                             </tr>
                                         </thead>
                                         <tbody id="grnConfirmationTableBody">
@@ -435,31 +309,22 @@ if (!isset($_SESSION['store_id'])) {
     </div>
     <!-- confirm po modal end -->
 
-
     <!-- Footer -->
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
-
 
     <!-- Alert -->
     <?php include("part/alert.php"); ?>
     <!-- Alert end -->
 
-
-    <!-- All JS -->
-    <?php include("part/all-js.php"); ?>
-    <!-- All JS end -->
-
-    <script src="dist/js/add-stock.js"></script>
-
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var ucv_name;
             var product_unit;
 
             // Function to adjust visibility based on product_unit
             function adjustVisibilityForPackRows() {
-                $(".addedProTable tbody tr").each(function() {
+                $(".addedProTable tbody tr").each(function () {
                     var rowProductUnit = $(this).find("#product_unit").text();
                     if (rowProductUnit !== 'pack / bottle') {
                         $(this).find(".auto-generate-m-unit").removeClass("d-none");
@@ -468,11 +333,12 @@ if (!isset($_SESSION['store_id'])) {
                 });
             }
 
-            $(document).on("click", ".add-btn", function() {
+            $(document).on("click", ".add-btn", function () {
                 // Fetch necessary data
-                var product_code = $(this).closest("tr").find("#product_code").text();
+                var product_code = $(this).closest("tr").find("#product_code").text().trim();
+                var stock_id = $(this).closest("tr").find("#stock_id").text().trim();
                 var product_name = $(this).closest("tr").find("#product_name").text().trim();
-                // var itemSprice = $(this).closest("tr").find("#itemSprice").text().trim();
+                var itemSprice = $(this).closest("tr").find("#itemSprice").text().trim();
                 var unitSprice = $(this).closest("tr").find("#unitSprice").text().trim();
                 ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
                 product_unit = $(this).closest("tr").find("#product_unit").text();
@@ -480,7 +346,7 @@ if (!isset($_SESSION['store_id'])) {
                 var product_qty = 1;
 
                 var exists = false;
-                $(".addedProTable tbody tr").each(function() {
+                $(".addedProTable tbody tr").each(function () {
                     if ($(this).find("#product_code").text() === product_code) {
                         exists = true;
                         return false;
@@ -494,15 +360,14 @@ if (!isset($_SESSION['store_id'])) {
                         "<th scope='row' id='product_code'>" + product_code + "</th>" +
                         "<td id='addproduct_name'>" + product_name + "</td>" +
                         "<td id='product_unit' class='d-none' >" + product_unit + "</td>" +
+                        "<td id='stock_id' class='d-none' >" + stock_id + "</td>" +
 
                         "<td>" +
                         "<input id='qty_input' type='text' class='bg-dark form-control text-center qty-input mb-2' value=''>" +
-                        "<input id='free_qty' placeholder='free of qty..' type='text' class='bg-dark form-control text-center free-qty-input' value=''>" +
                         "</td>" +
 
                         "<td class='text-center auto-generate-m-unit '>" +
                         "<label id='minimum_qty' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
-                        "<label id='free_minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
                         "</td>" +
 
                         "<td class='text-center manual-enter-m-unit d-none'>" +
@@ -510,26 +375,11 @@ if (!isset($_SESSION['store_id'])) {
                         "<input type='text' id='free_manual_unit_input' class='bg-dark form-control text-center free_manual_unit_input' value=''>" +
                         "</td>" +
 
-                        "<td>" + "<input type='text' id='cost_input' class='bg-dark form-control text-center cost-input' value=''></td>" +
-
-                        "<td>" + "<input placeholder='discount' id='item_discount' type='text' class='bg-dark form-control text-center itemdiscount' value=''>" + "</td>" +
-
-                        "<td>" + "<label id='item_sale_price'></label>" + "</td>" +
-
-                        "<td>" + "<label id='cost_per_unit'></label>" + "</td>" +
-
-
-
-                        "<td>" +
-                        "<input placeholder='unit price' id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input mb-2' value=''>" +
-                        "<input placeholder='barcode' id='unit_barcode' type='text' class='bg-dark form-control text-center unit_barcode' value=''>" +
-                        "</td>" +
-
+                        "<td>" + "<label id='cost_input' class='text-center cost-input'>" + itemSprice + "</label></td>" +
 
                         "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
 
                         "</tr>";
-
 
                     $(".addedProTable tbody").append(markup);
 
@@ -544,7 +394,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // Event listener for clicking the delete button
-            $(document).on("click", ".cus-delete", function() {
+            $(document).on("click", ".cus-delete", function () {
                 $(this).closest("tr").remove();
                 $("#proceedGrnBtn").removeAttr("data-toggle data-target");
                 $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
@@ -552,7 +402,7 @@ if (!isset($_SESSION['store_id'])) {
             });
 
             // Convert to minimum unit based on product_unit
-            $(document).on("input", ".qty-input", function() {
+            $(document).on("input", ".qty-input", function () {
                 if (product_unit === 'l') {
                     var liters = parseFloat($(this).val());
                     var milliliters = ucv_name * liters * 1000;
@@ -586,44 +436,8 @@ if (!isset($_SESSION['store_id'])) {
                 }
             });
 
-            // free qty input for auto generate minimum qty
-            $(document).on("input", ".free-qty-input", function() {
-                if (product_unit === 'l') {
-                    var liters = parseFloat($(this).val());
-                    var milliliters = ucv_name * liters * 1000;
-                    $(this).closest("tr").find("#free_minimum_qty").text(milliliters + "ml");
-
-                }
-                if (product_unit === 'kg') {
-                    var kilo = parseFloat($(this).val());
-                    var grams = ucv_name * kilo * 1000;
-                    $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-                }
-                if (product_unit === 'm') {
-                    var meter = parseFloat($(this).val());
-                    var centimete = ucv_name * meter * 100;
-                    $(this).closest("tr").find("#free_minimum_qty").text(centimete + "cm");
-
-                }
-                if (product_unit === 'ml') {
-                    var ml = parseFloat($(this).val());
-                    var mililiters = ucv_name * ml;
-                    $(this).closest("tr").find("#free_minimum_qty").text(mililiters + "ml");
-                }
-                if (product_unit === 'g') {
-                    var g = parseFloat($(this).val());
-                    var grams = ucv_name * g;
-                    $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-                }
-                if (product_unit === 'cm') {
-                    var cm = parseFloat($(this).val());
-                    var centimeters = ucv_name * cm;
-                    $(this).closest("tr").find("#free_minimum_qty").text(centimeters + "cm");
-                }
-            });
-
             // add minimum qty manuel for generate cost per unit
-            $(document).on("input", ".cost-input", function() {
+            $(document).on("input", ".cost-input", function () {
                 if ($(this).closest("tr").find(".auto-generate-m-unit").hasClass("d-none")) {
                     var cost = parseFloat($(this).val());
                     var manual_unit_input = parseFloat($(this).closest("tr").find(".manual_unit_input").val());
@@ -632,24 +446,9 @@ if (!isset($_SESSION['store_id'])) {
                 }
             });
 
-            // Calculate cost per unit based on product_unit
-            // $(document).on("input", ".cost-input", function() {
-            //     var product_unit = $(this).closest("tr").find("#product_unit").text();
-            //     var cost = parseFloat($(this).val());
-
-            //     var units = ["l", "kg", "m", "ml", "g", "cm"];
-
-            //     if (units.includes(product_unit)) {
-            //         var cost_per_unit = cost / ucv_name;
-            //         $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            //     }
-            // });
-
-            $(document).on("input", ".cost-input", function() {
+            $(document).on("input", ".cost-input", function () {
                 if (product_unit === "l") {
                     var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
-                    // var cost_per_unit = cost / milliliters;
                     var milliliters = ucv_name * 1000;
                     var cost_per_unit = cost / milliliters;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
@@ -657,8 +456,6 @@ if (!isset($_SESSION['store_id'])) {
 
                 if (product_unit === "kg") {
                     var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
-                    // var cost_per_unit = cost / milliliters;
                     var milliliters = ucv_name * 1000;
                     var cost_per_unit = cost / milliliters;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
@@ -666,90 +463,95 @@ if (!isset($_SESSION['store_id'])) {
 
                 if (product_unit === "m") {
                     var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 100;
-                    // var cost_per_unit = cost / milliliters;
                     var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "ml") {
                     var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    // var cost_per_unit = cost / milliliters;
                     var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "g") {
                     var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    // var cost_per_unit = cost / milliliters;
                     var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
 
                 if (product_unit === "cm") {
                     var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    // var cost_per_unit = cost / milliliters;
                     var cost_per_unit = cost / ucv_name;
                     $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
                 }
             });
 
-            // Calculate discounted price
-            // $(document).on("input", ".itemdiscount", function() {
-            //     var add_discount = parseFloat($(this).val());
-
-            //     var discount = add_discount + 100;
-
-            //     var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
-
-            //     var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-            //     var item_cost = cost_input / qty;
-
-            //     var item_sell_price = item_cost / 100 * discount;
-
-            //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
-            // });
-
-            // $(document).on("input", ".itemdiscount", function() {
-            //     var add_discount = parseFloat($(this).val());
-            //     var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-
-            //     stock_cost = cost_input * qty * discount
-
-
-            //     var item_sell_price = cost_input - (cost_input * (add_discount / 100));
-
-            //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
-            // });
-
-            $(document).on("input", ".itemdiscount", function() {
+            $(document).on("input", ".itemdiscount", function () {
                 var add_discount = parseFloat($(this).val());
                 // var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
                 var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-
                 // var item_sell_price = cost_input / qty;
-
                 //  var discount =   100 - add_discount;
                 //  var item_cost = cost_input / qty;
                 // var item_sell_price = item_cost / 100 * discount;
-
                 $(this).closest("tr").find("#item_sale_price").text(cost_input.toFixed(2));
             });
-
 
             // Initial adjustment of visibility
             adjustVisibilityForPackRows()
 
         });
+    </script>
 
-        $('#myModal').on('shown.bs.modal', function() {
+    <script>
+        $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
         })
 
-        $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
+        $(document).on("click", ".proceed-grn", function () {
+
+            document.getElementById("grnConfirmationTableBody").innerHTML = '';
+
+            $(".addedProTable tbody tr").each(function () {
+                var stock_id = $(this).find("#stock_id").text().trim();
+                var product_code = $(this).find("th").text().trim();
+                var product_name = $(this).find("#addproduct_name").text().trim();
+                var product_cost = $(this).find("#cost_input").text().trim();
+                var product_qty = parseInt($(this).find("#qty_input").val().trim());
+                var minimum_qty = $(this).find("#minimum_qty").text().trim();
+
+                if (product_qty === "" || product_qty === "0") {
+                    Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).fire({
+                        icon: "error",
+                        title: "Error: Product Quantity!",
+                    });
+
+                    $("#proceedGrnBtn").removeAttr("data-toggle data-target");
+                } else {
+                    var rows_data =
+                        '<tr>' +
+                        '<td class = "stock_id">' + stock_id + '</td>' +
+                        '<td class = "barcode">' + product_code + '</td>' +
+                        '<td class = "name">' + product_name + '</td>' +
+                        '<td class = "qty">' + product_qty + '</td>' +
+                        '<td class = "min_qty">' + minimum_qty + '</td>' +
+                        '<td class = "price">' + product_cost + '</td>' +
+                        '</tr>';
+                }
+                $("#grnConfirmationTableBody").append(rows_data);
+            });
+            $("#proceedGrnBtn").attr({
+                "data-toggle": "modal",
+                "data-target": "#confirmGRN",
+            });
+        });
+
+        $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function () {
             var grnNumber = document.getElementById("grnNumber").innerText;
             var grnDate = document.getElementById("grnDate").innerText;
             var grnTime = document.getElementById("grnTime").innerText;
@@ -757,50 +559,32 @@ if (!isset($_SESSION['store_id'])) {
 
             var poArray = [];
 
-            $("#grnConfirmationTableBody tr").each(function() {
-                var product_code = $(this).find(".product_code").text();
-                var product_name = $(this).find(".product_name").text();
-                var product_qty = $(this).find(".product_qty").text();
-                var minimum_qty = $(this).find(".minimum_qty").text();
-                var item_discount = $(this).find(".item_discount").text();
-                var cost_input = $(this).find(".cost_input").text();
-                if (item_discount > 0) {
-                    cost_input = cost_input / 100 * (100 - item_discount)
-                }
-
-                var cost_per_unit = $(this).find(".cost_per_unit").text();
-                var unit_s_price = $(this).find(".unit_s_price").text();
-
-                var item_sale_price = $(this).find(".item_sale_price").text();
-                var free_qty = $(this).find(".free_qty").text();
-                var free_minimum_qty = $(this).find(".free_minimum_qty").text();
-                var unit_barcode = $(this).find(".unit_barcode").text();
+            $("#grnConfirmationTableBody tr").each(function () {
+                var stock_id = $(this).find(".stock_id").text();
+                var barcode = $(this).find(".barcode").text();
+                var name = $(this).find(".name").text();
+                var product_qty = $(this).find(".qty").text();
+                var min_qty = $(this).find(".min_qty").text();
+                var price = $(this).find(".price").text();
 
                 var productData = {
-                    product_code: product_code,
-                    product_name: product_name,
+                    stock_id: stock_id,
+                    barcode: barcode,
+                    name: name,
                     product_qty: product_qty,
-                    minimum_qty: minimum_qty,
-                    cost_input: cost_input,
-                    cost_per_unit: cost_per_unit,
-                    unit_s_price: unit_s_price,
-                    item_discount: item_discount,
-                    item_sale_price: item_sale_price,
-                    free_qty: free_qty,
-                    free_minimum_qty: free_minimum_qty,
-                    unit_barcode: unit_barcode,
-
+                    min_qty: min_qty,
+                    price: price,
                 };
                 poArray.push(productData);
             });
 
             $.ajax({
-                url: "grnConfirmationInsert.php",
+                url: "edit-stock-action.php",
                 method: "POST",
                 data: {
                     products: JSON.stringify(poArray),
                 },
-                success: function(response) {
+                success: function (response) {
                     Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -821,13 +605,54 @@ if (!isset($_SESSION['store_id'])) {
                     });
                     $(".confirmPObtn").prop('disabled', false);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                     $(".confirmPObtn").prop('disabled', false);
                 },
             });
-
         });
+
+        function fbs(searchTxt) {
+            var bnInput = document.getElementById("bnInput").value;
+            var pcInput = document.getElementById("pcInput").value;
+            var pnInput = document.getElementById("pnInput").value;
+            var searchBy = "";
+
+            if (bnInput) {
+                searchBy += "barcode";
+            }
+            if (pcInput) {
+                if (searchBy) {
+                    searchBy += " & ";
+                }
+                searchBy += "product code";
+            }
+            if (pnInput) {
+                if (searchBy) {
+                    searchBy += " & ";
+                }
+                searchBy += "product name";
+            }
+            if (!searchBy) {
+                searchBy = "all";
+            }
+
+            var form = new FormData();
+            form.append("bnInput", bnInput);
+            form.append("pcInput", pcInput);
+            form.append("pnInput", pnInput);
+            form.append("searchBy", searchBy);
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function () {
+                if (req.readyState == 4 && req.status == 200) {
+                    var response = req.responseText;
+                    document.getElementById("filterBySupTable").innerHTML = response;
+                }
+            };
+            req.open("POST", "fbs.php", true);
+            req.send(form);
+        }
     </script>
 
 </body>

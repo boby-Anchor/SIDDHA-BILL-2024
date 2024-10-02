@@ -9,7 +9,9 @@ if (!isset($_SESSION['store_id'])) {
 
 $totalRows = 0;
 $totalValue = 0;
+$totalCost = 0;
 $price = 0;
+$cost = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,7 +63,8 @@ $price = 0;
                         <th>Cost</th>
                         <th>Price</th>
                         <th>Available Stock</th>
-                        <th>Value</th>
+                        <th>Total Cost</th>
+                        <th>Total Value</th>
 
                       </tr>
                     </thead>
@@ -86,23 +89,39 @@ $price = 0;
                           WHERE stock2.stock_shop_id = '$shop_id' AND  stock2.stock_item_qty > 0  ORDER BY p_medicine.name ASC     ");
                           while ($row = mysqli_fetch_assoc($sql)) {
                             $totalRows++;
-                            
+
                             $totalValue += $price;
                       ?>
                             <tr>
                               <td style="padding:5px" class="text-center">
-                                <img src="dist/img/product/<?php echo $row['p_img']; ?>" width="50" alt="Image">
+                                <?= $row['stock_id']; ?>
                                 <br>
-                                <?php echo $row['stock_id']; ?>
+                                <?= $row['p_code']; ?>
                               </td>
-                              <td> <?php echo $row['p_name']; ?>
-                                (<?= $row['ucv_name'] ?><?php echo $row['unit']; ?>)
+                              <td> <?= $row['p_name']; ?>
+                                (<?= $row['ucv_name'] ?><?= $row['unit']; ?>)
                               </td>
-                              <td> <?php echo $row['bName']; ?></td>
-                              <td> <?php echo $row['p_category']; ?></td>
-                              <td> <?php echo $row['p_cost']; ?>.00</td>
-                              <td class="text-center"> <label for="" class="product-selling-price"><?php echo $row['p_s_price']; ?></label> </td>
-                              <td> <?php echo $row['p_a_stock']; ?> </td>
+                              <td> <?= $row['bName']; ?></td>
+                              <td> <?= $row['p_category']; ?></td>
+                              <td> <?= number_format($row['p_cost'], 0); ?></td>
+                              <td class="text-center"> <label class="product-selling-price"><?= number_format($row['p_s_price']); ?></label> </td>
+                              <td> <?= $row['p_a_stock']; ?> </td>
+                              <td>
+                                <?php
+                                if ($row['unit'] == "ml") {
+                                  // Price per unit for ml
+                                  $cost = $row['p_cost'] * $row['p_a_stock'];
+                                } else if ($row['unit'] == "l") {
+                                  // Convert unit capacity value from liters to milliliters before calculating
+                                  // $cost = $row['p_cost'] / ($row['ucv_name'] * 1000) * $row['p_a_stock'];
+                                } else {
+                                  // Default calculation for other units
+                                  $cost = $row['p_a_stock'] * $row['p_cost'];
+                                }
+                                $totalCost += $cost;
+                                echo number_format($cost, 0);
+                                ?>
+                              </td>
                               <td>
                                 <?php
                                 if ($row['unit'] == "ml") {
@@ -116,7 +135,7 @@ $price = 0;
                                   $price = $row['p_a_stock'] * $row['p_s_price'];
                                 }
                                 // Round to 2 decimal points
-                                echo number_format($price, 2);
+                                echo number_format($price, 0);
                                 ?>
                               </td>
                             </tr>
@@ -128,11 +147,15 @@ $price = 0;
                     <tfoot>
                       <tr>
                         <td colspan="7" class="text-right"><strong>Total Rows:</strong></td>
-                        <td><?php echo $totalRows; ?></td>
+                        <td colspan="2"><?= $totalRows; ?></td>
+                      </tr>
+                      <tr>
+                        <td colspan="7" class="text-right"><strong>Total Cost:</strong></td>
+                        <td colspan="2"><?= number_format($totalCost, 0); ?></td>
                       </tr>
                       <tr>
                         <td colspan="7" class="text-right"><strong>Total Value:</strong></td>
-                        <td><?php echo  number_format($totalValue, 2); ?></td>
+                        <td colspan="2"><?= number_format($totalValue, 0); ?></td>
                       </tr>
                     </tfoot>
                   </table>

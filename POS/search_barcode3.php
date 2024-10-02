@@ -55,7 +55,8 @@ if (isset($_GET['barcode'])) {
                         // echo 'stock_id- '.$barcodeData['stock_id'].'<br>';
 ?>
                         <tr data-barcode="<?= $barcodeData['code'] ?><?= $barcodeData['item_s_price'] ?>">
-                            <th scope="row">#</th>
+                            <!-- <th scope="row">#</th> -->
+                            <th><input type="checkbox" name="isPaththu" id="isPaththu" onchange="calculateSubTotal()"> </th>
                             <td id="code" class="d-none"><?= $barcodeData['code'] ?></td>
                             <td id="ucv" class="d-none"><?= $barcodeData['ucv_name'] ?></td>
                             <td id="item_price" class="d-none"><?= $barcodeData['item_s_price'] ?></td>
@@ -70,7 +71,7 @@ if (isset($_GET['barcode'])) {
                                             <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
                                         </div>
                                         <div class="col-4">
-                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" onchange="updateTotal(this)" data-price="<?= $barcodeData['item_s_price'] ?>">
+                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" onchange="updateTotal(this)" data-price="<?= $barcodeData['item_s_price'] ?>">
                                         </div>
                                         <div class="col-2 d-flex justify-content-center">
                                             <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
@@ -85,19 +86,21 @@ if (isset($_GET['barcode'])) {
                             <td class="total" id="totalprice"><?= $totalPrice ?></td>
                             <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
-                                </svg></td>
+                                </svg>
+                            </td>
                         </tr>
                     <?php
                     } else {
 
                     ?>
                         <tr data-barcode="<?= $barcodeData['stock_minimum_unit_barcode'] ?><?= $barcodeData['unit_s_price'] ?>">
-                            <th scope="row">#</th>
+                            <!-- <th scope="row">#</th> -->
+                            <th scope="row"><input type="checkbox" name="isPaththu" id="isPaththu" onchange="calculateSubTotal()"> </th>
                             <td id="code" class="d-none"><?= $barcodeData['stock_minimum_unit_barcode'] ?></td>
                             <td id="ucv" class="d-none"><?= $barcodeData['ucv_name'] ?></td>
                             <td id="item_price" class="d-none"><?= $barcodeData['item_s_price'] ?></td>
                             <td id="unit_price" class="d-none"><?= $barcodeData['unit_s_price'] ?></td>
-                            
+
                             <td id="product_name"><?= $barcodeData['name'] ?></td>
                             <td id="product_price"><?= $barcodeData['unit_s_price'] ?></td>
                             <td>
@@ -107,8 +110,7 @@ if (isset($_GET['barcode'])) {
                                             <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
                                         </div>
                                         <div class="col-4">
-                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" onchange="updateTotal(this)" data-price="<?= $barcodeData['unit_s_price'] ?>">
-                                            
+                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" onchange="updateTotal(this)" data-price="<?= $barcodeData['unit_s_price'] ?>">
                                         </div>
                                         <div class="col-2 d-flex justify-content-center">
                                             <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
@@ -123,7 +125,8 @@ if (isset($_GET['barcode'])) {
                             <td class="total" id="totalprice"><?= $totalPriceunit ?></td>
                             <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
-                                </svg></td>
+                                </svg>
+                            </td>
                         </tr>
 <?php
                     }

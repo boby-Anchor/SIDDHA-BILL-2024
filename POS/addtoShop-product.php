@@ -212,6 +212,8 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Data Table JS end -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script src="dist/js/addToShop-product.js"></script>
+
     <script>
         function handleCheckboxStyle() {
             var checkboxes = document.querySelectorAll(".shop-checkbox");

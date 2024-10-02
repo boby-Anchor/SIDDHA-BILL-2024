@@ -214,38 +214,16 @@ if (!isset($_SESSION['store_id'])) {
 
                                                     $p_medicine_rs = $conn->query("SELECT unit_category_variation.ucv_name AS ucv_name,
                                                             medicine_unit.unit AS unit, p_medicine_category.name AS categoryname,
-                                                            p_brand.name AS brandname,
-                                                             t.*
-                                                            FROM stock2 t
-                                                            JOIN (
-                                                                SELECT stock_item_code, stock_item_name, stock_shop_id
-                                                                FROM stock2
-                                                                GROUP BY stock_item_code, stock_item_name, stock_item_cost, unit_s_price, added_discount, item_s_price, stock_shop_id
-                                                                HAVING COUNT(*) > 1
-                                                            ) d 
-                                                            ON t.stock_item_code = d.stock_item_code
-                                                            AND t.stock_shop_id = d.stock_shop_id
-                                                            INNER JOIN p_medicine ON t.stock_item_code = p_medicine.code
+                                                            p_brand.name AS brandname, stock2.*
+                                                            FROM stock2
+                                                            INNER JOIN p_medicine ON stock_item_code = p_medicine.code
                                                             INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
                                                             INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                                                             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                            WHERE t.stock_shop_id = '1'
-                                                            ORDER BY t.stock_item_code ASC, t.stock_id ASC;
+                                                            WHERE stock_shop_id = '1'
+                                                            ORDER BY stock_id ASC;
                                                             ");
-
-                                                    // $p_medicine_rs = $conn->query("SELECT unit_category_variation.ucv_name AS ucv_name,
-                                                    //         medicine_unit.unit AS unit, p_medicine_category.name AS categoryname,
-                                                    //         p_brand.name AS brandname, stock2.*
-                                                    //         FROM stock2
-                                                    //         INNER JOIN p_medicine ON stock_item_code = p_medicine.code
-                                                    //         INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
-                                                    //         INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                                                    //         INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                                                    //         INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                    //         WHERE stock_shop_id = '1' AND stock_item_qty LIKE '%.9%'
-                                                    //         ORDER BY stock_id ASC;
-                                                    //         ");
 
                                                     //ORDER BY t.stock_item_code ASC, t.stock_shop_id ASC, t.stock_id ASC;
 
@@ -423,6 +401,56 @@ if (!isset($_SESSION['store_id'])) {
                     }
                 });
 
+                // if (!exists) {
+                //     // Append new row to the table
+                //     var markup =
+                //         "<tr>" +
+                //         "<th scope='row' class='d-none' id='product_code'>" + product_code + "</th>" +
+                //         "<th scope='row' id='stock_id'>" + stock_id + "</th>" +
+                //         "<th scope='row' id='shop_id'>" + stock_shop_id + "</th>" +
+                //         "<th scope='row'>" + product_code + "</th>" +
+
+                //         "<th scope='row' id='old_unit_cost'>" + old_unit_cost + "</th>" +
+                //         "<th scope='row' id='old_added_discount'>" + old_added_discount + "</th>" +
+                //         "<th scope='row' id='old_unit_s_price'>" + old_unit_s_price + "</th>" +
+                //         "<th scope='row' id='old_item_s_price'>" + old_item_s_price + "</th>" +
+
+                //         "<td id='product_name'>" + product_name + "</td>" +
+                //         "<td id='product_unit' class='d-none' >" + product_unit + "</td>" +
+
+                //         "<td>" +
+                //         "<input id='qty_input' type='text' class='bg-dark form-control text-center qty-input mb-2' value=''>" +
+                //         "</td>" +
+
+                //         "<td class='text-center auto-generate-m-unit '>" +
+                //         "<label id='minimum_qty' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
+                //         "<label id='unit_id' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
+                //         "</td>" +
+
+                //         "<td>" + "<input type='text' id='cost_input' class='bg-dark form-control text-center cost-input' value=''></td>" +
+
+                //         "<td>" + "<input placeholder='discount' id='item_discount' type='text' class='bg-dark form-control text-center itemdicount' value=''>" + "</td>" +
+
+                //         "<td>" + "<label id='item_sale_price'></label>" + "</td>" +
+
+                //         "<td>" + "<label id='cost_per_unit'></label>" + "</td>" +
+
+                //         "<td>" +
+                //         "<input placeholder='unit price' id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input mb-2' value=''>" +
+                //         "</td>" +
+
+                //         "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
+
+                //         "</tr>";
+
+                //     $(".addedProTable tbody").append(markup);
+
+                //     $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
+                //     $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
+
+                //     // Update visibility based on product_unit
+                //     adjustVisibilityForPackRows()
+                // }
                 if (!exists) {
                     // Append new row to the table
                     var markup =
