@@ -231,12 +231,12 @@ if (!isset($_SESSION['store_id'])) {
 
       // Validation checks
       if (brand_product === "") {
-        errorMessageDisplay("Error", "Select brand");
+        errorMessageDisplay("Select brand");
         return;
       }
 
       if (category_product === "") {
-        errorMessageDisplay("Error", "Select category");
+        errorMessageDisplay("Select category");
         return;
       }
 
@@ -270,9 +270,6 @@ if (!isset($_SESSION['store_id'])) {
         details: details
       };
 
-      var pDataArr = [];
-      pDataArr.push(productData);
-
       $.ajax({
         url: "actions/addProduct.php",
         method: "POST",
@@ -281,39 +278,52 @@ if (!isset($_SESSION['store_id'])) {
         },
         success: function(response) {
 
-          // console.log(response);
+          var result;
+          try {
+            result = JSON.parse(response);
+          } catch (e) {
+            console.error("Error: ", response);
+            errorMessageDisplay(response);
+          }
 
-          successMessageDisplay("Information submit successfully");
-
-          // location.reload(true);
+          if (result.status === 'success') {
+            successMessageDisplay(result.message);
+            setTimeout(function() {
+              location.reload();
+            }, 3400);
+          } else {
+            errorMessageDisplay(result.message);
+          }
         },
         error: function(xhr, status, error) {
           console.error(xhr.responseText);
+          errorMessageDisplay(xhr.responseText);
         },
       });
     });
 
     function successMessageDisplay(message) {
-      Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-      }).fire({
-        icon: "success",
-        title: "Success: " + message + "!",
-      });
+      MessageDisplay("success", "Success", message)
     }
 
     function errorMessageDisplay(message) {
+      MessageDisplay("error", "Error", message)
+    }
+
+    function MessageDisplay(icon, status, message) {
       Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
         timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
       }).fire({
-        icon: "error",
-        title: "Error: " + message + ".",
+        icon: icon,
+        title: status + ": " + message + "!",
       });
     }
 
@@ -335,8 +345,8 @@ if (!isset($_SESSION['store_id'])) {
             $('select[name="unit_variation"]').html(options);
           },
           error: function(xhr, status, error) {
-            // Handle errors
             console.error(xhr.responseText);
+            errorMessageDisplay(xhr.responseText);
           }
         });
       });
