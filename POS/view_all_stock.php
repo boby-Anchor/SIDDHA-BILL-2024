@@ -50,7 +50,7 @@ if (!isset($_SESSION['store_id'])) {
                                     <table id="stockTable" class="table table-bordered">
                                         <thead>
                                             <tr class="bg-info">
-                                                <th>Image</th>
+                                                <th>Barcode</th>
                                                 <th>Product</th>
                                                 <th>Brand</th>
                                                 <th>Cost</th>
@@ -72,8 +72,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 $userLoginData = $_SESSION['store_id'];
 
                                                 // Fetch data from the stock table
-                                                $sql = $conn->query("
-                                                SELECT stock2.*, shop.*, p_medicine.*, p_brand.name AS bName
+                                                $sql = $conn->query("SELECT stock2.*, shop.*, p_medicine.*, p_brand.name AS bName
                                                 FROM stock2
                                                 INNER JOIN shop ON shop.shopId = stock2.stock_shop_id
                                                 INNER JOIN p_medicine ON stock2.stock_item_code = p_medicine.code
@@ -91,6 +90,7 @@ if (!isset($_SESSION['store_id'])) {
                                                     // Initialize product data if not exists
                                                     if (!isset($products[$product_id])) {
                                                         $products[$product_id] = array(
+                                                            'code' => $row['code'],
                                                             'name' => $row['name'],
                                                             'bName' => $row['bName'],
                                                             'cost' => $row['stock_item_cost'],
@@ -113,13 +113,15 @@ if (!isset($_SESSION['store_id'])) {
                                                     foreach ($product['prices'] as $price) {
                                             ?>
                                                         <tr>
-                                                            <td style="padding:5px" class="text-center">
-                                                                <img src="dist/img/product/<?php echo $product['img']; ?>" width="50" alt="Image">
+                                                            <td>
+                                                                <!-- <img src="dist/img/product/<?php //echo $product['img'];
+                                                                                                ?>" width="50" alt="Image"> -->
+                                                                <?= $product['code']; ?>
                                                             </td>
-                                                            <td><?php echo $product['name']; ?></td>
-                                                            <td><?php echo $product['bName']; ?></td>
-                                                            <td><?php echo $product['cost']; ?></td>
-                                                            <td><?php echo $price; ?></td>
+                                                            <td><?= $product['name']; ?></td>
+                                                            <td><?= $product['bName']; ?></td>
+                                                            <td><?= $product['cost']; ?></td>
+                                                            <td><?= $price; ?></td>
                                                             <?php
                                                             // Loop through all shops and display product quantity for the price
                                                             $shop_rs = $conn->query("SELECT `shopId` FROM shop");
