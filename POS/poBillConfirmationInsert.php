@@ -39,8 +39,6 @@ if (is_array($poArray) && !empty($poArray)) {
         $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'";
         $cm = runQuery($query);
 
-        // $conn->query("INSERT INTO test (c1, c2) VALUES('$invoice_number','$net_total')");
-
         $discount_percentage = isset($discount_percentage) ? $discount_percentage : 0;
 
 
@@ -49,8 +47,6 @@ if (is_array($poArray) && !empty($poArray)) {
                 !empty($product_unit) && !empty($ucv) && !empty($item_price) && !empty($product_name) &&
                 is_numeric($product_cost) && is_numeric($product_qty) && is_numeric($product_total) && !empty($invoice_number)
             ) {
-
-                // $conn->query("INSERT INTO test (c1, c2) VALUES('$invoice_number','$net_total')");
 
                 if (isset($_SESSION['store_id'])) {
 
@@ -62,7 +58,7 @@ if (is_array($poArray) && !empty($poArray)) {
                         $shop_id = $userData['shop_id'];
                         $productsAllTotal += $product_total;
 
-                        $conn->query("INSERT INTO poinvoiceitems (invoiceNumber,item_code,invoiceItem,invoiceItem_qty,invoiceItem_unit,invoiceItem_price,invoiceItem_total)
+                        $conn->query("INSERT INTO poinvoiceitems (invoiceNumber,  item_code, invoiceItem, invoiceItem_qty, invoiceItem_unit, invoiceItem_price, invoiceItem_total)
                         VALUES ('$invoice_number','$code','$product_name','$product_qty','$product_unit','$product_cost','$product_total')");
 
                         if ($product_unit == 'kg' || $product_unit == 'l') {
@@ -155,10 +151,10 @@ if (is_array($poArray) && !empty($poArray)) {
                 echo "Invalid product entry";
                 exit;
             }
-        } else {
-            echo "DD";
-            exit;
-        }
+        } //else {
+        //     echo "DD";
+        //     exit;
+        // }
     }  // close for-each $poArrary 
 
     // $conn->query("INSERT INTO test (c1, c2) VALUES('$invoice_number','$net_total')");

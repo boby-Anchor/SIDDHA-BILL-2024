@@ -110,9 +110,6 @@ if (isset($_SESSION['store_id'])) {
                         OR stock_minimum_unit_barcode = '$code')
                         AND unit_s_price = '$product_cost'");
                         }
-                    } else if ($product_unit == 'pieces') {
-                        $conn->query("UPDATE stock2 SET stock_item_qty = (stock_item_qty - $product_qty)
-                    WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost'");
                     } else if ($product_unit == 'g' || $product_unit == 'ml') {
 
                         if ($item_price == $product_cost) {
@@ -154,21 +151,9 @@ if (isset($_SESSION['store_id'])) {
                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
                         AND unit_s_price = '$product_cost'");
                         }
-                    } else if ($product_unit == 'pack / bottle') {
-
-                        $qty_rs = $conn->query("SELECT * FROM stock2 WHERE (stock_item_code = '$code' 
-                    OR stock_minimum_unit_barcode = '$code')
-                    AND stock_shop_id = '$shop_id' AND (unit_s_price = '$product_cost' 
-                    OR item_s_price = '$product_cost')");
-                        $qty_data = $qty_rs->fetch_assoc();
-                        $qd = $qty_data['stock_mu_qty'];
-                        $si = $qty_data['stock_item_qty'];
-                        $minimum_new_qty = $product_qty;
-
-                        $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty)
-                    WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' 
-                    OR stock_minimum_unit_barcode = '$code')
-                    AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
+                    } else if ($product_unit == 'pack / bottle' || $product_unit == 'pieces') {
+                        $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $product_qty)
+                        WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
                     }
                     // else {
                     //     $qty_rs = $conn->query("SELECT * FROM stock2 WHERE (stock_item_code = '$code' 
@@ -199,9 +184,9 @@ if (isset($_SESSION['store_id'])) {
                     WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code'
                     OR stock_minimum_unit_barcode = '$code')
                     AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
-                } else {
-                    exit;
-                }
+                } //else {
+                //     exit;
+                // }
             }  // close for-each $itemData
         }  // itemData[] end
         $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
