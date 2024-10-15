@@ -77,6 +77,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 INNER JOIN shop ON shop.shopId = stock2.stock_shop_id
                                                 INNER JOIN p_medicine ON stock2.stock_item_code = p_medicine.code
                                                 INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                                                WHERE stock_item_qty > 0
                                                 ORDER BY p_medicine.name DESC
                                                 ");
 

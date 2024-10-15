@@ -82,15 +82,6 @@ if (!isset($_SESSION['store_id'])) {
             text-indent: 5px;
         }
 
-        /* button.add-btn.btn.btn-outline-primary,
-        button.add-btn.btn.btn-outline-primary:focus,
-        button.add-btn.btn.btn-outline-primary:hover {
-            height: 30px;
-            line-height: 15px;
-            outline: 0 !important;
-            box-shadow: none;
-        } */
-
         .box {
             padding: 10px 0px;
         }
@@ -192,13 +183,13 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs(this.value);" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs();" id="bnInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs(this.value);" id="pcInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs();" id="pcInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs(this.value);" id="pnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs();" id="pnInput">
                                         </div>
                                         <div class="col-12 products-table mt-4">
                                             <table class="table table-bordered">
@@ -323,28 +314,7 @@ if (!isset($_SESSION['store_id'])) {
             </div>
         </div>
 
-        <!-- add new unit modal start -->
-
-        <!-- <div class="container">
-            <div class="modal fade" id="addunitmodal" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Add New Unit</h4>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" placeholder="Unite Name..." id="newUnit">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" onclick="addNewUnit();">Save</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
     </div>
-
-    <!-- add new unit modal end -->
 
     <?php
     if (isset($_SESSION['store_id'])) {

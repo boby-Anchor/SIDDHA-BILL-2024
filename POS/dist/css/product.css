@@ -1,13 +1,13 @@
 .productGrid {
     background-color: #212121;
-
 }
 
 .product-grid {
     font-family: 'Lato', sans-serif;
     text-align: center;
-    /* border-radius: 30px; */
+    border-radius: 10px;
     border: 2px solid #FFCAB0;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
 }
 
 .product-grid .product-image {

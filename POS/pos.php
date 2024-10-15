@@ -174,14 +174,18 @@ if (!isset($_SESSION['store_id'])) {
                   <select class="form-control select2" id="doctorName" name="doctorName">
                     <option value="" selected>Select a doctor</option>
                     <option value="Dr. Buddhika">Dr. Buddhika</option>
+                    <option value="Dr. Chathura">Dr. Chathura</option>
                     <option value="Dr. Daya">Dr. Daya</option>
                     <option value="Dr. Devinda">Dr. Devinda</option>
                     <option value="Dr. Fathima">Dr. Fathima</option>
                     <option value="Dr. Kusal">Dr. Kusal</option>
                     <option value="Dr. Mithula">Dr. Mithula</option>
+                    <option value="Dr. Nirosha">Dr. Nirosha</option>
+                    <option value="Dr. Nuwan">Dr. Nuwan</option>
                     <option value="Dr. Padmasiri">Dr. Padmasiri</option>
                     <option value="Dr. Parakrama">Dr. Parakrama</option>
                     <option value="Dr. Prasanga">Dr. Prasanga</option>
+                    <option value="Dr. Saranga">Dr. Saranga</option>
                     <option value="Dr. Tharindu">Dr. Tharindu</option>
                     <option value="Dr. Thilanka">Dr. Thilanka</option>
                     <option value="Dr. Yashodara">Dr. Yashodara</option>
@@ -271,7 +275,7 @@ if (!isset($_SESSION['store_id'])) {
                       INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                       INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                       INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0 
+                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0
                       ORDER BY p_medicine.name ASC");
 
                       if (!empty($cm)) {
