@@ -43,7 +43,7 @@ if (!isset($_SESSION['store_id'])) {
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper bg-dark">
- 
+
             <div class="row">
                 <div class="card-body overflow-hidden">
                     <div class="row px-4">

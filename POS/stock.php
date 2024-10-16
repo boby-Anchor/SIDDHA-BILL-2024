@@ -78,15 +78,15 @@ $cost = 0;
                           $shop_id = $userData['shop_id'];
                           $sql = $conn->query("SELECT stock2.stock_id,p_medicine.img AS p_img , p_medicine.name AS p_name , p_brand.name AS bName,
                           stock2.stock_item_cost AS p_cost , stock2.stock_item_code AS p_code , stock2.stock_item_qty AS p_a_stock ,
-                          stock2.item_s_price AS p_s_price , p_medicine_category.name AS p_category
-                          , medicine_unit.unit AS unit , unit_category_variation.ucv_name
+                          stock2.item_s_price AS p_s_price , p_medicine_category.name AS p_category ,
+                          medicine_unit.unit AS unit , unit_category_variation.ucv_name
                           FROM stock2
                           INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
                           INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock2.stock_shop_id = '$shop_id' AND  stock2.stock_item_qty > 0  ORDER BY p_medicine.name ASC     ");
+                          WHERE stock2.stock_shop_id = '$shop_id' AND  stock2.stock_item_qty >= 0  ORDER BY p_medicine.name ASC");
                           while ($row = mysqli_fetch_assoc($sql)) {
                             $totalRows++;
 
@@ -134,7 +134,6 @@ $cost = 0;
                                   // Default calculation for other units
                                   $price = $row['p_a_stock'] * $row['p_s_price'];
                                 }
-                                // Round to 2 decimal points
                                 echo number_format($price, 0);
                                 ?>
                               </td>

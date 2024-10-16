@@ -20,7 +20,7 @@ if (!isset($_SESSION['store_id'])) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
 
-    <body class="hold-transition sidebar-mini layout-fixed" onload="focus_filed();">
+    <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
 
             <!-- Navbar -->
@@ -333,7 +333,7 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="col-12 billPreviewMain bg-dark d-flex justify-content-center">
 
                             <div class="paperSize<?= $billpreview_data['print_paper_size'] ?> bg-light" id="<?= $billpreview_data['print_paper_size'] ?>mm">
-                                <table class="w-100" id="billpreviewTable" >
+                                <table class="w-100" id="billpreviewTable">
                                     <thead></thead>
                                     <tbody>
 
@@ -755,8 +755,6 @@ if (!isset($_SESSION['store_id'])) {
 
         </div>
 
-        <!-- confirm po modal end -->
-
         <!-- Footer -->
         <?php include("part/footer.php"); ?>
         <!-- Footer End -->
@@ -770,16 +768,12 @@ if (!isset($_SESSION['store_id'])) {
         <?php include("part/data-table-js.php"); ?>
         <!-- Data Table JS end -->
 
-        <!-- select2 input field -->
-
-
-
         <!-- ========================================== -->
+        <script src="dist/js/customize_bill.js"></script>
 
         <script>
-             // real time update bill contact preview
-
-             const contactNoInput = document.getElementById("contactNoInput");
+            // real time update bill contact preview
+            const contactNoInput = document.getElementById("contactNoInput");
             const contactNumberPreview = document.getElementById("contactNumberPreview");
             contactNoInput.addEventListener("input", function() {
                 contactNumberPreview.textContent = contactNoInput.value;

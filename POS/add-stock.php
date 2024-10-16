@@ -402,7 +402,6 @@ if (!isset($_SESSION['store_id'])) {
             </div>
         </div>
     </div>
-    </div>
     <!-- confirm po modal end -->
 
 

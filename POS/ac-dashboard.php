@@ -28,17 +28,23 @@ if (!isset($_SESSION['store_id'])) {
             font-size: 50px;
             font-weight: bold;
         }
-        .cashier-cash , .cashier-card , .cashier-out{
-           font-weight: bold;
-  padding: 10px;
+
+        .cashier-cash,
+        .cashier-card,
+        .cashier-out {
+            font-weight: bold;
+            padding: 10px;
         }
-        .cashier-cash{
+
+        .cashier-cash {
             background: #4b8c9f;
         }
-        .cashier-card{
+
+        .cashier-card {
             background: #0070ff;
         }
-        .cashier-out{
+
+        .cashier-out {
             background: #e35151;
         }
     </style>
@@ -60,7 +66,7 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Cashier's Today's Report</h1>
+                            <h1>All Cashier's Sales</h1>
                         </div>
                     </div>
                 </div>
@@ -82,40 +88,38 @@ if (!isset($_SESSION['store_id'])) {
                                         <div class="card-body">
                                             <div class="row">
                                                 <?php
-                                               $cashiers_rs= $conn->query("SELECT SUM(total_amount) AS total_amount , SUM(paidAmount) AS cashPayments ,
-                                               SUM(cardPaidAmount) AS cardPayments ,SUM(balance) AS cashOut, users.name AS name , shop.shopName AS shopName 
+                                                $cashiers_rs = $conn->query("SELECT SUM(total_amount) AS total_amount , SUM(paidAmount) AS cashPayments,
+                                                SUM(cardPaidAmount) AS cardPayments ,SUM(balance) AS cashOut, users.name AS name , shop.shopName AS shopName 
                                                                 FROM `invoices` 
                                                                 INNER JOIN users ON users.id = invoices.user_id
                                                                 INNER JOIN shop ON shop.shopId = invoices.shop_id
                                                                 GROUP BY user_id;");
-                                                                while($cashiers_data=$cashiers_rs->fetch_assoc()){
-                                                                    ?>
-                                                                      <div class="col-md-3">
-                                                    <div class="card card-body text-white" style="background-color:#15b580 !important" >
-                                                        <h2 class="text-white text-uppercase"><?= $cashiers_data['name'] ?></h2>
-                                                       <lable><?= $cashiers_data['shopName'] ?></lable>
-                                                        <p class="totalAmount"><?= $cashiers_data['total_amount'] ?> LKR</p>
-                                                        <p class="cashier-cash" >Card Payments : <?= $cashiers_data['cardPayments'] ?> LKR</p>
-                                                        <p class="cashier-card" >Cash Payments : <?= $cashiers_data['cashPayments'] ?> LKR</p>
-                                                        <p class="cashier-out" >Cash Out : -<?= $cashiers_data['cashOut'] ?> LKR</p>
-                                                    </div>
-                                                </div>
-                                                                    <?php
-                                                                }
+                                                while ($cashiers_data = $cashiers_rs->fetch_assoc()) {
                                                 ?>
-                                              
+                                                    <div class="col-md-3">
+                                                        <div class="card card-body" style="background-color:#15b580 !important">
+                                                            <h2 class="text-white text-uppercase"><?= $cashiers_data['name'] ?></h2>
+                                                            <lable><?= $cashiers_data['shopName'] ?></lable>
+                                                            <p class="totalAmount"><?= number_format($cashiers_data['total_amount']) ?> LKR</p>
+                                                            <p class="cashier-cash">Card Payments : <?= number_format($cashiers_data['cardPayments']) ?> LKR</p>
+                                                            <p class="cashier-card">Cash Payments : <?= number_format($cashiers_data['cashPayments']) ?> LKR</p>
+                                                            <p class="cashier-out">Cash Out : -<?= number_format($cashiers_data['cashOut']) ?> LKR</p>
+                                                        </div>
+                                                    </div>
+                                                <?php
+                                                }
+                                                ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                              
+
                             </div>
                     </section>
             <?php
                 }
             }
             ?>
-
         </div>
 
         <!-- Footer -->
@@ -134,84 +138,6 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Data Table JS -->
     <?php include("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
-
-
-    <!-- Page specific script -->
-    <script>
-        $(function() {
-            $(".select2").select2();
-
-            $(".select2bs4").select2({
-                theme: "bootstrap4",
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('#mytable').DataTable({
-                order: [
-                    [0, 'desc']
-                ],
-                // pageLength : 3,
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
-                    }
-                    $("#totalSales").text(totalAmount);
-                }
-            });
-
-            $('#mytable2').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
-                    }
-                    $("#totalExpense").text(totalAmount);
-                }
-            });
-
-            $('#mytable3').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][3]);
-                    }
-                    $("#totalPurchase").text(totalAmount);
-                }
-            });
-
-            $('#mytable4').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
-                    }
-                    $("#totalReceived").text(totalAmount);
-                }
-            });
-        });
-    </script>
 
 </body>
 
