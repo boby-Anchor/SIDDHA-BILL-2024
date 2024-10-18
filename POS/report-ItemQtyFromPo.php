@@ -13,11 +13,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $end_date = $_POST['end_date'];
   $po_shop = $_POST['po_shop'];
 
-  $sql = $conn->query("SELECT invoiceItem, invoiceItem_price,
+  $sql = $conn->query("SELECT invoiceItem, invoiceItem_price, item_code,
   SUM(invoiceItem_qty) AS total_qty
   FROM poinvoiceitems
   INNER JOIN poinvoices ON poinvoiceitems.invoiceNumber = poinvoices.invoice_id
-  WHERE poinvoices.po_shop_id = '$po_shop' AND poinvoices.created BETWEEN '$start_date' AND '$end_date'
+  WHERE poinvoices.created BETWEEN '$start_date' AND '$end_date' AND poinvoices.po_shop_id = '$po_shop'
   GROUP BY invoiceItem
   ");
 }
@@ -116,6 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <table id="stockTable" class="table table-bordered table-dark table-hover">
               <thead>
                 <tr class="bg-info">
+                  <th>Barcode</th>
                   <th>Product</th>
                   <th>Qty</th>
                   <th>Item Price</th>
@@ -132,7 +133,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       $total_price = $item_price * $total_qty;
                 ?>
                       <tr>
-                        <td> <?php echo $row['invoiceItem']; ?></td>
+                        <td> <?= $row['item_code']; ?></td>
+                        <td> <?= $row['invoiceItem']; ?></td>
                         <td> <?= number_format($total_qty, 0)  ?> </td>
                         <td> <?= number_format($item_price, 0) ?> </td>
                         <td> <?= number_format($total_price, 0) ?> </td>

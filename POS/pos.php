@@ -172,20 +172,24 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
                 <div id="doctorNameField" class="col-3 p-2">
                   <select class="form-control select2" id="doctorName" name="doctorName">
-                    <option value="" selected>Select a doctor</option>
+                    <option value="" disabled selected hidden>Select a doctor</option>
                     <option value="Dr. Buddhika">Dr. Buddhika</option>
                     <option value="Dr. Chathura">Dr. Chathura</option>
                     <option value="Dr. Daya">Dr. Daya</option>
                     <option value="Dr. Devinda">Dr. Devinda</option>
                     <option value="Dr. Fathima">Dr. Fathima</option>
+                    <option value="Dr. Jeewani">Dr. Jeewani</option>
                     <option value="Dr. Kusal">Dr. Kusal</option>
                     <option value="Dr. Mithula">Dr. Mithula</option>
+                    <option value="Dr. Nishantha">Dr. Nishantha</option>
                     <option value="Dr. Nirosha">Dr. Nirosha</option>
                     <option value="Dr. Nuwan">Dr. Nuwan</option>
                     <option value="Dr. Padmasiri">Dr. Padmasiri</option>
                     <option value="Dr. Parakrama">Dr. Parakrama</option>
                     <option value="Dr. Prasanga">Dr. Prasanga</option>
                     <option value="Dr. Saranga">Dr. Saranga</option>
+                    <option value="Dr. Shaminda">Dr. Shaminda</option>
+                    <option value="Dr. Sujeewa">Dr. Sujeewa</option>
                     <option value="Dr. Tharindu">Dr. Tharindu</option>
                     <option value="Dr. Thilanka">Dr. Thilanka</option>
                     <option value="Dr. Yashodara">Dr. Yashodara</option>
