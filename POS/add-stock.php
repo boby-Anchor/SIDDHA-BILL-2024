@@ -294,9 +294,10 @@ if (!isset($_SESSION['store_id'])) {
                                         <th scope="col">Minimum Unit Qty </th>
                                         <th scope="col">Item Price</th>
                                         <th scope="col">Discount(%)</th>
-                                        <th scope="col">(1 Item) Sell Price</th>
-                                        <th scope="col">(1 Unit) Cost</th>
-                                        <th scope="col">(1 Unit) Sell Price & Barcode</th>
+                                        <th scope="col">Total Cost</th>
+                                        <th scope="col">Total Value</th>
+                                        <th scope="col">Unit Cost</th>
+                                        <th scope="col">1 Unit Price</th>
 
                                         <th scope="col"></th>
                                     </tr>
@@ -307,7 +308,7 @@ if (!isset($_SESSION['store_id'])) {
 
                     </div>
                     <div class="po_btn col-6 d-none flex-column">
-                        <a type="button" class="btn btn-outline-success proceed-grn" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
+                        <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
                     </div>
                     <!-- right side desing end -->
                 </div>
@@ -379,6 +380,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 <th scope="col">Qty</th>
                                                 <th scope="col">MU-Qty</th>
                                                 <th scope="col">Total Cost</th>
+                                                <th scope="col">Total Value</th>
                                                 <th scope="col">Unit Cost</th>
                                                 <th scope="col">Unit S-Price</th>
                                                 <th scope="col">Discount(%)</th>
@@ -422,301 +424,208 @@ if (!isset($_SESSION['store_id'])) {
     <script src="dist/js/add-stock.js"></script>
 
     <script>
-        $(document).ready(function() {
-            var ucv_name;
-            var product_unit;
+        $(document).on("click", ".add-btn", function() {
+            var product_code = $(this).closest("tr").find("#product_code").text();
+            var product_name = $(this).closest("tr").find("#product_name").text().trim();
+            // var itemSprice = $(this).closest("tr").find("#itemSprice").text().trim();
+            var unitSprice = $(this).closest("tr").find("#unitSprice").text().trim();
+            var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
+            var product_unit = $(this).closest("tr").find("#product_unit").text();
 
-            // Function to adjust visibility based on product_unit
-            function adjustVisibilityForPackRows() {
-                $(".addedProTable tbody tr").each(function() {
-                    var rowProductUnit = $(this).find("#product_unit").text();
-                    if (rowProductUnit !== 'pack / bottle') {
-                        $(this).find(".auto-generate-m-unit").removeClass("d-none");
-                        $(this).find(".manual-enter-m-unit").addClass("d-none");
-                    }
-                });
-            }
+            var product_qty = 1;
 
-            $(document).on("click", ".add-btn", function() {
-                // Fetch necessary data
-                var product_code = $(this).closest("tr").find("#product_code").text();
-                var product_name = $(this).closest("tr").find("#product_name").text().trim();
-                // var itemSprice = $(this).closest("tr").find("#itemSprice").text().trim();
-                var unitSprice = $(this).closest("tr").find("#unitSprice").text().trim();
-                ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
-                product_unit = $(this).closest("tr").find("#product_unit").text();
-
-                var product_qty = 1;
-
-                var exists = false;
-                $(".addedProTable tbody tr").each(function() {
-                    if ($(this).find("#product_code").text() === product_code) {
-                        exists = true;
-                        return false;
-                    }
-                });
-
-                if (!exists) {
-                    // Append new row to the table
-                    var markup =
-                        "<tr>" +
-                        "<th scope='row' id='product_code'>" + product_code + "</th>" +
-                        "<td id='addproduct_name'>" + product_name + "</td>" +
-                        "<td id='product_unit' class='d-none' >" + product_unit + "</td>" +
-
-                        "<td>" +
-                        "<input id='qty_input' type='text' class='bg-dark form-control text-center qty-input mb-2' value=''>" +
-                        "<input id='free_qty' placeholder='free of qty..' type='text' class='bg-dark form-control text-center free-qty-input' value=''>" +
-                        "</td>" +
-
-                        "<td class='text-center auto-generate-m-unit '>" +
-                        "<label id='minimum_qty' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
-                        "<label id='free_minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
-                        "</td>" +
-
-                        "<td class='text-center manual-enter-m-unit d-none'>" +
-                        "<input type='text' id='manual_unit_input' class='bg-dark form-control text-center manual_unit_input mb-2' value=''>" +
-                        "<input type='text' id='free_manual_unit_input' class='bg-dark form-control text-center free_manual_unit_input' value=''>" +
-                        "</td>" +
-
-                        "<td>" + "<input type='text' id='cost_input' class='bg-dark form-control text-center cost-input' value=''></td>" +
-
-                        "<td>" + "<input placeholder='discount' id='item_discount' type='text' class='bg-dark form-control text-center itemdiscount' value=''>" + "</td>" +
-
-                        "<td>" + "<label id='item_sale_price'></label>" + "</td>" +
-
-                        "<td>" + "<label id='cost_per_unit'></label>" + "</td>" +
-
-
-
-                        "<td>" +
-                        "<input placeholder='unit price' id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input mb-2' value=''>" +
-                        "<input placeholder='barcode' id='unit_barcode' type='text' class='bg-dark form-control text-center unit_barcode' value=''>" +
-                        "</td>" +
-
-
-                        "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
-
-                        "</tr>";
-
-
-                    $(".addedProTable tbody").append(markup);
-
-                    $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
-                    $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
-
-                    // Update visibility based on product_unit
-                    adjustVisibilityForPackRows()
-                } else {
-                    alert("Product already exists in the list!");
+            var exists = false;
+            $(".addedProTable tbody tr").each(function() {
+                if ($(this).find("#product_code").text() === product_code) {
+                    exists = true;
+                    return false;
                 }
             });
 
-            // Event listener for clicking the delete button
-            $(document).on("click", ".cus-delete", function() {
-                $(this).closest("tr").remove();
-                $("#proceedGrnBtn").removeAttr("data-toggle data-target");
+            if (!exists) {
+                // Append new row to the table
+                var markup =
+                    "<tr>" +
+                    "<th scope='row' id='product_code'>" + product_code + "</th>" +
+                    "<td> <label id='product_name'>" + product_name + "</label>(<label id='ucv_name'>" + ucv_name + "</label><label id='product_unit'>" + product_unit + "</label>)</td>" +
+
+                    "<td>" +
+                    "<input id='qty_input' type='text' class='bg-dark form-control text-center mb-2' value=''  placeholder='Qty'>" +
+                    "<input id='free_qty' type='text' class='bg-dark form-control text-center free-qty-input' value='' placeholder='free qty..'>" +
+                    "</td>" +
+
+                    "<td class='text-center auto-generate-m-unit '>" +
+                    "<label id='minimum_qty' class='mb-2' ><i class='fa fa-solid fa-circle-notch fa-spin'></i></label><br>" +
+                    "<label id='free_minimum_qty'><i class='fa fa-solid fa-circle-notch fa-spin'></i></label>" +
+                    "</td>" +
+
+                    "<td class='text-center manual-enter-m-unit d-none'>" +
+                    "<input type='text' id='manual_unit_input' class='bg-dark form-control text-center manual_unit_input mb-2' value=''>" +
+                    "<input type='text' id='free_manual_unit_input' class='bg-dark form-control text-center free_manual_unit_input' value=''>" +
+                    "</td>" +
+
+                    "<td>" + "<input type='text' id='item_price' class='bg-dark form-control text-center' value=''  placeholder='Price'></td>" +
+
+                    "<td>" + "<input id='item_discount' type='text' class='bg-dark form-control text-center' value='' placeholder='Discount'>" + "</td>" +
+
+                    "<td>" + "<label id='total_cost'></label>" + "</td>" +
+
+                    "<td>" + "<label id='total_value'></label>" + "</td>" +
+
+                    "<td>" + "<label id='cost_per_unit'></label>" + "</td>" +
+
+                    "<td>" +
+                    "<input placeholder='unit price' id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input mb-2' value=''>" +
+                    "</td>" +
+
+                    "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
+
+                    "</tr>";
+
+                $(".addedProTable tbody").append(markup);
+
                 $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
                 $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
-            });
 
-            // Convert to minimum unit based on product_unit
-            $(document).on("input", ".qty-input", function() {
-                if (product_unit === 'l') {
-                    var liters = parseFloat($(this).val());
-                    var milliliters = ucv_name * liters * 1000;
-                    $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
-                }
-                if (product_unit === 'kg') {
-                    var kilo = parseFloat($(this).val());
-                    var grams = ucv_name * kilo * 1000;
-                    $(this).closest("tr").find("#minimum_qty").text(grams + "g");
-                }
-                if (product_unit === 'm') {
-                    var meter = parseFloat($(this).val());
-                    var centimete = ucv_name * meter * 100;
-                    $(this).closest("tr").find("#minimum_qty").text(centimete + "cm");
-
-                }
-                if (product_unit === 'ml') {
-                    var ml = parseFloat($(this).val());
-                    var mililiters = ucv_name * ml;
-                    $(this).closest("tr").find("#minimum_qty").text(mililiters + "ml");
-                }
-                if (product_unit === 'g') {
-                    var g = parseFloat($(this).val());
-                    var grams = ucv_name * g;
-                    $(this).closest("tr").find("#minimum_qty").text(grams + "g");
-                }
-                if (product_unit === 'cm') {
-                    var cm = parseFloat($(this).val());
-                    var centimeters = ucv_name * cm;
-                    $(this).closest("tr").find("#minimum_qty").text(centimeters + "cm");
-                }
-            });
-
-            // free qty input for auto generate minimum qty
-            $(document).on("input", ".free-qty-input", function() {
-                if (product_unit === 'l') {
-                    var liters = parseFloat($(this).val());
-                    var milliliters = ucv_name * liters * 1000;
-                    $(this).closest("tr").find("#free_minimum_qty").text(milliliters + "ml");
-
-                }
-                if (product_unit === 'kg') {
-                    var kilo = parseFloat($(this).val());
-                    var grams = ucv_name * kilo * 1000;
-                    $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-                }
-                if (product_unit === 'm') {
-                    var meter = parseFloat($(this).val());
-                    var centimete = ucv_name * meter * 100;
-                    $(this).closest("tr").find("#free_minimum_qty").text(centimete + "cm");
-
-                }
-                if (product_unit === 'ml') {
-                    var ml = parseFloat($(this).val());
-                    var mililiters = ucv_name * ml;
-                    $(this).closest("tr").find("#free_minimum_qty").text(mililiters + "ml");
-                }
-                if (product_unit === 'g') {
-                    var g = parseFloat($(this).val());
-                    var grams = ucv_name * g;
-                    $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-                }
-                if (product_unit === 'cm') {
-                    var cm = parseFloat($(this).val());
-                    var centimeters = ucv_name * cm;
-                    $(this).closest("tr").find("#free_minimum_qty").text(centimeters + "cm");
-                }
-            });
-
-            // add minimum qty manuel for generate cost per unit
-            $(document).on("input", ".cost-input", function() {
-                if ($(this).closest("tr").find(".auto-generate-m-unit").hasClass("d-none")) {
-                    var cost = parseFloat($(this).val());
-                    var manual_unit_input = parseFloat($(this).closest("tr").find(".manual_unit_input").val());
-                    var cost_per_unit = cost / ucv_name;
-                    $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-                }
-            });
-
-            // Calculate cost per unit based on product_unit
-            // $(document).on("input", ".cost-input", function() {
-            //     var product_unit = $(this).closest("tr").find("#product_unit").text();
-            //     var cost = parseFloat($(this).val());
-
-            //     var units = ["l", "kg", "m", "ml", "g", "cm"];
-
-            //     if (units.includes(product_unit)) {
-            //         var cost_per_unit = cost / ucv_name;
-            //         $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-            //     }
-            // });
-
-            $(document).on("input", ".cost-input", function() {
-                if (product_unit === "l") {
-                    var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
-                    // var cost_per_unit = cost / milliliters;
-                    var milliliters = ucv_name * 1000;
-                    var cost_per_unit = cost / milliliters;
-                    $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-                }
-
-                if (product_unit === "kg") {
-                    var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 1000;
-                    // var cost_per_unit = cost / milliliters;
-                    var milliliters = ucv_name * 1000;
-                    var cost_per_unit = cost / milliliters;
-                    $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-                }
-
-                if (product_unit === "m") {
-                    var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name * 100;
-                    // var cost_per_unit = cost / milliliters;
-                    var cost_per_unit = cost / ucv_name;
-                    $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-                }
-
-                if (product_unit === "ml") {
-                    var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    // var cost_per_unit = cost / milliliters;
-                    var cost_per_unit = cost / ucv_name;
-                    $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-                }
-
-                if (product_unit === "g") {
-                    var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    // var cost_per_unit = cost / milliliters;
-                    var cost_per_unit = cost / ucv_name;
-                    $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-                }
-
-                if (product_unit === "cm") {
-                    var cost = parseFloat($(this).val());
-                    // var milliliters = parseFloat($(this).closest("tr").find(".qty-input").val()) * ucv_name;
-                    // var cost_per_unit = cost / milliliters;
-                    var cost_per_unit = cost / ucv_name;
-                    $(this).closest("tr").find("#cost_per_unit").text(cost_per_unit.toFixed(2));
-                }
-            });
-
-            // Calculate discounted price
-            // $(document).on("input", ".itemdiscount", function() {
-            //     var add_discount = parseFloat($(this).val());
-
-            //     var discount = add_discount + 100;
-
-            //     var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
-
-            //     var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-            //     var item_cost = cost_input / qty;
-
-            //     var item_sell_price = item_cost / 100 * discount;
-
-            //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
-            // });
-
-            // $(document).on("input", ".itemdiscount", function() {
-            //     var add_discount = parseFloat($(this).val());
-            //     var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-
-            //     stock_cost = cost_input * qty * discount
-
-
-            //     var item_sell_price = cost_input - (cost_input * (add_discount / 100));
-
-            //     $(this).closest("tr").find("#item_sale_price").text(item_sell_price.toFixed(2));
-            // });
-
-            $(document).on("input", ".itemdiscount", function() {
-                var add_discount = parseFloat($(this).val());
-                // var qty = parseFloat($(this).closest("tr").find(".qty-input").val());
-                var cost_input = parseFloat($(this).closest("tr").find(".cost-input").val());
-
-                // var item_sell_price = cost_input / qty;
-
-                //  var discount =   100 - add_discount;
-                //  var item_cost = cost_input / qty;
-                // var item_sell_price = item_cost / 100 * discount;
-
-                $(this).closest("tr").find("#item_sale_price").text(cost_input.toFixed(2));
-            });
-
-
-            // Initial adjustment of visibility
-            adjustVisibilityForPackRows()
-
+            } else {
+                alert("Product already exists in the list!");
+            }
         });
 
-        $('#myModal').on('shown.bs.modal', function() {
-            $('#myInput').trigger('focus')
-        })
+        // Event listener for clicking the delete button
+        $(document).on("click", ".cus-delete", function() {
+            $(this).closest("tr").remove();
+            $("#proceedGrnBtn").removeAttr("data-toggle data-target");
+            $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
+            $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
+        });
+
+        // Convert to minimum unit based on product_unit
+        $(document).on("input", "#qty_input", function() {
+            var product_unit = $(this).closest("tr").find("#product_unit").text();
+            var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
+            if (product_unit === 'l') {
+                var liters = parseFloat($(this).val());
+                var milliliters = ucv_name * liters * 1000;
+                $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
+            }
+            if (product_unit === 'kg') {
+                var kilo = parseFloat($(this).val());
+                var grams = ucv_name * kilo * 1000;
+                $(this).closest("tr").find("#minimum_qty").text(grams + "g");
+            }
+            if (product_unit === 'm') {
+                var meter = parseFloat($(this).val());
+                var centimete = ucv_name * meter * 100;
+                $(this).closest("tr").find("#minimum_qty").text(centimete + "cm");
+            }
+            if (product_unit === 'ml') {
+                var ml = parseFloat($(this).val());
+                var mililiters = ucv_name * ml;
+                $(this).closest("tr").find("#minimum_qty").text(mililiters + "ml");
+            }
+            if (product_unit === 'g') {
+                var g = parseFloat($(this).val());
+                var grams = ucv_name * g;
+                $(this).closest("tr").find("#minimum_qty").text(grams + "g");
+            }
+            if (product_unit === 'cm') {
+                var cm = parseFloat($(this).val());
+                var centimeters = ucv_name * cm;
+                $(this).closest("tr").find("#minimum_qty").text(centimeters + "cm");
+            }
+        });
+
+        // free qty input for auto generate minimum qty
+        $(document).on("input", "#free_qty", function() {
+            var product_unit = $(this).closest("tr").find("#product_unit").text();
+            var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
+            if (product_unit === 'l') {
+                var liters = parseFloat($(this).val());
+                var milliliters = ucv_name * liters * 1000;
+                $(this).closest("tr").find("#free_minimum_qty").text(milliliters + "ml");
+            }
+            if (product_unit === 'kg') {
+                var kilo = parseFloat($(this).val());
+                var grams = ucv_name * kilo * 1000;
+                $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
+            }
+            if (product_unit === 'm') {
+                var meter = parseFloat($(this).val());
+                var centimete = ucv_name * meter * 100;
+                $(this).closest("tr").find("#free_minimum_qty").text(centimete + "cm");
+            }
+            if (product_unit === 'ml') {
+                var ml = parseFloat($(this).val());
+                var mililiters = ucv_name * ml;
+                $(this).closest("tr").find("#free_minimum_qty").text(mililiters + "ml");
+            }
+            if (product_unit === 'g') {
+                var g = parseFloat($(this).val());
+                var grams = ucv_name * g;
+                $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
+            }
+            if (product_unit === 'cm') {
+                var cm = parseFloat($(this).val());
+                var centimeters = ucv_name * cm;
+                $(this).closest("tr").find("#free_minimum_qty").text(centimeters + "cm");
+            }
+        });
+
+
+        $(document).on("input", "#item_price", function() {
+            const $row = $(this).closest("tr"); // Cache the row to minimize DOM lookups
+            const productUnit = $row.find("#product_unit").text();
+            const ucvName = parseFloat($row.find("#ucv_name").text());
+            const cost = parseFloat($(this).val());
+
+            let costPerUnit = null;
+
+            switch (productUnit) {
+                case "l":
+                case "kg":
+                    costPerUnit = cost / (ucvName * 1000);
+                    break;
+                case "m":
+                case "ml":
+                case "g":
+                case "cm":
+                    costPerUnit = cost / ucvName;
+                    break;
+                default:
+                    if (productUnit !== 'pack / bottle' && productUnit !== 'pieces') {
+                        costPerUnit = cost / ucvName; // Handle all other units, including 'pieces'
+                    }
+                    break;
+            }
+
+            if (costPerUnit !== null) {
+                $row.find("#cost_per_unit").text(costPerUnit.toFixed(2));
+            }
+        });
+
+
+
+        $(document).on("input", "#item_discount", function() {
+            var item_discount = parseFloat($(this).val());
+            var qty = parseFloat($(this).closest("tr").find("#qty_input").val());
+            var item_price = parseFloat($(this).closest("tr").find("#item_price").val());
+            var product_name = $(this).closest("tr").find("#product_name").text();
+
+            if (isNaN(qty)) {
+                $(this).val("");
+                MessageDisplay("error", "Error", product_name + " එකේ Qty දාලා ඉන්න.");
+            } else if (isNaN(item_price)) {
+                $(this).val("");
+                MessageDisplay("error", "Error", product_name + " එකේ Item Price දාලා ඉන්න.");
+            } else {
+                var total_value = item_price * qty;
+                $(this).closest("tr").find("#total_value").text(total_value.toFixed(2));
+                var total_cost = ((item_price * qty) / (100)) * (100 - item_discount);
+                $(this).closest("tr").find("#total_cost").text(total_cost.toFixed(2));
+            }
+        });
+
 
         $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
             var grnNumber = document.getElementById("grnNumber").innerText;
@@ -732,15 +641,15 @@ if (!isset($_SESSION['store_id'])) {
                 var product_qty = $(this).find(".product_qty").text();
                 var minimum_qty = $(this).find(".minimum_qty").text();
                 var item_discount = $(this).find(".item_discount").text();
-                var cost_input = $(this).find(".cost_input").text();
+                var item_price = $(this).find(".item_price").text();
                 if (item_discount > 0) {
-                    cost_input = cost_input / 100 * (100 - item_discount)
+                    item_price = item_price / 100 * (100 - item_discount)
                 }
 
                 var cost_per_unit = $(this).find(".cost_per_unit").text();
                 var unit_s_price = $(this).find(".unit_s_price").text();
 
-                var item_sale_price = $(this).find(".item_sale_price").text();
+                var total_cost = $(this).find(".total_cost").text();
                 var free_qty = $(this).find(".free_qty").text();
                 var free_minimum_qty = $(this).find(".free_minimum_qty").text();
                 var unit_barcode = $(this).find(".unit_barcode").text();
@@ -750,11 +659,11 @@ if (!isset($_SESSION['store_id'])) {
                     product_name: product_name,
                     product_qty: product_qty,
                     minimum_qty: minimum_qty,
-                    cost_input: cost_input,
+                    item_discount: item_discount,
+                    item_price: item_price,
                     cost_per_unit: cost_per_unit,
                     unit_s_price: unit_s_price,
-                    item_discount: item_discount,
-                    item_sale_price: item_sale_price,
+                    total_cost: total_cost,
                     free_qty: free_qty,
                     free_minimum_qty: free_minimum_qty,
                     unit_barcode: unit_barcode,
@@ -770,6 +679,7 @@ if (!isset($_SESSION['store_id'])) {
                     products: JSON.stringify(poArray),
                 },
                 success: function(response) {
+                    $(".confirmPObtn").prop('disabled', false);
                     Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -788,7 +698,6 @@ if (!isset($_SESSION['store_id'])) {
                         // Reload the page after the message is shown
                         location.reload(true);
                     });
-                    $(".confirmPObtn").prop('disabled', false);
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -800,5 +709,103 @@ if (!isset($_SESSION['store_id'])) {
     </script>
 
 </body>
+
+<script>
+    $(document).on("click", "#proceedGrnBtn", function() {
+        var poArray = [];
+        var hasErrors = false; // Flag to track if there are any errors
+
+        $(".addedProTable tbody tr").each(function() {
+            var product_code = $(this).find("#product_code").text(); // Barcode
+            var product_name = $(this).find("#product_name").text().trim(); // Item name
+
+            var product_qty = parseInt($(this).find("#qty_input").val().trim()); // Qty input
+            var free_qty = parseInt($(this).find("#free_qty").val().trim()) || 0; // Free qty input
+
+            var minimum_qty = parseInt($(this).find("#minimum_qty").text().trim()) || 0; // Minimun qty
+            var free_minimum_qty = parseInt($(this).find("#free_minimum_qty").text().trim()) || 0; // Free minimun qty
+
+            var item_price = parseInt($(this).find("#item_price").val().trim()); // Item price input
+            var item_discount = parseInt($(this).find("#item_discount").val().trim()); // Discount input
+
+            var total_cost = $(this).find("#total_cost").text().trim(); // Total cost
+            var total_value = $(this).find("#total_value").text().trim(); // Total value
+            var cost_per_unit = $(this).find("#cost_per_unit").text().trim(); // unit cost
+            var unit_s_price = parseFloat($(this).find("#unit_s_price").val()); // unit price
+
+            // Validation checks
+            if (isNaN(product_qty) || product_qty === 0) {
+                MessageDisplay("error", "Error", product_name + " එකේ Qty දාන්නේ නැද්ද?");
+                hasErrors = true; // Set the error flag to true
+                return false; // Stop processing this row and move to the next one
+            } else if (isNaN(item_price) || item_price === 0) {
+                MessageDisplay("error", "Error", product_name + " එකේ Price නැද්ද?");
+                hasErrors = true;
+                return false;
+            } else if (isNaN(item_discount) || item_discount === 0) {
+                MessageDisplay("error", "Error", product_name + " එකේ Discount නැද්ද?");
+                hasErrors = true;
+                return false;
+            } else {
+                var productData = {
+                    product_code: product_code,
+                    product_name: product_name,
+
+                    product_qty: product_qty,
+                    free_qty: free_qty,
+
+                    minimum_qty: minimum_qty,
+                    free_minimum_qty: free_minimum_qty,
+
+                    item_price: item_price,
+                    item_discount: item_discount,
+
+                    total_cost: total_cost,
+                    total_value: total_value,
+                    cost_per_unit: cost_per_unit,
+                    unit_s_price: unit_s_price,
+                };
+                poArray.push(productData);
+            }
+        });
+
+        // If no errors were found, generate the confirmation table and show the modal
+        if (!hasErrors) {
+            var tableHTML = "";
+            poArray.forEach(function(product) {
+                var totalProductQty = product.product_qty + product.free_qty;
+                var minimumQty = product.minimum_qty === 0 ?
+                    product.manual_unit_input + product.free_manual_unit_input :
+                    product.minimum_qty + product.free_minimum_qty;
+
+                tableHTML += `
+                <tr>
+                    <th scope="row" class="product_code">${product.product_code}</th>
+                    <td class="product_name">${product.product_name}</td>
+                    <td class="product_qty">${totalProductQty}</td>
+                    <td class="minimum_qty">${minimumQty}</td>
+                    <td class="cost_input">${product.item_price}</td>
+                    <td class="cost_per_unit">${product.cost_per_unit}</td>
+                    <td class="unit_s_price">${product.unit_s_price}</td>
+                    <td class="item_discount">${product.item_discount}</td>
+                    <td class="item_sale_price">${product.total_cost}</td>
+                    <td class="free_qty d-none">${product.free_qty}</td>
+                    <td class="unit_barcode d-none">${product.unit_barcode}</td>
+                </tr>
+            `;
+            });
+
+            // Insert the generated HTML into the confirmation table body
+            document.getElementById("grnConfirmationTableBody").innerHTML = tableHTML;
+
+            // Display the modal for confirmation if there are no errors
+            $("#proceedGrnBtn").attr({
+                "data-toggle": "modal",
+                "data-target": "#confirmGRN",
+            });
+        }
+    });
+
+</script>
 
 </html>
