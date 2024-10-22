@@ -69,14 +69,18 @@ if (isset($_SESSION['store_id'])) {
                 <p>PO Item Qty Report</p>
               </a>
             </li>
-
+            <li class="nav-item">
+              <a href="report-profitMargin.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Profit Report</p>
+              </a>
+            </li>
             <li class="nav-item">
               <a href="cashier-all-sales-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>All Sales Report</p>
               </a>
             </li>
-
 
             <li class="nav-header"></li>
 

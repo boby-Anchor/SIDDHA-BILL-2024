@@ -167,6 +167,14 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
 
+            <li class="nav-item">
+              <a href="patient-invoiceReport.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Patient Invoice Reoprt</p>
+              </a>
+            </li>
+
+
 
             <li class="nav-header">Return</li>
 
