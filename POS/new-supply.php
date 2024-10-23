@@ -116,11 +116,11 @@
               </div>
             </div>
             <!-- ads start  -->
-            <div class="d-none d-lg-block col-lg-3">
+            <!-- <div class="d-none d-lg-block col-lg-3">
               <div class="card">
                 <a href="#"> <img src="dist/img/clinic.jpg" alt="" class="img-fluid"> </a>
               </div>
-            </div>
+            </div> -->
             <!-- ads end  -->
           </div>
     </div>
