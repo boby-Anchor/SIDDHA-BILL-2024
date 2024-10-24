@@ -13,6 +13,10 @@ $invoices = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reg_no = $_POST['reg_no'];
 
+    $paymentType = isset($_POST['paymentType']) ? $_POST['paymentType'] : null;
+    $paid_amount = isset($_POST['paid_amount']) ? $_POST['paid_amount'] : null;
+    $fullTotal = 0;
+
     // $result = $conn->query("SELECT * 
     // FROM invoiceitems
     // INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
@@ -74,14 +78,30 @@ $totalValue = 0;
             <div class="row">
                 <div class="card-body overflow-hidden">
                     <div class="row px-4">
-                        <div class="col-4">
+                        <div class="col-12">
                             <form action="" method="post">
-                                <div class="col-auto">
-                                    <label for="start_date" class="col-form-label">Reg. No:</label>
+                                <div class="col-5">
+                                    <div class="col-auto">
+                                        <label for="start_date" class="col-form-label">Reg. No:</label>
+                                    </div>
+                                    <div class="col-auto input-group">
+                                        <input type="text" id="reg_no" name="reg_no" class="form-control" required>
+                                        <button type="submit" class="form-control col-2 btn btn-success ml-2"><i class="fas fa-search"></i></button>
+                                        <button class="form-control col-2 btn btn-success ml-2" onclick="printclaimBill()"><i class="fas fa-print"></i></button>
+                                    </div>
                                 </div>
-                                <div class="col-auto input-group">
-                                    <input type="text" id="reg_no" name="reg_no" class="form-control" required>
-                                    <button type="submit" class="form-control col-2 btn btn-success ml-2"><i class="fas fa-search"></i></button>
+
+                                <div class="col-5">
+                                    <div class="col-auto">
+                                        <label for="start_date" class="col-form-label">Payment type:</label>
+                                    </div>
+                                    <div class="col-auto input-group">
+                                        <select class="form-control ml-2" id="paymentType" name="paymentType">
+                                            <option value="Cash">Cash</option>
+                                            <option value="Card">Card</option>
+                                        </select>
+                                        <input type="text" id="paid_amount" name="paid_amount" class="form-control ml-2" placeholder="Amount">
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -111,12 +131,13 @@ $totalValue = 0;
                                     <th>Price</th>
                                     <th>Qty</th>
                                     <th>Total</th>
-
-
                                 </thead>
                                 <tbody>
                                     <?php
                                     if (!empty($invoices)) {
+
+                                        $invFullTotal =0;
+
                                         foreach ($invoices as $invoice):
 
                                     ?>
@@ -128,16 +149,7 @@ $totalValue = 0;
                                                     <label class="col-auto">Shop :</label><label class="col-auto"><?= htmlspecialchars($invoice['shop_name']); ?></label>
                                                     <label class="col-auto">Bill Total :</label><label class="col-auto"><?= htmlspecialchars($invoice['total_amount']); ?></label>
                                                 </td>
-                                                <!-- <td><label>Shop :</label><?= htmlspecialchars($invoice['shop_id']); ?></td> -->
                                             </tr>
-                                            <!-- <tr>
-                                                <td><label>Shop :</label><?= htmlspecialchars($invoice['shop_id']); ?></td>
-                                                <td><label>Shop :</label><?= htmlspecialchars($invoice['shop_id']); ?></td>
-                                                <td><label>Shop :</label><?= htmlspecialchars($invoice['shop_id']); ?></td>
-                                                <td><label>Shop :</label><?= htmlspecialchars($invoice['shop_id']); ?></td>
-                                                <td><label>Shop :</label><?= htmlspecialchars($invoice['shop_id']); ?></td>
-                                            </tr> -->
-
                                             <?php
 
                                             $dmDataResult = $conn->query("SELECT * 
@@ -159,15 +171,11 @@ $totalValue = 0;
                                             }
 
 
-
-
-
                                             $itemDataResult = $conn->query("SELECT * 
                                             FROM invoiceitems
                                             WHERE invoiceNumber = '" . $invoice['invoice_id'] . "'
                                             AND invoiceitems.isPaththu = 0
                                             ");
-
 
                                             $item_data = $itemDataResult->fetch_all(MYSQLI_ASSOC);
 
@@ -313,8 +321,127 @@ $totalValue = 0;
                         </div>
                         <!-- table header end -->
                         <div class="printInvoiceData" id="printInvoiceData">
+                            <?php
+                            if (!empty($invoices)) {
+                                foreach ($invoices as $invoice):
 
+                                    $fullTotal += $invoice['total_amount'];
+
+                                    $dmDataResult = $conn->query("SELECT * 
+                                    FROM dm_items
+                                    WHERE invoice_id = '" . $invoice['invoice_id'] . "'
+                                    ");
+
+                                    $dm_Item_data = $dmDataResult->fetch_all(MYSQLI_ASSOC);
+
+                                    foreach ($dm_Item_data as $data) {
+
+                            ?>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span class="product_name"><?= $data['dmName'] ?></span>
+                                                </div>
+                                                <div class="col-4">
+                                                    <span class="product_cost"><?= $data['totalPrice'] ?></span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="product_qty">
+                                                        1
+                                                    </span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="productTotal"><?= $data['totalPrice'] ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php
+                                    }
+
+                                    $itemDataResult = $conn->query("SELECT * 
+                                    FROM invoiceitems
+                                    WHERE invoiceNumber = '" . $invoice['invoice_id'] . "'
+                                    AND invoiceitems.isPaththu = 0
+                                    ");
+
+
+                                    $item_data = $itemDataResult->fetch_all(MYSQLI_ASSOC);
+
+                                    foreach ($item_data as $data) {
+
+                                    ?>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span class="product_name"><?= $data['invoiceItem'] ?></span>
+                                                </div>
+                                                <div class="col-4">
+                                                    <span class="product_cost"><?= $data['invoiceItem_price'] ?></span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="product_qty"> <?= $data['invoiceItem_qty'] ?> </span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="productTotal"><?= $data['invoiceItem_total'] ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
+                                    <div class="col-12" style="border-bottom: #0e0e0e 0.1rem solid;"></div>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span class="product_name">Inv. Date</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="product_name"><?= date('Y-m-d', strtotime($invoice['created'])) ?></span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="product_qty">
+                                                    Inv. Total
+                                                </span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="productTotal"><?= $invoice['total_amount'] ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" style="border-bottom: #0e0e0e 0.1rem solid;"></div>
+
+                                <?php
+                                endforeach;
+                            } else {
+                                ?>
+                                <tr>
+                                    <td colspan="5" class="text-center">No Data</td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
                         </div>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div>
+                                    <div class="col-12 d-flex justify-content-start pt-2" style="border-top: #0e0e0e 0.2rem solid;">
+                                        <span class="productsAllTotal">Net Total : <?= $fullTotal ?></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 d-flex justify-content-start pt-2">
+                                    <span>Payment Type : </span><span id="payment_type"></span>
+                                </div>
+
+                                <div class="col-12 d-flex justify-content-start pt-2">
+                                    <span>Paid Amaount : </span> <span id="paidAmount"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
                         <table>
                             <tr style="font-weight: 600;">
                                 <td>
@@ -357,5 +484,134 @@ $totalValue = 0;
     </div>
 
 </body>
+
+<script>
+    function printclaimBill() {
+
+        document.getElementById('payment_type').textContent = document.getElementById('paymentType').value;
+        document.getElementById('paidAmount').textContent = document.getElementById('paid_amount').value;
+
+
+        var printWindow = window.open("", "_blank");
+        printWindow.document.write("<html><head><title>Invoice</title>");
+
+        function loadContent() {
+            printWindow.document.write("<style>");
+            printWindow.document.write(
+                "\
+      span {\
+        font-size: 10px;\
+        font-weight:bold;\
+      }\
+      .paperSize48 {\
+        background-color: whitesmoke;\
+        width: 48mm;\
+      }\
+      .billpreviewlogo48 {\
+        height: 20px;\
+        width: 120px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: contain;\
+      }\
+      .address48,\
+      .datetime48,\
+      .agent48 {\
+        font-size: small;\
+        font-weight: bold;\
+      }\
+      .productTable48 {\
+        font-size: small;\
+      }\
+      .paperSize58 {\
+        background-color: whitesmoke;\
+        width: 58mm;\
+      }\
+      .billpreviewlogo {\
+        height: 70px;\
+        width: 120px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: contain;\
+      }\
+      .address58{\
+        max-width: 130px;\
+      }\
+      .address58,\
+      .datetime58,\
+      .agent58 {\
+        font-size: small;\
+        font-weight: bold;\
+      }\
+      .productTable58 {\
+        font-size: small;\
+      }\
+      .billpreviewlogo80 {\
+        height: 100px;\
+        width: 160px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: cover;\
+      }\
+      .paperSize80 {\
+        background-color: whitesmoke;\
+        width: 80mm;\
+      }\
+      .contactNumber{\
+        font-size:medium;\
+        font-weight: bold;\
+      }\
+        .check-by-box {\
+            border: 2px solid #000 !important;\
+            width:100%;\
+            padding: 5px;\
+            font-family: Arial, sans-serif;\
+        }\
+    .check-by-box label {\
+            display: block;\
+            font-size: 10px !important;\
+        }\
+    "
+            );
+            printWindow.document.write("</style>");
+
+            printWindow.document.write("</head><body>");
+            printWindow.document.write(
+                document.getElementById("invoice-POS").innerHTML
+            );
+            printWindow.document.write("</body></html>");
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+
+        function stylesheetLoaded() {
+            if (++loadedStylesheets === totalStylesheets) {
+                loadContent();
+            }
+        }
+
+        var totalStylesheets = 1;
+        var loadedStylesheets = 0;
+
+        var bootstrapLink = printWindow.document.createElement("link");
+        bootstrapLink.rel = "stylesheet";
+        bootstrapLink.href =
+            "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
+        bootstrapLink.onload = stylesheetLoaded;
+        printWindow.document.head.appendChild(bootstrapLink);
+
+        if (totalStylesheets === 0) {
+            loadContent();
+        }
+
+        // After printing, reload the pos.php file
+        printWindow.onafterprint = function() {
+            printWindow.close(); // Close the print window
+            window.location.reload();
+            // Reload the pos.php file in the main window
+        };
+    }
+</script>
 
 </html>

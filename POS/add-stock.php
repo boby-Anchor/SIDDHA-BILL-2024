@@ -775,7 +775,7 @@ if (!isset($_SESSION['store_id'])) {
             poArray.forEach(function(product) {
                 var totalProductQty = product.product_qty + product.free_qty;
                 var minimumQty = product.minimum_qty === 0 ?
-                    product.manual_unit_input + product.free_manual_unit_input :
+                    0 :
                     product.minimum_qty + product.free_minimum_qty;
 
                 tableHTML += `
@@ -789,8 +789,7 @@ if (!isset($_SESSION['store_id'])) {
                     <td class="unit_s_price">${product.unit_s_price}</td>
                     <td class="item_discount">${product.item_discount}</td>
                     <td class="item_sale_price">${product.total_cost}</td>
-                    <td class="free_qty d-none">${product.free_qty}</td>
-                    <td class="unit_barcode d-none">${product.unit_barcode}</td>
+                    <td class="free_qty">${product.free_qty}</td>
                 </tr>
             `;
             });
@@ -805,7 +804,6 @@ if (!isset($_SESSION['store_id'])) {
             });
         }
     });
-
 </script>
 
 </html>

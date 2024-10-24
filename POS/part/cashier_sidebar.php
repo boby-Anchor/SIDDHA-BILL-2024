@@ -174,8 +174,6 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
 
-
-
             <li class="nav-header">Return</li>
 
             <li class="nav-item">
