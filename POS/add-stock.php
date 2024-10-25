@@ -382,9 +382,9 @@ if (!isset($_SESSION['store_id'])) {
                                                 <th scope="col">Total Cost</th>
                                                 <th scope="col">Total Value</th>
                                                 <th scope="col">Unit Cost</th>
-                                                <th scope="col">Unit S-Price</th>
                                                 <th scope="col">Discount(%)</th>
                                                 <th scope="col">Item S-Price</th>
+                                                <th scope="col">Unit S-Price</th>
                                             </tr>
                                         </thead>
                                         <tbody id="grnConfirmationTableBody">
@@ -500,7 +500,7 @@ if (!isset($_SESSION['store_id'])) {
             $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
         });
 
-        // Convert to minimum unit based on product_unit
+        // Calculate minimum quantity unit based on product_unit
         $(document).on("input", "#qty_input", function() {
             var product_unit = $(this).closest("tr").find("#product_unit").text();
             var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
@@ -572,45 +572,60 @@ if (!isset($_SESSION['store_id'])) {
             }
         });
 
-
+        // calculate cost per unit 
         $(document).on("input", "#item_price", function() {
-            const $row = $(this).closest("tr"); // Cache the row to minimize DOM lookups
-            const productUnit = $row.find("#product_unit").text();
-            const ucvName = parseFloat($row.find("#ucv_name").text());
-            const cost = parseFloat($(this).val());
+            const $row = $(this).closest("tr");
+            const price = parseFloat($(this).val());
+            var product_name = $row.find("#product_name").text();
+            var qty = parseFloat($row.find("#qty_input").val());
 
-            let costPerUnit = null;
-
-            switch (productUnit) {
-                case "l":
-                case "kg":
-                    costPerUnit = cost / (ucvName * 1000);
-                    break;
-                case "m":
-                case "ml":
-                case "g":
-                case "cm":
-                    costPerUnit = cost / ucvName;
-                    break;
-                default:
-                    if (productUnit !== 'pack / bottle' && productUnit !== 'pieces') {
-                        costPerUnit = cost / ucvName; // Handle all other units, including 'pieces'
-                    }
-                    break;
+            if (isNaN(qty)) {
+                $(this).val("");
+                MessageDisplay("error", "Error", product_name + " එකේ Qty දාලා ඉන්න.");
+            } else {
+                total_value = price * qty;
+                $row.find("#total_value").text(total_value.toFixed(2));
             }
 
-            if (costPerUnit !== null) {
-                $row.find("#cost_per_unit").text(costPerUnit.toFixed(2));
-            }
+            // const productUnit = $row.find("#product_unit").text();
+            // const ucvName = parseFloat($row.find("#ucv_name").text());
+            // const cost = parseFloat($(this).val());
+
+            // let costPerUnit = null;
+
+            // switch (productUnit) {
+            //     case "l":
+            //     case "kg":
+            //         costPerUnit = cost / (ucvName * 1000);
+            //         break;
+            //     case "m":
+            //     case "ml":
+            //     case "g":
+            //     case "cm":
+            //         costPerUnit = cost / ucvName;
+            //         break;
+            //     default:
+            //         if (productUnit !== 'pack / bottle' && productUnit !== 'pieces') {
+            //             costPerUnit = cost / ucvName;
+            //         }
+            //         break;
+            // }
+
+            // if (costPerUnit !== null) {
+            //     $row.find("#cost_per_unit").text(costPerUnit.toFixed(2));
+            // }
         });
 
 
 
         $(document).on("input", "#item_discount", function() {
+            const $row = $(this).closest("tr");
             var item_discount = parseFloat($(this).val());
-            var qty = parseFloat($(this).closest("tr").find("#qty_input").val());
-            var item_price = parseFloat($(this).closest("tr").find("#item_price").val());
-            var product_name = $(this).closest("tr").find("#product_name").text();
+            var qty = parseFloat($row.find("#qty_input").val());
+            var item_price = parseFloat($row.find("#item_price").val());
+            var product_name = $row.find("#product_name").text();
+            var ucv_name = $row.find("#ucv_name").text();
+            var minimum_qty = parseFloat($row.find("#minimum_qty").text().replace(/[^\d.]/g, ''));
 
             if (isNaN(qty)) {
                 $(this).val("");
@@ -620,17 +635,16 @@ if (!isset($_SESSION['store_id'])) {
                 MessageDisplay("error", "Error", product_name + " එකේ Item Price දාලා ඉන්න.");
             } else {
                 var total_value = item_price * qty;
-                $(this).closest("tr").find("#total_value").text(total_value.toFixed(2));
-                var total_cost = ((item_price * qty) / (100)) * (100 - item_discount);
-                $(this).closest("tr").find("#total_cost").text(total_cost.toFixed(2));
+                $row.find("#total_value").text(total_value.toFixed(2));
+                var total_cost = (total_value * (100 - item_discount)) / 100;
+                $row.find("#total_cost").text(total_cost.toFixed(2));
+                var unit_cost = total_cost / minimum_qty;
+                $row.find("#cost_per_unit").text(unit_cost.toFixed(2));
             }
         });
 
 
         $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
-            var grnNumber = document.getElementById("grnNumber").innerText;
-            var grnDate = document.getElementById("grnDate").innerText;
-            var grnTime = document.getElementById("grnTime").innerText;
             $(this).prop('disabled', true);
 
             var poArray = [];
@@ -640,19 +654,13 @@ if (!isset($_SESSION['store_id'])) {
                 var product_name = $(this).find(".product_name").text();
                 var product_qty = $(this).find(".product_qty").text();
                 var minimum_qty = $(this).find(".minimum_qty").text();
+                var total_cost = $(this).find(".total_cost").text();
+                var total_value = $(this).find(".total_value").text();
+                var cost_per_unit = $(this).find(".cost_per_unit").text();
                 var item_discount = $(this).find(".item_discount").text();
                 var item_price = $(this).find(".item_price").text();
-                if (item_discount > 0) {
-                    item_price = item_price / 100 * (100 - item_discount)
-                }
-
-                var cost_per_unit = $(this).find(".cost_per_unit").text();
                 var unit_s_price = $(this).find(".unit_s_price").text();
-
-                var total_cost = $(this).find(".total_cost").text();
                 var free_qty = $(this).find(".free_qty").text();
-                var free_minimum_qty = $(this).find(".free_minimum_qty").text();
-                var unit_barcode = $(this).find(".unit_barcode").text();
 
                 var productData = {
                     product_code: product_code,
@@ -666,20 +674,21 @@ if (!isset($_SESSION['store_id'])) {
                     total_cost: total_cost,
                     free_qty: free_qty,
                     free_minimum_qty: free_minimum_qty,
-                    unit_barcode: unit_barcode,
 
                 };
                 poArray.push(productData);
             });
 
+            console.log(poArray);
+
             $.ajax({
                 url: "grnConfirmationInsert.php",
                 method: "POST",
                 data: {
-                    products: JSON.stringify(poArray),
+                    // products: JSON.stringify(poArray),
                 },
                 success: function(response) {
-                    $(".confirmPObtn").prop('disabled', false);
+                    // $(".confirmPObtn").prop('disabled', false);
                     Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -696,12 +705,12 @@ if (!isset($_SESSION['store_id'])) {
                         title: "Success: " + response, // Concatenate response text with "Success"
                     }).then(() => {
                         // Reload the page after the message is shown
-                        location.reload(true);
+                        // location.reload(true);
                     });
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
-                    $(".confirmPObtn").prop('disabled', false);
+                    // $(".confirmPObtn").prop('disabled', false);
                 },
             });
 
@@ -731,19 +740,23 @@ if (!isset($_SESSION['store_id'])) {
             var total_cost = $(this).find("#total_cost").text().trim(); // Total cost
             var total_value = $(this).find("#total_value").text().trim(); // Total value
             var cost_per_unit = $(this).find("#cost_per_unit").text().trim(); // unit cost
-            var unit_s_price = parseFloat($(this).find("#unit_s_price").val()); // unit price
+            var unit_s_price = parseFloat($(this).find("#unit_s_price").val()) || 0; // unit price
 
-            // Validation checks
+            // Data Validation
             if (isNaN(product_qty) || product_qty === 0) {
                 MessageDisplay("error", "Error", product_name + " එකේ Qty දාන්නේ නැද්ද?");
-                hasErrors = true; // Set the error flag to true
-                return false; // Stop processing this row and move to the next one
+                hasErrors = true;
+                return false;
             } else if (isNaN(item_price) || item_price === 0) {
                 MessageDisplay("error", "Error", product_name + " එකේ Price නැද්ද?");
                 hasErrors = true;
                 return false;
             } else if (isNaN(item_discount) || item_discount === 0) {
                 MessageDisplay("error", "Error", product_name + " එකේ Discount නැද්ද?");
+                hasErrors = true;
+                return false;
+            } else if (unit_s_price !== 0 && cost_per_unit > unit_s_price) {
+                MessageDisplay("error", "Error", product_name + " එකේ Unit Cost > Unit Price..!");
                 hasErrors = true;
                 return false;
             } else {
@@ -775,8 +788,7 @@ if (!isset($_SESSION['store_id'])) {
             poArray.forEach(function(product) {
                 var totalProductQty = product.product_qty + product.free_qty;
                 var minimumQty = product.minimum_qty === 0 ?
-                    0 :
-                    product.minimum_qty + product.free_minimum_qty;
+                    0 : product.minimum_qty + product.free_minimum_qty;
 
                 tableHTML += `
                 <tr>
@@ -784,12 +796,13 @@ if (!isset($_SESSION['store_id'])) {
                     <td class="product_name">${product.product_name}</td>
                     <td class="product_qty">${totalProductQty}</td>
                     <td class="minimum_qty">${minimumQty}</td>
-                    <td class="cost_input">${product.item_price}</td>
+                    <td class="total_cost">${product.total_cost}</td>
+                    <td class="total_value">${product.total_value}</td> 
                     <td class="cost_per_unit">${product.cost_per_unit}</td>
-                    <td class="unit_s_price">${product.unit_s_price}</td>
                     <td class="item_discount">${product.item_discount}</td>
-                    <td class="item_sale_price">${product.total_cost}</td>
-                    <td class="free_qty">${product.free_qty}</td>
+                    <td class="item_price">${product.item_price}</td>
+                    <td class="unit_s_price">${product.unit_s_price}</td>
+                    <td class="free_qty d-none">${product.free_qty}</td>
                 </tr>
             `;
             });
