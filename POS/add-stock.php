@@ -142,41 +142,41 @@ if (!isset($_SESSION['store_id'])) {
                     <div class="col-12">
                         <div class="card-body h-100 bg-dark overflow-hidden">
                             <div class="row">
-                                <!-- <div class="col-6"> -->
-                                <!-- <img src="dist/img/Siddha.lk (1).png" alt="" class="img-fluid"> -->
-                                <!-- </div> -->
+                                <!-- <div class="col-6">
+                                    <img src="dist/img/Siddha.lk (1).png" alt="" class="img-fluid">
+                                </div>
 
                                 <!-- supplier selector start -->
                                 <!-- <div class="col-12 p-4">
                                     <label for="select-supplier">Select Supplier</label>
                                     <select name="select-supplier" id="select-supplier" class="form-control bg-dark" onchange="select_suplier(this.value);">
-                                        <option value="0">select supplier</option>
+                                        <option value="0">select supplier</option> -->
 
-                                        <?php
-                                        // if (isset($_SESSION['store_id'])) {
+                                <?php
+                                // if (isset($_SESSION['store_id'])) {
 
-                                        //     $userLoginData = $_SESSION['store_id'];
+                                //     $userLoginData = $_SESSION['store_id'];
 
-                                        //     foreach ($userLoginData as $userData) {
-                                        //         $shop_id = $userData['shop_id'];
-                                        //         $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
-                                        //         INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
-                                        //         INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
-                                        //         WHERE producttoshop.shop_id = '$shop_id'
-                                        //         ");
-                                        //         while ($supplier_data = $supplier_rs->fetch_assoc()) {
-                                        ?>
-                                                    <option value="<?php // $supplier_data["id"] 
-                                                                    ?>"><?php // $supplier_data["name"] 
-                                                                        ?></option>
+                                //     foreach ($userLoginData as $userData) {
+                                //         $shop_id = $userData['shop_id'];
+                                //         $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
+                                //         INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
+                                //         INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
+                                //         WHERE producttoshop.shop_id = '$shop_id'
+                                //         ");
+                                //         while ($supplier_data = $supplier_rs->fetch_assoc()) {
+                                ?>
+                                <!-- <option value="<?php // $supplier_data["id"] 
+                                                    ?>"><?php // $supplier_data["name"] 
+                                                        ?></option>
                                         <?php
                                         //         }
                                         //     }
                                         // }
 
                                         ?>
-                                    </select>
-                                </div> -->
+                                     </select>
+                                </div>  -->
                                 <!-- supplier selector end -->
 
                                 <!-- supplier products start -->
@@ -298,7 +298,6 @@ if (!isset($_SESSION['store_id'])) {
                                         <th scope="col">Total Value</th>
                                         <th scope="col">Unit Cost</th>
                                         <th scope="col">1 Unit Price</th>
-
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -620,12 +619,13 @@ if (!isset($_SESSION['store_id'])) {
 
         $(document).on("input", "#item_discount", function() {
             const $row = $(this).closest("tr");
-            var item_discount = parseFloat($(this).val());
-            var qty = parseFloat($row.find("#qty_input").val());
-            var item_price = parseFloat($row.find("#item_price").val());
             var product_name = $row.find("#product_name").text();
             var ucv_name = $row.find("#ucv_name").text();
+            var product_unit = $row.find("#product_unit").text();
+            var qty = parseFloat($row.find("#qty_input").val());
             var minimum_qty = parseFloat($row.find("#minimum_qty").text().replace(/[^\d.]/g, ''));
+            var item_price = parseFloat($row.find("#item_price").val());
+            var item_discount = parseFloat($(this).val());
 
             if (isNaN(qty)) {
                 $(this).val("");
@@ -635,17 +635,19 @@ if (!isset($_SESSION['store_id'])) {
                 MessageDisplay("error", "Error", product_name + " එකේ Item Price දාලා ඉන්න.");
             } else {
                 var total_value = item_price * qty;
-                $row.find("#total_value").text(total_value.toFixed(2));
+                $row.find("#total_value").text(total_value.toFixed(0));
                 var total_cost = (total_value * (100 - item_discount)) / 100;
-                $row.find("#total_cost").text(total_cost.toFixed(2));
-                var unit_cost = total_cost / minimum_qty;
-                $row.find("#cost_per_unit").text(unit_cost.toFixed(2));
+                $row.find("#total_cost").text(total_cost.toFixed(0));
+                if (product_unit !== 'pack / bottle' && product_unit !== 'pieces') {
+                    var unit_cost = total_cost / minimum_qty;
+                    $row.find("#cost_per_unit").text(unit_cost.toFixed(2));
+                }
             }
         });
 
 
         $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
-            $(this).prop('disabled', true);
+            // $(this).prop('disabled', true);
 
             var poArray = [];
 
@@ -656,7 +658,7 @@ if (!isset($_SESSION['store_id'])) {
                 var minimum_qty = $(this).find(".minimum_qty").text();
                 var total_cost = $(this).find(".total_cost").text();
                 var total_value = $(this).find(".total_value").text();
-                var cost_per_unit = $(this).find(".cost_per_unit").text();
+                // var cost_per_unit = $(this).find(".cost_per_unit").text();
                 var item_discount = $(this).find(".item_discount").text();
                 var item_price = $(this).find(".item_price").text();
                 var unit_s_price = $(this).find(".unit_s_price").text();
@@ -669,46 +671,65 @@ if (!isset($_SESSION['store_id'])) {
                     minimum_qty: minimum_qty,
                     item_discount: item_discount,
                     item_price: item_price,
-                    cost_per_unit: cost_per_unit,
+                    // cost_per_unit: cost_per_unit,
                     unit_s_price: unit_s_price,
                     total_cost: total_cost,
                     free_qty: free_qty,
-                    free_minimum_qty: free_minimum_qty,
-
                 };
                 poArray.push(productData);
             });
-
-            console.log(poArray);
 
             $.ajax({
                 url: "grnConfirmationInsert.php",
                 method: "POST",
                 data: {
-                    // products: JSON.stringify(poArray),
+                    products: JSON.stringify(poArray),
                 },
                 success: function(response) {
-                    // $(".confirmPObtn").prop('disabled', false);
-                    Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true, // Show progress bar during timer
-                        didOpen: (toast) => {
-                            // Pause timer when mouse hover
-                            toast.addEventListener('mouseenter', Swal.stopTimer);
-                            toast.addEventListener('mouseleave', Swal.resumeTimer);
-                        }
-                    }).fire({
-                        icon: "success",
-                        title: "Success: " + response, // Concatenate response text with "Success"
-                    }).then(() => {
-                        // Reload the page after the message is shown
+
+                    var result = JSON.parse(response);
+
+                    if (result.status === 'success') {
+
+                        MessageDisplay("success", "Success", result.message);
+
+                        // setTimeout(function() {
                         // location.reload(true);
-                    });
+                        // }, 3000);
+
+                        // $("#totalSale").text(result.sellAmount);
+                        // // $("#totalSales").text(result.sellAmount);
+                        // $("#totalCash").text(result.cashpayment);
+                        // $("#totalCard").text(result.cardPayment);
+                        // $("#totalOut").text(result.cashOut);
+                        // $('#saleInvoiceData').empty();
+
+                        // result.tableData.forEach(function(item) {
+                        //     var row = '<tr>' +
+                        //         '<td><lable class="labInvo">' + item.invoice_id + '</lable> <br> ' + item.created + '</td>' +
+                        //         '<td>' + item.p_name + '</td>' +
+                        //         '<td>' + item.reg + '</td>' +
+                        //         '<td>' + item.contact_no + '</td>' +
+                        //         '<td>' + item.d_name + '</td>' +
+                        //         '</tr>';
+                        //     // $('#saleInvoiceData').append(row);
+                        //     document.getElementById('saleInvoiceData').insertAdjacentHTML('beforeend', row);
+                        // });
+
+                    } else if (result.status === 'error') {
+                        MessageDisplay("error", "Error", result.message);
+                    } else {
+                        console.log("anthima else eka");
+                        console.log(result);
+                    }
+
+                    console.log("eliye thiyana log eka");
+                    console.log(result);
+                    // $(".confirmPObtn").prop('disabled', false);
+
                 },
                 error: function(xhr, status, error) {
+                    MessageDisplay("error", "Error", "404 Connection failed");
                     console.error(xhr.responseText);
                     // $(".confirmPObtn").prop('disabled', false);
                 },
@@ -718,105 +739,5 @@ if (!isset($_SESSION['store_id'])) {
     </script>
 
 </body>
-
-<script>
-    $(document).on("click", "#proceedGrnBtn", function() {
-        var poArray = [];
-        var hasErrors = false; // Flag to track if there are any errors
-
-        $(".addedProTable tbody tr").each(function() {
-            var product_code = $(this).find("#product_code").text(); // Barcode
-            var product_name = $(this).find("#product_name").text().trim(); // Item name
-
-            var product_qty = parseInt($(this).find("#qty_input").val().trim()); // Qty input
-            var free_qty = parseInt($(this).find("#free_qty").val().trim()) || 0; // Free qty input
-
-            var minimum_qty = parseInt($(this).find("#minimum_qty").text().trim()) || 0; // Minimun qty
-            var free_minimum_qty = parseInt($(this).find("#free_minimum_qty").text().trim()) || 0; // Free minimun qty
-
-            var item_price = parseInt($(this).find("#item_price").val().trim()); // Item price input
-            var item_discount = parseInt($(this).find("#item_discount").val().trim()); // Discount input
-
-            var total_cost = $(this).find("#total_cost").text().trim(); // Total cost
-            var total_value = $(this).find("#total_value").text().trim(); // Total value
-            var cost_per_unit = $(this).find("#cost_per_unit").text().trim(); // unit cost
-            var unit_s_price = parseFloat($(this).find("#unit_s_price").val()) || 0; // unit price
-
-            // Data Validation
-            if (isNaN(product_qty) || product_qty === 0) {
-                MessageDisplay("error", "Error", product_name + " එකේ Qty දාන්නේ නැද්ද?");
-                hasErrors = true;
-                return false;
-            } else if (isNaN(item_price) || item_price === 0) {
-                MessageDisplay("error", "Error", product_name + " එකේ Price නැද්ද?");
-                hasErrors = true;
-                return false;
-            } else if (isNaN(item_discount) || item_discount === 0) {
-                MessageDisplay("error", "Error", product_name + " එකේ Discount නැද්ද?");
-                hasErrors = true;
-                return false;
-            } else if (unit_s_price !== 0 && cost_per_unit > unit_s_price) {
-                MessageDisplay("error", "Error", product_name + " එකේ Unit Cost > Unit Price..!");
-                hasErrors = true;
-                return false;
-            } else {
-                var productData = {
-                    product_code: product_code,
-                    product_name: product_name,
-
-                    product_qty: product_qty,
-                    free_qty: free_qty,
-
-                    minimum_qty: minimum_qty,
-                    free_minimum_qty: free_minimum_qty,
-
-                    item_price: item_price,
-                    item_discount: item_discount,
-
-                    total_cost: total_cost,
-                    total_value: total_value,
-                    cost_per_unit: cost_per_unit,
-                    unit_s_price: unit_s_price,
-                };
-                poArray.push(productData);
-            }
-        });
-
-        // If no errors were found, generate the confirmation table and show the modal
-        if (!hasErrors) {
-            var tableHTML = "";
-            poArray.forEach(function(product) {
-                var totalProductQty = product.product_qty + product.free_qty;
-                var minimumQty = product.minimum_qty === 0 ?
-                    0 : product.minimum_qty + product.free_minimum_qty;
-
-                tableHTML += `
-                <tr>
-                    <th scope="row" class="product_code">${product.product_code}</th>
-                    <td class="product_name">${product.product_name}</td>
-                    <td class="product_qty">${totalProductQty}</td>
-                    <td class="minimum_qty">${minimumQty}</td>
-                    <td class="total_cost">${product.total_cost}</td>
-                    <td class="total_value">${product.total_value}</td> 
-                    <td class="cost_per_unit">${product.cost_per_unit}</td>
-                    <td class="item_discount">${product.item_discount}</td>
-                    <td class="item_price">${product.item_price}</td>
-                    <td class="unit_s_price">${product.unit_s_price}</td>
-                    <td class="free_qty d-none">${product.free_qty}</td>
-                </tr>
-            `;
-            });
-
-            // Insert the generated HTML into the confirmation table body
-            document.getElementById("grnConfirmationTableBody").innerHTML = tableHTML;
-
-            // Display the modal for confirmation if there are no errors
-            $("#proceedGrnBtn").attr({
-                "data-toggle": "modal",
-                "data-target": "#confirmGRN",
-            });
-        }
-    });
-</script>
 
 </html>

@@ -1,81 +1,104 @@
-// ==============================================================================proceed_grn
+// ==============================================================================
 
-$(document).on("click", ".proceed-grn", function () {
+$(document).on("click", "#proceedGrnBtn", function() {
   var poArray = [];
+  var hasErrors = false; // Flag to track if there are any errors
 
-  $(".addedProTable tbody tr").each(function () {
-    var product_code = $(this).find("th").text();
-    var product_name = $(this).find("#addproduct_name").text();
-    var product_cost = parseInt($(this).find("#addproduct_cost").val());
-    var product_qty = parseInt($(this).find("#qty_input").val());
-    var free_qty = $(this).find("#free_qty").val();
-    var minimum_qty = $(this).find("#minimum_qty").text();
-    var free_minimum_qty = $(this).find("#free_minimum_qty").text();
+  $(".addedProTable tbody tr").each(function() {
+      var product_code = $(this).find("#product_code").text(); // Barcode
+      var product_name = $(this).find("#product_name").text().trim(); // Item name
 
-    var cost_input = parseInt($(this).find("#cost_input").val());
-    var cost_per_unit = $(this).find("#cost_per_unit").text();
-    var unit_s_price = parseFloat($(this).find("#unit_s_price").val());
-    var item_discount = parseInt($(this).find("#item_discount").val());
-    var item_sale_price = $(this).find("#item_sale_price").text();
-    var unit_barcode = $(this).find("#unit_barcode").val();
+      var product_qty = parseInt($(this).find("#qty_input").val().trim()); // Qty input
+      var free_qty = parseInt($(this).find("#free_qty").val().trim()) || 0; // Free qty input
 
-    var manual_unit_input = $(this).find("#manual_unit_input").val();
-    var free_manual_unit_input = $(this)
-      .find("#free_manual_unit_input")
-      .val();
+      var minimum_qty = parseInt($(this).find("#minimum_qty").text().trim()) || 0; // Minimun qty
+      var free_minimum_qty = parseInt($(this).find("#free_minimum_qty").text().trim()) || 0; // Free minimun qty
 
-    if (isNaN(product_qty) || product_qty === 0 || product_qty == "0" || product_qty === "") {
-      MessageDisplay("error", "Error", "Qrt is invalid in " + product_name)
+      var item_price = parseInt($(this).find("#item_price").val().trim()); // Item price input
+      var item_discount = parseInt($(this).find("#item_discount").val().trim()); // Discount input
 
-    } else if (isNaN(cost_input) || cost_input === 0 || cost_input == "0" || cost_input === "") {
-      MessageDisplay("error", "Error", "Price is empty in " + product_name);
+      var total_cost = $(this).find("#total_cost").text().trim(); // Total cost
+      var total_value = $(this).find("#total_value").text().trim(); // Total value
+      var cost_per_unit = $(this).find("#cost_per_unit").text().trim() || 0; // unit cost
+      var unit_s_price = parseFloat($(this).find("#unit_s_price").val().trim()) || 0; // unit price
 
-    } else if (isNaN(item_discount) || item_discount === 0 || item_discount == "0" || item_discount === "") {
-      MessageDisplay("error", "Error", "Discount is empty in " + product_name);
+      // Data Validation
+      if (isNaN(product_qty) || product_qty === 0) {
+          MessageDisplay("error", "Error", product_name + " එකේ Qty දාන්නේ නැද්ද?");
+          hasErrors = true;
+          return false;
+      } else if (isNaN(item_price) || item_price === 0) {
+          MessageDisplay("error", "Error", product_name + " එකේ Price නැද්ද?");
+          hasErrors = true;
+          return false;
+      } else if (isNaN(item_discount)) {
+          MessageDisplay("error", "Error", product_name + " එකේ Discount නැද්ද?");
+          hasErrors = true;
+          return false;
+      } else if (unit_s_price !== 0 && cost_per_unit > unit_s_price) {
+          MessageDisplay("error", "Error", product_name + " එකේ Unit Cost > Unit Price..!");
+          hasErrors = true;
+          return false;
+      } else {
+          var productData = {
+              product_code: product_code,
+              product_name: product_name,
 
-    } else {
-      var productData = {
-        product_code: product_code,
-        product_name: product_name,
-        product_cost: product_cost,
-        product_qty: product_qty,
-        free_qty: free_qty,
-        minimum_qty: minimum_qty,
-        cost_input: cost_input,
-        cost_per_unit: cost_per_unit,
-        unit_s_price: unit_s_price,
-        item_discount: item_discount,
-        item_sale_price: item_sale_price,
-        free_minimum_qty: free_minimum_qty,
-        manual_unit_input: manual_unit_input,
-        free_manual_unit_input: free_manual_unit_input,
-        unit_barcode: unit_barcode,
-      };
-      poArray.push(productData);
+              product_qty: product_qty,
+              free_qty: free_qty,
 
-      $.ajax({
-        url: "addToGrnConfirmation.php",
-        method: "POST",
-        data: {
-          products: poArray,
-        },
-        success: function (response) {
-          document.getElementById("grnConfirmationTableBody").innerHTML =
-            response;
-        },
-        error: function (xhr, status, error) {
-          console.error(xhr.responseText);
-        },
-      });
+              minimum_qty: minimum_qty,
+              free_minimum_qty: free_minimum_qty,
 
-      $("#proceedGrnBtn").attr({
-        "data-toggle": "modal",
-        "data-target": "#confirmGRN",
-      });
-    }
+              item_price: item_price,
+              item_discount: item_discount,
+
+              total_cost: total_cost,
+              total_value: total_value,
+              cost_per_unit: cost_per_unit,
+              unit_s_price: unit_s_price,
+          };
+          poArray.push(productData);
+      }
   });
 
+  // If no errors were found, generate the confirmation table and show the modal
+  if (!hasErrors) {
+      var tableHTML = "";
+      poArray.forEach(function(product) {
+          var totalProductQty = product.product_qty + product.free_qty;
+          var minimumQty = product.minimum_qty === 0 ?
+              0 : product.minimum_qty + product.free_minimum_qty;
+
+          tableHTML += `
+          <tr>
+              <th scope="row" class="product_code">${product.product_code}</th>
+              <td class="product_name">${product.product_name}</td>
+              <td class="product_qty">${totalProductQty}</td>
+              <td class="minimum_qty">${minimumQty}</td>
+              <td class="total_cost">${product.total_cost}</td>
+              <td class="total_value">${product.total_value}</td> 
+              <td class="cost_per_unit">${product.cost_per_unit}</td>
+              <td class="item_discount">${product.item_discount}</td>
+              <td class="item_price">${product.item_price}</td>
+              <td class="unit_s_price">${product.unit_s_price}</td>
+              <td class="free_qty d-none">${product.free_qty}</td>
+          </tr>
+      `;
+      });
+
+      // Insert the generated HTML into the confirmation table body
+      document.getElementById("grnConfirmationTableBody").innerHTML = tableHTML;
+
+      // Display the modal for confirmation if there are no errors
+      $("#proceedGrnBtn").attr({
+          "data-toggle": "modal",
+          "data-target": "#confirmGRN",
+      });
+  }
 });
+
+// ==============================================================================
 
 function MessageDisplay(icon, status, message) {
   $("#proceedGrnBtn").removeAttr("data-toggle data-target");
@@ -84,7 +107,7 @@ function MessageDisplay(icon, status, message) {
     toast: true,
     position: "top-end",
     showConfirmButton: false,
-    timer: 3000,
+    timer: 4000,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -92,7 +115,7 @@ function MessageDisplay(icon, status, message) {
     }
   }).fire({
     icon: icon,
-    title: status + ": " + message + "!",
+    title: status + ": " + message,
   });
 }
 
