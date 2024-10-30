@@ -7,6 +7,7 @@ if (isset($_SESSION['store_id'])) {
     $userLoginData = $_SESSION['store_id'];
 
     foreach ($userLoginData as $userData) {
+        $userId = $userData['id'];
         $shop_id = $userData['shop_id'];
 
         if (isset($_POST['products'])) {
@@ -17,6 +18,11 @@ if (isset($_SESSION['store_id'])) {
             if (is_array($poArray) && !empty($poArray)) {
 
                 $newDateTime = date("Y-m-d H:i:s");
+                $grnTotalCost;
+                $grnItemErrorOccured;
+                $stockItemErrorOccured;
+                $notificationMessage = "";
+                $notificationErrorMessage = "";
 
                 // Fetch GRN number
                 $grn_number_result = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'grn'");
@@ -30,71 +36,84 @@ if (isset($_SESSION['store_id'])) {
                         !empty($product['product_name']) &&
                         !empty($product['product_qty']) &&
                         // !empty($product['minimum_qty']) &&
-                        !empty($product['cost_input'])
-                        // !empty($product['cost_per_unit']) &&
-                        // !empty($product['unit_s_price']) &&
                         // !empty($product['item_discount']) &&
-                        // !empty($product['item_sale_price'])
+                        !empty($product['item_price']) &&
+                        // !empty($product['unit_s_price']) &&
+                        !empty($product['total_cost'])
+                        // !empty($product['free_qty'])
                     ) {
 
                         $product_code = $product['product_code'];
                         $product_name = $product['product_name'];
                         $product_qty = $product['product_qty'];
                         $minimum_qty = $product['minimum_qty'] ?? 0;
-                        $cost_input = $product['cost_input'];
-                        $cost_per_unit = $product['cost_per_unit'] ?? 0;
-                        $unit_s_price = $product['unit_s_price'] ?? 0;
                         $item_discount = $product['item_discount'] ?? 0;
-                        $item_sale_price = $product['item_sale_price'] ?? 0;
+                        $item_price = $product['item_price'];
+                        $unit_s_price = $product['unit_s_price'] ?? 0;
+                        $total_cost = $product['total_cost'];
                         $free_qty = $product['free_qty'] ?? 0;
-                        $free_minimum_qty = $product['free_minimum_qty'] ?? 0;
-                        $unit_barcode = $product['unit_barcode'] ?? '';
 
-                        // Determine free quantity
-                        $p_free_qty = $free_qty !== '' ? $free_qty : $free_minimum_qty;
-
-                        // Add product cost to total
-                        $productsAllTotal += $cost_input;
+                        // Add product cost to the totalcost
+                        $grnTotalCost += $total_cost;
 
                         // Query stock once
                         $stock_result = $conn->query("SELECT * FROM  stock2 WHERE stock_item_code = '$product_code'
-                            AND stock_item_cost = '$cost_input' AND added_discount = '$item_discount' AND stock_shop_id = '$shop_id'");
+                            AND item_s_price = '$item_price' AND stock_shop_id = '$shop_id'");
 
                         // Insert into grn_item
-                        $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_p_cost, grn_p_price, p_plus_discount, p_free_qty)
-                            VALUES ('$grn_number', '$product_code','$product_qty','$cost_input','$item_sale_price','$item_discount','$p_free_qty')");
+                        $result = $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_p_cost, grn_p_price, p_plus_discount, p_free_qty)
+                            VALUES ('$grn_number', '$product_code','$product_qty','$total_cost','$item_price','$item_discount','$free_qty')");
+
+
 
                         // Insert into monthly_stock
-                        $conn->query("INSERT INTO monthly_stock (item_code, item_name, qty, date_time, shop_id)
-                            VALUES ('$product_code', '$product_name','$product_qty','$newDateTime','$shop_id')");
+                        // $conn->query("INSERT INTO monthly_stock (item_code, item_name, qty, date_time, shop_id)
+                        //     VALUES ('$product_code', '$product_name','$product_qty','$newDateTime','$shop_id')");
 
                         // Update or Insert into stock
                         if ($stock_result && $stock_result->num_rows > 0) {
                             $stock_data = $stock_result->fetch_assoc();
-                            $update_qty = $stock_data["stock_item_qty"] + $product_qty;
-                            $update_minimum_qty = $stock_data["stock_mu_qty"] + (int)$minimum_qty;
+                            $update_qty = floatval($stock_data["stock_item_qty"]) + floatval($product_qty);
+                            $update_minimum_qty = floatval($stock_data["stock_mu_qty"]) + floatval($minimum_qty);
 
-                            $conn->query("UPDATE stock2 SET stock_item_qty = '$update_qty', stock_mu_qty = '$update_minimum_qty'
-                                WHERE stock_item_code = '$product_code' AND stock_shop_id = '$shop_id'");
-                            echo "Stock Updated Successfully";
+                            $dataUpdateStatus = $conn->query("UPDATE stock2 SET stock_item_qty = '$update_qty', stock_mu_qty = '$update_minimum_qty', unit_s_price = '$unit_s_price'
+                                WHERE stock_item_code = '$product_code' AND item_s_price='$item_price' AND stock_shop_id = '$shop_id'");
+                            // echo "Stock Updated Successfully";
+
+
                         } else {
-                            $conn->query("INSERT INTO stock2 (stock_item_code, stock_item_name, stock_item_qty, stock_item_cost, stock_mu_qty, unit_cost, unit_s_price, added_discount, item_s_price, stock_shop_id, stock_minimum_unit_barcode)
-                                VALUES ('$product_code','$product_name','$product_qty','$cost_input','$minimum_qty','$cost_per_unit','$unit_s_price','$item_discount','$item_sale_price','$shop_id','$unit_barcode')");
-                            echo "Successfully inserted new stock";
+                            $dataInsertStatus = $conn->query("INSERT INTO stock2 (stock_item_code, stock_item_name, stock_item_qty, stock_mu_qty, unit_s_price, item_s_price, stock_shop_id)
+                                VALUES ('$product_code','$product_name','$product_qty','$minimum_qty','$unit_s_price','$item_price','$shop_id')");
+                            // echo "Successfully inserted new stock";
+
                         }
                     } else {
-                        echo "Invalid product entry";
+                        echo json_encode(array(
+                            'status' => 'error',
+                            'message' => 'badu na yako.',
+                        ));
+                        // echo "Invalid product entry";
                     }
                 }
 
                 // Insert into GRN table
-                $conn->query("INSERT INTO grn (grn_number,grn_date,grn_sub_total,grn_shop_id) 
-                    VALUES ('$grn_number','$newDateTime','$productsAllTotal','$shop_id')");
+                $conn->query("INSERT INTO grn (grn_number, grn_date, grn_shop_id, user_id, grn_sub_total) 
+                     VALUES ('$grn_number','$newDateTime', '$shop_id', '$user_id', '$productsAllTotal')");
             } else {
-                echo "No products found or invalid data received.";
+                echo json_encode(array(
+                    'status' => 'error',
+                    'message' => 'No products found or invalid data received.',
+
+                ));
+                // echo "No products found or invalid data received.";
             }
         } else {
-            echo "No 'products' parameter received in the POST request.";
+            echo json_encode(array(
+                'status' => 'error',
+                'message' => 'No Data received in the POST request.',
+
+            ));
+            // echo "No Data received in the POST request.";
         }
     }
 }
