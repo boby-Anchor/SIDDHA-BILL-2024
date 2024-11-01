@@ -853,7 +853,6 @@ function checkout() {
           dMData: JSON.stringify(dMData),
         },
         success: function (response) {
-          console.log(response);
           Swal.mixin({
             toast: true,
             position: "top-end",

@@ -76,9 +76,9 @@ if (!isset($_SESSION['store_id'])) {
                                                     <td class="text-center">
                                                         <div class="btn-group">
                                                             <button class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-cogs"> Manage</i> </button>
-                                                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; top: 30px; left: 0px; will-change: top, left;">
-                                                                <a class="dropdown-item text-success" href="#" data-toggle="modal" data-target="#edit<?php echo $row['pid']; ?>"> <i class="fa fa-edit"></i> Edit </a>
-                                                            </div>
+                                                            <!-- <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; top: 30px; left: 0px; will-change: top, left;">
+                                                                <a class="dropdown-item text-success" href="#" data-toggle="modal" data-target="#edit<?php //echo $row['pid']; ?>"> <i class="fa fa-edit"></i> Edit </a>
+                                                            </div> -->
                                                         </div>
                                                     </td>
                                                 </tr>

@@ -7,7 +7,7 @@ function searchProducts() {
   if (searchInput !== "") {
     $.ajax({
       type: "POST",
-      url: "actions/searchNameProductPos.php",
+      url: "actions/searchNameProductPo.php",
       data: {
         searchName: searchInput,
       },

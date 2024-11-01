@@ -73,7 +73,7 @@ if (!isset($_SESSION['store_id'])) {
 
                                                 foreach ($userLoginData as $userData) {
                                                     $shop_id = $userData['shop_id'];
-                                                    $grn_details_result = $conn->query("SELECT * FROM `grn` WHERE grn_shop_id = '$shop_id'");
+                                                    $grn_details_result = $conn->query("SELECT * FROM `grn` WHERE grn_shop_id = '$shop_id' ORDER BY grn_date DESC");
 
                                             ?>
                                                     <?php while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
@@ -94,6 +94,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                                 <th scope="col">Item Name</th>
                                                                                 <th scope="col">Qty</th>
                                                                                 <th scope="col">Cost</th>
+                                                                                <th scope="col">Price</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -106,6 +107,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                                     <td><?= $poItems_data["name"] ?></td>
                                                                                     <td><?= $poItems_data["grn_p_qty"] ?></td>
                                                                                     <td><?= number_format($poItems_data["grn_p_cost"],0) ?></td>
+                                                                                    <td><?= number_format($poItems_data["grn_p_price"],0) ?></td>
                                                                                 </tr>
                                                                             <?php } ?>
                                                                         </tbody>

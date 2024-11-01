@@ -71,96 +71,105 @@ if (!isset($_SESSION['store_id'])) {
             ?>
                     <section class="content">
                         <div class="container-fluid">
-                            <div class="row">
-                                <div class="row">
-                                    <div class="col-12">
 
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <form method="POST" id="filterForm">
-                                                    <label class="ml-2" for="start_date">Start Date:</label>
-                                                    <input type="date" class="mr-5" id="start_date" name="start_date" required>
-                                                    <label for="end_date">End Date:</label>
-                                                    <input type="date" class="mr-4" id="end_date" name="end_date" required>
-                                                    <button type="submit" class="btn btn-outline-dark">Filter</button>
-                                                </form>
-                                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <form method="POST" id="filterForm">
+                                                <div class="row g-3 align-items-center">
+                                                    <div class="col-auto">
+                                                        <label for="start_date" class="col-form-label">Start Date:</label>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                                    </div>
+
+                                                    <div class="col-auto">
+                                                        <label for="end_date" class="col-form-label">End Date:</label>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                                    </div>
+                                                    <div>
+                                                        <button type="submit" class="btn btn-outline-dark">Filter</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div id="totalValuesFilterData" class="col-12">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <div class="card card-body bg-success">
-                                                            <h2 class="text-white text-uppercase">Sell Amount</h2>
-                                                            <p id="totalSale" class="totalAmount"></p>
-                                                            <p class="totalAmount">LKR</p>
-                                                        </div>
+                                <div id="totalValuesFilterData" class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="card card-body bg-success">
+                                                        <h2 class="text-white text-uppercase">Sell Amount</h2>
+                                                        <p id="totalSale" class="totalAmount"></p>
+                                                        <p class="totalAmount">LKR</p>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <div class="card card-body bg-info">
-                                                            <h2 class="text-white text-uppercase">Cash Payments</h2>
-                                                            <p id="totalCash" class="totalAmount"></p>
-                                                            <p class="totalAmount"> LKR</p>
-                                                        </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card card-body bg-info">
+                                                        <h2 class="text-white text-uppercase">Cash Payments</h2>
+                                                        <p id="totalCash" class="totalAmount"></p>
+                                                        <p class="totalAmount"> LKR</p>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <div class="card card-body bg-primary">
-                                                            <h2 class="text-white text-uppercase">Card Payments</h2>
-                                                            <p id="totalCard" class="totalAmount"></p>
-                                                            <p class="totalAmount"> LKR</p>
-                                                        </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card card-body bg-primary">
+                                                        <h2 class="text-white text-uppercase">Card Payments</h2>
+                                                        <p id="totalCard" class="totalAmount"></p>
+                                                        <p class="totalAmount"> LKR</p>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <div class="card card-body bg-danger">
-                                                            <h2 class="text-white text-uppercase">Cash Out</h2>
-                                                            <p id="totalOut" class="totalAmount"></p>
-                                                            <p class="totalAmount"> LKR</p>
-                                                        </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card card-body bg-danger">
+                                                        <h2 class="text-white text-uppercase">Cash Out</h2>
+                                                        <p id="totalOut" class="totalAmount"></p>
+                                                        <p class="totalAmount"> LKR</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <!-- <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button> -->
-                                                <table class="table table-hover table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Invoice Number</th>
-                                                            <th>Patient Name</th>
-                                                            <th>REG Number</th>
-                                                            <th>Contact No.</th>
-                                                            <th>Doctor Name</th>
-                                                            <th>Total Amount</th>
-                                                            <th>Paid Amount</th>
-                                                            <th>Payment Type</th>
-                                                            <th>Bill Type</th>
-                                                            <th>Chashier</th>
-                                                            <th>Shop</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="saleInvoiceData">
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr class="bg-dark">
-                                                            <td colspan="8" class="fw-bold" style="font-size:larger;">Total Sales</td>
-                                                            <td colspan="3" id="totalSales" class="fw-bold text-right" style="font-size:larger;"><?php //number_format($result['total_amount'], 2); 
-                                                                                                                                                    ?> LKR</td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
 
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!-- <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button> -->
+                                            <table class="table table-hover table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Invoice Number</th>
+                                                        <th>Patient Name</th>
+                                                        <th>REG Number</th>
+                                                        <th>Contact No.</th>
+                                                        <th>Doctor Name</th>
+                                                        <th>Total Amount</th>
+                                                        <th>Paid Amount</th>
+                                                        <th>Payment Type</th>
+                                                        <th>Bill Type</th>
+                                                        <th>Chashier</th>
+                                                        <th>Shop</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="saleInvoiceData">
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr class="bg-dark">
+                                                        <td colspan="8" class="fw-bold" style="font-size:larger;">Total Sales</td>
+                                                        <td colspan="3" id="totalSales" class="fw-bold text-right" style="font-size:larger;"><?php //number_format($result['total_amount'], 2); 
+                                                                                                                                                ?> LKR</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                     </section>
             <?php

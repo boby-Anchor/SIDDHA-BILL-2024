@@ -34,7 +34,7 @@ if (!isset($_SESSION['store_id'])) {
 
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed" onload="focus_filed();">
+<body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -106,13 +106,13 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="row">
                             <div class="d-flex justify-content-evenly">
                                 <div class="p-2 p-x-2">
-                                    <select name="po-shop-selector" id="po-shop-selector" class="po-shop-selector h-auto">
+                                    <select name="po-shop-selector" id="po-shop-selector" class="po-shop-selector form-control rounded-5">
                                         <?php
-                                        $payment_type_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
-                                        while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
+                                        $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
+                                        while ($shops_row = $shops_rs->fetch_assoc()) {
                                         ?>
-                                            <option value="<?= $payment_type_row['shopId'] ?>">
-                                                <?= $payment_type_row['shopName'] ?>
+                                            <option value="<?= $shops_row['shopId'] ?>">
+                                                <?= $shops_row['shopName'] ?>
                                             </option>
                                         <?php
                                         }

@@ -10,7 +10,6 @@ if (!isset($_POST['btnLogin'])) {
 
     $userid = $conn->real_escape_string($_POST['userid']);
     $pwd = $conn->real_escape_string($_POST['pwd']);
-
     $chk = 0;
 
     if (empty($userid)) {
@@ -27,23 +26,18 @@ if (!isset($_POST['btnLogin'])) {
         exit();
     }
 
-    $userCheck = mysqli_num_rows($conn->query("SELECT * FROM users WHERE user_name = '$userid' AND user_pass = '$pwd'"));
     $userLoginData = array();
-    if ($userCheck > 0 && $chk == 0) {
-       
-        $row = mysqli_fetch_assoc($conn->query("SELECT * FROM users WHERE user_name = '$userid' AND user_pass = '$pwd'"));
+    $result = $conn->query("SELECT * FROM users WHERE user_name = '$userid' AND user_pass = '$pwd'");
+    $userCheck = mysqli_num_rows($result);
 
-        $userLoginData[] = $row;
+    if ($userCheck > 0 && $chk == 0) {
+        $userLoginData[] = mysqli_fetch_assoc($result);
         $_SESSION['store_id'] = $userLoginData;
         header("location:../index.php");
         exit();
-    }
-    
-    else {
+    } else {
         $_SESSION['e-msg'] = "Invalid user input";
         echo "<script>window.history.back();</script>";
         exit();
     }
-
-    
 }

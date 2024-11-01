@@ -95,33 +95,29 @@ if (!isset($_SESSION['store_id'])) {
                                                     <div class="col-md-3">
                                                         <div class="card card-body bg-success">
                                                             <h2 class="text-white text-uppercase">Sell Amount</h2>
-                                                            <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount
-                                                                FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount"><?= number_format($result['total_amount'], 2); ?> LKR</p>
+                                                            <p id="totalSale" class="totalAmount"></p>
+                                                            <p class="totalAmount">LKR</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="card card-body bg-info">
                                                             <h2 class="text-white text-uppercase">Cash Payments</h2>
-                                                            <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(paidAmount) AS cash_amount
-                                                                FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount"><?= number_format($result['cash_amount'], 2); ?> LKR</p>
+                                                            <p id="totalCash" class="totalAmount"></p>
+                                                            <p class="totalAmount"> LKR</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="card card-body bg-primary">
                                                             <h2 class="text-white text-uppercase">Card Payments</h2>
-                                                            <?php $result = mysqli_fetch_assoc($conn->query("SELECT SUM(cardPaidAmount) AS cardPaidAmount
-                                                                FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount"><?= number_format($result['cardPaidAmount'], 2); ?> LKR</p>
+                                                            <p id="totalCard" class="totalAmount"></p>
+                                                            <p class="totalAmount"> LKR</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="card card-body bg-danger">
                                                             <h2 class="text-white text-uppercase">Cash Out</h2>
-                                                            <?php $result = mysqli_fetch_assoc($conn->query("SELECT ROUND(SUM(balance), 2) AS cashout
-                                                                FROM invoices WHERE DATE(`created`) = '$currentDate'")); ?>
-                                                            <p class="totalAmount">-<?= $result['cashout']; ?> LKR</p>
+                                                            <p id="totalOut" class="totalAmount"></p>
+                                                            <p class="totalAmount"> LKR</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -133,62 +129,30 @@ if (!isset($_SESSION['store_id'])) {
                                         <div class="card">
                                             <div class="card-body">
                                                 <!-- <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button> -->
-                                                <table id="mytable" class="table table-bordered table-hover">
+                                                <table class="table table-hover table-striped">
                                                     <thead>
-                                                        <tr class="bg-info">
+                                                        <tr>
                                                             <th>Invoice Number</th>
                                                             <th>Patient Name</th>
                                                             <th>REG Number</th>
                                                             <th>Contact No.</th>
                                                             <th>Doctor Name</th>
                                                             <th>Total Amount</th>
+                                                            <th>Cash Amount</th>
+                                                            <th>Card Amount</th>
                                                             <th>Payment Type</th>
                                                             <th>Bill Type</th>
                                                             <th>Chashier</th>
                                                             <th>Shop</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="cash-sale">
-                                                        <?php
-                                                        $currentDate = date("Y-m-d");
-                                                        $sql = $conn->query("SELECT invoices.*, payment_type.payment_type,
-                                                            bill_type.bill_type_name, users.name, shop.shopName
-                                                            FROM invoices
-                                                            INNER JOIN payment_type ON payment_type.payment_type_id = invoices.payment_method
-                                                            INNER JOIN bill_type ON bill_type.bill_type_id = invoices.bill_type_id
-                                                            INNER JOIN users ON users.id = invoices.user_id
-                                                            INNER JOIN shop ON shop.shopId = invoices.shop_id
-                                                            WHERE DATE(`created`) = '$currentDate'    ORDER BY  created DESC");
-
-                                                        $result = mysqli_fetch_assoc($conn->query("SELECT SUM(total_amount) AS total_amount 
-                                                                   FROM invoices 
-                                                                   WHERE DATE(`created`) = '$currentDate' 
-                                                                   "));
-                                                        while ($row = mysqli_fetch_assoc($sql)) {
-                                                        ?>
-                                                            <tr>
-                                                                <td>
-                                                                    <label class="labInvo"><?= $row['invoice_id']; ?></label>
-                                                                    <br><?= $row['created']; ?>
-                                                                </td>
-                                                                <td><?= $row['p_name']; ?></td>
-                                                                <td><?= $row['reg']; ?></td>
-                                                                <td><?= $row['contact_no']; ?></td>
-                                                                <td><?= $row['d_name']; ?></td>
-                                                                <td><?= number_format($row['total_amount']); ?></td>
-                                                                <td><?= $row['payment_type']; ?></td>
-                                                                <td><?= $row['bill_type_name']; ?></td>
-                                                                <td><?= $row['name']; ?></td>
-                                                                <td><?= $row['shopName']; ?></td>
-                                                            </tr>
-                                                        <?php
-                                                        } ?>
+                                                    <tbody id="saleInvoiceData">
                                                     </tbody>
                                                     <tfoot>
                                                         <tr class="bg-dark">
-                                                            <td></td>
-                                                            <td colspan="7" class="fw-bold" style="font-size:larger;">Total Sales</td>
-                                                            <td colspan="2" class="fw-bold text-right" style="font-size:larger;"><?= number_format($result['total_amount'], 2); ?> LKR</td>
+                                                            <td colspan="8" class="fw-bold" style="font-size:larger;">Total Sales</td>
+                                                            <td colspan="3" id="totalSales" class="fw-bold text-right" style="font-size:larger;"><?php //number_format($result['total_amount'], 2); 
+                                                                                                                                                    ?> LKR</td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -216,169 +180,83 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/alert.php"); ?>
     <!-- Alert end -->
 
-    <!-- All JS -->
-    <?php include("part/all-js.php"); ?>
-    <!-- All JS end -->
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
 
     <!-- Data Table JS -->
-    <?php include("part/data-table-js.php"); ?>
-    <!-- Data Table JS end -->
+    <?php //include("part/data-table-js.php"); 
+    ?>
 
     <!-- send data SearchSalesFilterDate -->
     <script>
+        window.onload = function() {
+            var todayDate = new Date().toISOString().split('T')[0]
+            filterData(todayDate, todayDate);
+        };
+
         document.getElementById('filterForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            SearchSalesFilterDate();
+            var startDate = $("#start_date").val();
+            var endDate = $("#end_date").val();
+            filterData(startDate, endDate);
         });
 
-        function SearchSalesFilterDate() {
-            var STDATE = $("#start_date").val();
-            var ENDDATE = $("#end_date").val();
+        function filterData(startDate, endDate) {
 
-            var soteDate = {
-                STDATE: STDATE,
-                ENDDATE: ENDDATE
+            var sortDates = {
+                startDate: startDate,
+                endDate: endDate
             };
 
             $.ajax({
-                url: "actions/cashier_total_sale_values.php",
+                url: "actions/cashier_all_total_sale_values.php",
                 method: "POST",
                 data: {
-                    sd: JSON.stringify(soteDate)
-                },
-                success: function(data) {
-                    document.getElementById("totalValuesFilterData").innerHTML = data;
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    }).fire({
-                        icon: "error",
-                        title: "Error: Something went wrong!" + xhr.responseText,
-                    });
-                },
-            });
-            $.ajax({
-                url: "actions/cashier_all_sales_.php",
-                method: "POST",
-                data: {
-                    sd: JSON.stringify(soteDate)
+                    sortDates: JSON.stringify(sortDates),
                 },
                 success: function(response) {
-                    Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    }).fire({
-                        icon: "success",
-                        title: "Success: Filtered!",
-                    });
-                    document.getElementById("cash-sale").innerHTML = response;
+
+                    var result = JSON.parse(response);
+
+                    if (result.status === 'success') {
+
+                        $("#totalSale").text(result.sellAmount);
+                        // $("#totalSales").text(result.sellAmount);
+                        $("#totalCash").text(result.cashpayment);
+                        $("#totalCard").text(result.cardPayment);
+                        $("#totalOut").text(result.cashOut);
+
+                        $('#saleInvoiceData').empty();
+
+                        result.tableData.forEach(function(item) {
+                            var row = '<tr>' +
+                                '<td><lable class="labInvo">' + item.invoice_id + '</lable> <br> ' + item.created + '</td>' +
+                                '<td>' + item.p_name + '</td>' +
+                                '<td>' + item.reg + '</td>' +
+                                '<td>' + item.contact_no + '</td>' +
+                                '<td>' + item.d_name + '</td>' +
+                                '<td>' + item.total_amount + '</td>' +
+                                '<td>' + item.paidAmount + '</td>' +
+                                '<td>' + item.cardPaidAmount + '</td>' +
+                                '<td>' + item.payment_type + '</td>' +
+                                '<td>' + item.bill_type_name + '</td>' +
+                                '<td>' + item.name + '</td>' +
+                                '<td>' + item.shopName + '</td>' +
+                                '</tr>';
+                            // $('#saleInvoiceData').append(row);
+                            document.getElementById('saleInvoiceData').insertAdjacentHTML('beforeend', row);
+                        });
+
+
+                    } else {
+                        alert('response failed');
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
-                    Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                    }).fire({
-                        icon: "error",
-                        title: "Error: Something went wrong!" + xhr.responseText,
-                    });
-                },
+                }
             });
-
         }
-    </script>
-    <!-- Page specific script -->
-    <script>
-        $(function() {
-            $(".select2").select2();
-
-            $(".select2bs4").select2({
-                theme: "bootstrap4",
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('#mytable').DataTable({
-                    order: [
-                        [0, 'asc']
-                    ],
-                    // pageLength : 3,
-                    dom: 'Bfrtip',
-                    aaSorting: [],
-                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                    "footerCallback": function(row, data, start, end, display) {
-                        var totalAmount = 0;
-                        for (var i = 0; i < data.length; i++) {
-                            totalAmount += parseFloat(data[i][4]);
-                        }
-                        $("#totalSales").text(totalAmount);
-                    }
-                }).buttons()
-                .container()
-                .appendTo("#mytable_wrapper .col-md-6:eq(0)");
-
-            $('#mytable2').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    // console.log(data);
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
-                    }
-                    // console.log(totalAmount);
-                    $("#totalExpense").text(totalAmount);
-                }
-            });
-
-            $('#mytable3').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    // console.log(data);
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][3]);
-                    }
-                    // console.log(totalAmount);
-                    $("#totalPurchase").text(totalAmount);
-                }
-            });
-
-            $('#mytable4').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    // console.log(data);
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
-                    }
-                    // console.log(totalAmount);
-                    $("#totalReceived").text(totalAmount);
-                }
-            });
-        });
     </script>
 
 </body>

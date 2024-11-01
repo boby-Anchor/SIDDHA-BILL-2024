@@ -192,6 +192,7 @@ if (!isset($_SESSION['store_id'])) {
                             <button class="btn btn-primary" onclick="saveDetails();">Save Changes</button>
                         </div>
                     </div>
+                </div>
             </section>
         </div>
         <!-- Footer -->
@@ -199,81 +200,78 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Footer End -->
     </div>
 
-    <!-- Alert -->
-    <?php include("part/alert.php"); ?>
-    <!-- Alert end -->
+</body>
 
-    <!-- All JS -->
-    <?php include("part/all-js.php"); ?>
-    <!-- All JS end -->
+<!-- Alert -->
+<?php include("part/alert.php"); ?>
+<!-- Alert end -->
 
-    <!-- Data Table JS -->
-    <?php include("part/data-table-js.php"); ?>
-    <!-- Data Table JS end -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- All JS -->
+<?php include("part/all-js.php"); ?>
+<!-- All JS end -->
 
-    <script src="dist/js/addToShop-product.js"></script>
+<!-- Data Table JS -->
+<?php include("part/data-table-js.php"); ?>
+<!-- Data Table JS end -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        function handleCheckboxStyle() {
-            var checkboxes = document.querySelectorAll(".shop-checkbox");
+<script src="dist/js/addToShop-product.js"></script>
 
-            checkboxes.forEach(function(checkbox) {
-                var label = checkbox.nextElementSibling;
-                if (checkbox.checked) {
-                    label.classList.add("selected-shop");
-                    label.classList.remove("not-selected-shop");
-                } else {
-                    label.classList.add("not-selected-shop");
-                    label.classList.remove("selected-shop");
-                }
-            });
-        }
+<script>
+    function handleCheckboxStyle() {
+        var checkboxes = document.querySelectorAll(".shop-checkbox");
+
+        checkboxes.forEach(function(checkbox) {
+            var label = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                label.classList.add("selected-shop");
+                label.classList.remove("not-selected-shop");
+            } else {
+                label.classList.add("not-selected-shop");
+                label.classList.remove("selected-shop");
+            }
+        });
+    }
+    var checkboxes = document.querySelectorAll(".shop-checkbox");
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener("change", handleCheckboxStyle);
+    });
+    handleCheckboxStyle();
+
+    function attachEventListeners() {
         var checkboxes = document.querySelectorAll(".shop-checkbox");
         checkboxes.forEach(function(checkbox) {
             checkbox.addEventListener("change", handleCheckboxStyle);
         });
         handleCheckboxStyle();
+    }
 
-        function attachEventListeners() {
-            var checkboxes = document.querySelectorAll(".shop-checkbox");
-            checkboxes.forEach(function(checkbox) {
-                checkbox.addEventListener("change", handleCheckboxStyle);
-            });
-            handleCheckboxStyle();
-        }
+    attachEventListeners();
 
-        attachEventListeners();
-    </script>
+    document.addEventListener("DOMContentLoaded", function() {
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-
-            var selectElement = document.getElementById('records_per_page');
-            selectElement.addEventListener('change', function() {
-                var selectedValue = selectElement.value;
-                updateRecordsPerPage(selectedValue);
-            });
-
-            function updateRecordsPerPage(value) {
-                var form = new FormData();
-                form.append("records_per_page", value);
-
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        var response = xhr.responseText;
-                        document.getElementById("tableBody").innerHTML = response;
-                        attachEventListeners();
-                    }
-                };
-                xhr.open("POST", "update_records_per_page.php", true);
-                xhr.send(form);
-            }
+        var selectElement = document.getElementById('records_per_page');
+        selectElement.addEventListener('change', function() {
+            var selectedValue = selectElement.value;
+            updateRecordsPerPage(selectedValue);
         });
-    </script>
 
+        function updateRecordsPerPage(value) {
+            var form = new FormData();
+            form.append("records_per_page", value);
 
-</body>
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = xhr.responseText;
+                    document.getElementById("tableBody").innerHTML = response;
+                    attachEventListeners();
+                }
+            };
+            xhr.open("POST", "update_records_per_page.php", true);
+            xhr.send(form);
+        }
+    });
+</script>
 
 </html>

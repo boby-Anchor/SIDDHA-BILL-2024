@@ -172,16 +172,24 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
                 <div id="doctorNameField" class="col-3 p-2">
                   <select class="form-control select2" id="doctorName" name="doctorName">
-                    <option value="" selected>Select a doctor</option>
+                    <option value="" disabled selected hidden>Select a doctor</option>
                     <option value="Dr. Buddhika">Dr. Buddhika</option>
+                    <option value="Dr. Chathura">Dr. Chathura</option>
                     <option value="Dr. Daya">Dr. Daya</option>
                     <option value="Dr. Devinda">Dr. Devinda</option>
                     <option value="Dr. Fathima">Dr. Fathima</option>
+                    <option value="Dr. Jeewani">Dr. Jeewani</option>
                     <option value="Dr. Kusal">Dr. Kusal</option>
                     <option value="Dr. Mithula">Dr. Mithula</option>
+                    <option value="Dr. Nishantha">Dr. Nishantha</option>
+                    <option value="Dr. Nirosha">Dr. Nirosha</option>
+                    <option value="Dr. Nuwan">Dr. Nuwan</option>
                     <option value="Dr. Padmasiri">Dr. Padmasiri</option>
                     <option value="Dr. Parakrama">Dr. Parakrama</option>
                     <option value="Dr. Prasanga">Dr. Prasanga</option>
+                    <option value="Dr. Saranga">Dr. Saranga</option>
+                    <option value="Dr. Shaminda">Dr. Shaminda</option>
+                    <option value="Dr. Sujeewa">Dr. Sujeewa</option>
                     <option value="Dr. Tharindu">Dr. Tharindu</option>
                     <option value="Dr. Thilanka">Dr. Thilanka</option>
                     <option value="Dr. Yashodara">Dr. Yashodara</option>
@@ -238,7 +246,7 @@ if (!isset($_SESSION['store_id'])) {
             <div class="row">
 
               <!-- Company Product list -->
-              <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
+              <div class="col-12 bg-dark" style="height: 100vh; overflow:auto;">
                 <!-- <div class="form-row input-group">
                   <button class="btn btn-success ">Paththu</button>
                   <input type="search" class="" name="search21" id="search21" onkeyup="searchProducts(); return false;" placeholder="Search...">
@@ -255,7 +263,7 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
 
                 <!-- products grid -->
-                <div class="row" id="productGrid" class="productGrid">
+                <div class="row productGrid" id="productGrid">
                   <?php
                   if (isset($_SESSION['store_id'])) {
 
@@ -271,24 +279,30 @@ if (!isset($_SESSION['store_id'])) {
                       INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                       INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                       INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0 
+                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0
                       ORDER BY p_medicine.name ASC");
 
                       if (!empty($cm)) {
                         foreach ($cm as $v) {
                   ?>
                           <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
-                            <div class="product-grid h-100">
+                            <div class="product-grid h-100 rounded-lg">
                               <div class="product-content">
-                                <div class="name" style="color: #fff;"><?php echo $v['name']; ?> <br>
-                                  <?= $v['code']; ?></div>
-                                <div class="name" style="color: #f67019; font-size:20px;">
+                                <div class="title"><?php echo $v['name']; ?>
+                                  <br>
+                                  <?= $v['code']; ?>
+                                </div>
+                                <div class="sub-title">
                                   <?php echo $v['bName']; ?></div>
-                                <div class="price" style="color: #3dce12;">I:- RS
-                                  <?php echo $v['item_s_price']; ?></div>
-                                <div class="price" style="color: #d8f13b;">U:- RS
-                                  <?php echo $v['unit_s_price']; ?></div>
-                                <div class="price" style="color: #fff;">
+                                <div class="f-size item-price">
+                                  I:- RS
+                                  <?php echo $v['item_s_price']; ?>
+                                </div>
+                                <div class="f-size unit-price">
+                                  U:- RS
+                                  <?php echo $v['unit_s_price']; ?>
+                                </div>
+                                <div class="f-size">
                                   (<?= $v['ucv_name'] ?><?php echo $v['unit']; ?>)</div>
                               </div>
                             </div>
