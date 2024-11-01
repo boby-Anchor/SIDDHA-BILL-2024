@@ -108,8 +108,6 @@ $(document).on("click", ".add-btn", function () {
   var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
   var product_unit = $(this).closest("tr").find("#product_unit").text();
 
-  var product_qty = 1;
-
   var exists = false;
   $(".addedProTable tbody tr").each(function () {
     if ($(this).find("#product_code").text() === product_code) {
@@ -164,7 +162,7 @@ $(document).on("click", ".add-btn", function () {
     $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
 
   } else {
-    alert("Product already exists in the list!");
+    MessageDisplay("error", "Error", "Product already exists in the list!");
   }
 });
 
@@ -341,8 +339,6 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
       var result = JSON.parse(response);
 
       if (result.status === 'success') {
-        // MessageDisplay("success", "Success", result.message);
-
         Swal.mixin({
           toast: true,
           position: "top-end",
@@ -368,18 +364,30 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
           window.open(window.location.href, '_blank');
         }, 5000);
       } else {
-        console.log(result);
         MessageDisplay("error", "Error", result.message);
       }
-
-      // console.log("eliye thiyana log eka");
-      // console.log(result);
-
     },
     error: function (xhr, status, error) {
-      MessageDisplay("error", "Error", "404 Connection failed");
-      console.error(xhr.responseText);
-      // $(".confirmPObtn").prop('disabled', false);
+      $.ajax({
+        url: "error_log.php",
+        method: "POST",
+        data: {
+          message: JSON.stringify(xhr.responseText),
+        },
+        success: function (response) {
+          if (response === 'success') {
+            MessageDisplay("error", "404", "Connection failed.");
+          } else if (response === 'error') {
+            MessageDisplay("error", "404", "Log and Connection failed. " + result.message);
+          } else {
+            MessageDisplay("error", "FATAL ERROR", "Contact IT department.");
+          }
+        },
+        error: function (xhr, status, error) {
+          MessageDisplay("error", "FATAL ERROR", "Contact IT department.");
+          console.error(xhr.responseText);
+        },
+      });
     },
   });
 
