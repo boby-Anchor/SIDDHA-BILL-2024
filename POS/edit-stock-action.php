@@ -74,7 +74,7 @@ if (is_array($poArray) && !empty($poArray)) {
         // stock_item_qty = '$product_qty',
         // stock_mu_qty = '$minimum_qty',
         // stock_item_cost = '$stock_item_cost',
-        // unit_cost = '$cost_per_unit',
+        // unit _cost = '$cost_per_unit',
         // unit_s_price = '$unit_s_price',
         // added_discount = '$item_discount',
         // item_s_price = '$item_sale_price'

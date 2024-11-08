@@ -74,7 +74,8 @@ $(document).on("click", "#proceedGrnBtn", function () {
           <tr>
               <th scope="row" class="product_code">${product.product_code}</th>
               <td class="product_name">${product.product_name}</td>
-              <td class="product_qty">${totalProductQty}</td>
+              <td class="product_total_qty">${totalProductQty}</td>
+              <td class="product_qty d-none">${product.product_qty}</td>
               <td class="minimum_qty">${minimumQty}</td>
               <td class="total_cost">${product.total_cost}</td>
               <td class="total_value">${product.total_value}</td> 
@@ -149,7 +150,7 @@ $(document).on("click", ".add-btn", function () {
       "<td>" + "<label id='cost_per_unit'></label>" + "</td>" +
 
       "<td>" +
-      "<input placeholder='unit price' id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input mb-2' value=''>" +
+      "<input placeholder='unit price' id='unit_s_price' type='text' class='bg-dark form-control text-center unitsell-price-input mb-2' value='" + unitSprice + "'>" +
       "</td>" +
 
       "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
@@ -295,31 +296,35 @@ $(document).on("input", "#item_discount", function () {
 
 $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function () {
   // $(this).prop('disabled', true);
-  $(".confirmPObtn").prop('disabled', false);
+  $(".confirmPObtn").prop('disabled', true);
 
   var poArray = [];
 
   $("#grnConfirmationTableBody tr").each(function () {
     var product_code = $(this).find(".product_code").text();
     var product_name = $(this).find(".product_name").text();
+    var product_total_qty = $(this).find(".product_total_qty").text();
     var product_qty = $(this).find(".product_qty").text();
     var minimum_qty = $(this).find(".minimum_qty").text();
     var total_cost = $(this).find(".total_cost").text();
     var total_value = $(this).find(".total_value").text();
-    // var cost_per_unit = $(this).find(".cost_per_unit").text();
+    var cost_per_unit = $(this).find(".cost_per_unit").text();
     var item_discount = $(this).find(".item_discount").text();
     var item_price = $(this).find(".item_price").text();
     var unit_s_price = $(this).find(".unit_s_price").text();
     var free_qty = $(this).find(".free_qty").text();
+    var cost_per_item = item_price * (1 - item_discount / 100);
 
     var productData = {
       product_code: product_code,
       product_name: product_name,
+      product_total_qty: product_total_qty,
       product_qty: product_qty,
       minimum_qty: minimum_qty,
       item_price: item_price,
       item_discount: item_discount,
-      // cost_per_unit: cost_per_unit,
+      cost_per_unit: cost_per_unit,
+      cost_per_item: cost_per_item,
       total_cost: total_cost,
       total_value: total_value,
       unit_s_price: unit_s_price,
@@ -357,14 +362,17 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
         });
 
       } else if (result.status === 'error') {
+        $(".confirmPObtn").prop('disabled', false);
         MessageDisplay("error", "Error", result.message);
       } else if (result.status === 'sessionExpired') {
+        $(".confirmPObtn").prop('disabled', false);
         MessageDisplay("error", "Error", result.message);
         setTimeout(function () {
           window.open(window.location.href, '_blank');
         }, 5000);
       } else {
-        MessageDisplay("error", "Error", result.message);
+        $(".confirmPObtn").prop('disabled', false);
+        MessageDisplay("error", "Error" + result.status, result.message);
       }
     },
     error: function (xhr, status, error) {
