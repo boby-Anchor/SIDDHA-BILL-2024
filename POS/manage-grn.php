@@ -99,15 +99,16 @@ if (!isset($_SESSION['store_id'])) {
                                                                         </thead>
                                                                         <tbody>
                                                                             <?php
+                                                                            $itemCount = 1;
                                                                             $poItems_result = $conn->query("SELECT * FROM grn_item INNER JOIN p_medicine ON grn_item.grn_p_id = p_medicine.code WHERE grn_number = '" . $grn_details_data["grn_number"] . "'");
                                                                             while ($poItems_data = $poItems_result->fetch_array()) { ?>
                                                                                 <tr>
-                                                                                    <td></td>
+                                                                                    <td><?= $itemCount++ ?></td>
                                                                                     <td><?= $poItems_data["grn_p_id"] ?></td>
                                                                                     <td><?= $poItems_data["name"] ?></td>
                                                                                     <td><?= $poItems_data["grn_p_qty"] ?></td>
-                                                                                    <td><?= number_format($poItems_data["grn_p_cost"],0) ?></td>
-                                                                                    <td><?= number_format($poItems_data["grn_p_price"],0) ?></td>
+                                                                                    <td><?= number_format($poItems_data["grn_p_cost"], 0) ?></td>
+                                                                                    <td><?= number_format($poItems_data["grn_p_price"], 0) ?></td>
                                                                                 </tr>
                                                                             <?php } ?>
                                                                         </tbody>
@@ -116,7 +117,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                 </ul>
                                                             </td>
                                                             <td><?= $grn_details_data["grn_date"] ?></td>
-                                                            <td><?= number_format($grn_details_data["grn_sub_total"],0) ?></td>
+                                                            <td><?= number_format($grn_details_data["grn_sub_total"], 0) ?></td>
                                                         </tr>
                                                     <?php } ?>
                                             <?php
