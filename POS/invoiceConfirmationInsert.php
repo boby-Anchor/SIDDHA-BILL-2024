@@ -2,21 +2,50 @@
 session_start();
 include('config/db.php');
 
+try {
+    function printErrorLog($error_message)
+    {
+        $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/oldSys/SIDDHA-BILL-2024/POS/error_log.txt";
+        // $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/s.ceylonhospitals.com/POS/error_log.txt";
+        file_put_contents($error_log_path, $error_message, FILE_APPEND);
+    }
+} catch (Exception $exception) {
+    echo json_encode(array(
+        'status' => 'error',
+        'message' => 'path Fatal Error. Contact IT Department',
+    ));
+    exit();
+}
+
+if (isset($_SESSION['store_id'])) {
+    $userLoginData = $_SESSION['store_id'][0];
+    $user_id = $userLoginData['id'] ?? null;
+    $shop_id = $userLoginData['shop_id'] ?? null;
+} else {
+    echo json_encode(array(
+        'status' => 'sessionExpired',
+        'message' => 'Session expired. Wait to Login again.',
+    ));
+    exit();
+}
+
+
 $invoiceNumber = $_SESSION["invoiceNumber"];
 $currentDateTime = date("Y-m-d H:i:s");
 
 $itemData = isset($_POST['itemData']) ? json_decode($_POST['itemData'], true) : [];
 $dMData = isset($_POST['dMData']) ? json_decode($_POST['dMData'], true) : [];
 $billData = isset($_POST['billData']) ? json_decode($_POST['billData'], true) : [];
+$error_message;
 
 $cm = runQuery("SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'");
 
 //  check if session is started
 if (isset($_SESSION['store_id'])) {
-    $userData = $_SESSION['store_id'][0];
+    // $userData = $_SESSION['store_id'][0];
 
-    $userId = $userData['id'];
-    $shop_id = $userData['shop_id'];
+    // $user_id = $userData['id'];
+    // $shop_id = $userData['shop_id'];
 
     $patientName;
     $contactNo;
@@ -34,8 +63,9 @@ if (isset($_SESSION['store_id'])) {
     $selectBillType;
 
     //  check if invoice is already inserted
-    if (empty($cm)) {
+    if (empty($cm) && !empty($billData)) {
 
+try{
         if (is_array($billData) && !empty($billData)) {
             foreach ($billData as $product) {
                 $patientName = $product['patientName'];
@@ -54,7 +84,11 @@ if (isset($_SESSION['store_id'])) {
                 $selectBillType = $product['selectBillType'];
             }  // close for-each $billData
         }  // billData[] end
+    }catch(Exception $exception){
+        printErrorLog($exception->getMessage());
+    }
 
+try{
         if (is_array($dMData) && !empty($dMData)) {
             foreach ($dMData as $product) {
                 $product_name = $product['product_name'];
@@ -65,7 +99,12 @@ if (isset($_SESSION['store_id'])) {
                 VALUES ('$invoiceNumber', '$currentDateTime', '$product_name', '$item_cost', '$item_price')");
             }  // close for-each $dMData 
         }  // dMData[] end
+    }catch(Exception $exception){
+        printErrorLog($exception->getMessage());
+    }
+    
 
+    try{
         if (is_array($itemData) && !empty($itemData)) {
             foreach ($itemData as $product) {
                 $isPaththu = $product['isPaththu'];
@@ -177,20 +216,31 @@ if (isset($_SESSION['store_id'])) {
                     // WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' 
                     // OR stock_minimum_unit_barcode = '$code')
                     // AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
-                    // }
-                    $conn->query("INSERT INTO test (c1, c2, c3, c4)
-                    SELECT '$invoiceNumber', '$code', $product_qty, stock_item_qty
-                    FROM stock2
-                    WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code'
-                    OR stock_minimum_unit_barcode = '$code')
-                    AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
                 } //else {
                 //     exit;
                 // }
             }  // close for-each $itemData
         }  // itemData[] end
+    }catch(Exception $exception){
+        printErrorLog($exception->getMessage());
+    }
+
+try{
         $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
-        VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentmethodselector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
+        VALUES ('$invoiceNumber', '$user_id', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentmethodselector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
+        }catch(Exception $exception){
+            printErrorLog($exception->getMessage());
+            // echo json_encode(array(
+            //     'status' => 'dataError',
+            //     'message' => $exception->getMessage(),
+            // ));
+        }
+    }else{
+        printErrorLog("Empty Bill data[] passed!\n");
+            echo json_encode(array(
+                'status' => 'dataError',
+                'message' => 'Empty bill data or duplicate inv No',
+            ));
     }
 }
 

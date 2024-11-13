@@ -519,81 +519,39 @@ function calculateSubTotal() {
 }
 
 function checkBalance(input) {
-  var selector = document.getElementById("payment-method-selector");
+  const selector = document.getElementById("payment-method-selector");
+  const productsAllTotal = parseFloat($("#netTotal").text().replace(/,/g, ""));
+  let totalEnteredAmount;
 
-  // Check if selector value is '3'
   if (selector.value === "3") {
-    var cashAmount = parseFloat($("#cashAmount").val());
-    var cardAmount = parseFloat($("#cardAmount").val());
-
-    // Calculate the total entered amount by summing both input fields
-    var totalEnteredAmount = cashAmount + cardAmount;
-
-    var productsAllTotal = parseFloat($("#netTotal").text().replace(/,/g, ""));
-
-    var balance = totalEnteredAmount - productsAllTotal;
-    var formattedBalance = balance.toLocaleString("en-US", {});
-
-    $(".balance").text(formattedBalance);
-
-    if (balance > 0) {
-      $(".balance")
-        .addClass("positive-balance")
-        .removeClass("negative-balance");
-      if (event.which == 13) {
-        event.preventDefault();
-        var balance = parseFloat($("#balance").text().replace(/,/g, ""));
-        if (balance >= 0) {
-          checkout();
-        }
-      }
-    } else if (balance < 0) {
-      $(".balance")
-        .addClass("negative-balance")
-        .removeClass("positive-balance");
-    } else {
-      $(".balance").removeClass("positive-balance negative-balance");
-      if (event.which == 13) {
-        event.preventDefault();
-        var balance = parseFloat($("#balance").text().replace(/,/g, ""));
-        if (balance >= 0) {
-          checkout();
-        }
-      }
-    }
+    // Case for mixed payment (cash + card)
+    const cashAmount = parseFloat($("#cashAmount").val()) || 0;
+    const cardAmount = parseFloat($("#cardAmount").val()) || 0;
+    totalEnteredAmount = cashAmount + cardAmount;
   } else {
-    var enteredAmount = parseFloat(input.value);
-    var discountedTotal = parseFloat($("#netTotal").text().replace(/,/g, ""));
-    balance = enteredAmount - discountedTotal;
+    // Case for single payment method
+    totalEnteredAmount = parseFloat(input.value) || 0;
+  }
 
-    var formattedBalance = balance.toLocaleString("en-US", {});
+  // Calculate balance
+  const balance = totalEnteredAmount - productsAllTotal;
+  $(".balance").text(balance.toLocaleString("en-US", {}));
 
-    $(".balance").text(formattedBalance);
+  // Update balance styling
+  if (balance > 0) {
+    $(".balance").addClass("positive-balance").removeClass("negative-balance");
+  } else if (balance < 0) {
+    $(".balance").addClass("negative-balance").removeClass("positive-balance");
+  } else {
+    $(".balance").removeClass("positive-balance negative-balance");
+  }
 
-    if (balance > 0) {
-      $(".balance")
-        .addClass("positive-balance")
-        .removeClass("negative-balance");
-      if (event.which == 13) {
-        event.preventDefault();
-        var balance = parseFloat($("#balance").text().replace(/,/g, ""));
-        if (balance >= 0) {
-          checkout();
-        }
-      }
-    } else if (balance < 0) {
-      $(".balance")
-        .addClass("negative-balance")
-        .removeClass("positive-balance");
-    } else {
-      $(".balance").removeClass("positive-balance negative-balance");
-      if (event.which == 13) {
-        event.preventDefault();
-        var balance = parseFloat($("#balance").text().replace(/,/g, ""));
-        if (balance >= 0) {
-          checkout();
-        }
-      }
+  // Handle Enter keypress for data check
+  if (event.which === 13) {
+    event.preventDefault();
+    const displayedBalance = parseFloat($("#balance").text().replace(/,/g, ""));
+    if (displayedBalance >= 0) {
+      dataCheck();
     }
   }
 }
@@ -715,16 +673,74 @@ function printInvoice() {
   // After printing, reload the pos.php file
   printWindow.onafterprint = function () {
     printWindow.close(); // Close the print window
-    window.location.reload();
+    // window.location.reload();
     // Reload the pos.php file in the main window
   };
 }
 
-function checkout() {
-  var billData = [];
-  var itemData = [];
-  var dMData = [];
+function dataCheck() {
 
+  var itemData = [];
+  var paththuTotal = parseFloat($("#paththuTotal").text());
+  var combinePrice;
+  var billHasPaththu;
+  var billHasCombine;
+
+  $("#barcodeResults tr").each(function () {
+    var isPaththu = $(this).find("#isPaththu").prop("checked");
+    var code = $(this).find("#code").text();
+    var ucv = $(this).find("#ucv").text();
+    var item_price = $(this).find("#item_price").text();
+    var unit_price = $(this).find("#unit_price").text();
+    var product_name = $(this).find("#product_name").text();
+    var product_cost = parseFloat($(this).find("#product_price").text());
+    var product_qty = parseInt($(this).find("#qty").val());
+    var product_unit = $(this).find("#unit").text();
+    var productTotal = parseFloat($(this).find("#totalprice").text());
+
+    if (product_unit == "combine") {
+      combinePrice = productTotal;
+      billHasCombine = true;
+    }
+
+    if (isPaththu) {
+      billHasPaththu = true;
+    }
+
+    var productData = {
+      isPaththu: isPaththu,
+      code: code,
+      ucv: ucv,
+      item_price: item_price,
+      unit_price: unit_price,
+      product_name: product_name,
+      product_cost: product_cost,
+      product_qty: product_qty,
+      product_unit: product_unit,
+      productTotal: productTotal,
+    };
+    itemData.push(productData);
+  });
+
+  if (billHasPaththu && billHasCombine && paththuTotal === combinePrice) {
+    // sessionCheck(itemData);
+    checkout(itemData);
+  } else if (billHasPaththu && billHasCombine) {
+    alert("පත්තුවේ ගාන වැරදී.");
+  } else if (billHasPaththu) {
+    alert("පත්තු හදන්නේ නැද්ද..??");
+  } else if (billHasCombine) {
+    alert("පත්තුවට බඩු දාන්න.");
+  } else {
+    // sessionCheck(itemData);
+    checkout(itemData);
+  }
+}
+
+function checkout(itemData) {
+
+  var billData = [];
+  var dMData = [];
   var patientName = $("#patientName").val().trim();
 
   if (patientName !== "") {
@@ -781,108 +797,45 @@ function checkout() {
       },
     });
 
-    if (balance === "" || balance < "0") {
-      Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-      }).fire({
-        icon: "error",
-        title: "Error: Paid Amount is Not Enough",
-      });
-    } else {
-      Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-      }).fire({
-        icon: "success",
-        title: "Success: Checkout Success !",
-      });
+    // Swal.mixin({
+    //   toast: true,
+    //   position: "top-end",
+    //   showConfirmButton: false,
+    //   timer: 3000,
+    // }).fire({
+    //   icon: "success",
+    //   title: "Success: Checkout Success !",
+    // });
 
-      $("#barcodeResults tr").each(function () {
-        var isPaththu = $(this).find("#isPaththu").prop("checked");
-        var code = $(this).find("#code").text();
-        var ucv = $(this).find("#ucv").text();
-        var item_price = $(this).find("#item_price").text();
-        var unit_price = $(this).find("#unit_price").text();
-        var product_name = $(this).find("#product_name").text();
-        var product_cost = parseFloat($(this).find("#product_price").text());
-        var product_qty = parseInt($(this).find("#qty").val());
-        var product_unit = $(this).find("#unit").text();
-        var productTotal = parseFloat($(this).find("#totalprice").text());
+    $("#doctorMedicineResults tr").each(function () {
+      var product_name = $(this).find("#product_name").text();
+      var item_cost = $(this).find("#item_price").text().trim();
+      var item_price = $(this).find("#totalprice").text();
 
-        // alert(product_unit);
-        var productData = {
-          isPaththu: isPaththu,
-          code: code,
-          ucv: ucv,
-          item_price: item_price,
-          unit_price: unit_price,
-          product_name: product_name,
-          product_cost: product_cost,
-          product_qty: product_qty,
-          product_unit: product_unit,
-          productTotal: productTotal,
-        };
-        itemData.push(productData);
-      });
+      // alert(product_unit);
+      var productData = {
+        product_name: product_name,
+        item_cost: item_cost,
+        item_price: item_price,
+      };
+      dMData.push(productData);
+    });
 
-      $("#doctorMedicineResults tr").each(function () {
-        var product_name = $(this).find("#product_name").text();
-        var item_cost = $(this).find("#item_price").text().trim();
-        var item_price = $(this).find("#totalprice").text();
+    $.ajax({
+      url: "invoiceConfirmationInsert.php",
+      method: "POST",
+      data: {
+        billData: JSON.stringify(billData),
+        itemData: JSON.stringify(itemData),
+        dMData: JSON.stringify(dMData),
+      },
 
-        // alert(product_unit);
-        var productData = {
-          product_name: product_name,
-          item_cost: item_cost,
-          item_price: item_price,
-        };
-        dMData.push(productData);
-      });
+      success: function (response) {
+        console.log(response);
+        var result = JSON.parse(response);
 
-      $.ajax({
-        url: "invoiceConfirmationInsert.php",
-        method: "POST",
-        data: {
-          billData: JSON.stringify(billData),
-          itemData: JSON.stringify(itemData),
-          dMData: JSON.stringify(dMData),
-        },
-        success: function (response) {
-          Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-          }).fire({
-            icon: "success",
-            title: "Success: Order Placed Successfully!",
-          });
-          $(".confirmPObtn").prop("disabled", false);
+        if (result.status === 'success') {
 
-          $.ajax({
-            url: "invoicePrintAddData.php",
-            method: "POST",
-            data: {
-              billData: JSON.stringify(billData),
-              itemData: JSON.stringify(itemData),
-              dMData: JSON.stringify(dMData),
-            },
-            success: function (response) {
-              document.getElementById("printInvoiceData").innerHTML = response;
-              printInvoice();
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr.responseText);
-            },
-          });
-        },
-        error: function (xhr, status, error) {
-          console.error(xhr.responseText);
           Swal.mixin({
             toast: true,
             position: "top-end",
@@ -890,20 +843,66 @@ function checkout() {
             timer: 3000,
           }).fire({
             icon: "error",
-            title: "Error: Something went wrong!",
+            title: result.message,
           });
-        },
-      });
-    }
-  } else {
-    Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-    }).fire({
-      icon: "error",
-      title: "Error: Enter Patient's Details",
+
+        } else if (result.status = 'dataError') {
+
+          MessageDisplay('error', 'Error', result.message);
+        }
+        // $(".confirmPObtn").prop("disabled", false);
+
+        $.ajax({
+          url: "invoicePrintAddData.php",
+          method: "POST",
+          data: {
+            billData: JSON.stringify(billData),
+            itemData: JSON.stringify(itemData),
+            dMData: JSON.stringify(dMData),
+          },
+          success: function (response) {
+            document.getElementById("printInvoiceData").innerHTML = response;
+            printInvoice();
+          },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+          },
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr.responseText);
+        Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        }).fire({
+          icon: "error",
+          title: "Error: Something went wrong!",
+        });
+      },
     });
+
+  } else {
+    MessageDisplay('error', 'Error', "Enter Patient's Details");
   }
+}
+
+function MessageDisplay(icon, status, message) {
+  $("#proceedGrnBtn").removeAttr("data-toggle data-target");
+
+  Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    }
+  }).fire({
+    icon: icon,
+    title: status + ": " + message,
+  });
 }

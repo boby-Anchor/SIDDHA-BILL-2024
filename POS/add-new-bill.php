@@ -639,6 +639,7 @@ if (!isset($_SESSION['store_id'])) {
         <!-- ========================================== -->
 
         <script src="dist/js/customize_bill.js"></script>
+        <script src="dist/js/add-new-bill.js"></script>
 
     </body>
 
