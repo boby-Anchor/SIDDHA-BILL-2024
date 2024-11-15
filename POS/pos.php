@@ -179,7 +179,6 @@ if (!isset($_SESSION['store_id'])) {
                     <option value="Dr. Devinda">Dr. Devinda</option>
                     <option value="Dr. Fathima">Dr. Fathima</option>
                     <option value="Dr. Jeewani">Dr. Jeewani</option>
-                    <option value="Dr. Kaviraj">Dr. Kaviraj</option>
                     <option value="Dr. Kusal">Dr. Kusal</option>
                     <option value="Dr. Mithula">Dr. Mithula</option>
                     <option value="Dr. Nishantha">Dr. Nishantha</option>
@@ -188,6 +187,7 @@ if (!isset($_SESSION['store_id'])) {
                     <option value="Dr. Padmasiri">Dr. Padmasiri</option>
                     <option value="Dr. Parakrama">Dr. Parakrama</option>
                     <option value="Dr. Prasanga">Dr. Prasanga</option>
+                    <option value="Dr. Rajapaksha">Dr. Rajapaksha</option>
                     <option value="Dr. Saranga">Dr. Saranga</option>
                     <option value="Dr. Shaminda">Dr. Shaminda</option>
                     <option value="Dr. Sujeewa">Dr. Sujeewa</option>

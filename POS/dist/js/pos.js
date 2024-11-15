@@ -673,7 +673,7 @@ function printInvoice() {
   // After printing, reload the pos.php file
   printWindow.onafterprint = function () {
     printWindow.close(); // Close the print window
-    // window.location.reload();
+    window.location.reload();
     // Reload the pos.php file in the main window
   };
 }
@@ -723,7 +723,6 @@ function dataCheck() {
   });
 
   if (billHasPaththu && billHasCombine && paththuTotal === combinePrice) {
-    // sessionCheck(itemData);
     checkout(itemData);
   } else if (billHasPaththu && billHasCombine) {
     alert("පත්තුවේ ගාන වැරදී.");
@@ -732,7 +731,6 @@ function dataCheck() {
   } else if (billHasCombine) {
     alert("පත්තුවට බඩු දාන්න.");
   } else {
-    // sessionCheck(itemData);
     checkout(itemData);
   }
 }
@@ -786,106 +784,115 @@ function checkout(itemData) {
     $.ajax({
       url: "invoiceConfirmation.php",
       method: "POST",
-      // data: {
-      //   products: inArray,
-      // },
       success: function (response) {
-        document.getElementById("invoiceNumber").innerHTML = response;
-      },
-      error: function (xhr, status, error) {
-        console.error(xhr.responseText);
-      },
-    });
 
-    // Swal.mixin({
-    //   toast: true,
-    //   position: "top-end",
-    //   showConfirmButton: false,
-    //   timer: 3000,
-    // }).fire({
-    //   icon: "success",
-    //   title: "Success: Checkout Success !",
-    // });
-
-    $("#doctorMedicineResults tr").each(function () {
-      var product_name = $(this).find("#product_name").text();
-      var item_cost = $(this).find("#item_price").text().trim();
-      var item_price = $(this).find("#totalprice").text();
-
-      // alert(product_unit);
-      var productData = {
-        product_name: product_name,
-        item_cost: item_cost,
-        item_price: item_price,
-      };
-      dMData.push(productData);
-    });
-
-    $.ajax({
-      url: "invoiceConfirmationInsert.php",
-      method: "POST",
-      data: {
-        billData: JSON.stringify(billData),
-        itemData: JSON.stringify(itemData),
-        dMData: JSON.stringify(dMData),
-      },
-
-      success: function (response) {
         console.log(response);
         var result = JSON.parse(response);
-
+        console.log(result);
         if (result.status === 'success') {
+          console.log(result.message);
+          document.getElementById("invoiceNumber").innerHTML = result.message;
 
-          Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-          }).fire({
-            icon: "error",
-            title: result.message,
+          $("#doctorMedicineResults tr").each(function () {
+            var product_name = $(this).find("#product_name").text();
+            var item_cost = $(this).find("#item_price").text().trim();
+            var item_price = $(this).find("#totalprice").text();
+
+            // alert(product_unit);
+            var productData = {
+              product_name: product_name,
+              item_cost: item_cost,
+              item_price: item_price,
+            };
+            dMData.push(productData);
           });
 
-        } else if (result.status = 'dataError') {
+          $.ajax({
+            url: "invoiceConfirmationInsert.php",
+            method: "POST",
+            data: {
+              billData: JSON.stringify(billData),
+              itemData: JSON.stringify(itemData),
+              dMData: JSON.stringify(dMData),
+            },
+            success: function (response) {
 
-          MessageDisplay('error', 'Error', result.message);
+              successMesageDisplay("Order Placed Successfully!");
+
+              //invoice print add data
+              $.ajax({
+                url: "invoicePrintAddData.php",
+                method: "POST",
+                data: {
+                  billData: JSON.stringify(billData),
+                  itemData: JSON.stringify(itemData),
+                  dMData: JSON.stringify(dMData),
+                },
+                success: function (response) {
+                  document.getElementById("printInvoiceData").innerHTML = response;
+                  printInvoice();
+                },
+                error: function (xhr, status, error) {
+                  console.error(xhr.responseText);
+                },
+              });
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr.responseText);
+              errorMessageDisplay("Error: Something went wrong!");
+            },
+          });
+
+        } else if (result.status === 'sessionExpired') {
+          errorMessageDisplay(result.message);
+          setTimeout(function () {
+            window.open(window.location.href, '_blank');
+          }, 4000);
+          return;
         }
-        // $(".confirmPObtn").prop("disabled", false);
+        else {
+          errorMessageDisplay("Invoice number failed");
+        }
 
-        $.ajax({
-          url: "invoicePrintAddData.php",
-          method: "POST",
-          data: {
-            billData: JSON.stringify(billData),
-            itemData: JSON.stringify(itemData),
-            dMData: JSON.stringify(dMData),
-          },
-          success: function (response) {
-            document.getElementById("printInvoiceData").innerHTML = response;
-            printInvoice();
-          },
-          error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-          },
-        });
-      },
-      error: function (xhr, status, error) {
-        console.error(xhr.responseText);
-        Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-        }).fire({
-          icon: "error",
-          title: "Error: Something went wrong!",
-        });
-      },
+      }
     });
 
   } else {
-    MessageDisplay('error', 'Error', "Enter Patient's Details");
+    errorMessageDisplay("Enter Patient's Details");
   }
+}
+
+function issetInvoiceNumber() {
+
+  getInvoiceNumber()
+    .then(function (response) {
+
+    })
+    .catch(function (xhr) {
+      console.error(xhr.responseText);
+      errorMessageDisplay(xhr.responseText); // Fixed typo
+    });
+
+
+}
+
+function getInvoiceNumber() {
+  return $.ajax({
+    url: "invoiceConfirmation.php",
+    method: "POST",
+    // data: {
+    //   products: inArray,
+    // },
+  });
+}
+
+
+function successMesageDisplay(message) {
+  MessageDisplay("success", "Success: ", message);
+}
+
+function errorMessageDisplay(message) {
+  MessageDisplay("error", "Error: ", message);
 }
 
 function MessageDisplay(icon, status, message) {
