@@ -561,7 +561,7 @@ if (!isset($_SESSION['store_id'])) {
           });
         </script>
     </body>
-
+    <script src="dist/js/add-purchase.js"></script>
     </html>
 <?php
   }

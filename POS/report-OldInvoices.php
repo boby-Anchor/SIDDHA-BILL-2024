@@ -30,6 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         WHERE invoiceNumber = '$invoiceNumber';
         ");
         $items = $result->fetch_all(MYSQLI_ASSOC);
+
+        $dmResult = $conn->query("SELECT *
+        FROM dm_items
+        WHERE invoice_id = '$invoiceNumber';
+        ");
+        $dmItems = $dmResult->fetch_all(MYSQLI_ASSOC);
     }
 }
 $totalPrice = 0;
@@ -83,6 +89,7 @@ $totalValue = 0;
                                     <label for="invoiceNumber" class="form-control bg-dark">Inv. No:</label>
                                     <input type="text" id="invoiceNumber" name="invoiceNumber" class="form-control col-8 bg-dark" value="<?php echo htmlspecialchars($invoiceNumber); ?>" required>
                                     <button type="submit" class="form-control col-2 btn btn-success ml-2"><i class="fas fa-search"></i></button>
+                                    <button class="form-control col-2 btn btn-success ml-2" onclick="printInvBill()"><i class="fas fa-print"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -158,11 +165,28 @@ $totalValue = 0;
                                 </thead>
                                 <tbody>
                                     <?php
-                                    if (!empty($items)) {
-                                        $rowNo = 0;
-                                        foreach ($items as $item):
+                                    $rowNo = 0;
+                                    if (!empty($dmItems)) {
+
+                                        foreach ($dmItems as $dmItem):
                                             $rowNo++
                                     ?>
+                                            <tr>
+                                                <td><?= $rowNo ?></td>
+                                                <td><?= htmlspecialchars($dmItem['dmName']); ?></td>
+                                                <td>1</td>
+                                                <td>Doctor medicine</td>
+                                                <td><?= number_format(htmlspecialchars($dmItem['totalPrice']), 0); ?></td>
+                                            </tr>
+                                        <?php
+                                        endforeach;
+                                    }
+
+                                    if (!empty($items)) {
+
+                                        foreach ($items as $item):
+                                            $rowNo++
+                                        ?>
                                             <tr>
                                                 <td><?= $rowNo ?></td>
                                                 <td><?= htmlspecialchars($item['invoiceItem']); ?></td>
@@ -174,7 +198,8 @@ $totalValue = 0;
                                             </tr>
                                         <?php
                                         endforeach;
-                                    } else {
+                                    }
+                                    if (empty($items) && empty($dmItems)) {
                                         ?>
                                         <tr>
                                             <td colspan="7" class="text-center">No data</td>
@@ -187,10 +212,6 @@ $totalValue = 0;
                         </div>
                     </div>
 
-                    <script>
-                        document.getElementById('totalPriceLabel').textContent = "<?= htmlspecialchars($totalPrice) ?>";
-                        document.getElementById('totalValueLabel').textContent = "<?= htmlspecialchars($totalValue) ?>";
-                    </script>
 
                 </div>
             </div>
@@ -209,6 +230,337 @@ $totalValue = 0;
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
 
+    <div id="invoice-POS" class="d-none">
+
+        <?php
+        if (isset($_SESSION['store_id'])) {
+
+            $userLoginData = $_SESSION['store_id'];
+
+            $currentDate = date("Y-m-d");
+            $currentTime = date("H:i:s");
+
+            foreach ($userLoginData as $userData) {
+                $shop_id = $userData['shop_id'];
+                $user_name = $userData['name'];
+
+                $bill_data_rs = $conn->query("SELECT shop.shopName AS shopName, customize_bills.*
+    FROM `customize_bills`
+    INNER JOIN shop ON shopId = customize_bills.`customize_bill_shop-id`
+    WHERE `customize_bill_shop-id` = '$shop_id'
+    ");
+                $bill_data = $bill_data_rs->fetch_assoc();
+        ?>
+                <div class="d-flex justify-content-center">
+                    <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
+                        <div class="row gap-1">
+                            <table>
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="col-12 d-flex justify-content-center p-2">
+                                            <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>"
+                                                style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="col-12 d-flex justify-content-center">
+                                            <label class="contactNumber"
+                                                id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center text-center center">
+                                            <label id="addresspreview"
+                                                class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12" style="text-align: center;">
+                                        <span><span class="text-left" style="font-size: 10px;"><?= date("Y-m-d", strtotime($invData['created'])) ?>
+                                            </span><span class="text-right"> <?= date("H:i:s", strtotime($invData['created'])); ?></span> </span>
+                                        <br>
+                                        <span><span class="invoicePatientName" id="invoicePatientName"><?= $invData['p_name'] ?></span> <span
+                                                id="InvoiceContactNumber"><?= $invData['contact_no'] ?></span></span>
+                                        <br>
+                                        <span><span class="fw-bold"><?= $invData['cashier'] ?> Inv.</span> <span class="fw-bolder"
+                                                style="font-size: 10px;" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12" style="border-bottom: #0e0e0e 0.2rem solid;"></div>
+                        </div>
+                        <!-- table header start -->
+                        <div class="row">
+                            <div class="col-4">
+                                <span class="product_cost">U.Price</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span class="product_qty">
+                                    QTY
+                                </span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span class="productTotal">Total</span>
+                            </div>
+                        </div>
+                        <!-- table header end -->
+                        <div class="printInvoiceData" id="printInvoiceData">
+                            <?php
+                            if (!empty($dmItems) || !empty($items)) {
+
+                                if (!empty($dmItems)) {
+
+                                    foreach ($dmItems as $dmItem) {
+
+                            ?>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span class="product_name"><?= $dmItem['dmName'] ?></span>
+                                                </div>
+                                                <div class="col-4">
+                                                    <span class="product_cost"><?= $dmItem['totalPrice'] ?></span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="product_qty">
+                                                        1
+                                                    </span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="productTotal"><?= $dmItem['totalPrice'] ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+
+                                if (!empty($items)) {
+
+                                    foreach ($items as $item) {
+
+                                    ?>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span class="product_name"><?= $item['invoiceItem'] ?></span>
+                                                </div>
+                                                <div class="col-4">
+                                                    <span class="product_cost"><?= $item['invoiceItem_price'] ?></span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="product_qty"> <?= $item['invoiceItem_qty'] ?> </span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="productTotal"><?= $item['invoiceItem_total'] ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                <?php
+                                    }
+                                }
+
+                                ?>
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <!-- <div>
+                                            <div class="col-12 d-flex justify-content-start pt-2" style="border-top: #0e0e0e 0.2rem solid;">
+                                                <span class="productsAllTotal">Sub total : <?= $subTotal ?></span>
+                                            </div>
+                                        </div> -->
+
+                                        <!-- <div class="col-12 d-flex justify-content-start pt-2">
+                                            <span class="productsAllTotal">Discount %: <?= $discountPercentage ?></span>
+                                        </div> -->
+
+                                        <!-- <div class="col-12 d-flex justify-content-start pt-2">
+                                            <span class="productsAllTotal">VAS & delivery: <?= $vas_delivery ?></span>
+                                        </div> -->
+
+                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-top: #0e0e0e 0.2rem solid;">
+                                            <span class="productsAllTotal">Net Total : <?= $invData['total_amount'] ?></span>
+                                        </div>
+
+                                        <div class="col-12 d-flex justify-content-start pt-2">
+                                            <span class="enterAmountFiled">Cash Amount :<?= $invData['paidAmount'] ?></span>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
+                                            <span class="enterAmountFiled">Card Amount :<?= $invData['cardPaidAmount'] ?></span>
+                                        </div>
+
+                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
+                                            <span class="balance">Balance : <?= $invData['balance'] ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <?php
+
+                            } else {
+                            ?>
+                                <tr>
+                                    <td colspan="5" class="text-center">No Data</td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                        <table>
+                            <tr style="font-weight: 600;">
+                                <td>
+                                    <div class="col-12 pt-2">
+                                        <div class="row">
+                                            <div class="col-12 d-flex justify-content-center text-center">
+                                                <span id="billnotepreview"
+                                                    style="font-size:9px;">THIS IS A RE-PRINTED OLD INVOICE</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+        <?php
+            }
+        }
+        ?>
+    </div>
+
 </body>
+
+<script>
+    function printInvBill() {
+
+        var printWindow = window.open("", "_blank");
+        printWindow.document.write("<html><head><title>Invoice</title>");
+
+        function loadContent() {
+            printWindow.document.write("<style>");
+            printWindow.document.write(
+                "\
+      span {\
+        font-size: 10px;\
+        font-weight:bold;\
+      }\
+      .paperSize48 {\
+        background-color: whitesmoke;\
+        width: 48mm;\
+      }\
+      .billpreviewlogo48 {\
+        height: 20px;\
+        width: 120px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: contain;\
+      }\
+      .address48,\
+      .datetime48,\
+      .agent48 {\
+        font-size: small;\
+        font-weight: bold;\
+      }\
+      .productTable48 {\
+        font-size: small;\
+      }\
+      .paperSize58 {\
+        background-color: whitesmoke;\
+        width: 58mm;\
+      }\
+      .billpreviewlogo {\
+        height: 70px;\
+        width: 120px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: contain;\
+      }\
+      .address58{\
+        max-width: 130px;\
+      }\
+      .address58,\
+      .datetime58,\
+      .agent58 {\
+        font-size: small;\
+        font-weight: bold;\
+      }\
+      .productTable58 {\
+        font-size: small;\
+      }\
+      .billpreviewlogo80 {\
+        height: 100px;\
+        width: 160px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: cover;\
+      }\
+      .paperSize80 {\
+        background-color: whitesmoke;\
+        width: 80mm;\
+      }\
+      .contactNumber{\
+        font-size:medium;\
+        font-weight: bold;\
+      }\
+        .check-by-box {\
+            border: 2px solid #000 !important;\
+            width:100%;\
+            padding: 5px;\
+            font-family: Arial, sans-serif;\
+        }\
+    .check-by-box label {\
+            display: block;\
+            font-size: 10px !important;\
+        }\
+    "
+            );
+            printWindow.document.write("</style>");
+
+            printWindow.document.write("</head><body>");
+            printWindow.document.write(
+                document.getElementById("invoice-POS").innerHTML
+            );
+            printWindow.document.write("</body></html>");
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+
+        function stylesheetLoaded() {
+            if (++loadedStylesheets === totalStylesheets) {
+                loadContent();
+            }
+        }
+
+        var totalStylesheets = 1;
+        var loadedStylesheets = 0;
+
+        var bootstrapLink = printWindow.document.createElement("link");
+        bootstrapLink.rel = "stylesheet";
+        bootstrapLink.href =
+            "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
+        bootstrapLink.onload = stylesheetLoaded;
+        printWindow.document.head.appendChild(bootstrapLink);
+
+        if (totalStylesheets === 0) {
+            loadContent();
+        }
+
+        // After printing, reload the pos.php file
+        printWindow.onafterprint = function() {
+            printWindow.close(); // Close the print window
+            window.location.reload();
+            // Reload the pos.php file in the main window
+        };
+    }
+</script>
 
 </html>

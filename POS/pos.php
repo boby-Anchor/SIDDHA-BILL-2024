@@ -187,6 +187,7 @@ if (!isset($_SESSION['store_id'])) {
                     <option value="Dr. Padmasiri">Dr. Padmasiri</option>
                     <option value="Dr. Parakrama">Dr. Parakrama</option>
                     <option value="Dr. Prasanga">Dr. Prasanga</option>
+                    <option value="Dr. Rajapaksha">Dr. Rajapaksha</option>
                     <option value="Dr. Saranga">Dr. Saranga</option>
                     <option value="Dr. Shaminda">Dr. Shaminda</option>
                     <option value="Dr. Sujeewa">Dr. Sujeewa</option>
@@ -586,13 +587,13 @@ if (!isset($_SESSION['store_id'])) {
     $(".select2").select2();
 
     //Initialize Select2 Elements
-    $(".select2bs4").select2({
-      theme: "bootstrap4",
-    });
+    // $(".select2bs4").select2({
+    //   theme: "bootstrap4",
+    // });
 
-    $('.medicine-unit-select').select2({
-      placeholder: "Select medicine unit"
-    });
+    // $('.medicine-unit-select').select2({
+    //   placeholder: "Select medicine unit"
+    // });
   });
 </script>
 

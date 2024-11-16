@@ -166,6 +166,7 @@ if (!isset($_SESSION['store_id'])) {
 
         <!-- ========================================== -->
     </body>
+    <script src="dist/js/add-user.js"></script>
 
     </html>
 <?php

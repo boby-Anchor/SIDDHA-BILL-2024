@@ -31,7 +31,7 @@
       <div class="content-wrapper">
         <section class="container-fluid">
           <div class="row">
-            <div class="card card-default col-md-12 col-lg-9">
+            <div class="card card-default col-md-12 col-lg-12">
               <div class="card-header">
                 <h3 class="card-title">New Category</h3>
                 <div class="card-tools">
@@ -40,7 +40,7 @@
               </div>
               <div class="card-body">
                 <div class="row">
-                  <div class="col-md-10">
+                  <div class="col-md-12">
                     <form action="actions/addMedicineCatogery.php" method="POST" enctype="multipart/form-data">
                       <div class="card-body">
                         <div class="form-group">
@@ -68,19 +68,12 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-2">
-                      <img id="img_preview" class="img-thambnail mt-3" src="" alt="category icon" height="200px" width="200px;" >
-                    </div>
+                   
                   </div>
                   <div class="mt-3 ml-4">
                     <button type="submit" class="btn btn-info" name="submitCategory">Save</button>
                   </div>
                 </form>
-              </div>
-            </div>
-            <div class="d-none d-lg-block col-lg-3">
-              <div class="card">
-                <a href="#"> <img src="dist/img/clinic.jpg" alt="" class="img-fluid w-100"> </a>
               </div>
             </div>
           </div>

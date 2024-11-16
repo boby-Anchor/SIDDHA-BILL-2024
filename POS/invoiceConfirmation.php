@@ -16,9 +16,16 @@ if (isset($_SESSION['store_id'])) {
         $invoiceNumber = "000" . $userId . $shop_id .  $invoiceId;
 
         $_SESSION["invoiceNumber"] = $invoiceNumber;
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => $invoiceNumber,
+        ));
     }
 } else {
-    echo "Session Expired !";
+    echo json_encode(array(
+        'status' => 'sessionExpired',
+        'message' => 'Session Expired! Login again',
+    ));
 }
-?>
-    <?= trim($invoiceNumber); ?>
+
+// <?= trim($invoiceNumber); 
