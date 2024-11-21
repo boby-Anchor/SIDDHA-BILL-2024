@@ -5,8 +5,7 @@ session_start();
 try {
     function printErrorLog($error_message)
     {
-        // $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/oldSys/SIDDHA-BILL-2024/POS/error_log.txt";
-        $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/s.ceylonhospitals.com/POS/error_log.txt";
+        $error_log_path = "error_log.txt";
         file_put_contents($error_log_path, $error_message, FILE_APPEND);
     }
 } catch (Exception $exception) {

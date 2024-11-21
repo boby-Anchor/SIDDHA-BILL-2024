@@ -5,8 +5,7 @@ include('config/db.php');
 try {
     function printErrorLog($error_message)
     {
-        $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/oldSys/SIDDHA-BILL-2024/POS/error_log.txt";
-        // $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/POS/error_log.txt";
+        $error_log_path = "error_log.txt";
         file_put_contents($error_log_path, $error_message, FILE_APPEND);
     }
 } catch (Exception $exception) {
@@ -14,9 +13,7 @@ try {
 try {
     function printInvoiceData($invDataLog)
     {
-        $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/oldSys/SIDDHA-BILL-2024/POS/error_log_invData.txt";
-        // $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/POS/error_log_invData.txt";
-
+        $error_log_path = "error_log_invData.txt";
         $log_message_str = json_encode($invDataLog, JSON_PRETTY_PRINT) . PHP_EOL;
 
         file_put_contents($error_log_path, $log_message_str, FILE_APPEND);

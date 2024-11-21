@@ -21,6 +21,8 @@ if (isset($_SESSION['store_id'])) {
             p_medicine_category.name AS category, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name,
             stock2.stock_id AS stock_id,
+            stock2.stock_item_cost AS item_cost,
+            stock2.unit_cost AS unit_cost,
             stock2.item_s_price AS itemSprice,
             stock2.unit_s_price AS unitSprice
             FROM producttoshop
@@ -38,6 +40,8 @@ if (isset($_SESSION['store_id'])) {
                     <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
                     <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
                     <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
+                    <th id="itemCost" class="d-none"><?= $p_medicine_data['item_cost'] ?> </th>
+                    <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
                     <!-- <td>
@@ -72,6 +76,8 @@ if (isset($_SESSION['store_id'])) {
             p_medicine_category.name AS category, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name,
             stock2.stock_id AS stock_id,
+            stock2.stock_item_cost AS item_cost,
+            stock2.unit_cost AS unit_cost,
             stock2.item_s_price AS itemSprice,
             stock2.unit_s_price AS unitSprice
             FROM producttoshop
@@ -88,6 +94,8 @@ if (isset($_SESSION['store_id'])) {
                     <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
                     <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
                     <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
+                    <th id="itemCost" class="d-none"><?= $p_medicine_data['item_cost'] ?> </th>
+                    <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
                     <!-- <td>
@@ -122,6 +130,8 @@ if (isset($_SESSION['store_id'])) {
             p_medicine_category.name AS category, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name,
             stock2.stock_id AS stock_id,
+            stock2.stock_item_cost AS item_cost,
+            stock2.unit_cost AS unit_cost,
             stock2.item_s_price AS itemSprice,
             stock2.unit_s_price AS unitSprice
             FROM producttoshop
@@ -138,6 +148,8 @@ if (isset($_SESSION['store_id'])) {
                     <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
                     <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
                     <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
+                    <th id="itemCost" class="d-none"><?= $p_medicine_data['item_cost'] ?> </th>
+                    <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
                     <!-- <td>
@@ -169,6 +181,8 @@ if (isset($_SESSION['store_id'])) {
             p_medicine_category.name AS category, p_brand.name AS brand,
             medicine_unit.unit AS unit, unit_category_variation.ucv_name,
             stock2.stock_id AS stock_id,
+            stock2.stock_item_cost AS item_cost,
+            stock2.unit_cost AS unit_cost,
             stock2.item_s_price AS itemSprice,
             stock2.unit_s_price AS unitSprice
             FROM producttoshop
@@ -185,6 +199,8 @@ if (isset($_SESSION['store_id'])) {
                     <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
                     <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
                     <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
+                    <th id="itemCost" class="d-none"><?= $p_medicine_data['item_cost'] ?> </th>
+                    <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
                     <!-- <td>
