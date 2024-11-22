@@ -195,7 +195,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
                                                             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
                                                             WHERE
-                                                            stock_shop_id='$shop_id' AND medicine_unit.unit != 'pieces' OR medicine_unit.unit != pack / bottle
+                                                            stock_shop_id='$shop_id' AND medicine_unit.unit NOT IN ('pieces' , 'pack / bottle')
                                                             GROUP BY p_medicine.name, itemSprice
                                                             ORDER BY p_medicine.name ASC
                                                             ");
