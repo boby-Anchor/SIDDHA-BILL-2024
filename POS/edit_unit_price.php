@@ -147,7 +147,7 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs();" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode" onkeyup="fbs();" id="bnInput">
                                         </div>
                                         <div class="col-4">
                                             <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs();" id="pcInput">
@@ -195,7 +195,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
                                                             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
                                                             WHERE
-                                                            stock_shop_id='$shop_id'
+                                                            stock_shop_id='$shop_id' AND medicine_unit.unit != 'pieces' OR medicine_unit.unit != pack / bottle
                                                             GROUP BY p_medicine.name, itemSprice
                                                             ORDER BY p_medicine.name ASC
                                                             ");
@@ -496,7 +496,7 @@ if (!isset($_SESSION['store_id'])) {
                     document.getElementById("filterBySupTable").innerHTML = response;
                 }
             };
-            req.open("POST", "fbs.php", true);
+            req.open("POST", "edit_unit_price_search.php", true);
             req.send(form);
         }
 
