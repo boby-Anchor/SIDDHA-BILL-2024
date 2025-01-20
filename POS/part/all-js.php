@@ -7,6 +7,9 @@
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js"></script>
 
+    <!-- Notification Message Display -->
+    <script src="dist/js/messageDisplay.js"></script>
+
     <!-- addToShop-Product JS -->
     <!-- <script src="dist/js/addToShop-product.js"></script> -->
 
@@ -17,4 +20,3 @@
     <!-- <script src="dist/js/customize_bill.js"></script> -->
     <!-- <script src="dist/js/add-user.js"></script> -->
     <!-- <script src="dist/js/add-new-bill.js"></script> -->
-    

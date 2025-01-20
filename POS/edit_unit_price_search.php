@@ -32,7 +32,7 @@ if (isset($_SESSION['store_id'])) {
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-            WHERE shop_id = '$shop_id' AND productToShopStatus = 'added' AND p_medicine.code LIKE '$bnInput%'
+            WHERE stock_shop_id = '$shop_id' AND p_medicine.code LIKE '$bnInput%' AND medicine_unit.unit NOT IN ('pieces' , 'pack / bottle')
             GROUP BY itemSprice");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
 ?>
@@ -44,10 +44,6 @@ if (isset($_SESSION['store_id'])) {
                     <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
-                    <!-- <td>
-                        <div class="product-img" style="background-image: url('dist/img/product/<?php //$p_medicine_data['img'] 
-                                                                                                ?>');"></div>
-                    </td> -->
                     <td>
                         <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
                         (<?= $p_medicine_data['ucv_name'] ?>
@@ -87,7 +83,7 @@ if (isset($_SESSION['store_id'])) {
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-            WHERE shop_id = '$shop_id' AND productToShopStatus = 'added' AND p_medicine.name LIKE '%$pcInput%'");
+            WHERE stock_shop_id = '$shop_id' AND p_medicine.name LIKE '%$pcInput%' AND medicine_unit.unit NOT IN ('pieces' , 'pack / bottle')");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
             ?>
                 <tr>
@@ -98,10 +94,6 @@ if (isset($_SESSION['store_id'])) {
                     <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
-                    <!-- <td>
-                        <div class="product-img" style="background-image: url('dist/img/product/<?php //$p_medicine_data['img'] 
-                                                                                                ?>');"></div>
-                    </td> -->
                     <td>
                         <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
                         (<?= $p_medicine_data['ucv_name'] ?>
@@ -141,7 +133,7 @@ if (isset($_SESSION['store_id'])) {
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-            WHERE shop_id = '$shop_id' AND productToShopStatus = 'added' AND p_medicine.name LIKE  '%$pnInput%'");
+            WHERE stock_shop_id = '$shop_id'  AND p_medicine.name LIKE  '%$pnInput%' AND medicine_unit.unit NOT IN ('pieces' , 'pack / bottle')");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
             ?>
                 <tr>
@@ -152,10 +144,6 @@ if (isset($_SESSION['store_id'])) {
                     <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
-                    <!-- <td>
-                        <div class="product-img" style="background-image: url('dist/img/product/<?php //$p_medicine_data['img'] 
-                                                                                                ?>');"></div>
-                    </td> -->
                     <td>
                         <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
                         (<?= $p_medicine_data['ucv_name'] ?>
@@ -192,7 +180,7 @@ if (isset($_SESSION['store_id'])) {
             INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-            WHERE shop_id = '$shop_id' AND productToShopStatus = 'added'");
+            WHERE stock_shop_id = '$shop_id' AND medicine_unit.unit NOT IN ('pieces' , 'pack / bottle')");
             while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
             ?>
                 <tr>
@@ -203,10 +191,6 @@ if (isset($_SESSION['store_id'])) {
                     <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                     <th scope="row"><?= $tableRowCount ?></th>
-                    <!-- <td>
-                        <div class="product-img" style="background-image: url('dist/img/product/<?php //$p_medicine_data['img'] 
-                                                                                                ?>');"></div>
-                    </td> -->
                     <td>
                         <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
                         (<?= $p_medicine_data['ucv_name'] ?>

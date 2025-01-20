@@ -136,54 +136,18 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper bg-dark">
             <div class="col-12">
-                <div class="row w-100">
+                <div class="row w-100 mb-3">
 
                     <!-- left side desing start -->
                     <div class="col-12">
                         <div class="card-body h-100 bg-dark overflow-hidden">
                             <div class="row">
-                                <!-- <div class="col-6">
-                                    <img src="dist/img/Siddha.lk (1).png" alt="" class="img-fluid">
-                                </div>
-
-                                <!-- supplier selector start -->
-                                <!-- <div class="col-12 p-4">
-                                    <label for="select-supplier">Select Supplier</label>
-                                    <select name="select-supplier" id="select-supplier" class="form-control bg-dark" onchange="select_suplier(this.value);">
-                                        <option value="0">select supplier</option> -->
-
-                                <?php
-                                // if (isset($_SESSION['store_id'])) {
-
-                                //     $userLoginData = $_SESSION['store_id'];
-
-                                //     foreach ($userLoginData as $userData) {
-                                //         $shop_id = $userData['shop_id'];
-                                //         $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
-                                //         INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
-                                //         INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
-                                //         WHERE producttoshop.shop_id = '$shop_id'
-                                //         ");
-                                //         while ($supplier_data = $supplier_rs->fetch_assoc()) {
-                                ?>
-                                <!-- <option value="<?php // $supplier_data["id"] 
-                                                    ?>"><?php // $supplier_data["name"] 
-                                                        ?></option>
-                                        <?php
-                                        //         }
-                                        //     }
-                                        // }
-
-                                        ?>
-                                     </select>
-                                </div>  -->
-                                <!-- supplier selector end -->
 
                                 <!-- supplier products start -->
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs();" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode" onkeyup="fbs();" id="bnInput">
                                         </div>
                                         <div class="col-4">
                                             <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs();" id="pcInput">
@@ -219,6 +183,8 @@ if (!isset($_SESSION['store_id'])) {
                                                             p_medicine_category.name AS category, p_brand.name AS brand,
                                                             medicine_unit.unit AS unit, unit_category_variation.ucv_name,
                                                             stock2.stock_id AS stock_id,
+                                                            stock2.stock_item_cost AS item_cost,
+                                                            stock2.unit_cost AS unit_cost,
                                                             stock2.item_s_price AS itemSprice,
                                                             stock2.unit_s_price AS unitSprice
                                                             FROM producttoshop
@@ -229,7 +195,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
                                                             LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
                                                             WHERE
-                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
+                                                            stock_shop_id='$shop_id' AND medicine_unit.unit NOT IN ('pieces' , 'pack / bottle')
                                                             GROUP BY p_medicine.name, itemSprice
                                                             ORDER BY p_medicine.name ASC
                                                             ");
@@ -241,11 +207,10 @@ if (!isset($_SESSION['store_id'])) {
                                                                     <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
                                                                     <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
                                                                     <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
+                                                                    <th id="itemCost" class="d-none"><?= $p_medicine_data['item_cost'] ?> </th>
+                                                                    <th id="unitCost" class="d-none"><?= $p_medicine_data['unit_cost'] ?> </th>
                                                                     <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
                                                                     <th scope="row"><?= $tableRowCount ?></th>
-                                                                    <!-- <td>
-                                                                        <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
-                                                                    </td> -->
                                                                     <td>
                                                                         <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
                                                                         (<?= $p_medicine_data['ucv_name'] ?>
@@ -278,10 +243,9 @@ if (!isset($_SESSION['store_id'])) {
                     <!-- left side desing end -->
 
                     <!-- add to stock table -->
-
                     <div class="col-12 d-flex flex-column align-items-center overflow-hidden ">
                         <div class="grn_tittle">
-                            <h3>ADD TO STOCK</h3>
+                            <h3>Edit Unit Price</h3>
                         </div>
                         <div class="col-12">
                             <table class="table table-dark table-hover addedProTable">
@@ -289,14 +253,11 @@ if (!isset($_SESSION['store_id'])) {
                                     <tr>
                                         <th scope="col">Barcode</th>
                                         <th scope="col">Product Name</th>
-                                        <th scope="col">Qty</th>
-                                        <th scope="col">Minimum Unit Qty </th>
-                                        <th scope="col">Item Price</th>
-                                        <th scope="col">Discount(%)</th>
-                                        <th scope="col">Total Cost</th>
-                                        <th scope="col">Total Value</th>
+                                        <th scope="col">Brand</th>
+                                        <th scope="col">Item Cost</th>
                                         <th scope="col">Unit Cost</th>
-                                        <th scope="col">1 Unit Price</th>
+                                        <th scope="col">Item Price</th>
+                                        <th scope="col">Unit Price</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -305,8 +266,8 @@ if (!isset($_SESSION['store_id'])) {
                         </div>
 
                     </div>
-                    <div class="po_btn col-6 d-none flex-column">
-                        <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
+                    <div class="po_btn col-6 d-none flex-column updatePriceBtn">
+                        <a type="button" class="btn btn-outline-success " id="updatePriceBtn">Update Price <i class="fas fa-arrow-right"></i></a>
                     </div>
                     <!-- right side desing end -->
                 </div>
@@ -315,111 +276,232 @@ if (!isset($_SESSION['store_id'])) {
 
     </div>
 
-    <?php
-    if (isset($_SESSION['store_id'])) {
-
-        $userLoginData = $_SESSION['store_id'];
-
-        foreach ($userLoginData as $userData) {
-            $userId = $userData['id'];
-            $shop_id = $userData['shop_id'];
-        }
-    }
-
-    $grn_number_result = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'grn'");
-    $grn_number_data = $grn_number_result->fetch_assoc();
-    $grnNumber = "GRN-000" . $grn_number_data['AUTO_INCREMENT'];
-
-    $grnDate = date("Y-m-d");
-    $grnTime = date("H:i:s");
-    ?>
-
-    <!-- confirm po modal start -->
-    <div class="container">
-        <div class="modal fade bg-success" id="confirmGRN" role="dialog">
-            <div class="modal-dialog d-flex justify-content-between ">
-                <div class="modal-content bg-dark align-items-center vw-100">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Stock Confirmation</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="grnId">
-                            <div class="row">
-                                <div class="col-4 text-center text-black fw-bold">
-                                    <label for="grnNumber">GRN No.</label>
-                                    <?php
-                                    echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
-                                    ?>
-                                </div>
-
-                                <div class="col-4 text-center">
-                                    <div class="col-12">
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <label for="grnDate">Date</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <span class="fs-2 text-dark fw-bold" name="grnDate" id="grnDate"><?= $grnDate ?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-4 text-center">
-                                    <label for="grnTime">Added time</label>
-                                    <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
-                                </div>
-                                <div class="orderItem col-12 mt-4 mb-3">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">B-CODE</th>
-                                                <th scope="col">P-Name</th>
-                                                <th scope="col">Qty</th>
-                                                <th scope="col">MU-Qty</th>
-                                                <th scope="col">Total Cost</th>
-                                                <th scope="col">Total Value</th>
-                                                <th scope="col">Unit Cost</th>
-                                                <th scope="col">Discount(%)</th>
-                                                <th scope="col">Item S-Price</th>
-                                                <th scope="col">Unit S-Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="grnConfirmationTableBody">
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success confirmPObtn">Save</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- confirm po modal end -->
-
-
     <!-- Footer -->
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
-
 
     <!-- Alert -->
     <?php include("part/alert.php"); ?>
     <!-- Alert end -->
 
-
     <!-- All JS -->
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
 
-    <script src="dist/js/add-stock.js"></script>
+    <script>
+        // ==============================================================================
+
+        $(document).on("click", "#updatePriceBtn", function() {
+
+            $(".updatePriceBtn").prop('disabled', true);
+
+            var poArray = [];
+            var hasErrors = false; // Flag to track if there are any errors
+
+            $(".addedProTable tbody tr").each(function() {
+                var product_code = $(this).find("#product_code").text(); // Barcode
+                var product_name = $(this).find("#product_name").text().trim(); // Item name
+
+                var item_cost = $(this).find("#item_cost").text().trim(); // Item Cost
+                var unit_cost = $(this).find("#unit_cost").text().trim(); // Unit Cost
+                var item_price = $(this).find("#item_price").text().trim() || 0; // Item Price
+                var unit_price = parseFloat($(this).find("#unit_price").val().trim()) || 0; // Unit price
+
+                // Data Validation
+                if (unit_price !== 0 && unit_cost > unit_price) {
+                    ErrorMessageDisplay(product_name + " එකේ Unit Cost > Unit Price..!");
+                    hasErrors = true;
+                    return false;
+                } else {
+                    var productData = {
+                        product_code: product_code,
+                        product_name: product_name,
+
+                        item_cost: item_cost,
+                        unit_cost: unit_cost,
+                        item_price: item_price,
+                        unit_price: unit_price,
+                    };
+                    poArray.push(productData);
+                }
+            });
+
+            if (!hasErrors) {
+                $.ajax({
+                    url: "edit_unit_price_action.php",
+                    method: "POST",
+                    data: {
+                        products: JSON.stringify(poArray),
+                    },
+                    success: function(response) {
+                        var result = JSON.parse(response);
+
+                        if (result.status === 'success') {
+                            $(".addedProTable tbody").empty();
+                            Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                                }
+                            }).fire({
+                                icon: "success",
+                                title: result.message
+                            }).then(() => {
+                                location.reload(true);
+                            });
+
+                        } else if (result.status === 'error') {
+                            $(".confirmPObtn").prop('disabled', false);
+                            ErrorMessageDisplay(result.message);
+                        } else if (result.status === 'sessionExpired') {
+                            $(".confirmPObtn").prop('disabled', false);
+                            ErrorMessageDisplay(result.message);
+                            setTimeout(function() {
+                                window.open(window.location.href, '_blank');
+                            }, 5000);
+                        } else {
+                            $(".confirmPObtn").prop('disabled', false);
+                            MessageDisplay("error", "Error" + result.status, result.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $.ajax({
+                            url: "error_log.php",
+                            method: "POST",
+                            data: {
+                                message: JSON.stringify(xhr.responseText),
+                            },
+                            success: function(response) {
+                                if (response === 'success') {
+                                    MessageDisplay("error", "404", "Connection failed.");
+                                } else if (response === 'error') {
+                                    MessageDisplay("error", "404", "Log and Connection failed. " + result.message);
+                                } else {
+                                    MessageDisplay("error", "FATAL ERROR", "Contact IT department.");
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                MessageDisplay("error", "FATAL ERROR", "Contact IT department.");
+                                console.error(xhr.responseText);
+                            },
+                        });
+                    },
+                });
+            }
+
+        });
+
+        // ==============================================================================
+
+        $(document).on("click", ".add-btn", function() {
+            var product_code = $(this).closest("tr").find("#product_code").text();
+            var product_name = $(this).closest("tr").find("#product_name").text().trim();
+            var product_brand = $(this).closest("tr").find("#product_brand").text().trim();
+
+            var itemCost = $(this).closest("tr").find("#itemCost").text().trim();
+            var unitCost = $(this).closest("tr").find("#unitCost").text().trim();
+            var itemSprice = $(this).closest("tr").find("#itemSprice").text().trim();
+            var unitSprice = $(this).closest("tr").find("#unitSprice").text().trim();
+
+            var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
+            var product_unit = $(this).closest("tr").find("#product_unit").text();
+
+            var exists = false;
+            $(".addedProTable tbody tr").each(function() {
+                if ($(this).find("#product_code").text() === product_code) {
+                    exists = true;
+                    return false;
+                }
+            });
+
+            if (!exists) {
+                // Append new row to the table
+                var markup =
+                    "<tr>" +
+                    "<th scope='row' id='product_code'>" + product_code + "</th>" +
+                    "<td> <label id='product_name'>" + product_name + "</label>(<label id='ucv_name'>" + ucv_name + "</label><label id='product_unit'>" + product_unit + "</label>)</td>" +
+
+                    "<td> <label id='product_brand'>" + product_brand + "</label></td>" +
+
+                    "<td> <label id='item_cost'>" + itemCost + "</label></td>" +
+                    "<td> <label id='unit_cost'>" + unitCost + "</label></td>" +
+                    "<td> <label id='item_price'>" + itemSprice + "</label></td>" +
+
+                    "<td>" + "<input id='unit_price' type='text' class='bg-dark form-control text-center' value='" + unitSprice + "' placeholder='Unit price'>" + "</td>" +
+
+                    "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
+
+                    "</tr>";
+
+                $(".addedProTable tbody").append(markup);
+
+                $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
+                $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
+
+            } else {
+                ErrorMessageDisplay("Product already exists in the list!");
+            }
+        });
+
+        // Event listener for clicking the delete button
+        $(document).on("click", ".cus-delete", function() {
+            $(this).closest("tr").remove();
+            $("#updatePriceBtn").removeAttr("data-toggle data-target");
+            $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
+            $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
+        });
+
+        // ==============================================================================
+
+        function fbs() {
+            var bnInput = document.getElementById("bnInput").value;
+            var pcInput = document.getElementById("pcInput").value;
+            var pnInput = document.getElementById("pnInput").value;
+            var searchBy = "";
+
+            if (bnInput) {
+                searchBy += "barcode";
+            }
+            if (pcInput) {
+                if (searchBy) {
+                    searchBy += " & ";
+                }
+                searchBy += "product code";
+            }
+            if (pnInput) {
+                if (searchBy) {
+                    searchBy += " & ";
+                }
+                searchBy += "product name";
+            }
+            if (!searchBy) {
+                searchBy = "all";
+            }
+
+            var form = new FormData();
+            form.append("bnInput", bnInput);
+            form.append("pcInput", pcInput);
+            form.append("pnInput", pnInput);
+            form.append("searchBy", searchBy);
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (req.readyState == 4 && req.status == 200) {
+                    var response = req.responseText;
+                    document.getElementById("filterBySupTable").innerHTML = response;
+                }
+            };
+            req.open("POST", "edit_unit_price_search.php", true);
+            req.send(form);
+        }
+
+        // ===============================================================================
+    </script>
 
 </body>
 

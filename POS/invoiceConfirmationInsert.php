@@ -5,11 +5,21 @@ include('config/db.php');
 try {
     function printErrorLog($error_message)
     {
-        $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/oldSys/SIDDHA-BILL-2024/POS/error_log.txt";
-        // $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "/s.ceylonhospitals.com/POS/error_log.txt";
+        $error_log_path = "error_log.txt";
         file_put_contents($error_log_path, $error_message, FILE_APPEND);
     }
 } catch (Exception $exception) {
+}
+try {
+    function printInvoiceData($invDataLog)
+    {
+        $error_log_path = "error_log_invData.txt";
+        $log_message_str = json_encode($invDataLog, JSON_PRETTY_PRINT) . PHP_EOL;
+
+        file_put_contents($error_log_path, $log_message_str, FILE_APPEND);
+    }
+} catch (Exception $exception) {
+    printErrorLog($exception->getMessage());
 }
 
 $invoiceNumber = $_SESSION["invoiceNumber"];
@@ -18,6 +28,15 @@ $currentDateTime = date("Y-m-d H:i:s");
 $itemData = isset($_POST['itemData']) ? json_decode($_POST['itemData'], true) : [];
 $dMData = isset($_POST['dMData']) ? json_decode($_POST['dMData'], true) : [];
 $billData = isset($_POST['billData']) ? json_decode($_POST['billData'], true) : [];
+
+$invDataLog = [
+    'timestamp' => date('Y-m-d H:i:s'),
+    'billData' => is_array($billData) ? $billData : "(No Data Received: $billData)",
+    'dMData' => is_array($dMData) ? $dMData : "(No Data Received: $dMData)",
+    'itemData' => is_array($itemData) ? $itemData : "(No Data Received: $itemData)",
+];
+
+printInvoiceData($invDataLog);
 
 $cm = runQuery("SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'");
 

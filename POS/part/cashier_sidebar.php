@@ -52,23 +52,43 @@ if (isset($_SESSION['store_id'])) {
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
             <li class="nav-item">
-              <a href="pos.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>POS Invoice</p>
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-sliders-h"></i>
+                <p>
+                  Options
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-info right">2</span>
+                </p>
               </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="pos.php" class="nav-link">
+                    <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                    <p>POS Invoice</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="edit_unit_price.php" class="nav-link">
+                    <d class="nav-icon fas fa-pen-square"></d>
+                    <p>Update Unit Price</p>
+                  </a>
+                </li>
+
+                <!-- <li class="nav-header">Return</li> -->
+
+                <li class="nav-item" disabled>
+                  <a href="return-invoice.php" class="nav-link">
+                    <i class="nav-icon fas fa-reply-all"></i>
+                    <p>Return Invoice</p>
+                  </a>
+                </li>
+              </ul>
             </li>
 
             <!--<li class="nav-item">-->
             <!--  <a href="sales.php" class="nav-link">-->
             <!--    <i class="nav-icon fas fa-copy"></i>-->
             <!--    <p>Sales</p>-->
-            <!--  </a>-->
-            <!--</li>-->
-
-            <!--<li class="nav-item">-->
-            <!--  <a href="return.php" class="nav-link">-->
-            <!--    <i class="nav-icon fas fa-copy"></i>-->
-            <!--    <p>Return</p>-->
             <!--  </a>-->
             <!--</li>-->
 
@@ -123,8 +143,6 @@ if (isset($_SESSION['store_id'])) {
             <!--</li>-->
 
 
-
-            <li class="nav-header">Reports</li>
             <!--<li class="nav-item">-->
             <!--  <a href="today-report.php" class="nav-link">-->
             <!--    <i class="nav-icon fas fa-copy"></i>-->
@@ -132,55 +150,60 @@ if (isset($_SESSION['store_id'])) {
             <!--  </a>-->
             <!--</li>-->
 
-            <li class="nav-item">
-              <a href="dm-view.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Doc Med Report</p>
-              </a>
-            </li>
+            <!-- <li class="nav-header">Reports</li> -->
 
             <li class="nav-item">
-              <a href="report-OldInvoices.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Old Invoices</p>
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>
+                  Reports
+                  <i class="fas fa-angle-left right"></i>
+                  <span class="badge badge-info right">6</span>
+                </p>
               </a>
-            </li>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="dm-view.php" class="nav-link">
+                    <i class="nav-icon fas fa-medkit"></i>
+                    <p>Doc Med Report</p>
+                  </a>
+                </li>
 
-            <li class="nav-item">
-              <a href="cashier-today-report.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Today Sales Report</p>
-              </a>
-            </li>
+                <li class="nav-item">
+                  <a href="report-OldInvoices.php" class="nav-link">
+                    <i class="nav-icon fas fa-print"></i>
+                    <p>Old Invoices</p>
+                  </a>
+                </li>
 
-            <li class="nav-item">
-              <a href="cashier-sales-report.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Sales Report</p>
-              </a>
-            </li>
+                <li class="nav-item">
+                  <a href="cashier-today-report.php" class="nav-link">
+                    <i class="nav-icon fas fa-money-bill-wave"></i>
+                    <p>Today Sales Report</p>
+                  </a>
+                </li>
 
-            <li class="nav-item">
-              <a href="cashier-all-sales-report.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>All Sales Report</p>
-              </a>
-            </li>
+                <li class="nav-item">
+                  <a href="cashier-sales-report.php" class="nav-link">
+                    <i class="nav-icon fas fa-chart-line"></i>
+                    <p>Sales Report</p>
+                  </a>
+                </li>
 
-            <li class="nav-item">
-              <a href="patient-invoiceReport.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Patient Invoice Reoprt</p>
-              </a>
-            </li>
+                <li class="nav-item">
+                  <a href="cashier-all-sales-report.php" class="nav-link">
+                   <i class="nav-icon far fa-chart-bar"></i>
+                    <p>All Sales Report</p>
+                  </a>
+                </li>
 
-            <li class="nav-header">Return</li>
-
-            <li class="nav-item">
-              <a href="return-invoice.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>Return Invoice</p>
-              </a>
+                <li class="nav-item">
+                  <a href="patient-invoiceReport.php" class="nav-link">
+                 <i class="nav-icon fab fa-accessible-icon"></i>
+                    <p>Patient Invoice Reoprt</p>
+                  </a>
+                </li>
+              </ul>
             </li>
 
           </ul>
