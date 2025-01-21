@@ -331,10 +331,17 @@ if (isset($_SESSION['store_id'])) {
                   <p>
                     Reports
                     <i class="fas fa-angle-left right"></i>
-                    <span class="badge badge-info right">2</span>
+                    <span class="badge badge-info right">3</span>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="report-ItemOutQtyInDateRange.php" class="nav-link">
+                      <i class="nav-icon fas fa-copy"></i>
+                      <i class=""></i>
+                      <p>Item Out Qty In Date Range</p>
+                    </a>
+                  </li>
                   <li class="nav-item">
                     <a href="report-ItemQtyFromGrn.php" class="nav-link">
                       <i class="nav-icon fas fa-copy"></i>
