@@ -318,11 +318,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         [2, 'desc']
                     ],
                     searching: true,
-                    //buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                    // buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                    buttons: ["excel", "pdf", "print", "colvis"],
                 })
-            // .buttons()
-            // .container()
-            // .appendTo("#stockTable_wrapper .col-md-6:eq(0)");
+            .buttons()
+            .container()
+            .appendTo("#stockTable_wrapper .col-md-6:eq(0)");
         });
     </script>
 

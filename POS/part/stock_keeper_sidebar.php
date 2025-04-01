@@ -154,6 +154,19 @@ if (isset($_SESSION['store_id'])) {
                     <p>View GRN</p>
                   </a>
                 </li>
+                <?php
+                if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 2) {
+                ?>
+                  <li class="nav-item">
+                    <a href="report-ItemOutQtyInDateRange.php" class="nav-link">
+                      <i class="nav-icon fas fa-copy"></i>
+                      <i class=""></i>
+                      <p>Item Out Qty In Date Range</p>
+                    </a>
+                  </li>
+                <?php
+                }
+                ?>
               </ul>
             </li>
 
