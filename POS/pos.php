@@ -173,14 +173,19 @@ if (!isset($_SESSION['store_id'])) {
                 <div id="doctorNameField" class="col-3 p-2">
                   <select class="form-control select2" id="doctorName" name="doctorName">
                     <option value="" disabled selected hidden>Select a doctor</option>
+                    <option value="Dr. Ashoka Alagiyawanna">Dr. Ashoka Alagiyawanna</option>
                     <option value="Dr. Buddhika">Dr. Buddhika</option>
                     <option value="Dr. Chathura">Dr. Chathura</option>
                     <option value="Dr. Daya">Dr. Daya</option>
                     <option value="Dr. Devinda">Dr. Devinda</option>
                     <option value="Dr. Fathima">Dr. Fathima</option>
+                    <option value="Dr. Fathima Fakeera">Dr. Fathima Fakeera</option>
+                    <option value="Dr. Fathima Naleefa">Dr. Fathima Naleefa</option>
                     <option value="Dr. Jeewani">Dr. Jeewani</option>
                     <option value="Dr. Kusal">Dr. Kusal</option>
+                    <option value="Dr. Lahiru Sampath">Dr. Lahiru Sampath</option>
                     <option value="Dr. Mithula">Dr. Mithula</option>
+                    <option value="Dr. Nadeesha Sewwandi">Dr. Nadeesha Sewwandi</option>
                     <option value="Dr. Nishantha">Dr. Nishantha</option>
                     <option value="Dr. Nirosha">Dr. Nirosha</option>
                     <option value="Dr. Nuwan">Dr. Nuwan</option>
@@ -188,11 +193,17 @@ if (!isset($_SESSION['store_id'])) {
                     <option value="Dr. Parakrama">Dr. Parakrama</option>
                     <option value="Dr. Prasanga">Dr. Prasanga</option>
                     <option value="Dr. Rajapaksha">Dr. Rajapaksha</option>
+                    <option value="Dr. Rajeew Poltan">Dr. Rajeew Poltan</option>
+                    <option value="Dr. Rishad Buhari">Dr. Rishad Buhari</option>
                     <option value="Dr. Saranga">Dr. Saranga</option>
+                    <option value="Dr. Shehani Shashipraba">Dr. Shehani Shashipraba</option>
                     <option value="Dr. Shaminda">Dr. Shaminda</option>
                     <option value="Dr. Sujeewa">Dr. Sujeewa</option>
+                    <option value="Dr. Sujitha">Dr. Sujitha</option>
+                    <option value="Dr. Swarna">Dr. Swarna</option>
                     <option value="Dr. Tharindu">Dr. Tharindu</option>
                     <option value="Dr. Thilanka">Dr. Thilanka</option>
+                    <option value="Dr. Wathsala">Dr. Wathsala</option>
                     <option value="Dr. Yashodara">Dr. Yashodara</option>
                   </select>
                 </div>

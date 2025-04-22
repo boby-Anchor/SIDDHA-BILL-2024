@@ -3,9 +3,12 @@ if (isset($_SESSION['store_id'])) {
 
   $userLoginData = $_SESSION['store_id'];
 
-  foreach ($userLoginData as $userData) {
-    $userName = $userData['name'];
-    $userId = $userData['id'];
+  // foreach ($userLoginData as $userData) {
+  //   $userName = $userData['name'];
+  //   $userId = $userData['id'];
+
+  $userName = $userLoginData[0]['name'];
+$userId = $userLoginData[0]['id'];
 
     $user_shop_rs = $conn->query("SELECT * FROM users INNER JOIN shop ON shop.shopId = users.shop_id INNER JOIN user_role ON user_role.user_role_id = users.user_role_id WHERE id = '$userId'");
     $user_shop_data = $user_shop_rs->fetch_assoc();
@@ -184,6 +187,14 @@ if (isset($_SESSION['store_id'])) {
                 </li>
 
                 <li class="nav-item">
+                  <a href="report-ItemOutQty.php" class="nav-link">
+                    <i class="nav-icon fas fa-prescription-bottle-alt"></i>
+                    <i class=""></i>
+                    <p>Total Items Sale Report</p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
                   <a href="cashier-sales-report.php" class="nav-link">
                     <i class="nav-icon fas fa-chart-line"></i>
                     <p>Sales Report</p>
@@ -213,7 +224,7 @@ if (isset($_SESSION['store_id'])) {
 
     </aside>
 <?php
-  }
+  // }
 } else {
   echo "  ";
 }
