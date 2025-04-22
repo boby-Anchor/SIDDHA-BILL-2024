@@ -73,7 +73,7 @@ if (!isset($_SESSION['store_id'])) {
 
                                                 foreach ($userLoginData as $userData) {
                                                     $shop_id = $userData['shop_id'];
-                                                    $grn_details_result = $conn->query("SELECT * FROM `grn` WHERE grn_shop_id = '$shop_id' ORDER BY grn_date DESC");
+                                                    $grn_details_result = $conn->query("SELECT * FROM `grn` WHERE grn_shop_id = '$shop_id' ORDER BY grn_date DESC LIMIT 100");
 
                                             ?>
                                                     <?php while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>

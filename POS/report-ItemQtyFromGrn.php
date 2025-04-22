@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   JOIN grn_item gi ON g.grn_number = gi.grn_number
   LEFT JOIN p_medicine pm ON gi.grn_p_id = pm.code
   WHERE g.grn_date BETWEEN '$start_date' AND '$end_date' AND grn_shop_id ='1'
-  GROUP BY pm.name");
+  GROUP BY gi.grn_p_id");
 }
 
 ?>
@@ -105,6 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <tbody>
                 <?php
 
+                $fullTotal = 0;
+
                 if (isset($_POST['start_date'])) {
 
                   if (isset($sql)) {
@@ -113,6 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       $item_price = $row['item_price'];
                       $total_qty = $row['total_quantity'];
                       $total_price = $item_price * $total_qty;
+                      $fullTotal += $total_price;
                 ?>
                       <tr>
                         <td> <?= $row['code']; ?></td>
@@ -127,6 +130,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 ?>
               </tbody>
+              <tfoot>
+                <tr class="bg-blue">
+                  <td colspan="4">Total</td>
+                  <td> <?= number_format($fullTotal, 0); ?></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
           <!-- Data table end -->
