@@ -92,6 +92,8 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN users ON users.id = poinvoices.user_id
                                                             INNER JOIN shop AS shop1 ON shop1.shopId = poinvoices.shop_id
                                                             INNER JOIN shop AS shop2 ON shop2.shopId = poinvoices.po_shop_id
+                                                            ORDER BY po_date DESC
+                                                            LIMIT 100
                                                             ");
                                                         } else {
                                                             $hub_order_details_result = $conn->query("SELECT 
@@ -108,17 +110,20 @@ if (!isset($_SESSION['store_id'])) {
                                                             INNER JOIN users ON users.id = poinvoices.user_id
                                                             INNER JOIN shop AS shop1 ON shop1.shopId = poinvoices.shop_id
                                                             INNER JOIN shop AS shop2 ON shop2.shopId = poinvoices.po_shop_id
-                                                            WHERE shop1.shopId = '$shop_id'");
+                                                            WHERE shop1.shopId = '$shop_id'
+                                                            ORDER BY po_date DESC
+                                                            LIMIT 100
+                                                            ");
                                                         }
 
                                                         while ($hub_order_details_data = $hub_order_details_result->fetch_assoc()) {
                                                         ?>
                                                             <tr>
                                                                 <th><?= $hub_order_details_data["invoice_id"] ?></th>
-                                                                <td><?= $hub_order_details_data["shop_name"] ?></td>
-                                                                <td><?= $hub_order_details_data["po_shop_name"] ?></td>
-                                                                <td><?= $hub_order_details_data["user_name"] ?></td>
-                                                                <td>
+                                                                <th><?= $hub_order_details_data["shop_name"] ?></th>
+                                                                <th><?= $hub_order_details_data["po_shop_name"] ?></th>
+                                                                <th><?= $hub_order_details_data["user_name"] ?></th>
+                                                                <th>
                                                                     <?php
                                                                     $itemCount_result = $conn->query("SELECT COUNT(invoiceNumber) AS itemCount
                                                                     FROM poinvoiceitems WHERE invoiceNumber = '" . $hub_order_details_data['invoice_id'] . "'");
@@ -148,18 +153,18 @@ if (!isset($_SESSION['store_id'])) {
                                                                                 $poItems_result = $conn->query("SELECT * FROM poinvoiceitems 
                                                                                 INNER JOIN p_medicine ON p_medicine.code = poinvoiceitems.item_code
                                                                                 WHERE invoiceNumber = '" . $hub_order_details_data['invoice_id'] . "'  ");
-                                                                                $rowNo = 0;
+
                                                                                 while ($poItems_data = $poItems_result->fetch_array()) {
-                                                                                    $rowNo++
                                                                                 ?>
                                                                                     <tr>
-                                                                                        <th scope="row"><?= $rowNo ?></th>
+                                                                                        <th scope="row">1</th>
                                                                                         <td><?= $poItems_data["code"] ?></td>
                                                                                         <td><?= $poItems_data["name"] ?></td>
                                                                                         <td><?= number_format($poItems_data["invoiceItem_price"], 0) ?></td>
                                                                                         <td><?= number_format($poItems_data["invoiceItem_qty"], 0) ?></td>
                                                                                         <td><?= number_format($poItems_data["invoiceItem_total"], 0) ?></td>
                                                                                     </tr>
+
                                                                                 <?php
                                                                                 }
                                                                                 ?>
@@ -167,12 +172,11 @@ if (!isset($_SESSION['store_id'])) {
                                                                         </table>
                                                                         <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['invoice_id'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
                                                                     </ul>
-
-                                                                </td>
-                                                                <td><?= $hub_order_details_data['po_date'] ?></td>
-                                                                <td><?= number_format($hub_order_details_data["sub_total"], 0) ?></td>
-                                                                <td><?= number_format($hub_order_details_data['discount'], 0) ?></td>
-                                                                <td><?= number_format($hub_order_details_data['net_total'], 0) ?></td>
+                                                                </th>
+                                                                <th><?= $hub_order_details_data['po_date'] ?></th>
+                                                                <th><?= number_format($hub_order_details_data["sub_total"], 0) ?></th>
+                                                                <th><?= number_format($hub_order_details_data['discount'], 0) ?></th>
+                                                                <th><?= number_format($hub_order_details_data['net_total'], 0) ?></th>
 
                                                             </tr>
                                                     <?php

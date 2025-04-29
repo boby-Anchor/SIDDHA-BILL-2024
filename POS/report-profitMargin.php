@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     FROM invoiceitems
     WHERE invoiceDate BETWEEN '$start_date' AND '$end_date'");
 
-    $totalDmData = $conn->query("SELECT SUM(totalPrice) AS total_price
+    $totalDmData = $conn->query("SELECT SUM(totalPrice) AS total_price, SUM(itemPrice) AS total_value
     FROM dm_items
     WHERE invoiceDate BETWEEN '$start_date' AND '$end_date'");
 }
@@ -75,14 +75,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                         <div class="col-auto">
                                             <input type="date" id="start_date" name="start_date" class="form-control"
-                                                value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>" required>
+                                                value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>"
+                                                required>
                                         </div>
                                         <div class="col-auto">
                                             <label for="end_date" class="col-form-label">End Date:</label>
                                         </div>
                                         <div class="col-auto">
                                             <input type="date" id="end_date" name="end_date" class="form-control"
-                                                value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>" required>
+                                                value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>"
+                                                required>
                                         </div>
                                         <div class="ml-2">
                                             <button type="submit" class="btn btn-outline-success">Filter</button>
@@ -112,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 if (isset($_POST['start_date'])) {
 
                                     //---------------------------------------------------------------------------------------------------
-
+                                
                                     if (isset($totalBuyData)) {
 
                                         $fullTotal = 0;
@@ -124,14 +126,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             $total_price = $item_price * $total_qty;
                                             $fullTotal += $total_price;
                                         }
-                                ?>
+                                        ?>
                                         <tr>
                                             <td class="text-center">Total Buyings</td>
                                             <td class="text-center"> <?= number_format($fullTotal, 0); ?></td>
                                         </tr>
-                                    <?php
+                                        <?php
                                     } else {
-                                    ?>
+                                        ?>
                                         <tr>
                                             <td class="text-center">Total Buyings</td>
                                             <td class="text-center">No Grn Data</td>
@@ -141,15 +143,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     }
 
                                     //---------------------------------------------------------------------------------------------------
-
+                                
                                     if (isset($totalSaleData)) {
                                         while ($row = mysqli_fetch_assoc($totalSaleData)) {
-                                        ?>
+                                            ?>
                                             <tr>
                                                 <td class="text-center">Total Sales</td>
-                                                <td class="text-center"> <?= number_format($item_price = $row['total_sale'], 0); ?></td>
+                                                <td class="text-center"> <?= number_format($item_price = $row['total_sale'], 0); ?>
+                                                </td>
                                             </tr>
-                                        <?php
+                                            <?php
                                         }
                                     } else {
                                         ?>
@@ -162,16 +165,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     }
 
                                     //---------------------------------------------------------------------------------------------------
-
+                                
                                     if (isset($totalDmData)) {
 
                                         while ($row = mysqli_fetch_assoc($totalDmData)) {
-                                        ?>
+                                            ?>
                                             <tr>
                                                 <td class="text-center">Total Doctor Medicine</td>
-                                                <td class="text-center"> <?= number_format($item_price = $row['total_price'], 0); ?></td>
+                                                <td class="text-center">
+                                                    <label>Total Sale</label>
+                                                    <?= number_format($item_price = $row['total_price'], 0); ?>
+                                                    <br>
+                                                    <label>Total Value</label>
+                                                    <?= number_format($item_price = $row['total_value'], 0); ?>
+
+                                                </td>
                                             </tr>
-                                        <?php
+                                            <?php
                                         }
                                     } else {
                                         ?>
@@ -180,14 +190,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <td class="text-center">No Doctor Medicine Data</td>
                                         </tr>
 
-                                    <?php
+                                        <?php
                                     }
                                 } else {
                                     ?>
                                     <tr>
                                         <td colspan="2" class="text-center">No Data</td>
                                     </tr>
-                                <?php
+                                    <?php
                                 }
                                 ?>
 
@@ -218,7 +228,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Page specific script -->
     <script>
-        $(function() {
+        $(function () {
             $("#stockTable")
                 .DataTable({
                     responsive: true,

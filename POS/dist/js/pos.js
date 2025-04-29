@@ -461,15 +461,7 @@ function calculateSubTotal() {
         var isPaththu = $this.find("#isPaththu").prop("checked");
 
         if (product_qty <= 0) {
-            Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-            }).fire({
-                icon: "error",
-                title: "Error: Product Quantity!",
-            });
+            ErrorMessageDisplay("Invalid Product Quantity!");
             $("#checkoutBtn").removeAttr("data-toggle data-target");
             return;
         }
@@ -756,7 +748,7 @@ function checkout(itemData) {
         var valueAddedServices = $("#valueAddedServices").val();
         var cashAmount = $("#cashAmount").val();
         var cardAmount = $("#cardAmount").val();
-        var paymentmethodselector = $("#payment-method-selector").val();
+        var paymentMethodSelector = $("#payment-method-selector").val();
         var selectBillType = $("#selectBillType").val();
 
         document.getElementById("invoicePatientName").innerText = patientName;
@@ -776,7 +768,7 @@ function checkout(itemData) {
             valueAddedServices: valueAddedServices,
             cashAmount: cashAmount,
             cardAmount: cardAmount,
-            paymentmethodselector: paymentmethodselector,
+            paymentMethodSelector: paymentMethodSelector,
             selectBillType: selectBillType,
         };
 
@@ -818,7 +810,7 @@ function checkout(itemData) {
                         },
                         success: function(response) {
 
-                            successMesageDisplay("Order Placed Successfully!");
+                            successMessageDisplay("Order Placed Successfully!");
 
                             //invoice print add data
                             $.ajax({
@@ -883,33 +875,5 @@ function getInvoiceNumber() {
         // data: {
         //   products: inArray,
         // },
-    });
-}
-
-
-function successMesageDisplay(message) {
-    MessageDisplay("success", "Success: ", message);
-}
-
-function errorMessageDisplay(message) {
-    MessageDisplay("error", "Error: ", message);
-}
-
-function MessageDisplay(icon, status, message) {
-    $("#proceedGrnBtn").removeAttr("data-toggle data-target");
-
-    Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
-    }).fire({
-        icon: icon,
-        title: status + ": " + message,
     });
 }
