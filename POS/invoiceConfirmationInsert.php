@@ -59,7 +59,7 @@ if (isset($_SESSION['store_id'])) {
     $valueAddedServices;
     $cashAmount;
     $cardAmount;
-    $paymentMethodSelector;
+    $paymentmethodselector;
     $selectBillType;
 
     //  check if invoice is already inserted
@@ -80,7 +80,7 @@ if (isset($_SESSION['store_id'])) {
                     $valueAddedServices = $product['valueAddedServices'];
                     $cashAmount = $product['cashAmount'];
                     $cardAmount = $product['cardAmount'];
-                    $paymentMethodSelector = $product['paymentMethodSelector'];
+                    $paymentmethodselector = $product['paymentmethodselector'];
                     $selectBillType = $product['selectBillType'];
                 }  // close for-each $billData
             }  // billData[] end
@@ -227,7 +227,7 @@ if (isset($_SESSION['store_id'])) {
 
         try {
             $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
-        VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentMethodSelector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
+        VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentmethodselector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
         } catch (Exception $exception) {
             printErrorLog($exception->getMessage());
         }

@@ -213,12 +213,19 @@ function checkNetTotal() {
 function calculateSubTotal() {
   var productsAllTotal = 0;
   $(".barcodeResults tbody tr").each(function () {
-    var product_name = $(this).find("#product_name").text();
     var product_cost = $(this).find("#product_price").text();
     var product_qty = $(this).find("#qty").val();
 
     if (product_qty === "" || product_qty === "0") {
-      ErrorMessageDisplay(product_name + "invalid Quantity!");
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      }).fire({
+        icon: "error",
+        title: "Error: Product Quantity!",
+      });
       $("#checkoutBtn").removeAttr("data-toggle data-target");
     } else {
       var productTotal = product_cost * product_qty;
@@ -350,11 +357,6 @@ function checkout() {
   var discount_percentage = $("#discountPercentage").val();
   var net_total = $("#netTotal").text().replace(/,/g, "");
 
-  if (po_shop_id == 0) {
-    ErrorMessageDisplay("Shop එක select කරන්නේ නැද්ද?");
-    return;
-  }
-
   var poArray = [];
   var inArray = [];
 
@@ -403,7 +405,15 @@ function checkout() {
       products: JSON.stringify(poArray),
     },
     success: function (response) {
-      SuccessMessageDisplay("Success: Order Placed Successfully!");
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      }).fire({
+        icon: "success",
+        title: "Success: Order Placed Successfully!",
+      });
       $(".confirmPObtn").prop("disabled", false);
 
       $.ajax({
@@ -414,15 +424,32 @@ function checkout() {
         },
         success: function (response) {
           document.getElementById("printInvoiceData").innerHTML = response;
+          // console.log(response);
           printInvoice();
         },
         error: function (xhr, status, error) {
-          ErrorMessageDisplay("Bill print error!");
+          Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+          }).fire({
+            icon: "error",
+            title: "Bill print error!",
+          });
         },
       });
     },
     error: function (xhr, status, error) {
-      ErrorMessageDisplay("Something went wrong!");
+      Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+      }).fire({
+        icon: "error",
+        title: "Error: Something went wrong!",
+      });
     },
   });
 }

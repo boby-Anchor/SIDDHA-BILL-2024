@@ -27,7 +27,7 @@ function MessageDisplay(icon, status, message) {
         }
     }).fire({
         icon: icon,
-        title: status + message,
+        title: status + ": " + message,
     });
 }
 
