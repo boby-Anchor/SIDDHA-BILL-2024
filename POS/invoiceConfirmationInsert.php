@@ -10,17 +10,18 @@ try {
     }
 } catch (Exception $exception) {
 }
-try {
-    function printInvoiceData($invDataLog)
-    {
-        $error_log_path = "error_log_invData.txt";
-        $log_message_str = json_encode($invDataLog, JSON_PRETTY_PRINT) . PHP_EOL;
+// try {
+//     function printInvoiceData($invDataLog)
+//     {
+//         $error_log_path = "error_log_invData.txt";
+//         $log_message_str = json_encode($invDataLog, JSON_PRETTY_PRINT) . PHP_EOL;
 
-        file_put_contents($error_log_path, $log_message_str, FILE_APPEND);
-    }
-} catch (Exception $exception) {
-    printErrorLog($exception->getMessage());
-}
+//         file_put_contents($error_log_path, $log_message_str, FILE_APPEND);
+//     }
+// } catch (Exception $exception) {
+//     printErrorLog($exception->getMessage());
+//     printErrorLog("Invoice data log error." . $exception->getMessage());
+// }
 
 $invoiceNumber = $_SESSION["invoiceNumber"];
 $currentDateTime = date("Y-m-d H:i:s");
@@ -29,14 +30,14 @@ $itemData = isset($_POST['itemData']) ? json_decode($_POST['itemData'], true) : 
 $dMData = isset($_POST['dMData']) ? json_decode($_POST['dMData'], true) : [];
 $billData = isset($_POST['billData']) ? json_decode($_POST['billData'], true) : [];
 
-$invDataLog = [
-    'timestamp' => date('Y-m-d H:i:s'),
-    'billData' => is_array($billData) ? $billData : "(No Data Received: $billData)",
-    'dMData' => is_array($dMData) ? $dMData : "(No Data Received: $dMData)",
-    'itemData' => is_array($itemData) ? $itemData : "(No Data Received: $itemData)",
-];
+// $invDataLog = [
+//     'timestamp' => date('Y-m-d H:i:s'),
+//     'billData' => is_array($billData) ? $billData : "(No Data Received: $billData)",
+//     'dMData' => is_array($dMData) ? $dMData : "(No Data Received: $dMData)",
+//     'itemData' => is_array($itemData) ? $itemData : "(No Data Received: $itemData)",
+// ];
 
-printInvoiceData($invDataLog);
+// printInvoiceData($invDataLog);
 
 $cm = runQuery("SELECT invoice_id  FROM `invoices` WHERE invoice_id = '$invoiceNumber'");
 
@@ -86,6 +87,7 @@ if (isset($_SESSION['store_id'])) {
             }  // billData[] end
         } catch (Exception $exception) {
             printErrorLog($exception->getMessage());
+            printErrorLog("Bill data error." . $exception->getMessage());
         }
 
         try {
@@ -100,7 +102,7 @@ if (isset($_SESSION['store_id'])) {
                 }  // close for-each $dMData 
             }  // dMData[] end
         } catch (Exception $exception) {
-            printErrorLog($exception->getMessage());
+            printErrorLog("DM Data error." . $exception->getMessage());
         }
 
 
@@ -132,68 +134,104 @@ if (isset($_SESSION['store_id'])) {
 
                             if ($item_price == $product_cost) {
 
-                                $total_qty = $product_qty * 1000;
-                                $sell_p_qty = ($total_qty / $ucv);
+                                try {
+                                    $total_qty = $product_qty * 1000;
+                                    $sell_p_qty = ($total_qty / $ucv);
 
-                                $conn->query("UPDATE stock2 SET
-                        stock_item_qty = (stock_item_qty - $product_qty),
-                        stock_mu_qty = (stock_mu_qty - $total_qty)
-                        WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code'
-                        OR stock_minimum_unit_barcode = '$code')
-                        AND (item_s_price = '$product_cost'
-                        OR unit_s_price = '$product_cost')");
+                                    $conn->query("UPDATE stock2 SET
+                                    stock_item_qty = (stock_item_qty - $product_qty),
+                                    stock_mu_qty = (stock_mu_qty - $total_qty)
+                                    WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code'
+                                    OR stock_minimum_unit_barcode = '$code')
+                                    AND (item_s_price = '$product_cost'
+                                    OR unit_s_price = '$product_cost')");
+                                } catch (Exception $exception) {
+                                    printErrorLog("Item error kg/l.\n" . $exception->getMessage());
+                                }
+
                             } else {
-                                $conn->query("UPDATE stock2 SET
-                        stock_item_qty = (stock_item_qty - ROUND($product_qty / ($ucv * 1000), 3)),
-                        stock_mu_qty = (stock_mu_qty - $product_qty)
-                        WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' 
-                        OR stock_minimum_unit_barcode = '$code')
-                        AND unit_s_price = '$product_cost'");
+                                try {
+                                    $conn->query("UPDATE stock2 SET
+                                stock_item_qty = (stock_item_qty - ROUND($product_qty / ($ucv * 1000), 3)),
+                                stock_mu_qty = (stock_mu_qty - $product_qty)
+                                WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' 
+                                OR stock_minimum_unit_barcode = '$code')
+                                AND unit_s_price = '$product_cost'");
+                                } catch (Exception $exception) {
+                                    printErrorLog("Mu error kg/l\n" . $exception->getMessage());
+                                }
                             }
                         } else if ($product_unit == 'g' || $product_unit == 'ml') {
 
                             if ($item_price == $product_cost) {
-                                $total_qty = $product_qty * $ucv;
-                                $sell_p_qty = ($total_qty / $ucv);
+                                try {
 
-                                $conn->query("UPDATE stock2 SET
-                        stock_item_qty = (stock_item_qty - $sell_p_qty),
-                        stock_mu_qty = (stock_mu_qty - $total_qty)
-                        WHERE stock_shop_id = '$shop_id'
-                        AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                        AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
+                                    $total_qty = $product_qty * $ucv;
+                                    $sell_p_qty = ($total_qty / $ucv);
+
+                                    $conn->query("UPDATE stock2 SET
+                                    stock_item_qty = (stock_item_qty - $sell_p_qty),
+                                    stock_mu_qty = (stock_mu_qty - $total_qty)
+                                    WHERE stock_shop_id = '$shop_id'
+                                    AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                                    AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
+                                } catch (Exception $exception) {
+                                    printErrorLog("Item error g/ml\n" . $exception->getMessage());
+                                }
+
                             } else {
-                                $total_qty = $product_qty * 1000;
-                                $sell_p_qty = ($total_qty / $ucv);
+                                try {
+                                    $total_qty = $product_qty * 1000;
+                                    $sell_p_qty = ($total_qty / $ucv);
 
-                                $conn->query("UPDATE stock2 SET
-                        stock_item_qty = (stock_item_qty - ROUND($product_qty / $ucv, 3)),
-                        stock_mu_qty = (stock_mu_qty - $product_qty)
-                        WHERE stock_shop_id = '$shop_id' 
-                        AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                        AND unit_s_price = '$product_cost'");
+                                    $conn->query("UPDATE stock2 SET
+                                    stock_item_qty = (stock_item_qty - ROUND($product_qty / $ucv, 3)),
+                                    stock_mu_qty = (stock_mu_qty - $product_qty)
+                                    WHERE stock_shop_id = '$shop_id' 
+                                    AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                                    AND unit_s_price = '$product_cost'");
+                                } catch (Exception $exception) {
+                                    printErrorLog("Mu error g/ml\n" . $exception->getMessage());
+                                }
+
                             }
                         } else if ($product_unit == 'm') {
 
                             if ($item_price == $product_cost) {
-                                $product_minimum_qty = $product_qty * 100;
-                                $conn->query("UPDATE stock2 SET
-                        stock_item_qty = (stock_item_qty -  $product_qty), 
-                        stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
-                        WHERE stock_shop_id = '$shop_id'
-                        AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                        AND item_s_price = '$product_cost'");
+                                try {
+                                    $product_minimum_qty = $product_qty * 100;
+
+                                    $conn->query("UPDATE stock2 SET
+                                    stock_item_qty = (stock_item_qty -  $product_qty),
+                                    stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
+                                    WHERE stock_shop_id = '$shop_id'
+                                    AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                                    AND item_s_price = '$product_cost'");
+                                } catch (Exception $exception) {
+                                    printErrorLog("Item error m\n" . $exception->getMessage());
+                                }
+
                             } else {
-                                $product_minimum_qty = $product_qty;
-                                $conn->query("UPDATE stock2 SET
-                        stock_item_qty = ROUND((stock_mu_qty - $product_minimum_qty) / 100, 2), 
-                        stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
-                        WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                        AND unit_s_price = '$product_cost'");
+                                try {
+                                    $product_minimum_qty = $product_qty;
+                                    $conn->query("UPDATE stock2 SET
+                            stock_item_qty = ROUND((stock_mu_qty - $product_minimum_qty) / 100, 2), 
+                            stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
+                            WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                            AND unit_s_price = '$product_cost'");
+                                } catch (Exception $exception) {
+                                    printErrorLog("Mu error m\n" . $exception->getMessage());
+                                }
+
                             }
                         } else if ($product_unit == 'pack / bottle' || $product_unit == 'pieces') {
-                            $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $product_qty)
-                        WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
+                            try {
+                                $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $product_qty)
+                                WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost'");
+                            } catch (Exception $exception) {
+                                printErrorLog("Item error\n" . $exception->getMessage());
+                            }
+
                         }
                         // else {
                         //     $qty_rs = $conn->query("SELECT * FROM stock2 WHERE (stock_item_code = '$code' 
@@ -222,14 +260,14 @@ if (isset($_SESSION['store_id'])) {
                 }  // close for-each $itemData
             }  // itemData[] end
         } catch (Exception $exception) {
-            printErrorLog($exception->getMessage());
+            printErrorLog("Invoice items save error." . $exception->getMessage());
         }
 
         try {
             $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
         VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentMethodSelector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
         } catch (Exception $exception) {
-            printErrorLog($exception->getMessage());
+            printErrorLog("Invoice data save error." . $exception->getMessage());
         }
     }
 }

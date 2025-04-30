@@ -397,7 +397,7 @@ function addDiscount() {
     $("#netTotal").text(discountedTotal.toLocaleString());
 }
 
-// netTotal calculation dislay
+// netTotal calculation display
 function checkNetTotal() {
     var subTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
     var billType = document.getElementById("selectBillType");
@@ -779,7 +779,6 @@ function checkout(itemData) {
             method: "POST",
             success: function(response) {
 
-                console.log(response);
                 var result = JSON.parse(response);
                 console.log(result);
                 if (result.status === 'success') {
@@ -791,7 +790,6 @@ function checkout(itemData) {
                         var item_cost = $(this).find("#item_price").text().trim();
                         var item_price = $(this).find("#totalprice").text();
 
-                        // alert(product_unit);
                         var productData = {
                             product_name: product_name,
                             item_cost: item_cost,
@@ -810,7 +808,7 @@ function checkout(itemData) {
                         },
                         success: function(response) {
 
-                            successMessageDisplay("Order Placed Successfully!");
+                            SuccessMessageDisplay("Order Placed Successfully!");
 
                             //invoice print add data
                             $.ajax({
@@ -832,25 +830,25 @@ function checkout(itemData) {
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
-                            errorMessageDisplay("Error: Something went wrong!");
+                            ErrorMessageDisplay("Error: Something went wrong!");
                         },
                     });
 
                 } else if (result.status === 'sessionExpired') {
-                    errorMessageDisplay(result.message);
+                    ErrorMessageDisplay(result.message);
                     setTimeout(function() {
                         window.open(window.location.href, '_blank');
                     }, 4000);
                     return;
                 } else {
-                    errorMessageDisplay("Invoice number failed");
+                    ErrorMessageDisplay("Invoice number failed");
                 }
 
             }
         });
 
     } else {
-        errorMessageDisplay("Enter Patient's Details");
+        ErrorMessageDisplay("Enter Patient's Details");
     }
 }
 
@@ -862,7 +860,7 @@ function issetInvoiceNumber() {
         })
         .catch(function(xhr) {
             console.error(xhr.responseText);
-            errorMessageDisplay(xhr.responseText); // Fixed typo
+            ErrorMessageDisplay(xhr.responseText);
         });
 
 
