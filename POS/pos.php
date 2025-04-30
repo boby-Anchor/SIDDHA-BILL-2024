@@ -137,11 +137,11 @@ if (!isset($_SESSION['store_id'])) {
                       <?php
                       $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
-                        ?>
+                      ?>
                         <option value="<?= $payment_type_row['payment_type_id'] ?>">
                           <?= $payment_type_row['payment_type'] ?>
                         </option>
-                        <?php
+                      <?php
                       }
                       ?>
                     </select>
@@ -169,38 +169,16 @@ if (!isset($_SESSION['store_id'])) {
                 <div id="doctorNameField" class="col-3 p-2">
                   <select class="form-control select2" id="doctorName" name="doctorName">
                     <option value="" disabled selected hidden>Select a doctor</option>
-                    <option value="Dr. Ashoka Alagiyawanna">Dr. Ashoka Alagiyawanna</option>
-                    <option value="Dr. Buddhika">Dr. Buddhika</option>
-                    <option value="Dr. Chathura">Dr. Chathura</option>
-                    <option value="Dr. Daya">Dr. Daya</option>
-                    <option value="Dr. Devinda">Dr. Devinda</option>
-                    <option value="Dr. Fathima">Dr. Fathima</option>
-                    <option value="Dr. Fathima Fakeera">Dr. Fathima Fakeera</option>
-                    <option value="Dr. Fathima Naleefa">Dr. Fathima Naleefa</option>
-                    <option value="Dr. Jeewani">Dr. Jeewani</option>
-                    <option value="Dr. Kusal">Dr. Kusal</option>
-                    <option value="Dr. Lahiru Sampath">Dr. Lahiru Sampath</option>
-                    <option value="Dr. Mithula">Dr. Mithula</option>
-                    <option value="Dr. Nadeesha Sewwandi">Dr. Nadeesha Sewwandi</option>
-                    <option value="Dr. Nishantha">Dr. Nishantha</option>
-                    <option value="Dr. Nirosha">Dr. Nirosha</option>
-                    <option value="Dr. Nuwan">Dr. Nuwan</option>
-                    <option value="Dr. Padmasiri">Dr. Padmasiri</option>
-                    <option value="Dr. Parakrama">Dr. Parakrama</option>
-                    <option value="Dr. Prasanga">Dr. Prasanga</option>
-                    <option value="Dr. Rajapaksha">Dr. Rajapaksha</option>
-                    <option value="Dr. Rajeew Poltan">Dr. Rajeew Poltan</option>
-                    <option value="Dr. Rishad Buhari">Dr. Rishad Buhari</option>
-                    <option value="Dr. Saranga">Dr. Saranga</option>
-                    <option value="Dr. Shehani Shashipraba">Dr. Shehani Shashipraba</option>
-                    <option value="Dr. Shaminda">Dr. Shaminda</option>
-                    <option value="Dr. Sujeewa">Dr. Sujeewa</option>
-                    <option value="Dr. Sujitha">Dr. Sujitha</option>
-                    <option value="Dr. Swarna">Dr. Swarna</option>
-                    <option value="Dr. Tharindu">Dr. Tharindu</option>
-                    <option value="Dr. Thilanka">Dr. Thilanka</option>
-                    <option value="Dr. Wathsala">Dr. Wathsala</option>
-                    <option value="Dr. Yashodara">Dr. Yashodara</option>
+                    <?php
+                    $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
+                    while ($doctors_row = $doctors_rs->fetch_assoc()) {
+                    ?>
+                      <option value="<?= $doctors_row['name'] ?>">
+                        <?= $doctors_row['name'] ?>
+                      </option>
+                    <?php
+                    }
+                    ?>
                   </select>
                 </div>
                 <div id="regNoField" class="col-3 p-2">
@@ -221,11 +199,11 @@ if (!isset($_SESSION['store_id'])) {
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
                   while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
-                    ?>
+                  ?>
                     <option value="<?= $bill_type_row['bill_type_id'] ?>">
                       <?= $bill_type_row['bill_type_name'] ?>
                     </option>
-                    <?php
+                  <?php
                   }
                   ?>
                 </select>
@@ -291,7 +269,7 @@ if (!isset($_SESSION['store_id'])) {
 
                       if (!empty($cm)) {
                         foreach ($cm as $v) {
-                          ?>
+                  ?>
                           <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
                             <div class="product-grid h-100 rounded-lg">
                               <div class="product-content">
@@ -315,7 +293,7 @@ if (!isset($_SESSION['store_id'])) {
                               </div>
                             </div>
                           </div>
-                        <?php }
+                  <?php }
                       }
                     }
                   } ?>
@@ -466,7 +444,7 @@ if (!isset($_SESSION['store_id'])) {
           WHERE `customize_bill_shop-id` = '$shop_id'
           ");
           $bill_data = $bill_data_rs->fetch_assoc();
-          ?>
+      ?>
           <div class="d-flex justify-content-center">
             <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
               <div class="row gap-1">
@@ -482,7 +460,7 @@ if (!isset($_SESSION['store_id'])) {
                             <h3>
                               <b>
                                 <?php //echo $bill_data['shopName'] 
-                                    ?>
+                                ?>
                               </b>
                             </h3>
                           </label>
@@ -575,7 +553,7 @@ if (!isset($_SESSION['store_id'])) {
               </table>
             </div>
           </div>
-          <?php
+      <?php
         }
       }
       ?>
@@ -586,7 +564,7 @@ if (!isset($_SESSION['store_id'])) {
 </body>
 
 <script>
-  $(function () {
+  $(function() {
     //Initialize Select2 Elements
     $(".select2").select2();
 
