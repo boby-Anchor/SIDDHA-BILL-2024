@@ -239,10 +239,12 @@ if (!isset($_SESSION['store_id'])) {
                         printWindow.document.write('<h5>ORDER NUMBER : ' + orderNumber + '</h5>');
                         printWindow.document.write('</div>');
                         printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                        printWindow.document.write('<h6>ORDER DATE : <?= date('Y-m-d', strtotime($itemCount_data['orderDate'])) ?></h6>');
+                        // printWindow.document.write('<h6>ORDER DATE : <?php //date('Y-m-d', strtotime($itemCount_data['orderDate'])) 
+                                                                        ?></h6>');
+                        printWindow.document.write('<h6>ORDER DATE : <?= !empty($itemCount_data['orderDate']) ? date('Y-m-d', strtotime($itemCount_data['orderDate'])) : 'No date available' ?></h6>');
                         printWindow.document.write('</div>');
                         printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                        printWindow.document.write('<h6>ORDER TIME : <?= date('H:i:s', strtotime($itemCount_data['orderDate'])) ?></h6>');
+                        printWindow.document.write('<h6>ORDER TIME : <?= (!empty($itemCount_data['orderDate'])) ? date('H:i:s', strtotime($itemCount_data['orderDate'])) : 'No date available' ?></h6>');
                         printWindow.document.write('</div>');
                         printWindow.document.write('</div>');
                         printWindow.document.write('</div>');

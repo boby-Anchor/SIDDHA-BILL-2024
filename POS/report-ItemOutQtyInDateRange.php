@@ -25,15 +25,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $twoMonthsAgoStart = date("Y-m-$startDay", strtotime("first day of -2 months", strtotime($start_date)));
     $twoMonthsAgoEnd = date("Y-m-$endDay", strtotime("first day of -2 months", strtotime($end_date)));
 
-    $thisMonthData = $conn->query("SELECT invoiceItem, invoiceItem_unit, DATE(invoiceDate) AS sale_date,
+    // Calculate the range for three months ago
+    $threeMonthsAgoStart = date("Y-m-$startDay", strtotime("first day of -3 months", strtotime($start_date)));
+    $threeMonthsAgoEnd = date("Y-m-$endDay", strtotime("first day of -3 months", strtotime($end_date)));
+
+    $thisMonthData = $conn->query("SELECT invoiceItem, invoiceItem_unit,
         SUM(invoiceItem_qty) AS this_month_total_qty
         FROM
         invoiceitems
         INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
+        INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
         WHERE DATE(invoiceDate) BETWEEN '$start_date' AND '$end_date'
         AND invoices.shop_id = '$shop_id'
-        GROUP BY DATE(invoiceDate), invoiceItem
-        ORDER BY 'sale_date' DESC
+        GROUP BY invoiceItem
+        ORDER BY 'invoiceItem' ASC
       ");
 }
 
@@ -152,6 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <th><?php echo "$start_date - $end_date" ?></th>
                                             <th><?php echo "$previousMonthStart - $previousMonthEnd" ?></th>
                                             <th><?php echo "$twoMonthsAgoStart - $twoMonthsAgoEnd" ?></th>
+                                            <th><?php echo "$threeMonthsAgoStart - $threeMonthsAgoEnd" ?></th>
                                             <th>Details</th>
 
                                         <?php
@@ -160,6 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <th>This Month Total Qty</th>
                                             <th>Previous Month Total Qty</th>
                                             <th>Two Months Ago Total Qty</th>
+                                            <th>Three Months Ago Total Qty</th>
                                             <th>Details</th>
                                         <?php
                                         }
@@ -218,6 +225,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                                         ?>
                                                     </td>
+                                                    <td id="three_months_ago_qty">
+                                                        <?php
+                                                        $threeMonthsAgoData = $conn->query("SELECT SUM(invoiceItem_qty) AS three_months_ago_total_qty
+                                                        FROM invoiceitems
+                                                        INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
+                                                        WHERE invoices.shop_id = '$shop_id'
+                                                        AND invoiceItem='$invoiceItemName'
+                                                        AND invoiceItem_unit ='$invoiceItemUnit'
+                                                        AND DATE(invoiceDate) BETWEEN '$threeMonthsAgoStart' AND '$threeMonthsAgoEnd'
+                                                        ");
+
+                                                        if (isset($threeMonthsAgoData)) {
+                                                            while ($threeMonthsAgoCell = mysqli_fetch_assoc($threeMonthsAgoData)) {
+                                                                echo $threeMonthsAgoCell['three_months_ago_total_qty'];
+                                                            }
+                                                        } else {
+                                                            echo "0";
+                                                        }
+
+                                                        ?>
+                                                    </td>
                                                     <td class="align-items-center align-content-center">
                                                         <button id="updateCharButton" class="button bg-dark border rounded border-success" onclick="updateChartData(this)">
                                                             <i class="nav-icon fas fa-eye p-2"></i>
@@ -267,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         const myBarChart = new Chart(chartElement, {
             type: 'bar',
             data: {
-                labels: ['This Month', 'Last Month', 'Two Months Ago'],
+                labels: ['This Month', 'Last Month', 'Two Months Ago', 'Three Months Ago'],
                 datasets: [{
                     label: 'Items Qty',
                     data: [0, 0, 0],
@@ -275,11 +303,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
                         'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
                     ],
                     borderWidth: 1
                 }]
@@ -297,9 +327,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             var this_month_qty = $(this).closest("tr").find("#this_month_qty").text();
             var last_month_qty = $(this).closest("tr").find("#last_month_qty").text();
             var two_months_ago_qty = $(this).closest("tr").find("#two_months_ago_qty").text();
+            var three_months_ago_qty = $(this).closest("tr").find("#three_months_ago_qty").text();
 
             // alert(this_month_qty + " " + last_month_qty + " " + two_months_ago_qty);
-            const newData = [this_month_qty, last_month_qty, two_months_ago_qty];
+            const newData = [this_month_qty, last_month_qty, two_months_ago_qty, three_months_ago_qty];
             myBarChart.data.datasets[0].data = newData;
             myBarChart.update();
 
@@ -321,9 +352,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
                     buttons: ["excel", "pdf", "print", "colvis"],
                 })
-            .buttons()
-            .container()
-            .appendTo("#stockTable_wrapper .col-md-6:eq(0)");
+                .buttons()
+                .container()
+                .appendTo("#stockTable_wrapper .col-md-6:eq(0)");
         });
     </script>
 
