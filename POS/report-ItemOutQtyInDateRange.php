@@ -29,15 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $threeMonthsAgoStart = date("Y-m-$startDay", strtotime("first day of -3 months", strtotime($start_date)));
     $threeMonthsAgoEnd = date("Y-m-$endDay", strtotime("first day of -3 months", strtotime($end_date)));
 
-    $thisMonthData = $conn->query("SELECT invoiceItem, invoiceItem_unit,
+    $thisMonthData = $conn->query("SELECT invoiceItem, invoiceItem_unit, invoiceItem_price,
         SUM(invoiceItem_qty) AS this_month_total_qty
         FROM
         invoiceitems
         INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
-        INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
         WHERE DATE(invoiceDate) BETWEEN '$start_date' AND '$end_date'
         AND invoices.shop_id = '$shop_id'
-        GROUP BY invoiceItem
+        GROUP BY invoiceItem, invoiceItem_price
         ORDER BY 'invoiceItem' ASC
       ");
 }
@@ -151,6 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <thead>
                                     <tr class="bg-info">
                                         <th>Invoice Item</th>
+                                        <th>Brand</th>
                                         <?php
                                         if (isset($_POST['start_date'])) {
                                         ?>
@@ -180,9 +180,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             while ($row = mysqli_fetch_assoc($thisMonthData)) {
                                                 $invoiceItemName =  $row['invoiceItem'];
                                                 $invoiceItemUnit =  $row['invoiceItem_unit'];
+                                                $invoiceItemPrice =  $row['invoiceItem_price'];
                                     ?>
                                                 <tr>
-                                                    <td><?php echo "$invoiceItemName ($invoiceItemUnit)" ?></td>
+                                                    <td><?php echo "$invoiceItemName <br/> (Price- $invoiceItemPrice)" ?></td>
+                                                    <td><?php
+
+                                                        $medicineData = $conn->query("SELECT brand FROM p_medicine
+                                                        WHERE name = '$invoiceItemName'
+                                                        LIMIT 1;
+                                                        ");
+                                                        if ($medicineData) {
+                                                            while ($brandRow = mysqli_fetch_assoc($medicineData)) {
+                                                                $bName = $brandRow['brand'];
+                                                                // echo $bName;
+                                                                $brandData = $conn->query("SELECT name FROM p_brand
+                                                                WHERE id = '$bName'
+                                                        ");
+                                                                if ($brandData) {
+                                                                    while ($brandRow = mysqli_fetch_assoc($brandData)) {
+                                                                        echo $brandRow['name'];
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+
+
+                                                        ?></td>
                                                     <td id="this_month_qty"><?= $row['this_month_total_qty']; ?></td>
                                                     <td id="last_month_qty">
                                                         <?php
@@ -192,6 +216,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         WHERE invoices.shop_id = '$shop_id'
                                                         AND invoiceItem='$invoiceItemName'
                                                         AND invoiceItem_unit ='$invoiceItemUnit'
+                                                        AND invoiceItem_price = '$invoiceItemPrice'
                                                         AND DATE(invoiceDate) BETWEEN '$previousMonthStart' AND '$previousMonthEnd'
                                                         ");
 
@@ -212,6 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         WHERE invoices.shop_id = '$shop_id'
                                                         AND invoiceItem='$invoiceItemName'
                                                         AND invoiceItem_unit ='$invoiceItemUnit'
+                                                        AND invoiceItem_price = '$invoiceItemPrice'
                                                         AND DATE(invoiceDate) BETWEEN '$twoMonthsAgoStart' AND '$twoMonthsAgoEnd'
                                                         ");
 
@@ -233,6 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         WHERE invoices.shop_id = '$shop_id'
                                                         AND invoiceItem='$invoiceItemName'
                                                         AND invoiceItem_unit ='$invoiceItemUnit'
+                                                        AND invoiceItem_price = '$invoiceItemPrice'
                                                         AND DATE(invoiceDate) BETWEEN '$threeMonthsAgoStart' AND '$threeMonthsAgoEnd'
                                                         ");
 
