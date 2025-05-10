@@ -183,30 +183,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 $invoiceItemPrice =  $row['invoiceItem_price'];
                                     ?>
                                                 <tr>
-                                                    <td><?php echo "$invoiceItemName <br/> (Price- $invoiceItemPrice)" ?></td>
-                                                    <td><?php
+                                                    <td>
+                                                        <?php echo "$invoiceItemName <br/>";
 
-                                                        $medicineData = $conn->query("SELECT brand FROM p_medicine
-                                                        WHERE name = '$invoiceItemName'
-                                                        LIMIT 1;
+                                                        $barcodeData = $conn->query("SELECT stock_item_code
+                                                        FROM stock2
+                                                        WHERE stock2.stock_item_name = '$invoiceItemName'
+                                                        AND (stock2.item_s_price=$invoiceItemPrice OR stock2.unit_s_price = $invoiceItemPrice)
+                                                        GROUP BY stock_item_code
+                                                        ORDER BY stock_item_code DESC
+                                                        LIMIT 1
                                                         ");
-                                                        if ($medicineData) {
-                                                            while ($brandRow = mysqli_fetch_assoc($medicineData)) {
-                                                                $bName = $brandRow['brand'];
-                                                                // echo $bName;
-                                                                $brandData = $conn->query("SELECT name FROM p_brand
-                                                                WHERE id = '$bName'
-                                                        ");
-                                                                if ($brandData) {
-                                                                    while ($brandRow = mysqli_fetch_assoc($brandData)) {
-                                                                        echo $brandRow['name'];
+                                                        if ($barcodeData) {
+                                                            if ($barcodeRow = mysqli_fetch_assoc($barcodeData)) {
+                                                                $barcode = $barcodeRow['stock_item_code'];
+
+                                                                $unitData = $conn->query("SELECT medicine_unit.unit AS unit, unit_category_variation.ucv_name AS volume, p_brand.name as brand
+                                                                    FROM p_medicine
+                                                                    JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                                                                    JOIN medicine_unit ON medicine_unit.id = unit_category_variation.p_unit_id
+                                                                    JOIN p_brand ON p_medicine.brand = p_brand.id
+                                                                    WHERE p_medicine.name = '$invoiceItemName'
+                                                                    AND p_medicine.code = '$barcode'
+                                                                    ");
+
+                                                                if ($unitData) {
+                                                                    while ($unitRow = mysqli_fetch_assoc($unitData)) {
+                                                                        echo "(" . $unitRow ? $unitRow['volume'] . $unitRow['unit']  . ")<br/>" : "No unit <br/>";
+                                                                        $brand = $unitRow['brand'];
                                                                     }
                                                                 }
+                                                                echo "
+                                                                Price:-" . $invoiceItemPrice;
                                                             }
                                                         }
 
+                                                        // $unitData = $conn->query("SELECT medicine_unit.unit AS unit, unit_category_variation.ucv_name AS volume FROM stock2
+                                                        // JOIN p_medicine ON p_medicine.code = p_medicine.unit_variation
+                                                        // JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                                                        // JOIN medicine_unit ON medicine_unit.id = unit_category_variation.p_unit_id
+                                                        // WHERE stock2.stock_item_name = '$invoiceItemName'
+                                                        // AND stock2.item_s_price = '$invoiceItemPrice'
+                                                        // AND stock2.stock_shop_id = '$shop_id'
+                                                        // ");
+                                                        // if ($unitData) {
+                                                        //     while ($unitRow = mysqli_fetch_assoc($unitData)) {
+                                                        //         echo "(" . $unitRow['volume'];
+                                                        //         echo $unitRow['unit'] . ")";
+                                                        //     }
+                                                        // }
+                                                        ?>
+                                                    </td>
 
-                                                        ?></td>
+                                                    <td>
+                                                        <?= $brand; ?>
+                                                    </td>
                                                     <td id="this_month_qty"><?= $row['this_month_total_qty']; ?></td>
                                                     <td id="last_month_qty">
                                                         <?php
