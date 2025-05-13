@@ -154,44 +154,27 @@ if (!isset($_SESSION['store_id'])) {
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-          <div class="col-12">
+          <div class="col-12 bg-dark">
             <div class="row w-100">
 
-              <!-- left side desing start -->
+              <!-- left side design start -->
               <div class="col-12">
-                <div class="card-body h-100 bg-white">
+                <div class="card-body h-100 ">
                   <div class="row">
 
-                    <!-- supplier selector start -->
-                    <div class="col-12 p-4">
-                      <label for="select-supplier">Select Supplier</label>
-                      <select name="select-supplier" id="select-supplier" class="form-control" onchange="select_suplier(this.value);">
-                        <option value="0">select supplier</option>
-                        <?php
-                        $supplier_rs = $conn->query("SELECT * FROM `p_supplier`");
-                        while ($supplier_data = $supplier_rs->fetch_assoc()) {
-                        ?>
-                          <option value="<?= $supplier_data["id"] ?>"><?= $supplier_data["name"] ?></option>
-                        <?php
-                        }
-                        ?>
-                      </select>
-                    </div>
-                    <!-- supplier selector end -->
-
                     <!-- supplier products start -->
-                    <div class="col-12 p-4">
+                    <div class="col-12 px-4">
                       <div class="row">
                         <div class="col-4">
-                          <input type="text" class="form-control" placeholder="Barcode Number" onkeyup="filterBySearch(this.value);" id="bnInput">
+                          <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="filterBySearch(this.value);" id="bnInput">
                         </div>
                         <div class="col-4">
-                          <input type="text" class="form-control" placeholder="Product Code" onkeyup="filterBySearch(this.value);" id="pcInput">
+                          <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="filterBySearch(this.value);" id="pcInput">
                         </div>
                         <div class="col-4">
-                          <input type="text" class="form-control" placeholder="Product Name" onkeyup="filterBySearch(this.value);" id="pnInput">
+                          <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="filterBySearch(this.value);" id="pnInput">
                         </div>
-                        <div class="col-12 products-table">
+                        <div class="col-12 products-table mt-3">
                           <table class="table">
                             <thead>
                               <tr>
@@ -230,7 +213,7 @@ if (!isset($_SESSION['store_id'])) {
                                   <td id="product_unit">
                                     <label for=""><?= $p_medicine_data['unit'] ?></label>
                                     <br>
-                                     <lable class="labQty"><?= $p_medicine_data['siq'] ?></lable>
+                                     <label class="labQty"><?= $p_medicine_data['siq'] ?></label>
                                   </td>
                                   <td id="product_cost">
                                     <label for=""><?= $p_medicine_data['cost'] ?></label>
@@ -256,9 +239,9 @@ if (!isset($_SESSION['store_id'])) {
                   </div>
                 </div>
               </div>
-              <!-- left side desing end -->
+              <!-- left side design end -->
 
-              <!-- right side desing start -->
+              <!-- right side design start -->
               <div class="col-12">
                 <div class="po_tittle">
                   <h3>PO PRODUCTS</h3>
@@ -289,7 +272,7 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
               </div>
 
-              <!-- right side desing end -->
+              <!-- right side design end -->
             </div>
           </div>
         </div>
