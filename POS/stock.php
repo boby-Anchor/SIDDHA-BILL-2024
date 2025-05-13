@@ -56,7 +56,7 @@ $cost = 0;
                     <thead>
 
                       <tr class="bg-info">
-                        <th> </th>
+                        <th>#</th>
                         <th>Product</th>
                         <th>Brand</th>
                         <th>Category</th>
@@ -86,7 +86,7 @@ $cost = 0;
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock2.stock_shop_id = '$shop_id' AND  stock2.stock_item_qty >= 0  ORDER BY p_medicine.name ASC");
+                          WHERE stock2.stock_shop_id = '$shop_id' AND  stock2.stock_item_qty > 0  ORDER BY p_medicine.name ASC");
                           while ($row = mysqli_fetch_assoc($sql)) {
                             $totalRows++;
 
@@ -94,6 +94,7 @@ $cost = 0;
                       ?>
                             <tr>
                               <td style="padding:5px" class="text-center">
+                                <?= $totalRows; ?> -
                                 <?= $row['stock_id']; ?>
                                 <br>
                                 <?= $row['p_code']; ?>
@@ -204,7 +205,7 @@ $cost = 0;
           autoWidth: false,
           // aaSorting: [],
           order: [
-            [5, 'desc']
+            [1, 'asc']
           ],
           buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
         })
