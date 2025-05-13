@@ -76,13 +76,15 @@ if (!isset($_SESSION['store_id'])) {
                               FROM hub_order_details 
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
-                              INNER JOIN shop ON shop.shopId = hub_order.HO_shopId");
+                              INNER JOIN shop ON shop.shopId = hub_order.HO_shopId
+                              ORDER BY hub_order_details_id DESC");
                             } else {
                               $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id
                               FROM hub_order_details 
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
-                              INNER JOIN shop ON shop.shopId = hub_order.HO_shopId WHERE shop.shopId = '$shop_id'");
+                              INNER JOIN shop ON shop.shopId = hub_order.HO_shopId WHERE shop.shopId = '$shop_id'
+                              ORDER BY 'HO_date' DESC");
                             }
 
                             while ($hub_order_details_data = $hub_order_details_result->fetch_assoc()) {
@@ -96,6 +98,7 @@ if (!isset($_SESSION['store_id'])) {
                                   FROM hub_order WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'");
                                   $itemCount_data = $itemCount_result->fetch_assoc();
                                   ?>
+                                  <!--Items list table start  -->
                                   <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['itemCount'] ?> </button>
                                   <ul class="dropdown-menu">
                                     <table class="table" id="poItemsTable<?= $hub_order_details_data['hub_order_number'] ?>">
@@ -143,6 +146,7 @@ if (!isset($_SESSION['store_id'])) {
                                       <i class="nav-icon fas fa-copy"></i> PRINT
                                     </button>
                                   </ul>
+                                  <!--Items list table end  -->
                                 </th>
                                 <th><?= $hub_order_details_data['HO_date'] ?></th>
                                 <th><?= number_format($hub_order_details_data["hub_order_subTotal"], 2) ?></th>
@@ -216,6 +220,34 @@ if (!isset($_SESSION['store_id'])) {
         <!-- All JS -->
         <?php include("part/all-js.php"); ?>
         <!-- All JS end -->
+
+        <script src="dist/js/messageDisplay.js"> </script>
+
+        <script>
+          function updateOrderStatus(orderNO, status) {
+            $(".btn").prop('disabled', true);
+
+            $.ajax({
+              url: "actions/purchase_orders/updateOrderStatusProcess.php",
+              method: "POST",
+              data: {
+                orderNumber: orderNO,
+                status: status,
+              },
+              success: function() {
+                SuccessMessageDisplay("Order status updated!")
+                setTimeout(function() {
+                  location.reload();
+                }, 4000);
+              },
+              error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                ErrorMessageDisplay("Order status update failed!");
+                $(".btn").prop('disabled', false);
+              },
+            });
+          }
+        </script>
 
         <script>
           document.addEventListener("DOMContentLoaded", function() {
