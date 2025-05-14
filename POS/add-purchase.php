@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (!isset($_SESSION['store_id'])) {
@@ -132,10 +131,10 @@ if (!isset($_SESSION['store_id'])) {
           font-weight: 500;
           cursor: pointer;
         }
-        
-        .labQty{
-            color:red;
-            font-size: 18px;
+
+        .labQty {
+          color: red;
+          font-size: 18px;
         }
       </style>
 
@@ -180,46 +179,48 @@ if (!isset($_SESSION['store_id'])) {
                               <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Product Name</th>
-                                <th scope="col">Brand</th>
+                                <th scope="col">Category</th>
                                 <th scope="col">Product Unit</th>
-                                <th scope="col">Product Cost</th>
+                                <th scope="col">Brand</th>
                                 <th scope="col">Product Sell price</th>
-                                <th scope="col"></th>
+                                <th scope="col">Action</th>
                               </tr>
                             </thead>
                             <tbody id="filterBySupTable">
                               <?php
-                              $p_medicine_rs = $conn->query("SELECT producttoshop.*, p_brand.name AS brand,
-                              p_medicine.name AS medName, medicine_unit.unit AS unit, stock2.stock_item_cost AS cost,stock2.stock_item_qty AS siq,
+                              $p_medicine_rs = $conn->query("SELECT 
+                              stock2.stock_item_code AS barcode,
+                              p_brand.name AS brand,
+                              p_medicine.name AS medicineName,
+                              p_medicine_category.name AS category,
+                              unit_category_variation.ucv_name AS volume,
+                              medicine_unit.unit AS unit,
                               stock2.item_s_price AS item_s_price
-                              FROM producttoshop
-                              INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
-                              INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
+                              FROM p_medicine
                               INNER JOIN stock2 ON p_medicine.code = stock2.stock_item_code
+                              INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
+                              INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
                               INNER JOIN p_brand ON p_medicine.brand = p_brand.id
-                              WHERE producttoshop.shop_id = '$shop_id' AND productToShopStatus = 'added' ORDER BY stock2.stock_id ASC");
+                              INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                              WHERE stock2.stock_shop_id = '$shop_id' ORDER BY p_medicine.name ASC, volume ASC");
 
                               $tableRowCount = 1;
                               while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
                               ?>
                                 <tr>
-                                  <th id="product_code" class="d-none"><?= $p_medicine_data['medicinId'] ?></th>
+                                  <th id="product_code" class="d-none"><?= $p_medicine_data['barcode'] ?></th>
+                                  <th id="item_s_price" class="d-none"><?= $p_medicine_data['item_s_price'] ?></th>
 
                                   <th scope="row"><?= $tableRowCount ?></th>
 
-                                  <td id="product_name"><?= $p_medicine_data['medName'] ?></td>
-                                  <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
-
+                                  <td id="product_name"><?= $p_medicine_data['medicineName'] ?> </td>
+                                  <td id="product_name"><?= $p_medicine_data['category'] ?> </td>
                                   <td id="product_unit">
-                                    <label for=""><?= $p_medicine_data['unit'] ?></label>
-                                    <br>
-                                     <label class="labQty"><?= $p_medicine_data['siq'] ?></label>
+                                    <label><?= $p_medicine_data['volume'] ?><?= $p_medicine_data['unit'] ?></label>
                                   </td>
-                                  <td id="product_cost">
-                                    <label for=""><?= $p_medicine_data['cost'] ?></label>
-                                  </td>
-                                  <td id="product_sprice">
-                                    <label for=""><?= $p_medicine_data['item_s_price'] ?></label>
+                                  <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
+                                  <td>
+                                    <?= number_format($p_medicine_data['item_s_price'],0) ?>
                                   </td>
 
                                   <td><button class="btn btn-outline-success add-btn">Add</button></td>
@@ -248,23 +249,22 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
                 <table class="table table-dark table-hover addedProTable">
                   <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Product Name</th>
-                       <th scope="col">Brand</th>
-                      <th scope="col">Product Cost</th>
-                      <th scope="col">Qty</th>
-                      <th scope="col"></th>
+                    <tr class="row">
+                      <th scope="col" class="col-1">#</th>
+                      <th scope="col" class="col-3 text-center">Product Name</th>
+                      <th scope="col" class="col-3 text-center">Brand</th>
+                      <th scope="col" class="col-3 px-5"><input type="date" class="form-control" id="order_date"></th>
+                      <th scope="col" class="col-2">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <!-- <tr>
                       <th scope="row" id="addproduct_code"></th>
                       <td id="addproduct_name"></td>
                       <td id="addproduct_brand"></td>
                       <td id="addproduct_cost"></td>
                       <td></td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
                 <div class="po_btn col-12 d-none justify-content-end align-items-center">
@@ -408,16 +408,17 @@ if (!isset($_SESSION['store_id'])) {
         <?php include("part/all-js.php"); ?>
         <!-- All JS end -->
 
+        <script src="dist/js/messageDisplay.js"></script>
+
         <script>
           $(document).ready(function() {
 
             $(document).on("click", ".add-btn", function() {
               var product_code = $(this).closest("tr").find("#product_code").text();
               var product_name = $(this).closest("tr").find("#product_name").text();
-               var product_brand = $(this).closest("tr").find("#product_brand").text();
+              var product_brand = $(this).closest("tr").find("#product_brand").text();
               var product_cost = $(this).closest("tr").find("#product_cost").text();
               var product_unit = $(this).closest("tr").find("#product_unit").text();
-              var product_qty = 1;
 
               var exists = false;
               $(".addedProTable tbody tr").each(function() {
@@ -429,25 +430,12 @@ if (!isset($_SESSION['store_id'])) {
 
               if (!exists) {
                 var markup =
-                  "<tr>" +
-                  "<th scope='row'>" + product_code + "</th>" +
+                  "<tr class=''>" +
+                  "<th>" + product_code + "</th>" +
                   "<td id='addproduct_name'>" + product_name + "</td>" +
                   "<td id='addproduct_brand'>" + product_brand + "</td>" +
-                  "<td id='addproduct_cost'>" + product_cost + "</td>" +
                   "<td>" +
-                  "<div class='medi_uni'>" +
-                  "<div class='col-6'>" +
-                  "<div class='input-group'>" +
-                  "<input type='text' class='form-control bg-dark' value='" + product_qty + "'>" +
-                  "<div class='input-group-append unit-select-main' id='unitselectordiv'>" +
-                  "<select name='quantity_unit' class='form-control bg-dark' id='qtyUnitSelector' >" +
-                  "<option value='" + product_unit + "'>" + product_unit + "</option>" +
-                  "</select>" +
-
-                  "</div>" +
-                  "</div>" +
-                  "</div>" +
-                  "</div>" +
+                  "<input type='number' class='form-control bg-dark'>" +
                   "</td>" +
                   "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
                   "</tr>";
@@ -458,7 +446,7 @@ if (!isset($_SESSION['store_id'])) {
                 $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
 
               } else {
-                alert("Product already exists in the list!");
+                ErrorMessageDisplay("Product already exists in the list!");
               }
             });
 
@@ -479,6 +467,9 @@ if (!isset($_SESSION['store_id'])) {
 
         <script>
           $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
+
+            $(".confirmPObtn").prop('disabled', true);
+
             var orderNumber = document.getElementById("orderNumber").innerText;
             var orderDate = document.getElementById("orderDate").innerText;
             var orderTime = document.getElementById("orderTime").innerText;
@@ -515,29 +506,14 @@ if (!isset($_SESSION['store_id'])) {
                 products: JSON.stringify(poArray),
               },
               success: function() {
-                Swal.mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 3000,
-                }).fire({
-                  icon: "success",
-                  title: "Success: Order Placed Success !",
-                });
-                $(".confirmPObtn").prop('disabled', false);
-                location.reload(true);
+                SuccessMessageDisplay("Success: Order Placed Success !");
+                setTimeout(function() {
+                  location.reload();
+                }, 3000);
               },
               error: function(xhr, status, error) {
                 console.error(xhr.responseText);
-                Swal.mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 3000,
-                }).fire({
-                  icon: "error",
-                  title: "Order Failed !",
-                });
+                ErrorMessageDisplay("Order Failed !");
                 $(".confirmPObtn").prop('disabled', false);
               },
             });
@@ -545,6 +521,7 @@ if (!isset($_SESSION['store_id'])) {
         </script>
     </body>
     <script src="dist/js/add-purchase.js"></script>
+
     </html>
 <?php
   }
