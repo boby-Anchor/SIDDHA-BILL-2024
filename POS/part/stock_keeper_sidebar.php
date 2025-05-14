@@ -54,6 +54,33 @@ if (isset($_SESSION['store_id'])) {
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+            <?php
+            if ($user_shop_data['user_role'] == "Stock Keeper") {
+            ?>
+              <li class="nav-header">Special</li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Special
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">1</span>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="edit-stock_new.php" class="nav-link">
+                      <i class="nav-icon fas fa-copy"></i>
+                      <i class=""></i>
+                      <p>Edit item Qty</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            <?php
+            }
+            ?>
+            <li class="nav-header"> Stock Item functions</li>
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
@@ -365,6 +392,31 @@ if (isset($_SESSION['store_id'])) {
                     <a href="report-ItemQtyFromPo.php" class="nav-link">
                       <i class="nav-icon fas fa-copy"></i>
                       <p>PO Item Qty Report</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            <?php
+            }
+
+            if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 2) {
+            ?>
+              <!-- <li class="nav-header">Item Qty Reports</li> -->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Functions
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">1</span>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="" class="nav-link">
+                      <i class="nav-icon fas fa-copy"></i>
+                      <i class=""></i>
+                      <p>Add doctor</p>
                     </a>
                   </li>
                 </ul>
