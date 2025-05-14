@@ -77,14 +77,15 @@ if (!isset($_SESSION['store_id'])) {
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
                               INNER JOIN shop ON shop.shopId = hub_order.HO_shopId
-                              ORDER BY hub_order_details_id DESC");
+                              ORDER BY `hub_order_details_id` DESC");
                             } else {
                               $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id
                               FROM hub_order_details 
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
-                              INNER JOIN shop ON shop.shopId = hub_order.HO_shopId WHERE shop.shopId = '$shop_id'
-                              ORDER BY 'HO_date' DESC");
+                              INNER JOIN shop ON shop.shopId = hub_order.HO_shopId 
+                              WHERE shop.shopId = '$shop_id'
+                              ORDER BY `hub_order_details_id` DESC");
                             }
 
                             while ($hub_order_details_data = $hub_order_details_result->fetch_assoc()) {
@@ -152,23 +153,52 @@ if (!isset($_SESSION['store_id'])) {
                                 <th><?= number_format($hub_order_details_data["hub_order_subTotal"], 2) ?></th>
                                 <th>
                                   <?php
-                                  if ($shop_id == "1" && $hub_order_details_data["order_status_id"] == '1' || $shop_id == "1" && $hub_order_details_data["order_status_id"] == '6') {
+                                  if ($shop_id == "1") {
+                                    if ($hub_order_details_data["order_status_id"] == '1' || $hub_order_details_data["order_status_id"] == '6') {
                                   ?>
-                                    <button class="btn btn-success" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '2')">Accept</button>
-                                  <?php
-                                  } else if ($shop_id == "1" && $hub_order_details_data["order_status_id"] == '2') {
-                                  ?>
-                                    <button class="btn btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
-                                <?php
-                                  } else  if ($shop_id != "1") {
+                                      <button class="btn btn-info" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '2')">Accept</button>
+                                    <?php
+                                    } else if ($hub_order_details_data["order_status_id"] == '2') {
+                                    ?>
+                                      <button class="btn mr-1 bg-primary text-white" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '3')">Packing</button>
+                                      <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
+                                    <?php
+                                    } else if ($hub_order_details_data["order_status_id"] == '3') {
+                                    ?>
+                                      <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '7')">Ready</button>
+                                      <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
+                                    <?php
+                                    } else if ($hub_order_details_data["order_status_id"] == '7') {
+                                    ?>
+                                      <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '4')">Deliver</button>
+                                      <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
+                                    <?php
+                                    } else if ($hub_order_details_data["order_status_id"] == '4') {
+                                    ?>
+                                      <label class='p-2 orderStatus btn-success'>Sent</label>
+                                      <!-- <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?php //echo $hub_order_details_data['hub_order_number'] 
+                                                                                                            ?>' , '6')">Reject</button> -->
+                                    <?php
+                                    } else if ($hub_order_details_data["order_status_id"] == '5') {
+                                    ?>
+                                      <label class='p-2 orderStatus btn-success'>Completed</label>
+                                    <?php
+                                    } else if ($hub_order_details_data["order_status_id"] == '8') {
+                                    ?>
+                                      <label class='p-2 orderStatus btn-success'>Completed</label>
+                                    <?php
+                                    }
+                                  } else {
 
                                     $orderStatusColor = array(
-                                      "1" => "#ffcb00",
-                                      "2" => "#06a63d",
-                                      "3" => "#06a63d",
-                                      "4" => "#06b63d",
-                                      "5" => "#06a62d",
-                                      "6" => "#bd0d0d"
+                                      "1" => "#FACC15",
+                                      "2" => "#22C55E",
+                                      "3" => "#3B82F6",
+                                      "4" => "#0EA5E9",
+                                      "5" => "#10B981",
+                                      "6" => "#EF4444",
+                                      "7" => "#8B5CF6",
+                                      "8" => "#14B8A6"
                                     );
 
                                     $orderStatus = array(
@@ -177,17 +207,25 @@ if (!isset($_SESSION['store_id'])) {
                                       "3" => "Packaging",
                                       "4" => "Delivered",
                                       "5" => "Received",
-                                      "6" => "Rejected"
+                                      "6" => "Rejected",
+                                      "7" => "Ready",
+                                      "8" => "Completed"
                                     );
 
-                                    $order_status_id = $hub_order_details_data["order_status_id"];
+                                    if ($hub_order_details_data["order_status_id"] == '4') {
+                                    ?>
+                                      <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '8')">Received</button>
+                                <?php
+                                    } else {
 
-                                    $bgColor = isset($orderStatusColor[$order_status_id]) ? $orderStatusColor[$order_status_id] : "white";
-                                    $statusType = isset($orderStatus[$order_status_id]) ? $orderStatus[$order_status_id] : "Unknown";
+                                      $order_status_id = $hub_order_details_data["order_status_id"];
+                                      $bgColor = isset($orderStatusColor[$order_status_id]) ? $orderStatusColor[$order_status_id] : "white";
+                                      $statusType = isset($orderStatus[$order_status_id]) ? $orderStatus[$order_status_id] : "Unknown";
 
-                                    echo "
+                                      echo "
                                               <label class='p-2 orderStatus' style='background-color: $bgColor;color:white;'>$statusType</label>
                                             ";
+                                    }
                                   }
                                 }
                                 ?>
@@ -238,7 +276,7 @@ if (!isset($_SESSION['store_id'])) {
                 SuccessMessageDisplay("Order status updated!")
                 setTimeout(function() {
                   location.reload();
-                }, 4000);
+                }, 3000);
               },
               error: function(xhr, status, error) {
                 console.error(xhr.responseText);
