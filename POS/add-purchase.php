@@ -202,7 +202,8 @@ if (!isset($_SESSION['store_id'])) {
                               INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
                               INNER JOIN p_brand ON p_medicine.brand = p_brand.id
                               INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                              WHERE stock2.stock_shop_id = '$shop_id' ORDER BY p_medicine.name ASC, volume ASC");
+                              WHERE stock2.stock_shop_id = '$shop_id'
+                              ORDER BY p_medicine.name ASC, volume ASC");
 
                               $tableRowCount = 1;
                               while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
@@ -214,13 +215,13 @@ if (!isset($_SESSION['store_id'])) {
                                   <th scope="row"><?= $tableRowCount ?></th>
 
                                   <td id="product_name"><?= $p_medicine_data['medicineName'] ?> </td>
-                                  <td id="product_name"><?= $p_medicine_data['category'] ?> </td>
+                                  <td id="product_category"><?= $p_medicine_data['category'] ?> </td>
                                   <td id="product_unit">
                                     <label><?= $p_medicine_data['volume'] ?><?= $p_medicine_data['unit'] ?></label>
                                   </td>
                                   <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
                                   <td>
-                                    <?= number_format($p_medicine_data['item_s_price'],0) ?>
+                                    <?= number_format($p_medicine_data['item_s_price'], 0) ?>
                                   </td>
 
                                   <td><button class="btn btn-outline-success add-btn">Add</button></td>
@@ -243,28 +244,23 @@ if (!isset($_SESSION['store_id'])) {
               <!-- left side design end -->
 
               <!-- right side design start -->
-              <div class="col-12">
+              <div class="col-12 mb-5">
                 <div class="po_tittle">
                   <h3>PO PRODUCTS</h3>
                 </div>
                 <table class="table table-dark table-hover addedProTable">
                   <thead>
                     <tr class="row">
-                      <th scope="col" class="col-1">#</th>
+                      <th scope="col" class="col-1">Barcode</th>
                       <th scope="col" class="col-3 text-center">Product Name</th>
-                      <th scope="col" class="col-3 text-center">Brand</th>
-                      <th scope="col" class="col-3 px-5"><input type="date" class="form-control" id="order_date"></th>
-                      <th scope="col" class="col-2">Action</th>
+                      <th scope="col" class="col-2 text-center">Brand</th>
+                      <th scope="col" class="col-2">Unit</th>
+                      <th scope="col" class="col-1">Qty</th>
+                      <th scope="col" class="col-2 px-5"><input type="date" class="form-control" id="order_date"></th>
+                      <th scope="col" class="col-1 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- <tr>
-                      <th scope="row" id="addproduct_code"></th>
-                      <td id="addproduct_name"></td>
-                      <td id="addproduct_brand"></td>
-                      <td id="addproduct_cost"></td>
-                      <td></td>
-                    </tr> -->
                   </tbody>
                 </table>
                 <div class="po_btn col-12 d-none justify-content-end align-items-center">
@@ -313,7 +309,7 @@ if (!isset($_SESSION['store_id'])) {
         $orderId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'hub_order'");
         $orderId_row = $orderId_rs->fetch_assoc();
         $orderId = $orderId_row['AUTO_INCREMENT'];
-        $orderNumber = "PO-$userId$shop_id" . "0000" . $orderId;
+        $orderNumber = "PO-$userId$shop_id" . "00" . $orderId;
 
         $poDate = date("Y-m-d");
         $poTime = date("H:i:s");
@@ -355,26 +351,17 @@ if (!isset($_SESSION['store_id'])) {
                         <span class="fs-2" name="orderTime" id="orderTime"><?= $poTime ?></span>
                       </div>
                       <div class="orderItem col-12 mt-4 mb-3">
-                        <table class="table">
+                        <table class="table orderConfirmationTable">
                           <thead>
                             <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">Order Item</th>
+                              <th scope="col">Barcode</th>
+                              <th scope="col">Item</th>
                               <th scope="col">Brand</th>
-                              <th scope="col">Price</th>
+                              <th scope="col">Unit</th>
                               <th scope="col">Qty</th>
-                              <th scope="col">Total Price</th>
                             </tr>
                           </thead>
                           <tbody id="orderConfirmationTableBody">
-                            <tr>
-                              <th scope="row"></th>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                            </tr>
                             <tr>
                               <td colspan="4"></td>
                               <td class="order-confirmation-total"></td>
@@ -408,121 +395,12 @@ if (!isset($_SESSION['store_id'])) {
         <?php include("part/all-js.php"); ?>
         <!-- All JS end -->
 
-        <script src="dist/js/messageDisplay.js"></script>
-
-        <script>
-          $(document).ready(function() {
-
-            $(document).on("click", ".add-btn", function() {
-              var product_code = $(this).closest("tr").find("#product_code").text();
-              var product_name = $(this).closest("tr").find("#product_name").text();
-              var product_brand = $(this).closest("tr").find("#product_brand").text();
-              var product_cost = $(this).closest("tr").find("#product_cost").text();
-              var product_unit = $(this).closest("tr").find("#product_unit").text();
-
-              var exists = false;
-              $(".addedProTable tbody tr").each(function() {
-                if ($(this).find("#addproduct_name").text() === product_name) {
-                  exists = true;
-                  return false;
-                }
-              });
-
-              if (!exists) {
-                var markup =
-                  "<tr class=''>" +
-                  "<th>" + product_code + "</th>" +
-                  "<td id='addproduct_name'>" + product_name + "</td>" +
-                  "<td id='addproduct_brand'>" + product_brand + "</td>" +
-                  "<td>" +
-                  "<input type='number' class='form-control bg-dark'>" +
-                  "</td>" +
-                  "<td><i class='fa fa-trash-o cus-delete'></i></td>" +
-                  "</tr>";
-
-                $(".addedProTable tbody").append(markup);
-
-                $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
-                $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
-
-              } else {
-                ErrorMessageDisplay("Product already exists in the list!");
-              }
-            });
-
-            $(document).on("click", ".cus-delete", function() {
-              $(this).closest("tr").remove();
-              $("#proceedOrderBtn").removeAttr("data-toggle data-target");
-              $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 1);
-              $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 1);
-            });
-          });
-        </script>
-
-        <script>
-          $('#myModal').on('shown.bs.modal', function() {
-            $('#myInput').trigger('focus')
-          })
-        </script>
-
-        <script>
-          $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
-
-            $(".confirmPObtn").prop('disabled', true);
-
-            var orderNumber = document.getElementById("orderNumber").innerText;
-            var orderDate = document.getElementById("orderDate").innerText;
-            var orderTime = document.getElementById("orderTime").innerText;
-            $(this).prop('disabled', true);
-
-            var poArray = [];
-
-            $("#orderConfirmationTableBody tr").each(function() {
-              var product_code = $(this).find(".product_code").text();
-              var product_name = $(this).find(".product_name").text();
-              var product_brand = $(this).find(".product_brand").text();
-              var product_cost = $(this).find(".product_cost").text();
-              var product_qty = $(this).find(".product_qty").text();
-              var qty_unit = $(this).find(".qty_unit").text();
-
-              var productData = {
-                product_code: product_code,
-                product_name: product_name,
-                product_brand: product_brand,
-                product_cost: product_cost,
-                product_qty: product_qty,
-                qty_unit: qty_unit,
-                orderNumber: orderNumber,
-                orderDate: orderDate,
-                orderTime: orderTime,
-              };
-              poArray.push(productData);
-            });
-
-            $.ajax({
-              url: "poConfirmationInsert.php",
-              method: "POST",
-              data: {
-                products: JSON.stringify(poArray),
-              },
-              success: function() {
-                SuccessMessageDisplay("Success: Order Placed Success !");
-                setTimeout(function() {
-                  location.reload();
-                }, 3000);
-              },
-              error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-                ErrorMessageDisplay("Order Failed !");
-                $(".confirmPObtn").prop('disabled', false);
-              },
-            });
-          });
-        </script>
     </body>
+    </html>
+
+    <script src="dist/js/messageDisplay.js"></script>
     <script src="dist/js/add-purchase.js"></script>
 
-    </html>
 <?php
   }
 }
