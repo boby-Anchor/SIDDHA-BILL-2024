@@ -72,14 +72,14 @@ if (!isset($_SESSION['store_id'])) {
                           <tbody>
                             <?php
                             if ($shop_id == "1") {
-                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id
+                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , order_date , hub_order_subTotal , order_status , order_status_id
                               FROM hub_order_details 
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
                               INNER JOIN shop ON shop.shopId = hub_order.HO_shopId
                               ORDER BY `hub_order_details_id` DESC");
                             } else {
-                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , HO_date , hub_order_subTotal , order_status , order_status_id
+                              $hub_order_details_result = $conn->query("SELECT DISTINCT hub_order_details_id , hub_order_number , shopName , order_date , hub_order_subTotal , order_status , order_status_id
                               FROM hub_order_details 
                               INNER JOIN hub_order ON hub_order.HO_number = hub_order_details.hub_order_number
                               INNER JOIN order_status ON order_status.order_status_id = hub_order_details.hub_order_status
@@ -88,154 +88,156 @@ if (!isset($_SESSION['store_id'])) {
                               ORDER BY `hub_order_details_id` DESC");
                             }
 
-                            while ($hub_order_details_data = $hub_order_details_result->fetch_assoc()) {
+                            if ($hub_order_details_result->num_rows > 0) {
+                              while ($hub_order_details_data = $hub_order_details_result->fetch_assoc()) {
                             ?>
-                              <tr>
-                                <th><?= $hub_order_details_data["hub_order_number"] ?></th>
-                                <th><?= $hub_order_details_data["shopName"] ?></th>
-                                <th>
-                                  <?php
-                                  $itemCount_result = $conn->query("SELECT COUNT(hub_order_id) AS itemCount  
+                                <tr>
+                                  <th><?= $hub_order_details_data["hub_order_number"] ?></th>
+                                  <th><?= $hub_order_details_data["shopName"] ?></th>
+                                  <th>
+                                    <?php
+                                    $itemCount_result = $conn->query("SELECT COUNT(hub_order_id) AS itemCount  
                                   FROM hub_order WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'");
-                                  $itemCount_data = $itemCount_result->fetch_assoc();
-                                  ?>
-                                  <!--Items list table start  -->
-                                  <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['itemCount'] ?> </button>
-                                  <ul class="dropdown-menu">
-                                    <table class="table" id="poItemsTable<?= $hub_order_details_data['hub_order_number'] ?>">
-                                      <thead>
-                                        <tr>
-                                          <th scope="col">#</th>
-                                          <th scope="col">Barcode</th>
-                                          <th scope="col">Item Name</th>
-                                          <th scope="col">Qty</th>
-                                          <th scope="col">Cost</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <?php
+                                    $itemCount_data = $itemCount_result->fetch_assoc();
+                                    ?>
+                                    <!--Items list table start  -->
+                                    <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['itemCount'] ?> </button>
+                                    <ul class="dropdown-menu">
+                                      <table class="table" id="poItemsTable<?= $hub_order_details_data['hub_order_number'] ?>">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Barcode</th>
+                                            <th scope="col">Item Name</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Cost</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <?php
 
-                                        $poItems_result = $conn->query("SELECT * FROM hub_order 
-                                        INNER JOIN p_medicine ON p_medicine.id = hub_order.HO_item 
+                                          $poItems_result = $conn->query("SELECT * FROM hub_order 
+                                        INNER JOIN p_medicine ON p_medicine.code = hub_order.HO_item 
                                         WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'  ");
 
-                                        $rowId = 0;
-                                        $billTotal = 0;
-                                        while ($poItems_data = $poItems_result->fetch_array()) {
-                                          $rowId++;
-                                          $billTotal += $poItems_data["HO_price"];
-                                        ?>
+                                          $rowId = 0;
+                                          $billTotal = 0;
+                                          while ($poItems_data = $poItems_result->fetch_array()) {
+                                            $rowId++;
+                                            $billTotal += $poItems_data["HO_price"];
+                                          ?>
+                                            <tr>
+                                              <th scope="row"><?= $rowId ?></th>
+                                              <td><?= $poItems_data["code"] ?></td>
+                                              <td><?= $poItems_data["name"] ?></td>
+                                              <td><?= $poItems_data["HO_qty"] ?></td>
+                                              <td><?= number_format($poItems_data["HO_price"], 0) ?></td>
+                                            </tr>
+                                          <?php
+                                          }
+                                          ?>
+                                        </tbody>
+                                        <tfoot>
                                           <tr>
-                                            <th scope="row"><?= $rowId ?></th>
-                                            <td><?= $poItems_data["code"] ?></td>
-                                            <td><?= $poItems_data["name"] ?> <?= $poItems_data["hub_order_unit"] ?></td>
-                                            <td><?= $poItems_data["HO_qty"] ?></td>
-                                            <td><?= number_format($poItems_data["HO_price"], 0) ?></td>
+                                            <td colspan="4" class="text-right"><strong>Total Cost:</strong></td>
+                                            <td><?php echo  number_format($billTotal, 0); ?></td>
                                           </tr>
-                                        <?php
-                                        }
-                                        ?>
-                                      </tbody>
-                                      <tfoot>
-                                        <tr>
-                                          <td colspan="4" class="text-right"><strong>Total Cost:</strong></td>
-                                          <td><?php echo  number_format($billTotal, 0); ?></td>
-                                        </tr>
-                                      </tfoot>
-                                    </table>
-                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['hub_order_number'] ?>');">
-                                      <i class="nav-icon fas fa-copy"></i> PRINT
-                                    </button>
-                                  </ul>
-                                  <!--Items list table end  -->
-                                </th>
-                                <th><?= $hub_order_details_data['HO_date'] ?></th>
-                                <th><?= number_format($hub_order_details_data["hub_order_subTotal"], 2) ?></th>
-                                <th>
-                                  <?php
-                                  if ($shop_id == "1") {
-                                    if ($hub_order_details_data["order_status_id"] == '1' || $hub_order_details_data["order_status_id"] == '6') {
-                                  ?>
-                                      <button class="btn btn-info" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '2')">Accept</button>
+                                        </tfoot>
+                                      </table>
+                                      <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['hub_order_number'] ?>');">
+                                        <i class="nav-icon fas fa-copy"></i> PRINT
+                                      </button>
+                                    </ul>
+                                    <!--Items list table end  -->
+                                  </th>
+                                  <th><?= $hub_order_details_data['order_date'] ?></th>
+                                  <th><?= number_format($hub_order_details_data["hub_order_subTotal"], 2) ?></th>
+                                  <th>
                                     <?php
-                                    } else if ($hub_order_details_data["order_status_id"] == '2') {
+                                    if ($shop_id == "1") {
+                                      if ($hub_order_details_data["order_status_id"] == '1' || $hub_order_details_data["order_status_id"] == '6') {
                                     ?>
-                                      <button class="btn mr-1 bg-primary text-white" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '3')">Packing</button>
-                                      <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
-                                    <?php
-                                    } else if ($hub_order_details_data["order_status_id"] == '3') {
-                                    ?>
-                                      <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '7')">Ready</button>
-                                      <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
-                                    <?php
-                                    } else if ($hub_order_details_data["order_status_id"] == '7') {
-                                    ?>
-                                      <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '4')">Deliver</button>
-                                      <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
-                                    <?php
-                                    } else if ($hub_order_details_data["order_status_id"] == '4') {
-                                    ?>
-                                      <label class='p-2 orderStatus btn-success'>Sent</label>
-                                      <!-- <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?php //echo $hub_order_details_data['hub_order_number'] 
-                                                                                                            ?>' , '6')">Reject</button> -->
-                                    <?php
-                                    } else if ($hub_order_details_data["order_status_id"] == '5') {
-                                    ?>
-                                      <label class='p-2 orderStatus btn-success'>Completed</label>
-                                    <?php
-                                    } else if ($hub_order_details_data["order_status_id"] == '8') {
-                                    ?>
-                                      <label class='p-2 orderStatus btn-success'>Completed</label>
-                                    <?php
-                                    }
-                                  } else {
-
-                                    $orderStatusColor = array(
-                                      "1" => "#FACC15",
-                                      "2" => "#22C55E",
-                                      "3" => "#3B82F6",
-                                      "4" => "#0EA5E9",
-                                      "5" => "#10B981",
-                                      "6" => "#EF4444",
-                                      "7" => "#8B5CF6",
-                                      "8" => "#14B8A6"
-                                    );
-
-                                    $orderStatus = array(
-                                      "1" => "Pending",
-                                      "2" => "Approved",
-                                      "3" => "Packaging",
-                                      "4" => "Delivered",
-                                      "5" => "Received",
-                                      "6" => "Rejected",
-                                      "7" => "Ready",
-                                      "8" => "Completed"
-                                    );
-
-                                    if ($hub_order_details_data["order_status_id"] == '4') {
-                                    ?>
-                                      <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '8')">Received</button>
-                                <?php
+                                        <button class="btn btn-info" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '2')">Accept</button>
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '2') {
+                                      ?>
+                                        <button class="btn mr-1 bg-primary text-white" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '3')">Packing</button>
+                                        <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '3') {
+                                      ?>
+                                        <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '7')">Ready</button>
+                                        <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '7') {
+                                      ?>
+                                        <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '4')">Deliver</button>
+                                        <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '4') {
+                                      ?>
+                                        <label class='p-2 orderStatus btn-success'>Sent</label>
+                                        <!-- <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?php //echo $hub_order_details_data['hub_order_number'] 
+                                                                                                              ?>' , '6')">Reject</button> -->
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '5') {
+                                      ?>
+                                        <label class='p-2 orderStatus btn-success'>Completed</label>
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '8') {
+                                      ?>
+                                        <label class='p-2 orderStatus btn-success'>Completed</label>
+                                      <?php
+                                      }
                                     } else {
 
-                                      $order_status_id = $hub_order_details_data["order_status_id"];
-                                      $bgColor = isset($orderStatusColor[$order_status_id]) ? $orderStatusColor[$order_status_id] : "white";
-                                      $statusType = isset($orderStatus[$order_status_id]) ? $orderStatus[$order_status_id] : "Unknown";
+                                      $orderStatusColor = array(
+                                        "1" => "#FACC15",
+                                        "2" => "#22C55E",
+                                        "3" => "#3B82F6",
+                                        "4" => "#0EA5E9",
+                                        "5" => "#10B981",
+                                        "6" => "#EF4444",
+                                        "7" => "#8B5CF6",
+                                        "8" => "#14B8A6"
+                                      );
 
-                                      echo "
+                                      $orderStatus = array(
+                                        "1" => "Pending",
+                                        "2" => "Approved",
+                                        "3" => "Packaging",
+                                        "4" => "Delivered",
+                                        "5" => "Received",
+                                        "6" => "Rejected",
+                                        "7" => "Ready",
+                                        "8" => "Completed"
+                                      );
+
+                                      if ($hub_order_details_data["order_status_id"] == '4') {
+                                      ?>
+                                        <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '8')">Received</button>
+                                <?php
+                                      } else {
+
+                                        $order_status_id = $hub_order_details_data["order_status_id"];
+                                        $bgColor = isset($orderStatusColor[$order_status_id]) ? $orderStatusColor[$order_status_id] : "white";
+                                        $statusType = isset($orderStatus[$order_status_id]) ? $orderStatus[$order_status_id] : "Unknown";
+
+                                        echo "
                                               <label class='p-2 orderStatus' style='background-color: $bgColor;color:white;'>$statusType</label>
                                             ";
+                                      }
                                     }
                                   }
                                 }
                                 ?>
-                                </th>
+                                  </th>
 
 
-                              </tr>
-                            <?php
-                          }
-                            ?>
+                                </tr>
+                              <?php
+                            }
+                              ?>
 
                           </tbody>
                         </table>
