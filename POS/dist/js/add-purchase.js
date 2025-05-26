@@ -52,8 +52,8 @@ function addNewUnit() {
 $(document).on("click", ".proceed-order", function() {
 
   if (!$("#order_date").val()) {
-    ErrorMessageDisplay("Select order Date");
-  }
+    ErrorMessageDisplay("Select required Date");
+  }else{
   var poArray = [];
 
   var markup = "";
@@ -116,6 +116,7 @@ $(document).on("click", ".proceed-order", function() {
       });
     }
   });
+}
 });
 
 

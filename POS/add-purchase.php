@@ -177,7 +177,7 @@ if (!isset($_SESSION['store_id'])) {
                           <table class="table">
                             <thead>
                               <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">Barcode</th>
                                 <th scope="col">Product Name</th>
                                 <th scope="col">Category</th>
                                 <th scope="col">Product Unit</th>
@@ -205,14 +205,13 @@ if (!isset($_SESSION['store_id'])) {
                               WHERE stock2.stock_shop_id = '$shop_id'
                               ORDER BY p_medicine.name ASC, volume ASC");
 
-                              $tableRowCount = 1;
                               while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
                               ?>
                                 <tr>
                                   <th id="product_code" class="d-none"><?= $p_medicine_data['barcode'] ?></th>
                                   <th id="item_s_price" class="d-none"><?= $p_medicine_data['item_s_price'] ?></th>
 
-                                  <th scope="row"><?= $tableRowCount ?></th>
+                                  <th scope="row"><?= $p_medicine_data['barcode']  ?></th>
 
                                   <td id="product_name"><?= $p_medicine_data['medicineName'] ?> </td>
                                   <td id="product_category"><?= $p_medicine_data['category'] ?> </td>
@@ -227,7 +226,6 @@ if (!isset($_SESSION['store_id'])) {
                                   <td><button class="btn btn-outline-success add-btn">Add</button></td>
                                 </tr>
                               <?php
-                                $tableRowCount++;
                               }
                               ?>
 
@@ -396,6 +394,7 @@ if (!isset($_SESSION['store_id'])) {
         <!-- All JS end -->
 
     </body>
+
     </html>
 
     <script src="dist/js/messageDisplay.js"></script>

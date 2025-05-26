@@ -87,6 +87,7 @@ $(document).on("click", "#addStockButton", function() {
       method: "POST",
       data: {
           poItemData: JSON.stringify(poItemData),
+          poNumber :$("#poNumber").val(),
       },
       success: function(response) {
           Swal.mixin({
