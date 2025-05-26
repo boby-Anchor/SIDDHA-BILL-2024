@@ -127,8 +127,8 @@ if (isset($_SESSION['store_id'])) {
                     ) {
                         $isPaththu = isset($isPaththu) && $isPaththu == 1 ? $isPaththu : null;
 
-                        $conn->query("INSERT INTO invoiceitems (invoiceNumber, invoiceDate, invoiceItem, invoiceItem_qty, invoiceItem_unit, invoiceItem_price, invoiceItem_total, isPaththu)
-                    VALUES ('$invoiceNumber', '$currentDateTime', '$product_name', '$product_qty', '$product_unit', '$product_cost', '$productTotal', '$isPaththu')");
+                        $conn->query("INSERT INTO invoiceitems (invoiceNumber, invoiceDate, barcode, invoiceItem, invoiceItem_qty, invoiceItem_unit, invoiceItem_price, invoiceItem_total, isPaththu)
+                    VALUES ('$invoiceNumber', '$currentDateTime', '$code', '$product_name', '$product_qty', '$product_unit', '$product_cost', '$productTotal', '$isPaththu')");
 
                         if ($product_unit == 'kg' || $product_unit == 'l') {
 
