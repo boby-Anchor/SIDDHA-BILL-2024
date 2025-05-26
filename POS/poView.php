@@ -12,6 +12,7 @@ if (!isset($_SESSION['store_id'])) {
         foreach ($userLoginData as $userData) {
 
             $shop_id = $userData['shop_id'];
+            $user_id = $userData['id'];
 ?>
             <!DOCTYPE html>
             <html lang="en">
@@ -73,6 +74,11 @@ if (!isset($_SESSION['store_id'])) {
                                                             <th class="adThText">Sub Total</th>
                                                             <th class="adThText">Discount %</th>
                                                             <th class="adThText">Net Total</th>
+                                                            <?php
+                                                            if ($user_id == 13) {
+                                                                echo "<th class='adThText'>Status</th>";
+                                                            }
+                                                            ?>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -87,7 +93,8 @@ if (!isset($_SESSION['store_id'])) {
                                                             poinvoices.created AS po_date,
                                                             Round(poinvoices.sub_total,2) AS sub_total,
                                                             poinvoices.discount_percentage AS discount,
-                                                            poinvoices.net_total AS net_total
+                                                            poinvoices.net_total AS net_total,
+                                                            poinvoices.transferred AS status
                                                             FROM poinvoices
                                                             INNER JOIN users ON users.id = poinvoices.user_id
                                                             INNER JOIN shop AS shop1 ON shop1.shopId = poinvoices.shop_id
@@ -177,7 +184,13 @@ if (!isset($_SESSION['store_id'])) {
                                                                 <th><?= number_format($hub_order_details_data["sub_total"], 0) ?></th>
                                                                 <th><?= number_format($hub_order_details_data['discount'], 0) ?></th>
                                                                 <th><?= number_format($hub_order_details_data['net_total'], 0) ?></th>
-
+                                                                <?php
+                                                                if ($user_id == 13) {
+                                                                    echo "<th>";
+                                                                    echo ($hub_order_details_data['status'] == 1) ? "Transferred" : "No";
+                                                                    echo "</th>";
+                                                                }
+                                                                ?>
                                                             </tr>
                                                     <?php
                                                         }
@@ -186,8 +199,6 @@ if (!isset($_SESSION['store_id'])) {
 
                                                     </tbody>
                                                 </table>
-
-
 
                                             </div>
                                         </div>
@@ -208,8 +219,6 @@ if (!isset($_SESSION['store_id'])) {
                 <!-- All JS -->
                 <?php include("part/all-js.php"); ?>
                 <!-- All JS end -->
-
-
 
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
@@ -254,7 +263,6 @@ if (!isset($_SESSION['store_id'])) {
                         printWindow.document.close();
                         printWindow.focus();
                         printWindow.print();
-
                     }
                 </script>
 

@@ -165,7 +165,7 @@ function addDiscount() {
   $("#netTotal").text(discountedTotal.toLocaleString());
 }
 
-// netTotal calculation dislay
+// netTotal calculation display
 function checkNetTotal() {
   var subTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
   var billType = document.getElementById("selectBillType");

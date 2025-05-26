@@ -3,6 +3,7 @@ session_start();
 include('../config/db.php');
 
 $poItemData = isset($_POST['poItemData']) ? json_decode($_POST['poItemData'], true) : [];
+$poNumber = isset($_POST['poNumber']) ? $_POST['poNumber'] : 0;
 
 //  check if session is started
 if (isset($_SESSION['store_id'])) {
@@ -84,6 +85,9 @@ if (isset($_SESSION['store_id'])) {
                 }
             } // close data check if()
         }  // close for-each $itemData
+
+        $conn->query("UPDATE poinvoices SET transferred = '1'
+        WHERE invoice_id = '$poNumber'");
     }  // poItemData[] end
 
 }
