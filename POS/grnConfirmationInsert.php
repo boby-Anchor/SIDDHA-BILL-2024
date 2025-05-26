@@ -34,6 +34,8 @@ if (isset($_POST['products'])) {
 
     $grnTotalCost = 0;
     $grnTotalValue = 0;
+    $updated_qty = 0;
+    $update_minimum_qty = 0;
     $newDateTime = date("Y-m-d H:i:s");
     $errorOccured = false;
     $notificationMessage = "";
@@ -86,8 +88,8 @@ if (isset($_POST['products'])) {
 
                     try {
                         // Insert into grn_item
-                        $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_p_cost, grn_p_price, p_plus_discount, p_free_qty)
-                            VALUES ('$grn_number', '$product_code','$product_qty','$total_cost','$item_price','$item_discount','$free_qty')");
+                        $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_u_cost, grn_p_cost, grn_p_price, p_plus_discount, p_free_qty)
+                            VALUES ('$grn_number', '$product_code','$product_qty', '$cost_per_unit','$total_cost','$item_price','$item_discount','$free_qty')");
                     } catch (Exception $exception) {
                         $error_message = "Error: " . $conn->error . " " . $exception->getMessage() . "GRN item data insert failed. Date-" . $newDateTime . " GRN no-" . $grn_number . " Code-" . $product_code . ", Name-"
                             . $product_name . " Qty-" . $product_qty . " min qty-" . $minimum_qty . ' Discount-' . $item_discount . ' Unit Price-' . $unit_s_price . ' Total cost-' . $total_cost . ' Free qty-' . $free_qty . "\n";
@@ -103,11 +105,15 @@ if (isset($_POST['products'])) {
 
                     if ($stock_result && $stock_result->num_rows > 0) {
                         $stock_data = $stock_result->fetch_assoc();
-                        $updated_qty = floatval($stock_data["stock_item_qty"]) + floatval($product_total_qty);
-                        $updated_minimum_qty = floatval($stock_data["stock_mu_qty"]) + floatval($minimum_qty);
-
+                        if (floatval($stock_data["stock_item_qty"]) < 0) {
+                            $updated_qty = $product_qty;
+                            $update_minimum_qty = $minimum_qty;
+                        } else {
+                            $updated_qty = floatval($stock_data["stock_item_qty"]) + floatval($product_total_qty);
+                            $updated_minimum_qty = floatval($stock_data["stock_mu_qty"]) + floatval($minimum_qty);
+                        }
                         try {
-                            $conn->query("UPDATE stock2 SET stock_item_qty = '$updated_qty', stock_mu_qty = '$updated_minimum_qty', unit_s_price = '$unit_s_price'
+                            $conn->query("UPDATE stock2 SET stock_item_qty = '$updated_qty', stock_mu_qty = '$updated_minimum_qty', unit_s_price = '$unit_s_price', added_discount='$item_discount', stock_item_cost='$cost_per_item', unit_cost='$cost_per_unit'
                                 WHERE stock_item_code = '$product_code' AND item_s_price='$item_price' AND stock_shop_id = '$shop_id'");
                             // echo "Stock Updated Successfully";
                             $notificationMessage .= "Success " . $product_name . " updated.\n";
