@@ -93,8 +93,12 @@ if (!isset($_SESSION['store_id'])) {
                                                                                 <th scope="col">Item Code</th>
                                                                                 <th scope="col">Item Name</th>
                                                                                 <th scope="col">Qty</th>
-                                                                                <th scope="col">Cost</th>
-                                                                                <th scope="col">Price</th>
+                                                                                <th scope="col">Free Qty</th>
+                                                                                <th scope="col">Item Price</th>
+                                                                                <th scope="col">Total Value</th>
+                                                                                <th scope="col">Item Discount</th>
+                                                                                <th scope="col">Total Cost</th>
+                                                                                <th scope="col">Unit Cost</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -107,8 +111,12 @@ if (!isset($_SESSION['store_id'])) {
                                                                                     <td><?= $poItems_data["grn_p_id"] ?></td>
                                                                                     <td><?= $poItems_data["name"] ?></td>
                                                                                     <td><?= $poItems_data["grn_p_qty"] ?></td>
-                                                                                    <td><?= number_format($poItems_data["grn_p_cost"], 0) ?></td>
+                                                                                    <td><?= $poItems_data["p_free_qty"] ?></td>
                                                                                     <td><?= number_format($poItems_data["grn_p_price"], 0) ?></td>
+                                                                                    <td><?= number_format($poItems_data["grn_p_qty"] * $poItems_data["grn_p_price"], 0) ?></td>
+                                                                                    <td><?= $poItems_data["p_plus_discount"] ?></td>
+                                                                                    <td><?= number_format($poItems_data["grn_p_cost"], 0) ?></td>
+                                                                                    <td><?= number_format($poItems_data["grn_u_cost"], 0) ?></td>
                                                                                 </tr>
                                                                             <?php } ?>
                                                                         </tbody>
