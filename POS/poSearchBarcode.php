@@ -108,9 +108,9 @@ if (isset($_GET['barcode'])) {
                     } else {
 
                     ?>
-                        <tr data-barcode="<?= $barcodeData['stock_minimum_unit_barcode'] ?><?= $barcodeData['unit_s_price'] ?>">
+                        <tr data-barcode="<?= $barcodeData['code'] ?><?= $barcodeData['unit_s_price'] ?>">
                             <th scope="row">#</th>
-                            <td id="code" class="d-none"><?= $barcodeData['stock_minimum_unit_barcode'] ?></td>
+                            <td id="code" class="d-none"><?= $barcodeData['code'] ?></td>
                             <td id="ucv" class="d-none"><?= $barcodeData['ucv_name'] ?></td>
                             <td id="item_price" class="d-none"><?= $barcodeData['item_s_price'] ?></td>
                             <td id="unit_price" class="d-none"><?= $barcodeData['unit_s_price'] ?></td>
