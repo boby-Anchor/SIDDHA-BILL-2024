@@ -75,6 +75,19 @@ if (isset($_SESSION['store_id'])) {
                       <p>Edit item Qty</p>
                     </a>
                   </li>
+                  <?php
+                  if ($userId == 13) {
+                  ?>
+                    <li class="nav-item">
+                      <a href="report-shopWiseItemsSale.php" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <i class=""></i>
+                        <p>Shop wise item sale qty</p>
+                      </a>
+                    </li>
+                  <?php
+                  }
+                  ?>
                 </ul>
               </li>
             <?php
