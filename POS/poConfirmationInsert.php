@@ -53,7 +53,10 @@ try {
                         $conn->query("INSERT INTO hub_order (HO_number, HO_item, HO_brand, HO_qty, hub_order_unit, HO_price, HO_total,HO_shopId) 
                     VALUES ('$orderNumber', '$product_code', '$product_brand','$product_qty', '', '0', '0','$shop_id')");
                     } else {
-                        echo "Invalid product entry ";
+                        echo json_encode(array(
+                            'status' => 'error',
+                            'message' => 'Invalid product entry.',
+                        ));
                     }
                 }
 
@@ -62,12 +65,28 @@ try {
 
                 $conn->query("INSERT INTO hub_order_details (hub_order_number,hub_order_subTotal,hub_order_status,hub_order_paymentType,hub_order_paymentStatus,order_date,delivery_date)
             VALUES ('$orderNumber','0','1','1','1','$dateTimeFormatted','$deliveryDate')");
+
+                echo json_encode(array(
+                    'status' => 'success',
+                    'message' => 'Purchase Order placed successfully!',
+                ));
             } else {
-                echo "No products found or invalid data received.";
+                echo json_encode(array(
+                    'status' => 'error',
+                    'message' => 'No products found or invalid data received.',
+                ));
             }
         }
+    } else {
+        echo json_encode(array(
+            'status' => 'session_expired',
+            'message' => 'Session expired. Wait to login again.',
+        ));
     }
 } catch (Exception $exception) {
     printErrorLog($exception->getMessage() . $message);
-    echo ($exception->getMessage() . $message);
+    echo json_encode(array(
+        'status' => 'error',
+        'message' => $exception->getMessage() . $message,
+    ));
 }
