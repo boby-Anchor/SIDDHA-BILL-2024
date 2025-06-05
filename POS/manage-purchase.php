@@ -152,7 +152,8 @@ if (!isset($_SESSION['store_id'])) {
                                         <!-- <tfoot>
                                           <tr>
                                             <td colspan="4" class="text-right"><strong>Total Cost:</strong></td>
-                                            <td><?php //echo  number_format($billTotal, 0); ?></td>
+                                            <td><?php //echo  number_format($billTotal, 0); 
+                                                ?></td>
                                           </tr>
                                         </tfoot> -->
                                       </table>
@@ -167,7 +168,7 @@ if (!isset($_SESSION['store_id'])) {
                                   <th>
                                     <?php
                                     if ($shop_id == "1") {
-                                      if ($hub_order_details_data["order_status_id"] == '1' || $hub_order_details_data["order_status_id"] == '6') {
+                                      if ($hub_order_details_data["order_status_id"] == '1') {
                                     ?>
                                         <button class="btn btn-info" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '2')">Accept</button>
                                       <?php
@@ -179,22 +180,26 @@ if (!isset($_SESSION['store_id'])) {
                                       } else if ($hub_order_details_data["order_status_id"] == '3') {
                                       ?>
                                         <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '7')">Ready</button>
-                                        <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
-                                      <?php
-                                      } else if ($hub_order_details_data["order_status_id"] == '7') {
-                                      ?>
-                                        <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '4')">Deliver</button>
+                                        <!-- <button class="btn mr-1 btn-info" onclick="billPO('<?php //$hub_order_details_data['hub_order_number'] 
+                                                                                                ?>')">Bill</button> -->
                                         <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
                                       <?php
                                       } else if ($hub_order_details_data["order_status_id"] == '4') {
                                       ?>
                                         <label class='p-2 orderStatus btn-success'>Sent</label>
-                                        <!-- <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?php //echo $hub_order_details_data['hub_order_number'] 
-                                                                                                              ?>' , '6')">Reject</button> -->
                                       <?php
                                       } else if ($hub_order_details_data["order_status_id"] == '5') {
                                       ?>
                                         <label class='p-2 orderStatus btn-success'>Completed</label>
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '6') {
+                                      ?>
+                                        <label class='p-2 orderStatus' style='background-color: #EF4444;color:white;'>Rejected</label>
+                                      <?php
+                                      } else if ($hub_order_details_data["order_status_id"] == '7') {
+                                      ?>
+                                        <button class="btn mr-1 btn-warning" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '4')">Deliver</button>
+                                        <button class="btn ml-1 btn-danger" onclick="updateOrderStatus('<?= $hub_order_details_data['hub_order_number'] ?>' , '6')">Reject</button>
                                       <?php
                                       } else if ($hub_order_details_data["order_status_id"] == '8') {
                                       ?>
@@ -244,13 +249,10 @@ if (!isset($_SESSION['store_id'])) {
                                 }
                                 ?>
                                   </th>
-
-
                                 </tr>
                               <?php
                             }
                               ?>
-
                           </tbody>
                         </table>
                       </div>
@@ -299,6 +301,10 @@ if (!isset($_SESSION['store_id'])) {
               },
             });
           }
+
+          function billPO(poNumber) {
+
+          }
         </script>
 
         <script>
@@ -329,10 +335,12 @@ if (!isset($_SESSION['store_id'])) {
             printWindow.document.write('<h5>ORDER NUMBER : ' + orderNumber + '</h5>');
             printWindow.document.write('</div>');
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h6>ORDER DATE : <?= date('Y-m-d', strtotime($itemCount_data['orderDate'])) ?></h6>');
+            // printWindow.document.write('<h6>ORDER DATE : <?php // date('Y-m-d', strtotime($itemCount_data['orderDate'])) 
+                                                            ?></h6>');
             printWindow.document.write('</div>');
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h6>ORDER TIME : <?= date('H:i:s', strtotime($itemCount_data['orderDate'])) ?></h6>');
+            // printWindow.document.write('<h6>ORDER TIME : <?php // date('H:i:s', strtotime($itemCount_data['orderDate'])) 
+                                                            ?></h6>');
             printWindow.document.write('</div>');
             printWindow.document.write('</div>');
             printWindow.document.write('</div>');

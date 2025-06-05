@@ -1,7 +1,6 @@
-
 function select_suplier(sup_id) {
   var req = new XMLHttpRequest();
-  req.onreadystatechange = function() {
+  req.onreadystatechange = function () {
     if (req.readyState == 4 && req.status == 200) {
       var response = req.response;
       document.getElementById("filterBySupTable").innerHTML = response;
@@ -19,7 +18,7 @@ function addNewUnit() {
   var newUnit = document.getElementById("newUnit").value;
 
   var req = new XMLHttpRequest();
-  req.onreadystatechange = function() {
+  req.onreadystatechange = function () {
     if (req.readyState == 4 && req.status == 200) {
       var response = req.responseText;
       var iconType;
@@ -48,79 +47,85 @@ function addNewUnit() {
 
 // ==============================================================================
 
-
-$(document).on("click", ".proceed-order", function() {
-
+$(document).on("click", ".proceed-order", function () {
   if (!$("#order_date").val()) {
     ErrorMessageDisplay("Select required Date");
-  }else{
-  var poArray = [];
+  } else {
+    var poArray = [];
 
-  var markup = "";
+    var markup = "";
 
-  $(".addedProTable tbody tr").each(function() {
-    var product_code = $(this).find("#product_code").text();
-    var product_name = $(this).find("#product_name").text();
-    var product_brand = $(this).find("#product_brand").text();
-    var product_qty = $(this).find("#product_qty").val();
-    var product_unit = $(this).find("#product_unit").text();
+    $(".addedProTable tbody tr").each(function () {
+      var product_code = $(this).find("#product_code").text();
+      var product_name = $(this).find("#product_name").text();
+      var product_brand = $(this).find("#product_brand").text();
+      var product_qty = $(this).find("#product_qty").val();
+      var product_unit = $(this).find("#product_unit").text();
 
-    if (product_qty === "" || product_qty === "0") {
-      ErrorMessageDisplay(product_name + "Invalid qty");
-      $("#proceedOrderBtn").removeAttr("data-toggle data-target");
-    } else {
-      var productData = {
-        product_code: product_code,
-        product_name: product_name,
-        product_brand: product_brand,
-        product_qty: product_qty,
-        product_unit: product_unit,
-      };
-      console.log(productData);
+      if (product_qty === "" || product_qty === "0") {
+        ErrorMessageDisplay(product_name + "Invalid qty");
+        $("#proceedOrderBtn").removeAttr("data-toggle data-target");
+      } else {
+        var productData = {
+          product_code: product_code,
+          product_name: product_name,
+          product_brand: product_brand,
+          product_qty: product_qty,
+          product_unit: product_unit,
+        };
 
-      markup +=
-        "<tr class=''>" +
-        "<th class='product_code'>" + product_code + "</th>" +
-        "<td class='product_name'>" + product_name + "</td>" +
-        "<td class='product_brand'>" + product_brand + "</td>" +
-        "<td class'product_unit'>" + product_unit + "</td>" +
-        "<td class='product_qty'>" + product_qty + " </td>" +
-        "<td class=''></td>" +
-        "</tr>";
+        markup +=
+          "<tr class=''>" +
+          "<th class='product_code'>" +
+          product_code +
+          "</th>" +
+          "<td class='product_name'>" +
+          product_name +
+          "</td>" +
+          "<td class='product_brand'>" +
+          product_brand +
+          "</td>" +
+          "<td class'product_unit'>" +
+          product_unit +
+          "</td>" +
+          "<td class='product_qty'>" +
+          product_qty +
+          " </td>" +
+          "<td class=''></td>" +
+          "</tr>";
 
-      $(".orderConfirmationTable tbody").html(markup);
+        $(".orderConfirmationTable tbody").html(markup);
 
-      $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
-      $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
+        $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
+        $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
 
-      poArray.push(productData);
+        poArray.push(productData);
 
-      // $.ajax({
-      //   url: "poConfirmation.php",
-      //   method: "POST",
-      //   data: {
-      //     products: poArray,
-      //   },
-      //   success: function (response) {
-      //     document.getElementById("orderConfirmationTableBody").innerHTML =
-      //       response;
-      //   },
-      //   error: function (xhr, status, error) {
-      //     console.error(xhr.responseText);
-      //   },
-      // });
+        // $.ajax({
+        //   url: "poConfirmation.php",
+        //   method: "POST",
+        //   data: {
+        //     products: poArray,
+        //   },
+        //   success: function (response) {
+        //     document.getElementById("orderConfirmationTableBody").innerHTML =
+        //       response;
+        //   },
+        //   error: function (xhr, status, error) {
+        //     console.error(xhr.responseText);
+        //   },
+        // });
 
-      $("#proceedOrderBtn").attr({
-        "data-toggle": "modal",
-        "data-target": "#confirmPO",
-      });
-    }
-  });
-}
+        $("#proceedOrderBtn").attr({
+          "data-toggle": "modal",
+          "data-target": "#confirmPO",
+        });
+      }
+    });
+  }
 });
 
-
-$(document).on("click", ".add-btn", function() {
+$(document).on("click", ".add-btn", function () {
   var product_code = $(this).closest("tr").find("#product_code").text();
   var product_name = $(this).closest("tr").find("#product_name").text();
   var product_brand = $(this).closest("tr").find("#product_brand").text();
@@ -128,7 +133,7 @@ $(document).on("click", ".add-btn", function() {
   var product_unit = $(this).closest("tr").find("#product_unit").text();
 
   var exists = false;
-  $(".addedProTable tbody tr").each(function() {
+  $(".addedProTable tbody tr").each(function () {
     if ($(this).find("#product_code").text() === product_code) {
       exists = true;
       return false;
@@ -138,11 +143,20 @@ $(document).on("click", ".add-btn", function() {
   if (!exists) {
     var markup =
       "<tr class='row'>" +
-      "<th class='col-1' id='product_code'>" + product_code + "</th>" +
-      "<td class='col-3' id='product_name'>" + product_name + "</td>" +
-      "<td class='col-2' id='product_brand'>" + product_brand + "</td>" +
-      "<td class='col-1 text-center' id='product_unit'>" + product_volume + product_unit + "</td>" +
-      "<td class='col-2' colspan=2> <input type='number' class='form-control bg-dark' id='product_qty' oninput='this.value = this.value.replace(/[^0-9]/g, '')' /> </td>" +
+      "<th class='col-1' id='product_code'>" +
+      product_code +
+      "</th>" +
+      "<td class='col-3' id='product_name'>" +
+      product_name +
+      "</td>" +
+      "<td class='col-2' id='product_brand'>" +
+      product_brand +
+      "</td>" +
+      "<td class='col-1 text-center' id='product_unit'>" +
+      product_volume +
+      product_unit +
+      "</td>" +
+      "<td class='col-2' colspan=2> <input type='text' class='form-control bg-dark' id='product_qty' oninput='this.value = this.value.replace(/[^0-9]/g, ``)' /> </td>" +
       "<td class='col-1'></td>" +
       "<td class='col-1 text-right'><i class='fa fa-trash-o cus-delete'></i></td>" +
       "</tr>";
@@ -151,29 +165,25 @@ $(document).on("click", ".add-btn", function() {
 
     $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
     $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
-
   } else {
     ErrorMessageDisplay("Product already exists in the list!");
   }
 });
 
-$(document).on("click", ".cus-delete", function() {
+$(document).on("click", ".cus-delete", function () {
   $(this).closest("tr").remove();
   $("#proceedOrderBtn").removeAttr("data-toggle data-target");
   $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 1);
   $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 1);
 });
 
-$('#myModal').on('shown.bs.modal', function() {
-  $('#myInput').trigger('focus')
-})
-
+$("#myModal").on("shown.bs.modal", function () {
+  $("#myInput").trigger("focus");
+});
 
 // ==============================================================================
 
-function filterBySearch(searchTxt) {
-  // alert("in search");
-  //console.log("in search");
+function filterBySearch() {
   var bnInput = document.getElementById("bnInput").value;
   var pcInput = document.getElementById("pcInput").value;
   var pnInput = document.getElementById("pnInput").value;
@@ -205,7 +215,7 @@ function filterBySearch(searchTxt) {
   form.append("searchBy", searchBy);
 
   var req = new XMLHttpRequest();
-  req.onreadystatechange = function() {
+  req.onreadystatechange = function () {
     if (req.readyState == 4 && req.status == 200) {
       var response = req.responseText;
       document.getElementById("filterBySupTable").innerHTML = response;
@@ -220,7 +230,7 @@ function filterBySearch(searchTxt) {
 function refreshOptions(selectedItem) {
   if (selectedItem == "0") {
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
       if (req.readyState == 4 && req.status == 200) {
         var response = req.responseText;
         document.getElementById("unitselectordiv").innerHTML = response;
@@ -231,57 +241,71 @@ function refreshOptions(selectedItem) {
   }
 }
 
-$(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function() {
+$(document)
+  .off("click", ".confirmPObtn")
+  .on("click", ".confirmPObtn", function () {
+    var deliveryDate = $("#order_date").val();
+    var orderNumber = document.getElementById("orderNumber").innerText;
+    var orderDate = document.getElementById("orderDate").innerText;
+    var orderTime = document.getElementById("orderTime").innerText;
+    $(".confirmPObtn").prop("disabled", true);
 
-  $(".confirmPObtn").prop('disabled', true);
-
-  var deliveryDate = $("#order_date").val()
-  var orderNumber = document.getElementById("orderNumber").innerText;
-  var orderDate = document.getElementById("orderDate").innerText;
-  var orderTime = document.getElementById("orderTime").innerText;
-  $(this).prop('disabled', true);
-
-  var poArray = [];
-  var poBillData = {
-    orderNumber: orderNumber,
-    orderDate: orderDate,
-    orderTime: orderTime,
-    deliveryDate: deliveryDate,
-  }
-
-  $("#orderConfirmationTableBody tr").each(function() {
-    var product_code = $(this).find(".product_code").text();
-    var product_name = $(this).find(".product_name").text();
-    var product_brand = $(this).find(".product_brand").text();
-    var product_qty = $(this).find(".product_qty").text();
-    var qty_unit = $(this).find(".qty_unit").text();
-
-    var productData = {
-      product_code: product_code,
-      product_name: product_name,
-      product_brand: product_brand,
-      product_qty: product_qty,
+    var poArray = [];
+    var poBillData = {
+      orderNumber: orderNumber,
+      orderDate: orderDate,
+      orderTime: orderTime,
+      deliveryDate: deliveryDate,
     };
-    poArray.push(productData);
-  });
 
-  $.ajax({
-    url: "poConfirmationInsert.php",
-    method: "POST",
-    data: {
-      products: JSON.stringify(poArray),
-      poBillData: JSON.stringify(poBillData),
-    },
-    success: function(response) {
-      SuccessMessageDisplay(response);
-      setTimeout(function() {
-        location.reload();
-      }, 3000);
-    },
-    error: function(xhr, status, error) {
-      console.error(xhr.responseText);
-      ErrorMessageDisplay("Order Failed !");
-      $(".confirmPObtn").prop('disabled', false);
-    },
+    $("#orderConfirmationTableBody tr").each(function () {
+      var product_code = $(this).find(".product_code").text();
+      var product_name = $(this).find(".product_name").text();
+      var product_brand = $(this).find(".product_brand").text();
+      var product_qty = $(this).find(".product_qty").text();
+      var qty_unit = $(this).find(".qty_unit").text();
+
+      var productData = {
+        product_code: product_code,
+        product_name: product_name,
+        product_brand: product_brand,
+        product_qty: product_qty,
+      };
+      poArray.push(productData);
+    });
+
+    $.ajax({
+      url: "poConfirmationInsert.php",
+      method: "POST",
+      data: {
+        products: JSON.stringify(poArray),
+        poBillData: JSON.stringify(poBillData),
+      },
+      success: function (response) {
+        var result = JSON.parse(response);
+
+        if (result.status === "success") {
+          SuccessMessageDisplay(result.message);
+          setTimeout(function () {
+            location.reload();
+          }, 3000);
+        } else if (result.status === "session_expired") {
+          ErrorMessageDisplay(result.message);
+          setTimeout(function () {
+            window.open(window.location.href, "_blank");
+          }, 4000);
+          $(".confirmPObtn").prop("disabled", false);
+          return;
+        } else if (result.status === "error") {
+          ErrorMessageDisplay(result.message);
+        } else {
+          ErrorMessageDisplay("Fatal error. Contact IT department.");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error(xhr.responseText);
+        ErrorMessageDisplay("Order Failed! Check connection.");
+        $(".confirmPObtn").prop("disabled", false);
+      },
+    });
   });
-});
