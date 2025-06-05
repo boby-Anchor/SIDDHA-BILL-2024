@@ -74,11 +74,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <th class="adThText">Sub Total</th>
                                                             <th class="adThText">Discount %</th>
                                                             <th class="adThText">Net Total</th>
-                                                            <?php
-                                                            if ($user_id == 13) {
-                                                                echo "<th class='adThText'>Status</th>";
-                                                            }
-                                                            ?>
+                                                            <th class='adThText'>Status</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -184,13 +180,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                 <th><?= number_format($hub_order_details_data["sub_total"], 0) ?></th>
                                                                 <th><?= number_format($hub_order_details_data['discount'], 0) ?></th>
                                                                 <th><?= number_format($hub_order_details_data['net_total'], 0) ?></th>
-                                                                <?php
-                                                                if ($user_id == 13) {
-                                                                    echo "<th>";
-                                                                    echo ($hub_order_details_data['status'] == 1) ? "Transferred" : "No";
-                                                                    echo "</th>";
-                                                                }
-                                                                ?>
+                                                                <th><?php echo ($hub_order_details_data['status'] == 1) ? "Transferred" : "No"; ?></th>
                                                             </tr>
                                                     <?php
                                                         }
