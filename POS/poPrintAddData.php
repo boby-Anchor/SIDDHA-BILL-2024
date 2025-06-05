@@ -9,7 +9,6 @@ $discount_percentage = 0;
 $cardAmount = 0;
 $invoiceNumber = "";
 
-
 if (is_array($inArray) && !empty($inArray)) {
 ?>
 
@@ -36,75 +35,61 @@ if (is_array($inArray) && !empty($inArray)) {
     </div>
 
     <?php
-    if (isset($_SESSION['store_id'])) {
-        $userLoginData = $_SESSION['store_id'];
+    foreach ($inArray as $product) {
 
-        foreach ($inArray as $product) {
+        $product_code = isset($product['code']) ? $product['code'] : '';
+        $product_name = isset($product['product_name']) ? $product['product_name'] : '';
+        $product_brand = isset($product['brand']) ? $product['brand'] : '';
+        $product_discount = isset($product['discount']) ? $product['discount'] : '';
+        $product_cost = isset($product['product_cost']) ? $product['product_cost'] : '';
+        $product_qty = isset($product['product_qty']) ? $product['product_qty'] : '';
+        $product_unit = isset($product['product_unit']) ? $product['product_unit'] : '';
 
-            //time tika set krn eka
-            foreach ($userLoginData as $userData) {
-                $userId = $userData['id'];
-                $shop_id = $userData['shop_id'];
+        $sub_total = isset($product['sub_total']) ? $product['sub_total'] : 0;
+        $discount_percentage = isset($product['discount_percentage']) ? $product['discount_percentage'] : 0;
+        $net_total = isset($product['net_total']) ? $product['net_total'] : 0;
 
-                $product_code = isset($product['code']) ? $product['code'] : '';
-                $product_name = isset($product['product_name']) ? $product['product_name'] : '';
-                $product_brand = isset($product['brand']) ? $product['brand'] : '';
-                $product_discount = isset($product['discount']) ? $product['discount'] : '';
-                $product_cost = isset($product['product_cost']) ? $product['product_cost'] : '';
-                $product_qty = isset($product['product_qty']) ? $product['product_qty'] : '';
-                $product_unit = isset($product['product_unit']) ? $product['product_unit'] : '';
+        $productTotal = doubleval($product_cost) * doubleval($product_qty);
+        $productsAllTotal += $productTotal;
 
-                $sub_total = isset($product['sub_total']) ? $product['sub_total'] : 0;
-                $discount_percentage = isset($product['discount_percentage']) ? $product['discount_percentage'] : 0;
-                $net_total = isset($product['net_total']) ? $product['net_total'] : 0;
-
-                $productTotal = doubleval($product_cost) * doubleval($product_qty);
-                $productsAllTotal += $productTotal;
-
-                if ($discount_percentage != 0) {
-                    $net_total = $productsAllTotal  * (1 - doubleval($discount_percentage) / 100);
-                }
-                if ($discount_percentage == "") {
-                    $discount_percentage = 0;
-                }
-
-    ?>
-                <!-- items of the invoice -->
-                <div class="col-12">
-
-                    <div class="row">
-                        <div class="col-6">
-                            <span class="product_name"><?= $product_name ?></span>
-                        </div>
-                        <div class="col-6">
-                            <span class="product_cost"><?= $product_brand ?></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        
-                        <div class="col-3">
-                            <span class="product_cost"><?= $product_cost ?></span>
-                        </div>
-                        <div class="col-3 text-center">
-                            <span class="product_qty">
-                                <?= $product_qty ?>
-                            </span>
-                        </div>
-                        <div class="col-3 text-center">
-                            <span class="productTotal"><?= $product_discount ?></span>
-                        </div>
-                        <div class="col-3 text-center">
-                            <span class="productTotal"><?= $productTotal ?></span>
-                        </div>
-                    </div>
-                </div>
-    <?php
-            }
+        if ($discount_percentage != 0) {
+            $net_total = $productsAllTotal  * (1 - doubleval($discount_percentage) / 100);
         }
-    } else {
-        echo "Session Expired !";
-    }
+        if ($discount_percentage == "") {
+            $discount_percentage = 0;
+        }
+    ?>
+        <!-- items of the invoice -->
+        <div class="col-12">
 
+            <div class="row">
+                <div class="col-6">
+                    <span class="product_name"><?= $product_name ?></span>
+                </div>
+                <div class="col-6">
+                    <span class="product_cost"><?= $product_brand ?></span>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-3">
+                    <span class="product_cost"><?= $product_cost ?></span>
+                </div>
+                <div class="col-3 text-center">
+                    <span class="product_qty">
+                        <?= $product_qty ?>
+                    </span>
+                </div>
+                <div class="col-3 text-center">
+                    <span class="productTotal"><?= $product_discount ?></span>
+                </div>
+                <div class="col-3 text-center">
+                    <span class="productTotal"><?= $productTotal ?></span>
+                </div>
+            </div>
+        </div>
+    <?php
+    }
     ?>
     <!-- total amount tika set krnwa -->
     <!-- footer for amounts -->
