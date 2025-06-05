@@ -165,13 +165,13 @@ if (!isset($_SESSION['store_id'])) {
                     <div class="col-12 px-4">
                       <div class="row">
                         <div class="col-4">
-                          <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="filterBySearch(this.value);" id="bnInput">
+                          <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="filterBySearch();" id="bnInput">
                         </div>
                         <div class="col-4">
-                          <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="filterBySearch(this.value);" id="pcInput">
+                          <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="filterBySearch();" id="pcInput">
                         </div>
                         <div class="col-4">
-                          <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="filterBySearch(this.value);" id="pnInput">
+                          <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="filterBySearch();" id="pnInput">
                         </div>
                         <div class="col-12 products-table mt-3">
                           <table class="table">

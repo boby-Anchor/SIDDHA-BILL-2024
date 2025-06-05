@@ -54,8 +54,6 @@ function getBarcode3() {
 
   req.open("GET", url, true);
   req.send();
-  $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
-  $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
 
 function getBarcode2(barcode) {
@@ -68,8 +66,6 @@ function getBarcode2(barcode) {
   };
   req.open("GET", "search_barcode2.php?barcode=" + barcode, true);
   req.send();
-  $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
-  $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
 
 // barcode reader
@@ -100,15 +96,10 @@ function getBarcode(barcode, stock_s_price) {
   };
 
   var url =
-    "search_barcode.php?barcode=" +
-    encodeURIComponent(barcode) +
-    "&stock_s_price=" +
-    encodeURIComponent(stock_s_price);
+    "search_barcode.php?barcode=" + encodeURIComponent(barcode) + "&stock_s_price=" + encodeURIComponent(stock_s_price);
 
   req.open("GET", url, true);
   req.send();
-  $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
-  $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
 
 // update total by qty
@@ -137,8 +128,7 @@ function decreaseQuantity(button) {
 
 // qty update +
 function increaseQuantity(button) {
-  var input =
-    button.parentElement.previousElementSibling.querySelector("input");
+  var input = button.parentElement.previousElementSibling.querySelector("input");
   var quantity = parseFloat(input.value);
   quantity++;
   input.value = quantity;
@@ -150,9 +140,6 @@ function increaseQuantity(button) {
 function removeRow(button) {
   var row = button.closest("tr");
   row.remove();
-  // alert($(".table tbody tr").length);
-  $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length === 0);
-  $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length > 0);
   calculateSubTotal();
 }
 
@@ -171,13 +158,9 @@ function checkNetTotal() {
   var billType = document.getElementById("selectBillType");
   var paymentMethod = document.getElementById("payment-method-selector");
 
-  var discountPercentage = parseFloat(
-    document.getElementById("discountAmount").value
-  );
+  var discountPercentage = parseFloat(document.getElementById("discountAmount").value);
 
-  var deliveryCharges = parseFloat(
-    document.getElementById("deliveryCharges").value
-  );
+  var deliveryCharges = parseFloat(document.getElementById("deliveryCharges").value);
 
   var vas = parseFloat(document.getElementById("serviceChargeAmount").value);
 
@@ -219,7 +202,6 @@ function calculateSubTotal() {
 
     if (product_qty === "" || product_qty === "0") {
       ErrorMessageDisplay(product_name + "invalid Quantity!");
-      $("#checkoutBtn").removeAttr("data-toggle data-target");
     } else {
       var productTotal = product_cost * product_qty;
       productsAllTotal += productTotal;
@@ -305,9 +287,7 @@ function printInvoice() {
     printWindow.document.write("</style>");
 
     printWindow.document.write("</head><body>");
-    printWindow.document.write(
-      document.getElementById("invoice-POS").innerHTML
-    );
+    printWindow.document.write(document.getElementById("invoice-POS").innerHTML);
     printWindow.document.write("</body></html>");
     printWindow.document.close();
     printWindow.focus();
@@ -325,8 +305,7 @@ function printInvoice() {
 
   var bootstrapLink = printWindow.document.createElement("link");
   bootstrapLink.rel = "stylesheet";
-  bootstrapLink.href =
-    "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
+  bootstrapLink.href = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
   bootstrapLink.onload = stylesheetLoaded;
   printWindow.document.head.appendChild(bootstrapLink);
 
@@ -403,26 +382,40 @@ function checkout() {
       products: JSON.stringify(poArray),
     },
     success: function (response) {
-      SuccessMessageDisplay("Success: Order Placed Successfully!");
+      var result = JSON.parse(response);
+      if (result.status === "success") {
+        SuccessMessageDisplay(result.message);
+        $.ajax({
+          url: "poPrintAddData.php",
+          method: "POST",
+          data: {
+            products: inArray,
+          },
+          success: function (response) {
+            document.getElementById("printInvoiceData").innerHTML = response;
+            printInvoice();
+          },
+          error: function (xhr, status, error) {
+            ErrorMessageDisplay("Bill print error!");
+          },
+        });
+      } else if (result.status === "session_expired") {
+        ErrorMessageDisplay(result.message);
+        setTimeout(function () {
+          window.open(window.location.href, "_blank");
+        }, 4000);
+        return;
+      } else if (result.status === "error") {
+        ErrorMessageDisplay(result.message);
+        return;
+      } else {
+        ErrorMessageDisplay("PO insert failed. Check connection.");
+        return;
+      }
       $(".confirmPObtn").prop("disabled", false);
-
-      $.ajax({
-        url: "poPrintAddData.php",
-        method: "POST",
-        data: {
-          products: inArray,
-        },
-        success: function (response) {
-          document.getElementById("printInvoiceData").innerHTML = response;
-          printInvoice();
-        },
-        error: function (xhr, status, error) {
-          ErrorMessageDisplay("Bill print error!");
-        },
-      });
     },
     error: function (xhr, status, error) {
-      ErrorMessageDisplay("Something went wrong!");
+      ErrorMessageDisplay("Something went wrong! Check connection.");
     },
   });
 }
