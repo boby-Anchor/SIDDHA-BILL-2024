@@ -157,10 +157,11 @@ if (!isset($_SESSION['store_id'])) {
                                                                                 INNER JOIN p_medicine ON p_medicine.code = poinvoiceitems.item_code
                                                                                 WHERE invoiceNumber = '" . $hub_order_details_data['invoice_id'] . "'  ");
 
+                                                                                $row = 1;
                                                                                 while ($poItems_data = $poItems_result->fetch_array()) {
                                                                                 ?>
                                                                                     <tr>
-                                                                                        <th scope="row">1</th>
+                                                                                        <th scope="row"><?= $row ?></th>
                                                                                         <td><?= $poItems_data["code"] ?></td>
                                                                                         <td><?= $poItems_data["name"] ?></td>
                                                                                         <td><?= number_format($poItems_data["invoiceItem_price"], 0) ?></td>
@@ -169,6 +170,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                                     </tr>
 
                                                                                 <?php
+                                                                                    $row++;
                                                                                 }
                                                                                 ?>
                                                                             </tbody>
