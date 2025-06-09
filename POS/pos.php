@@ -62,19 +62,15 @@ if (!isset($_SESSION['store_id'])) {
 
                   <!--id="deliveryCharges" amountDiv-->
                   <div class="col-2 p-2 " id="deliveryChargesField">
-                    <input type="text" placeholder="DC" class="form-control col-10" id="deliveryCharges"
-                      name="deliveryCharges" onkeyup="checkNetTotal()">
-                  </div>
-
-                  <!--id="valueAddedServices" name="valueAddedServices"-->
-                  <div class="col-2 p-2 " id="ServiceChargesField">
-                    <input type="text" class="form-control col-10" id="valueAddedServices" name="valueAddedServices"
-                      placeholder="VAS" onkeyup="checkNetTotal()">
+                    <input type="text" class="form-control col-10" id="deliveryCharges"
+                      name="deliveryCharges"
+                      placeholder="DC" onkeyup="checkNetTotal()">
                   </div>
 
                   <!--id="packingChargesField" name="packingChargesField"-->
                   <div class="col-2 p-2 " id="packingChargesField">
-                    <input type="text" class="form-control col-10" id="packingChargesField" name="packingChargesField"
+                    <input type="text" class="form-control col-10" id="packingCharges"
+                      name="packingCharges"
                       placeholder="PC" onkeyup="checkNetTotal()">
                   </div>
 
@@ -90,7 +86,7 @@ if (!isset($_SESSION['store_id'])) {
                     <label class="subTotal">RS(NT)</label>
                   </div>
 
-                  <div class="col-3 text-right ">
+                  <div class="col-3 text-right" id="paththuTotalField">
                     <label class="subTotal" id="paththuTotal"></label>
                     <label class="subTotal">RS(PT)</label>
                   </div>
@@ -102,19 +98,19 @@ if (!isset($_SESSION['store_id'])) {
                   <!-- discountPercentage -->
                   <div class="col-4 p-2 " id="discountField" style="color:#000 !important; background: #000;">
                     <input type="text" placeholder="Discount %" class="form-control col-8" id="discountPercentage"
-                      name="discountPercentage" onkeyup="addDiscount()">
+                      name="discountPercentage" onkeyup="checkNetTotal()">
                   </div>
 
                   <!-- cashAmount -->
                   <div class="col-4 p-2 " id="cashAmountField">
                     <input type="text" placeholder="Enter Cash Amount" class="form-control col-10" id="cashAmount"
-                      name="cashAmount" onkeyup="checkBalance(this)">
+                      name="cashAmount" onkeyup="checkBalance()">
                   </div>
 
                   <!-- cardAmount -->
                   <div class="col-4 p-2  d-none" id="cardAmountField">
                     <input type="text" placeholder="Enter Card Amount" class="form-control col-10" id="cardAmount"
-                      name="cardAmount" onkeyup="checkBalance(this)">
+                      name="cardAmount" onkeyup="checkBalance()">
                   </div>
                 </div>
               </div>
@@ -187,7 +183,7 @@ if (!isset($_SESSION['store_id'])) {
               </div>
               <br>
 
-              <div class="col-4 mb-2 p-2">
+              <div id="barcodeInputField" class="col-4 mb-2 p-2">
                 <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
                   onchange="getBarcode2(this.value);">
               </div>
@@ -250,53 +246,62 @@ if (!isset($_SESSION['store_id'])) {
                 <!-- products grid -->
                 <div class="row productGrid" id="productGrid">
                   <?php
-                  if (isset($_SESSION['store_id'])) {
+                  // if (isset($_SESSION['store_id'])) {
 
-                    $userLoginData = $_SESSION['store_id'];
+                  //   $userLoginData = $_SESSION['store_id'];
 
-                    foreach ($userLoginData as $userData) {
-                      $shop_id = $userData['shop_id'];
+                  //   foreach ($userLoginData as $userData) {
+                  //     $shop_id = $userData['shop_id'];
 
-                      $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
-                      medicine_unit.unit AS unit , unit_category_variation.ucv_name
-                      FROM stock2
-                      INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-                      INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                      INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                      INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0
-                      ORDER BY p_medicine.name ASC");
+                  //     $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
+                  //     medicine_unit.unit AS unit , unit_category_variation.ucv_name
+                  //     FROM stock2
+                  //     INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
+                  //     INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                  //     INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+                  //     INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                  //     WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0
+                  //     ORDER BY p_medicine.name ASC");
 
-                      if (!empty($cm)) {
-                        foreach ($cm as $v) {
+                  //     if (!empty($cm)) {
+                  //       foreach ($cm as $v) {
+                  // 
                   ?>
-                          <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
-                            <div class="product-grid h-100 rounded-lg">
-                              <div class="product-content">
-                                <div class="title"><?php echo $v['name']; ?>
-                                  <br>
-                                  <?= $v['code']; ?>
-                                </div>
-                                <div class="sub-title">
-                                  <?php echo $v['bName']; ?>
-                                </div>
-                                <div class="f-size item-price">
-                                  I:- RS
-                                  <?php echo $v['item_s_price']; ?>
-                                </div>
-                                <div class="f-size unit-price">
-                                  U:- RS
-                                  <?php echo $v['unit_s_price']; ?>
-                                </div>
-                                <div class="f-size">
-                                  (<?= $v['ucv_name'] ?><?php echo $v['unit']; ?>)</div>
-                              </div>
-                            </div>
-                          </div>
-                  <?php }
-                      }
-                    }
-                  } ?>
+                  <!-- //         <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
+                  //           <div class="product-grid h-100 rounded-lg">
+                  //             <div class="product-content">
+                  //               <div class="title"><?php //echo $v['name']; 
+                                                      ?>
+                  //                 <br>
+                  //                 <?php //$v['code']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="sub-title">
+                  //                 <?php //echo $v['bName']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="f-size item-price">
+                  //                 I:- RS
+                  //                 <?php // echo $v['item_s_price']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="f-size unit-price">
+                  //                 U:- RS
+                  //                 <?php //echo $v['unit_s_price']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="f-size">
+                  //                 (<?php // $v['ucv_name'] 
+                                      ?><?php //echo $v['unit']; 
+                                        ?>)</div>
+                  //             </div>
+                  //           </div>
+                  //         </div> -->
+                  <?php // }
+                  //     }
+                  //   }
+                  // } 
+                  ?>
 
                 </div>
               </div>
@@ -563,10 +568,15 @@ if (!isset($_SESSION['store_id'])) {
   </div>
 </body>
 
+<script src="dist/js/pos.js"></script>
+<script src="dist/js/messageDisplay.js"> </script>
+
 <script>
   $(function() {
     //Initialize Select2 Elements
     $(".select2").select2();
+    searchProducts();
+    formatFields();
 
     //Initialize Select2 Elements
     // $(".select2bs4").select2({
@@ -578,8 +588,5 @@ if (!isset($_SESSION['store_id'])) {
     // });
   });
 </script>
-
-<script src="dist/js/pos.js"></script>
-<script src="dist/js/messageDisplay.js"> </script>
 
 </html>
