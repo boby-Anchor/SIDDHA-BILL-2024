@@ -288,15 +288,22 @@ if (!isset($_SESSION['store_id'])) {
                 orderNumber: orderNO,
                 status: status,
               },
-              success: function() {
-                SuccessMessageDisplay("Order status updated!")
-                setTimeout(function() {
-                  location.reload();
-                }, 3000);
+              success: function(response) {
+                var result = JSON.parse(response);
+                if (result.status === "success") {
+                  SuccessMessageDisplay(result.message);
+                  setTimeout(function() {
+                    location.reload();
+                  }, 3000);
+                } else if (result.status === "error") {
+                  ErrorMessageDisplay(result.message);
+                } else {
+                  ErrorMessageDisplay("Unknown error occurred.");
+                }
               },
               error: function(xhr, status, error) {
                 console.error(xhr.responseText);
-                ErrorMessageDisplay("Order status update failed!");
+                ErrorMessageDisplay("Order status update failed! Check connection.");
                 $(".btn").prop('disabled', false);
               },
             });
