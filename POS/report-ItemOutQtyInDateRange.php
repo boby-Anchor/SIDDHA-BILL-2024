@@ -209,7 +209,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                                                 if ($unitData) {
                                                                     while ($unitRow = mysqli_fetch_assoc($unitData)) {
-                                                                        echo "(" . $unitRow ? $unitRow['volume'] . $unitRow['unit']  . ")<br/>" : "No unit <br/>";
+
+                                                                        // echo "(" . $unitRow ?  $unitRow['volume'] . $unitRow['unit']  . ")<br/>" : "No unit <br/>";
+                                                                        if ($unitRow) {
+                                                                            echo "(" . $unitRow['volume'] . $unitRow['unit'] . ")<br/>";
+                                                                        } else {
+                                                                            echo "No unit <br/>";
+                                                                        }
+
                                                                         $brand = $unitRow['brand'];
                                                                     }
                                                                 }
