@@ -86,7 +86,7 @@ $cost = 0;
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock2.stock_shop_id = '$shop_id' AND  stock2.stock_item_qty > 0  ORDER BY p_medicine.name ASC");
+                          WHERE stock2.stock_shop_id = '$shop_id' ORDER BY p_medicine.name ASC");
                           while ($row = mysqli_fetch_assoc($sql)) {
                             $totalRows++;
 
@@ -106,36 +106,44 @@ $cost = 0;
                               <td> <?= $row['p_category']; ?></td>
                               <td> <?= number_format($row['p_cost'], 0); ?></td>
                               <td class="text-center"> <label class="product-selling-price"><?= number_format($row['p_s_price']); ?></label> </td>
-                              <td> <?= $row['p_a_stock']; ?> </td>
+                              <td> <?= $row['p_a_stock'] > 0 ? $row['p_a_stock'] : 0; ?> </td>
                               <td>
                                 <?php
-                                if ($row['unit'] == "ml") {
-                                  // Price per unit for ml
-                                  $cost = $row['p_cost'] * $row['p_a_stock'];
-                                } else if ($row['unit'] == "l") {
-                                  // Convert unit capacity value from liters to milliliters before calculating
-                                  // $cost = $row['p_cost'] / ($row['ucv_name'] * 1000) * $row['p_a_stock'];
+                                if ($row['p_a_stock'] > 0) {
+                                  if ($row['unit'] == "ml") {
+                                    // Price per unit for ml
+                                    $cost = $row['p_cost'] * $row['p_a_stock'];
+                                  } else if ($row['unit'] == "l") {
+                                    // Convert unit capacity value from liters to milliliters before calculating
+                                    // $cost = $row['p_cost'] / ($row['ucv_name'] * 1000) * $row['p_a_stock'];
+                                  } else {
+                                    // Default calculation for other units
+                                    $cost = $row['p_a_stock'] * $row['p_cost'];
+                                  }
+                                  $totalCost += $cost;
+                                  echo number_format($cost, 0);
                                 } else {
-                                  // Default calculation for other units
-                                  $cost = $row['p_a_stock'] * $row['p_cost'];
+                                  echo 0;
                                 }
-                                $totalCost += $cost;
-                                echo number_format($cost, 0);
                                 ?>
                               </td>
                               <td>
                                 <?php
-                                if ($row['unit'] == "ml") {
-                                  // Price per unit for ml
-                                  $price = $row['p_s_price'] * $row['p_a_stock'];
-                                } else if ($row['unit'] == "l") {
-                                  // Convert unit capacity value from liters to milliliters before calculating
-                                  $price = $row['p_s_price'] / ($row['ucv_name'] * 1000) * $row['p_a_stock'];
+                                if ($row['p_a_stock'] > 0) {
+                                  if ($row['unit'] == "ml") {
+                                    // Price per unit for ml
+                                    $price = $row['p_s_price'] * $row['p_a_stock'];
+                                  } else if ($row['unit'] == "l") {
+                                    // Convert unit capacity value from liters to milliliters before calculating
+                                    $price = $row['p_s_price'] / ($row['ucv_name'] * 1000) * $row['p_a_stock'];
+                                  } else {
+                                    // Default calculation for other units
+                                    $price = $row['p_a_stock'] * $row['p_s_price'];
+                                  }
+                                  echo number_format($price, 0);
                                 } else {
-                                  // Default calculation for other units
-                                  $price = $row['p_a_stock'] * $row['p_s_price'];
+                                  echo 0;
                                 }
-                                echo number_format($price, 0);
                                 ?>
                               </td>
                             </tr>
