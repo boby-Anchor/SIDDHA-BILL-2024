@@ -119,11 +119,11 @@ if (!isset($_SESSION['store_id'])) {
                                         $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
                                         while ($shops_row = $shops_rs->fetch_assoc()) {
                                             if ($shop_id != $shops_row['shopId']) {
-                                                ?>
+                                        ?>
                                                 <option value="<?= $shops_row['shopId'] ?>">
                                                     <?= $shops_row['shopName'] ?>
                                                 </option>
-                                                <?php
+                                        <?php
                                             }
                                         }
                                         ?>
@@ -185,7 +185,7 @@ if (!isset($_SESSION['store_id'])) {
 
                                         if (!empty($cm)) {
                                             foreach ($cm as $v) {
-                                                ?>
+                                    ?>
                                                 <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
                                                     <div class="product-grid h-100">
                                                         <div class="product-content">
@@ -204,7 +204,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <?php
+                                    <?php
                                             }
                                         }
                                         // }
@@ -262,7 +262,7 @@ if (!isset($_SESSION['store_id'])) {
                     $bill_data_rs = $conn->query("SELECT * FROM `customize_bills` WHERE `customize_bill_shop-id` = '$shop_id'");
                     $bill_data = $bill_data_rs->fetch_assoc();
 
-                    ?>
+            ?>
                     <div class="d-flex justify-content-center">
                         <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
                             <div class="row gap-1">
@@ -297,7 +297,7 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col-12" style="text-align: center;">
-                                            <span style="font-size: 10px;"><?= $currentDate ?>         <?= $currentTime ?></span> <br>
+                                            <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
 
                                             <span><span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO -
                                                 </span> <span class="invoiceNumber"
@@ -328,7 +328,7 @@ if (!isset($_SESSION['store_id'])) {
                             </table>
                         </div>
                     </div>
-                    <?php
+            <?php
                 }
             }
             ?>
@@ -336,12 +336,12 @@ if (!isset($_SESSION['store_id'])) {
 
         <!-- ========================================== -->
 
-        <!-- po JS -->
-        <script src="dist/js/po.js"></script>
-        <script src="dist/js/messageDisplay.js"> </script>
-        <!-- po JS end -->
-
     </div>
 </body>
+
+<!-- po JS -->
+<script src="dist/js/po.js"></script>
+<script src="dist/js/messageDisplay.js"> </script>
+<!-- po JS end -->
 
 </html>

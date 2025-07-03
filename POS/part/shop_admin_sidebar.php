@@ -16,7 +16,6 @@ if (isset($_SESSION['store_id'])) {
         <div class="shopImg" style="background-image: url('dist/img/shop/<?= $user_shop_data['shopImg'] ?>');"></div>
       </div>
       <!--<span class="brand-text font-weight-light text-uppercase">Siddha.lk</span>-->
-      </a>
 
       <!-- Sidebar -->
       <div class="sidebar">
@@ -25,7 +24,7 @@ if (isset($_SESSION['store_id'])) {
           <!--   <div class="image">
                <img src="dist/img/user1.jpg" class="img-circle elevation-2" alt="User Image" />
             </div>-->
-            <div class="info userNameMain">
+          <div class="info userNameMain">
             <a href="#" class="d-block userName">
               <?= $userName; ?>
             </a>
@@ -34,8 +33,8 @@ if (isset($_SESSION['store_id'])) {
             <a href="#" class="d-block userRole">
               <?= $user_shop_data['user_role'] ?>
             </a>
-          </div> 
-          
+          </div>
+
         </div>
 
         <!-- SidebarSearch Form -->
@@ -147,9 +146,6 @@ if (isset($_SESSION['store_id'])) {
               </ul>
             </li>
 
-
-           
-
             <li class="nav-header">REPORTS</li>
             <li class="nav-item">
               <a href="today-report.php" class="nav-link">
@@ -169,9 +165,6 @@ if (isset($_SESSION['store_id'])) {
             <!--    <p>Summary Report</p>-->
             <!--  </a>-->
             <!--</li>-->
-            
-            
-            
             <li class="nav-item">
               <a href="daily-report.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
@@ -191,19 +184,19 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
             <li class="nav-item">
-               <a href="today-cashiers-shop.php" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+              <a href="today-cashiers-shop.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
                 <p>Today Cashiers</p>
-                </a>
+              </a>
             </li>
-            
+
             <li class="nav-item">
-               <a href="ac-cashier-today-report.php" class="nav-link">
-            <i class="nav-icon fas fa-copy"></i>
+              <a href="ac-cashier-today-report.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
                 <p>Today Sale</p>
-                </a>
+              </a>
             </li>
-            
+
             <!--<li class="nav-item">-->
             <!--  <a href="top-customer.php" class="nav-link">-->
             <!--    <i class="nav-icon fas fa-copy"></i>-->

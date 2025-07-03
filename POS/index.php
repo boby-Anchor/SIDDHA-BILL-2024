@@ -18,10 +18,10 @@ if (isset($_SESSION['store_id'])) {
 
     if (isset($redirects[$userRoleId])) {
       echo "<script>window.location='" . $redirects[$userRoleId] . "';</script>";
-      exit;
+      exit();
     } else {
       echo "<script>alert('Unknown role!');</script>";
-      exit;
+      exit();
     }
   }
 }

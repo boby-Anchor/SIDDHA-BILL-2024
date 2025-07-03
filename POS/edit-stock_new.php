@@ -425,24 +425,6 @@ if (!isset($_SESSION['store_id'])) {
 
   <script src="dist/js/edit-stock_new.js"></script>
 
-  <script>
-    $(function() {
-      $("#itemTable")
-        .DataTable({
-          responsive: true,
-          lengthChange: false,
-          autoWidth: false,
-          // aaSorting: [],
-          order: [
-            [5, 'desc']
-          ],
-          buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
-        })
-        .buttons()
-        .container()
-        .appendTo("#stockTable_wrapper .col-md-6:eq(0)");
-    });
-  </script>
 </body>
 
 </html>
