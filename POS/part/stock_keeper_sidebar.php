@@ -104,16 +104,24 @@ if (isset($_SESSION['store_id'])) {
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="add-purchase.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Add Purchase Order</p>
-                  </a>
-                </li>
+
+                <?php
+                if ($user_shop_data['shop_id'] != 1) {
+                ?>
+                  <li class="nav-item">
+                    <a href="add-purchase.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Add Purchase Order</p>
+                    </a>
+                  </li>
+                <?php
+                }
+                ?>
+
                 <li class="nav-item">
                   <a href="manage-purchase.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Order List</p>
+                    <p>Orders List</p>
                   </a>
                 </li>
 
@@ -133,6 +141,12 @@ if (isset($_SESSION['store_id'])) {
                       <p>PO view</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="add-stock-from-po.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Add Stock from PO</p>
+                    </a>
+                  </li>
                 <?php
                 }
                 ?>
@@ -150,32 +164,26 @@ if (isset($_SESSION['store_id'])) {
                 </p>
               </a>
               <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="stock.php" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>View Shop Stock</p>
+                  </a>
+                </li>
                 <!-- meka hub admin and hub stock keeper only Start-->
                 <?php
                 if ($user_shop_data['shop_id'] == 1) {
                 ?>
-                  <!-- <li class="nav-item">
-                    <a href="edit-stock-new.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Edit Stock</p>
-                    </a>
-                  </li> -->
-                  <li class="nav-item">
-                    <a href="add-stock.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Add New Stock</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="add-stock-from-po.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Add Stock from PO</p>
-                    </a>
-                  </li>
                   <li class="nav-item">
                     <a href="view_all_stock.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>View all Stock</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="add-stock.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Add New Stock (GRN)</p>
                     </a>
                   </li>
                 <?php
@@ -183,15 +191,9 @@ if (isset($_SESSION['store_id'])) {
                 ?>
                 <!-- meka hub admin and hub stock keeper only End-->
                 <li class="nav-item">
-                  <a href="stock.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>View Shop Stock</p>
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a href="manage-grn.php" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>View GRN</p>
+                    <p>View GRNs</p>
                   </a>
                 </li>
                 <?php
