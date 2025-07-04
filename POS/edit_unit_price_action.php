@@ -32,7 +32,7 @@ if (isset($_POST['products'])) {
 
     $poArray = json_decode($_POST['products'], true);
 
-    $errorOccured = false;
+    $errorOccurred = false;
     $notificationMessage = "";
 
     if (is_array($poArray) && !empty($poArray)) {
@@ -52,7 +52,7 @@ if (isset($_POST['products'])) {
                 if (
                     !empty($product['product_code']) &&
                     !empty($product['product_name']) &&
-                    !empty($product['item_cost']) &&
+                    // !empty($product['item_cost']) &&
                     // !empty($product['unit_cost']) &&
                     !empty($product['item_price'])
                     // !empty($product['unit_price'])
@@ -76,17 +76,17 @@ if (isset($_POST['products'])) {
                     }
 
                 } else {
-                    $errorOccured = true;
+                    $errorOccurred = true;
                     $error_message = "Data update error\n";
                 }
             }
         } catch (Exception $exception) {
-            $errorOccured = true;
+            $errorOccurred = true;
             $error_message = "ERROR: " . $exception->getMessage() . "\n";
             printErrorLog($error_message);
             $notificationMessage .= $exception->getMessage();
         } finally {
-            if ($errorOccured) {
+            if ($errorOccurred) {
                 echo json_encode(array(
                     'status' => 'error',
                     'message' => $error_message

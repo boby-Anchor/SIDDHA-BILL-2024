@@ -260,6 +260,7 @@ if (isset($_SESSION['store_id'])) {
                 }  // close for-each $itemData
             }  // itemData[] end
         } catch (Exception $exception) {
+            error_log("Invoice items save error." . $exception->getMessage());
             printErrorLog("Invoice items save error." . $exception->getMessage());
         }
 
@@ -267,6 +268,7 @@ if (isset($_SESSION['store_id'])) {
             $conn->query("INSERT INTO invoices (invoice_id, user_id, shop_id, created, p_name, contact_no, d_name,reg,bill_type_id, payment_method, total_amount, discount_percentage, delivery_charges, value_added_services, paidAmount, cardPaidAmount, balance)
         VALUES ('$invoiceNumber', '$userId', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentMethodSelector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')");
         } catch (Exception $exception) {
+            error_log("Invoice data save error." . $exception->getMessage());
             printErrorLog("Invoice data save error." . $exception->getMessage());
         }
     }
