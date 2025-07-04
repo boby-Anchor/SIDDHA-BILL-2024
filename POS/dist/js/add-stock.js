@@ -24,19 +24,19 @@ $(document).on("click", "#proceedGrnBtn", function () {
 
     // Data Validation
     if (isNaN(product_qty) || product_qty === 0) {
-      MessageDisplay("error", "Error", product_name + " එකේ Qty දාන්නේ නැද්ද?");
+      ErrorMessageDisplay(product_name + " එකේ Qty දාන්නේ නැද්ද?");
       hasErrors = true;
       return false;
     } else if (isNaN(item_price) || item_price === 0) {
-      MessageDisplay("error", "Error", product_name + " එකේ Price නැද්ද?");
+      ErrorMessageDisplay(product_name + " එකේ Price නැද්ද?");
       hasErrors = true;
       return false;
     } else if (isNaN(item_discount)) {
-      MessageDisplay("error", "Error", product_name + " එකේ Discount නැද්ද?");
+      ErrorMessageDisplay(product_name + " එකේ Discount නැද්ද?");
       hasErrors = true;
       return false;
     } else if (unit_s_price !== 0 && cost_per_unit > unit_s_price) {
-      MessageDisplay("error", "Error", product_name + " එකේ Unit Cost > Unit Price..!");
+      ErrorMessageDisplay(product_name + " එකේ Unit Cost > Unit Price..!");
       hasErrors = true;
       return false;
     } else {
@@ -163,7 +163,7 @@ $(document).on("click", ".add-btn", function () {
     $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
 
   } else {
-    MessageDisplay("error", "Error", "Product already exists in the list!");
+    ErrorMessageDisplay("Product already exists in the list!");
   }
 });
 
@@ -256,7 +256,7 @@ $(document).on("input", "#item_price", function () {
 
   if (isNaN(qty)) {
     $(this).val("");
-    MessageDisplay("error", "Error", product_name + " එකේ Qty දාලා ඉන්න.");
+    ErrorMessageDisplay(product_name + " එකේ Qty දාලා ඉන්න.");
   } else {
     total_value = price * qty;
     $row.find("#total_value").text(total_value.toFixed(2));
@@ -277,10 +277,10 @@ $(document).on("input", "#item_discount", function () {
 
   if (isNaN(qty)) {
     $(this).val("");
-    MessageDisplay("error", "Error", product_name + " එකේ Qty දාලා ඉන්න.");
+    ErrorMessageDisplay(product_name + " එකේ Qty දාලා ඉන්න.");
   } else if (isNaN(item_price)) {
     $(this).val("");
-    MessageDisplay("error", "Error", product_name + " එකේ Item Price දාලා ඉන්න.");
+    ErrorMessageDisplay(product_name + " එකේ Item Price දාලා ඉන්න.");
   } else {
     var total_value = item_price * qty;
     $row.find("#total_value").text(total_value.toFixed(0));
@@ -340,87 +340,34 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
       products: JSON.stringify(poArray),
     },
     success: function (response) {
-      console.log(response);
       var result = JSON.parse(response);
 
       if (result.status === 'success') {
-        Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-          }
-        }).fire({
-          icon: "success",
-          title: result.message
-        }).then(() => {
-          location.reload(true);
-        });
-
+        SuccessMessageDisplay(result.message);
+        setTimeout(() => {
+          location.reload();
+        }, 3000);
       } else if (result.status === 'error') {
-        $(".confirmPObtn").prop('disabled', false);
-        MessageDisplay("error", "Error", result.message);
+        // $(".confirmPObtn").prop('disabled', false);
+        ErrorMessageDisplay(result.message);
       } else if (result.status === 'sessionExpired') {
-        $(".confirmPObtn").prop('disabled', false);
-        MessageDisplay("error", "Error", result.message);
+        // $(".confirmPObtn").prop('disabled', false);
+        ErrorMessageDisplay(result.message);
         setTimeout(function () {
           window.open(window.location.href, '_blank');
         }, 5000);
       } else {
-        $(".confirmPObtn").prop('disabled', false);
-        MessageDisplay("error", "Error" + result.status, result.message);
+        ErrorMessageDisplay(result.status, result.message);
       }
+      $(".confirmPObtn").prop('disabled', false);
     },
     error: function (xhr, status, error) {
-      $.ajax({
-        url: "error_log.php",
-        method: "POST",
-        data: {
-          message: JSON.stringify(xhr.responseText),
-        },
-        success: function (response) {
-          if (response === 'success') {
-            MessageDisplay("error", "404", "Connection failed.");
-          } else if (response === 'error') {
-            MessageDisplay("error", "404", "Log and Connection failed. " + result.message);
-          } else {
-            MessageDisplay("error", "FATAL ERROR", "Contact IT department.");
-          }
-        },
-        error: function (xhr, status, error) {
-          MessageDisplay("error", "FATAL ERROR", "Contact IT department.");
-          console.error(xhr.responseText);
-        },
-      });
+      ErrorMessageDisplay("Connection failed. Check Internet connection.");
+      $(".confirmPObtn").prop('disabled', false);
     },
   });
 
 });
-
-// ==============================================================================
-
-function MessageDisplay(icon, status, message) {
-  $("#proceedGrnBtn").removeAttr("data-toggle data-target");
-
-  Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 4000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer);
-      toast.addEventListener('mouseleave', Swal.resumeTimer);
-    }
-  }).fire({
-    icon: icon,
-    title: status + ": " + message,
-  });
-}
 
 // ==============================================================================
 
@@ -466,4 +413,4 @@ function fbs() {
   req.send(form);
 }
 
-// ===============================================================================
+// ==============================================================================

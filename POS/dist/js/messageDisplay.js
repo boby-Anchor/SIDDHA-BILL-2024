@@ -13,7 +13,6 @@ function InfoMessageDisplay(message) {
 // ==============================================================================
 
 function MessageDisplay(icon, status, message) {
-    $("#updatePriceBtn").removeAttr("data-toggle data-target");
 
     Swal.mixin({
         toast: true,

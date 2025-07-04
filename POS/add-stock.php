@@ -419,8 +419,8 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
 
-    <script src="dist/js/add-stock.js"></script>
-
 </body>
+
+<script src="dist/js/add-stock.js"></script>
 
 </html>
