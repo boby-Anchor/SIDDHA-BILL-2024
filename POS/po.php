@@ -112,7 +112,7 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="row">
                             <div class="d-flex justify-content-evenly">
                                 <div class="p-2 p-x-2">
-                                    <select name="po-shop-selector" id="po-shop-selector"
+                                    <select name="po-shop-selector" id="po-shop-selector" onchange="setPoShopOnBill(this)"
                                         class="po-shop-selector form-control rounded-5">
                                         <option value="0" selected disabled hidden>Select shop</option>
                                         <?php
@@ -306,12 +306,19 @@ if (!isset($_SESSION['store_id'])) {
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col-12" style="text-align: center;">
-                                            <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span> <br>
+                                            <span style="font-size: 10px;"><?= $currentDate ?> <?= $currentTime ?></span>
+                                            <br>
 
                                             <span>
-                                                <span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?> NO -
-                                                </span> <span class="invoiceNumber"
-                                                    id="invoiceNumber"><?= $invoiceNumber ?></span>
+                                                <span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?>
+                                                    <br />
+                                                </span>
+                                                To-
+                                                <span id="po_shop_on_bill">
+                                                </span>
+                                                <span class="invoiceNumber"
+                                                    id="invoiceNumber"><?= $invoiceNumber ?>
+                                                </span>
                                             </span>
                                         </div>
                                     </div>

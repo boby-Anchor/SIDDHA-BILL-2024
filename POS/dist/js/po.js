@@ -2,6 +2,10 @@ $(document).ready(function () {
   $("#barcodeInput").focus();
 });
 
+function setPoShopOnBill(selectElement) {
+  $('#po_shop_on_bill').text(selectElement.options[selectElement.selectedIndex].text);
+}
+
 function searchProducts() {
   var searchInput = document.getElementById("search21").value.trim();
   if (searchInput !== "") {
@@ -15,6 +19,8 @@ function searchProducts() {
         $("#productGrid").html(response);
       },
     });
+  } else {
+    $("#productGrid").html("<h1 style='color: white;'>Search product name.</h1>");
   }
 }
 
@@ -27,7 +33,6 @@ function getBarcode3() {
       var txt = req.responseText;
       var barcodeResults = document.getElementById("barcodeResults");
       var existingRows = barcodeResults.querySelectorAll("tr[data-barcode]");
-      console.log(existingRows);
 
       for (var i = 0; i < existingRows.length; i++) {
         var existingBarcode = existingRows[i].getAttribute("data-barcode");
@@ -212,7 +217,7 @@ function calculateSubTotal() {
 }
 
 // invoice print
-function printInvoice() {
+function printPOBill() {
   var printWindow = window.open("", "_blank");
   printWindow.document.write("<html><head><title>Invoice</title>");
 
@@ -316,17 +321,17 @@ function printInvoice() {
   // After printing, reload the pos.php file
   printWindow.onafterprint = function () {
     printWindow.close(); // Close the print window
-    window.location.reload();
+    // window.location.reload();
     // Reload the pos.php file in the main window
   };
 }
 
 // checkout
 function checkout() {
-  var po_shop_id = document.getElementById("po-shop-selector").value;
-  var invoice_number = $(".invoiceNumber").text();
-  var sub_total = $("#subTotal").text().trim();
-  var discount_percentage = $("#discountPercentage").val();
+  var po_shop_id = document.getElementById("po-shop-selector").value || null;
+  var invoice_number = $(".invoiceNumber").text() || null;
+  var sub_total = $("#subTotal").text().trim() || null;
+  var discount_percentage = $("#discountPercentage").val() || null;
   var net_total = $("#netTotal").text().replace(/,/g, "");
 
   if (po_shop_id == 0) {
@@ -335,7 +340,15 @@ function checkout() {
   }
 
   var poArray = [];
-  var inArray = [];
+  var billData = [];
+
+  var bData = {
+    po_shop_id: po_shop_id,
+    sub_total: sub_total,
+    discount_percentage: discount_percentage,
+    net_total: net_total,
+  }
+  billData.push(bData);
 
   $("#barcodeResults tr").each(function () {
     var code = $(this).find("#code").text();
@@ -364,21 +377,16 @@ function checkout() {
       product_qty: product_qty,
       product_unit: product_unit,
       product_total: product_total,
-      invoice_number: invoice_number,
-
-      po_shop_id: po_shop_id,
-      sub_total: sub_total,
-      discount_percentage: discount_percentage,
-      net_total: net_total,
     };
     poArray.push(productData);
-    inArray.push(productData);
   });
 
   $.ajax({
     url: "poBillConfirmationInsert.php",
     method: "POST",
     data: {
+      invoice_number: invoice_number,
+      billData: JSON.stringify(billData),
       products: JSON.stringify(poArray),
     },
     success: function (response) {
@@ -389,11 +397,12 @@ function checkout() {
           url: "poPrintAddData.php",
           method: "POST",
           data: {
-            products: inArray,
+            billData: JSON.stringify(billData),
+            products: JSON.stringify(poArray),
           },
           success: function (response) {
             document.getElementById("printInvoiceData").innerHTML = response;
-            printInvoice();
+            printPOBill();
           },
           error: function (xhr, status, error) {
             ErrorMessageDisplay("Bill print error!");
@@ -416,6 +425,7 @@ function checkout() {
     },
     error: function (xhr, status, error) {
       ErrorMessageDisplay("Something went wrong! Check connection.");
+      $(".confirmPObtn").prop("disabled", false);
     },
   });
 }
