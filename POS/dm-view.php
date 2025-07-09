@@ -32,7 +32,7 @@ $totalValue = 0;
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | Pharmacy</title>
+    <title>Report | Doctor Medicine</title>
 
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -70,53 +70,29 @@ $totalValue = 0;
                         <div class="col-4">
                             <form action="" method="post">
                                 <div class="input-group">
-                                    <select class="form-control mr-2 bg-dark" id="doctorName" name="doctorName" required>
+                                    <select class="form-control select2" id="doctorName" name="doctorName">
                                         <option value="" disabled selected hidden>Select a doctor</option>
-                                        <option value="Dr. Buddhika">Dr. Buddhika</option>
-                                        <option value="Dr. Chathura">Dr. Chathura</option>
-                                        <option value="Dr. Daya">Dr. Daya</option>
-                                        <option value="Dr. Devinda">Dr. Devinda</option>
-                                        <option value="Dr. Fathima">Dr. Fathima</option>
-                                        <option value="Dr. Jeewani">Dr. Jeewani</option>
-                                        <option value="Dr. Kusal">Dr. Kusal</option>
-                                        <option value="Dr. Mithula">Dr. Mithula</option>
-                                        <option value="Dr. Nishantha">Dr. Nishantha</option>
-                                        <option value="Dr. Nirosha">Dr. Nirosha</option>
-                                        <option value="Dr. Nuwan">Dr. Nuwan</option>
-                                        <option value="Dr. Padmasiri">Dr. Padmasiri</option>
-                                        <option value="Dr. Parakrama">Dr. Parakrama</option>
-                                        <option value="Dr. Prasanga">Dr. Prasanga</option>
-                                        <option value="Dr. Saranga">Dr. Saranga</option>
-                                        <option value="Dr. Shaminda">Dr. Shaminda</option>
-                                        <option value="Dr. Sujeewa">Dr. Sujeewa</option>
-                                        <option value="Dr. Tharindu">Dr. Tharindu</option>
-                                        <option value="Dr. Thilanka">Dr. Thilanka</option>
-                                        <option value="Dr. Yashodara">Dr. Yashodara</option>
+                                        <?php
+                                        $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
+                                        while ($doctors_row = $doctors_rs->fetch_assoc()) {
+                                        ?>
+                                            <option value="<?= $doctors_row['name'] ?>">
+                                                <?= $doctors_row['name'] ?>
+                                            </option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                     <input type="date" id="date" name="date" class="form-control col-8 bg-dark" value="<?php echo htmlspecialchars($selected_date); ?>" required>
                                     <button type="submit" class="form-control col-2 btn btn-success ml-2"><i class="fas fa-search"></i></button>
                                 </div>
                             </form>
                         </div>
-
-                        <div class="col-2">
-                        </div>
-
-                        <div class="col-6 row">
-                            <div class="col-6">
-                                <label>Total Value:</label>
-                                <label id="totalValueLabel"><?= htmlspecialchars($totalValue) ?></label>
-                            </div>
-                            <div class="col-6">
-                                <label>Total Price:</label>
-                                <label id="totalPriceLabel"><?= htmlspecialchars($totalPrice) ?></label>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row p-4">
                         <div class="col-12">
-                            <table class="table table-dark table-striped table-bordered table-hover">
+                            <table id="dm_data_table" class="table table-dark table-striped table-bordered table-hover">
                                 <thead class="">
                                     <th>Invoice ID</th>
                                     <th>Doc. Name</th>
@@ -139,8 +115,32 @@ $totalValue = 0;
                                                 <td><?php echo htmlspecialchars($invoice['totalPrice']); ?></td>
                                             </tr>
                                         <?php endforeach;
-                                    } else {
                                         ?>
+                                        <tr>
+                                            <td class=""><strong>Date:</strong></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><?= $selected_date; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class=""><strong>Total Value:</strong></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><?= $totalValue; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class=""><strong>Total Price:</strong></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><?= $totalPrice; ?></td>
+                                        </tr>
+                                    <?php
+
+                                    } else {
+                                    ?>
                                         <tr>
                                             <td colspan="5" class="text-center">No Doctor Medicine Data</td>
                                         </tr>
@@ -148,14 +148,10 @@ $totalValue = 0;
                                     }
                                     ?>
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
-
-                    <script>
-                        document.getElementById('totalPriceLabel').textContent = "<?= htmlspecialchars($totalPrice) ?>";
-                        document.getElementById('totalValueLabel').textContent = "<?= htmlspecialchars($totalValue) ?>";
-                    </script>
 
                 </div>
             </div>
@@ -174,6 +170,29 @@ $totalValue = 0;
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
 
+    <!-- Data Table JS -->
+    <?php include("part/data-table-js.php"); ?>
+    <!-- Data Table JS end -->
+
 </body>
 
+<script>
+    $(function() {
+        $("#dm_data_table")
+            .DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                searching: false,
+                // aaSorting: [],
+                order: [
+                    [1, 'asc']
+                ],
+                buttons: ["pdf", "print", "colvis"],
+            })
+            .buttons()
+            .container()
+            .appendTo("#dm_data_table_wrapper .col-md-6:eq(0)");
+    });
+</script>
 </html>
