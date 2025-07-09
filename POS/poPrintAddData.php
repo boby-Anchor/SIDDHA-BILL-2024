@@ -1,18 +1,20 @@
 <?php
 include('config/db.php');
-session_start();
-$inArray = $_POST['products'];
-// print_r($inArray);
+$billData = json_decode($_POST['billData'], true);
+$inArray = json_decode($_POST['products'], true);
 $productsAllTotal = 0;
-$balance = 0; // Initialize balance outside of the loop
-$discount_percentage = 0;
-$cardAmount = 0;
-$invoiceNumber = "";
+$balance = 0;
+$sub_total;
+$net_total;
+$discount_percentage;
 
-if (is_array($inArray) && !empty($inArray)) {
+if (is_array($billData) && !empty($billData) && is_array($inArray) && !empty($inArray)) {
+    foreach ($billData as $value) {
+        $discount_percentage = isset($value['discount_percentage']) ? $value['discount_percentage'] : 0;
+    }
 ?>
 
-    <!--//table header eka set krnwa-->
+    <!-- set table header -->
     <div class="col-12">
 
         <div class="row">
@@ -21,9 +23,7 @@ if (is_array($inArray) && !empty($inArray)) {
                 <span class="product_cost">U.Price</span>
             </div>
             <div class="col-3 text-center">
-                <span class="product_qty">
-                    QTY
-                </span>
+                <span class="product_qty">QTY</span>
             </div>
             <div class="col-3 text-center">
                 <span class="productTotal">D.%</span>
@@ -45,18 +45,13 @@ if (is_array($inArray) && !empty($inArray)) {
         $product_qty = isset($product['product_qty']) ? $product['product_qty'] : '';
         $product_unit = isset($product['product_unit']) ? $product['product_unit'] : '';
 
-        $sub_total = isset($product['sub_total']) ? $product['sub_total'] : 0;
-        $discount_percentage = isset($product['discount_percentage']) ? $product['discount_percentage'] : 0;
-        $net_total = isset($product['net_total']) ? $product['net_total'] : 0;
-
         $productTotal = doubleval($product_cost) * doubleval($product_qty);
         $productsAllTotal += $productTotal;
 
+        $net_total = $productsAllTotal;
+
         if ($discount_percentage != 0) {
             $net_total = $productsAllTotal  * (1 - doubleval($discount_percentage) / 100);
-        }
-        if ($discount_percentage == "") {
-            $discount_percentage = 0;
         }
     ?>
         <!-- items of the invoice -->
@@ -91,8 +86,7 @@ if (is_array($inArray) && !empty($inArray)) {
     <?php
     }
     ?>
-    <!-- total amount tika set krnwa -->
-    <!-- footer for amounts -->
+    <!-- footer of total amounts -->
     <div class="col-12">
         <div class="row">
             <div>
@@ -102,13 +96,14 @@ if (is_array($inArray) && !empty($inArray)) {
             </div>
 
             <div class="col-12 d-flex justify-content-end pt-2">
-                <span class="productsAllTotal">Discount %: <?= $discount_percentage ?></span>
+                <span class="discount">Discount : <?= $discount_percentage ?>%</span>
             </div>
 
             <div class="col-12 d-flex justify-content-end pt-2">
-                <span class="productsAllTotal">Net Total : <?= $net_total ?></span>
+                <span class="netTotal">Net Total : <?= $net_total ?></span>
             </div>
         </div>
+        <div class="col-12 d-flex justify-content-end pt-2" style="border-top: #0e0e0e 0.2rem solid;"></div>
     </div>
 
 <?php

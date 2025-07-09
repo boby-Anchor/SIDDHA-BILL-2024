@@ -2,21 +2,10 @@
 session_start();
 include('config/db.php');
 
-$poArray = json_decode($_POST['products'], true);
+$user_id;
+$shop_id;
 
-$productsAllTotal = 0;
-
-if (is_array($poArray) && !empty($poArray)) {
-
-    $invoice_number;
-    $user_id;
-    $shop_id;
-    $po_shop_id;
-    $currentDateTime;
-    $sub_total;
-    $discount_percentage;
-    $net_total;
-
+try {
     if (isset($_SESSION['store_id'])) {
         $userData = $_SESSION['store_id'][0];
         $user_id = $userData['id'];
@@ -29,32 +18,48 @@ if (is_array($poArray) && !empty($poArray)) {
         exit();
     }
 
-    foreach ($poArray as $product) {
+    $invoice_number = isset($_POST['invoice_number']) && !empty($_POST['invoice_number']) ? $_POST['invoice_number'] : null;
+    $billData = json_decode($_POST['billData'], true);
+    $poArray = json_decode($_POST['products'], true);
 
-        $code = $product['code'];
-        $ucv = $product['ucv'];
-        $unit_price = $product['unit_price'];
-        $item_price = $product['item_price'];
-        $product_name = $product['product_name'];
-        $product_cost = $product['product_cost'];
-        $product_qty = $product['product_qty'];
-        $product_unit = $product['product_unit'];
-        $product_total = $product['product_total'];
-        $invoice_number = $product['invoice_number'];
+    // if (runQuery("SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'")) {
+    //     echo json_encode(array(
+    //         'status' => 'error',
+    //         'message' => 'Invoice ID already exists.',
+    //     ));
+    //     exit();
+    // }
 
-        $po_shop_id = $product['po_shop_id'];
-        $sub_total = $product['sub_total'];
-        $discount_percentage = $product['discount_percentage'];
-        $net_total = $product['net_total'];
-        $currentDateTime = date("Y-m-d H:i:s");
+    $productsAllTotal = 0;
+    $po_shop_id;
+    $sub_total;
+    $discount_percentage;
+    $net_total;
+    $currentDateTime = date("Y-m-d H:i:s");
 
-        $query = "SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'";
-        $cm = runQuery($query);
+    if (!is_null($invoice_number) && is_array($billData) && !empty($billData) && is_array($poArray) && !empty($poArray)) {
 
-        $discount_percentage = isset($discount_percentage) ? $discount_percentage : 0;
+        foreach ($billData as $value) {
+            $po_shop_id = $value['po_shop_id'];
+            $sub_total = $value['sub_total'];
+            $discount_percentage = $value['discount_percentage'];
+            $net_total = $value['net_total'];
+        }
 
+        foreach ($poArray as $product) {
 
-        if (empty($cm)) {
+            $code = $product['code'];
+            $ucv = $product['ucv'];
+            $unit_price = $product['unit_price'];
+            $item_price = $product['item_price'];
+            $product_name = $product['product_name'];
+            $product_cost = $product['product_cost'];
+            $product_qty = $product['product_qty'];
+            $product_unit = $product['product_unit'];
+            $product_total = $product['product_total'];
+
+            $discount_percentage = isset($discount_percentage) ? $discount_percentage : 0;
+
             if (
                 !empty($product_unit) && !empty($ucv) && !empty($item_price) && !empty($product_name) &&
                 is_numeric($product_cost) && is_numeric($product_qty) && is_numeric($product_total) && !empty($invoice_number)
@@ -152,33 +157,34 @@ if (is_array($poArray) && !empty($poArray)) {
                     'message' => 'Invalid product entry',
                 ));
             }
-            $query = "INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total) 
-          VALUES ('$invoice_number', '$user_id', '$shop_id', '$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')";
+        }  // close for-each $poArray
 
-            if ($conn->query($query)) {
-                echo json_encode(array(
-                    'status' => 'success',
-                    'message' => 'Order Placed Successfully!',
-                ));
-            } else {
-                $error = $conn->error;
-                error_log("Error in inserting invoice: " . $error);
-                echo json_encode(array(
-                    'status' => 'error',
-                    'message' => 'Invoice saving error',
-                ));
-            }
+        $query = "INSERT INTO poinvoices (invoice_id, user_id, shop_id, po_shop_id, created, sub_total, discount_percentage, net_total)
+        VALUES ('$invoice_number', '$user_id', '$shop_id', '$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')";
+
+        if ($conn->query($query)) {
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => 'Order Placed Successfully!',
+            ));
         } else {
+            $error = $conn->error;
+            error_log("Error in inserting invoice: " . $error);
             echo json_encode(array(
                 'status' => 'error',
-                'message' => 'Invoice ID already exists.',
+                'message' => 'Invoice saving error',
             ));
         }
-    }  // close for-each $poArrary 
-
-} else {
+    } else {
+        echo json_encode(array(
+            'status' => 'error',
+            'message' => 'No products found or invalid data received.',
+        ));
+        exit();
+    }
+} catch (Throwable $th) {
     echo json_encode(array(
         'status' => 'error',
-        'message' => 'No products found or invalid data received.',
+        'message' => $th->getMessage(),
     ));
 }
