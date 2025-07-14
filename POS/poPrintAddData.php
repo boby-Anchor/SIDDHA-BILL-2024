@@ -1,5 +1,4 @@
 <?php
-include('config/db.php');
 $billData = json_decode($_POST['billData'], true);
 $inArray = json_decode($_POST['products'], true);
 $productsAllTotal = 0;

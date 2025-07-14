@@ -322,7 +322,7 @@ function printPOBill() {
   printWindow.onafterprint = function () {
     printWindow.close(); // Close the print window
     window.location.reload();
-    // Reload the po.php file in the main window
+    // Reload the pos.php file in the main window
   };
 }
 
