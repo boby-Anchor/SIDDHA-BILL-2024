@@ -1,9 +1,10 @@
 <?php
 date_default_timezone_set("Asia/Colombo");
 $host = "localhost";
-$name = "ceylriea_ts";
+$name = "root";
+$pass = "";
 $db = "ceylriea_siddha";
-$db = "ceylriea_ts";
+//ceylriea_ts   ceylriea_nps2
 $conn = new mysqli($host, $name, $pass, $db);
 
 $date = date("Y-m-d");

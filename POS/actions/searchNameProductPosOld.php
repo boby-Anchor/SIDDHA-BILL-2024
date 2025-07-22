@@ -2,7 +2,7 @@
 session_start();
 include('../config/db.php');
 
-$searchName = $_POST['searchName'];
+$searchName = !empty($_POST['searchName']) ? $_POST['searchName'] : null;
 $shop_id = 0;
 
 if (isset($_SESSION['store_id'])) {
@@ -21,7 +21,6 @@ if (!empty($searchName)) {
         INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
         WHERE stock2.stock_shop_id = '$shop_id'
         AND p_medicine.name LIKE '%$searchName%'
-        AND stock_item_qty > 0
         ORDER BY bName ASC
         ";
 
