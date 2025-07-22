@@ -18,8 +18,8 @@ if (isset($_GET['barcode'])) {
             INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
             WHERE stock_shop_id = '$shop_id'
             AND ( p_medicine.code = '$barcode'  OR stock2.stock_minimum_unit_barcode = '$barcode' )
-            ");
-//AND stock2.stock_item_qty > '0'
+            AND stock2.stock_item_qty > '0'");
+
             if ($barcodeResult->num_rows > 0) {
 
                 $displayedProducts = array();

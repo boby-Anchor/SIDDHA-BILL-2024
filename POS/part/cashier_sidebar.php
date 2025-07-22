@@ -78,6 +78,13 @@ $userId = $userLoginData[0]['id'];
                 </li>
 
                 <!-- <li class="nav-header">Return</li> -->
+
+                <li class="nav-item" disabled>
+                  <a href="return-invoice.php" class="nav-link">
+                    <i class="nav-icon fas fa-reply-all"></i>
+                    <p>Return Invoice</p>
+                  </a>
+                </li>
               </ul>
             </li>
 
@@ -159,6 +166,13 @@ $userId = $userLoginData[0]['id'];
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                  <a href="dm-view.php" class="nav-link">
+                    <i class="nav-icon fas fa-medkit"></i>
+                    <p>Doc Med Report</p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
                   <a href="report-OldInvoices.php" class="nav-link">
                     <i class="nav-icon fas fa-print"></i>
                     <p>Old Invoices</p>
@@ -169,6 +183,14 @@ $userId = $userLoginData[0]['id'];
                   <a href="cashier-today-report.php" class="nav-link">
                     <i class="nav-icon fas fa-money-bill-wave"></i>
                     <p>Today Sales Report</p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a href="report-ItemOutQty.php" class="nav-link">
+                    <i class="nav-icon fas fa-prescription-bottle-alt"></i>
+                    <i class=""></i>
+                    <p>Total Items Sale Report</p>
                   </a>
                 </li>
 

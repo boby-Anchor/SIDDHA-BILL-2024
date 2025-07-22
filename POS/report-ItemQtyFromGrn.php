@@ -12,14 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $start_date = $_POST['start_date'];
   $end_date = $_POST['end_date'];
 
-  // $sql = $conn->query("SELECT SUM(gi.grn_p_qty) AS total_quantity, pm.code AS code, pm.name AS name, gi.grn_p_price AS item_price, unit_category_variation.ucv_name AS volume, medicine_unit.unit AS unit
-  // FROM grn g
-  // JOIN grn_item gi ON g.grn_number = gi.grn_number
-  // LEFT JOIN p_medicine pm ON gi.grn_p_id = pm.code
-  // INNER JOIN unit_category_variation ON pm.unit_variation = unit_category_variation.ucv_id
-  // INNER JOIN medicine_unit ON unit_category_variation.p_unit_id = medicine_unit.id
-  // WHERE g.grn_date BETWEEN '$start_date' AND '$end_date' AND grn_shop_id ='1'
-  // GROUP BY gi.grn_p_id");
   $sql = $conn->query("SELECT SUM(gi.grn_p_qty) AS total_quantity, pm.code AS code, pm.name AS name, gi.grn_p_price AS item_price
   FROM grn g
   JOIN grn_item gi ON g.grn_number = gi.grn_number
@@ -102,14 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="card-body overflow-auto">
             <table id="stockTable" class="table table-bordered table-dark table-hover">
               <thead>
-                <!-- <tr class="bg-info">
-                  <th>Barcode</th>
-                  <th>Product</th>
-                  <th>Volume</th>
-                  <th>Qty</th>
-                  <th>Item Price</th>
-                  <th>Total Value</th>
-                </tr> -->
                 <tr class="bg-info">
                   <th>Barcode</th>
                   <th>Product</th>
@@ -133,14 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       $total_price = $item_price * $total_qty;
                       $fullTotal += $total_price;
                 ?>
-                      <!-- <tr>
-                        <td> <?= $row['code']; ?></td>
-                        <td> <?= $row['name']; ?></td>
-                        <td> <?= $row['volume']; ?> <?= $row['unit']; ?></td>
-                        <td> <?= number_format($total_qty, 0)  ?> </td>
-                        <td> <?= number_format($item_price, 0) ?> </td>
-                        <td> <?= number_format($total_price, 0) ?> </td>
-                      </tr> -->
                       <tr>
                         <td> <?= $row['code']; ?></td>
                         <td> <?= $row['name']; ?></td>
@@ -155,10 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?>
               </tbody>
               <tfoot>
-                <!-- <tr class="bg-blue">
-                  <td colspan="5">Total</td>
-                  <td> <?= number_format($fullTotal, 0); ?></td>
-                </tr> -->
                 <tr class="bg-blue">
                   <td colspan="4">Total</td>
                   <td> <?= number_format($fullTotal, 0); ?></td>

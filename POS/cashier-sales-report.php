@@ -141,7 +141,7 @@ if (!isset($_SESSION['store_id'])) {
                                     <div class="card">
                                         <div class="card-body">
                                             <!-- <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button> -->
-                                            <table id="table" class="table table-hover table-striped">
+                                            <table class="table table-hover table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>Invoice Number</th>
@@ -150,9 +150,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         <th>Contact No.</th>
                                                         <th>Doctor Name</th>
                                                         <th>Total Amount</th>
-                                                        <th>Cash Amount</th>
-                                                        <th>Card Paid Amount</th>
-                                                        <th>Balance</th>
+                                                        <th>Paid Amount</th>
                                                         <th>Payment Type</th>
                                                         <th>Bill Type</th>
                                                         <th>Chashier</th>
@@ -164,7 +162,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 <tfoot>
                                                     <tr class="bg-dark">
                                                         <td colspan="8" class="fw-bold" style="font-size:larger;">Total Sales</td>
-                                                        <td colspan="4" id="totalSales" class="fw-bold text-right" style="font-size:larger;"><?php //number_format($result['total_amount'], 2); 
+                                                        <td colspan="3" id="totalSales" class="fw-bold text-right" style="font-size:larger;"><?php //number_format($result['total_amount'], 2); 
                                                                                                                                                 ?> LKR</td>
                                                     </tr>
                                                 </tfoot>
@@ -230,12 +228,6 @@ if (!isset($_SESSION['store_id'])) {
 
                     if (result.status === 'success') {
 
-                        var item_total = 0;
-                        var card_total = 0;
-                        var cash_total = 0;
-                        var balance_total = 0;
-
-
                         $("#totalSale").text(result.sellAmount);
                         // $("#totalSales").text(result.sellAmount);
                         $("#totalCash").text(result.cashpayment);
@@ -245,12 +237,6 @@ if (!isset($_SESSION['store_id'])) {
                         $('#saleInvoiceData').empty();
 
                         result.tableData.forEach(function(item) {
-
-                            item_total += parseFloat(item.total_amount) || 0;
-                            card_total += parseFloat(item.cardPaidAmount) || 0;
-                            cash_total += parseFloat(item.paidAmount) || 0;
-                            balance_total += parseFloat(item.balance) || 0;
-
                             var row = '<tr>' +
                                 '<td><lable class="labInvo">' + item.invoice_id + '</lable> <br> ' + item.created + '</td>' +
                                 '<td>' + item.p_name + '</td>' +
@@ -259,8 +245,6 @@ if (!isset($_SESSION['store_id'])) {
                                 '<td>' + item.d_name + '</td>' +
                                 '<td>' + item.total_amount + '</td>' +
                                 '<td>' + item.paidAmount + '</td>' +
-                                '<td>' + item.cardPaidAmount + '</td>' +
-                                '<td>' + item.balance + '</td>' +
                                 '<td>' + item.payment_type + '</td>' +
                                 '<td>' + item.bill_type_name + '</td>' +
                                 '<td>' + item.name + '</td>' +
@@ -269,15 +253,6 @@ if (!isset($_SESSION['store_id'])) {
                             // $('#saleInvoiceData').append(row);
                             document.getElementById('saleInvoiceData').insertAdjacentHTML('beforeend', row);
                         });
-
-                        $("#table tfoot").append(
-                            '<tr>' +
-                            '<td>' + item_total + '</td>' +
-                            '<td>' + card_total + '</td>' +
-                            '<td>' + cash_total + '</td>' +
-                            '<td>' + balance_total + '</td>' +
-                            '</tr>'
-                        )
 
                     } else {
                         alert('response failed');

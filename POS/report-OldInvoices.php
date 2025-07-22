@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $result = $conn->query("SELECT *
         FROM invoiceitems
-        WHERE invoiceNumber = '$invoiceNumber' AND isPaththu = 0;
+        WHERE invoiceNumber = '$invoiceNumber';
         ");
         $items = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -87,13 +87,9 @@ $totalValue = 0;
                             <form action="" method="post">
                                 <div class="input-group">
                                     <label for="invoiceNumber" class="form-control bg-dark">Inv. No:</label>
-                                    <input type="text" id="invoiceNumber" name="invoiceNumber"
-                                        class="form-control col-8 bg-dark"
-                                        value="<?php echo htmlspecialchars($invoiceNumber); ?>" required>
-                                    <button type="submit" class="form-control col-2 btn btn-success ml-2"><i
-                                            class="fas fa-search"></i></button>
-                                    <button class="form-control col-2 btn btn-success ml-2" onclick="printInvBill()"><i
-                                            class="fas fa-print"></i></button>
+                                    <input type="text" id="invoiceNumber" name="invoiceNumber" class="form-control col-8 bg-dark" value="<?php echo htmlspecialchars($invoiceNumber); ?>" required>
+                                    <button type="submit" class="form-control col-2 btn btn-success ml-2"><i class="fas fa-search"></i></button>
+                                    <button class="form-control col-2 btn btn-success ml-2" onclick="printInvBill()"><i class="fas fa-print"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -287,18 +283,14 @@ $totalValue = 0;
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-12" style="text-align: center;">
-                                        <span><span class="text-left"
-                                                style="font-size: 10px;"><?= date("Y-m-d", strtotime($invData['created'])) ?>
-                                            </span><span class="text-right">
-                                                <?= date("H:i:s", strtotime($invData['created'])); ?></span> </span>
+                                        <span><span class="text-left" style="font-size: 10px;"><?= date("Y-m-d", strtotime($invData['created'])) ?>
+                                            </span><span class="text-right"> <?= date("H:i:s", strtotime($invData['created'])); ?></span> </span>
                                         <br>
-                                        <span><span class="invoicePatientName"
-                                                id="invoicePatientName"><?= $invData['p_name'] ?></span> <span
+                                        <span><span class="invoicePatientName" id="invoicePatientName"><?= $invData['p_name'] ?></span> <span
                                                 id="InvoiceContactNumber"><?= $invData['contact_no'] ?></span></span>
                                         <br>
-                                        <span><span class="fw-bold"><?= $invData['cashier'] ?> Inv.</span> <span
-                                                class="fw-bolder" style="font-size: 10px;"
-                                                id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                                        <span><span class="fw-bold"><?= $invData['cashier'] ?> Inv.</span> <span class="fw-bolder"
+                                                style="font-size: 10px;" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
                                     </div>
                                 </div>
                             </div>
@@ -394,20 +386,18 @@ $totalValue = 0;
                                             <span class="productsAllTotal">VAS & delivery: <?= $vas_delivery ?></span>
                                         </div> -->
 
-                                        <div class="col-12 d-flex justify-content-start pt-2"
-                                            style="border-top: #0e0e0e 0.2rem solid;">
+                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-top: #0e0e0e 0.2rem solid;">
                                             <span class="productsAllTotal">Net Total : <?= $invData['total_amount'] ?></span>
                                         </div>
 
                                         <div class="col-12 d-flex justify-content-start pt-2">
                                             <span class="enterAmountFiled">Cash Amount :<?= $invData['paidAmount'] ?></span>
                                         </div>
-                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom: #0e0e0e 0.1rem solid;">
+                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
                                             <span class="enterAmountFiled">Card Amount :<?= $invData['cardPaidAmount'] ?></span>
                                         </div>
 
-                                        <div class="col-12 d-flex justify-content-start pt-2"
-                                            style="border-bottom: #0e0e0e 0.1rem solid;">
+                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
                                             <span class="balance">Balance : <?= $invData['balance'] ?></span>
                                         </div>
                                     </div>
@@ -430,8 +420,8 @@ $totalValue = 0;
                                     <div class="col-12 pt-2">
                                         <div class="row">
                                             <div class="col-12 d-flex justify-content-center text-center">
-                                                <span id="billnotepreview" style="font-size:9px;">THIS IS A RE-PRINTED OLD
-                                                    INVOICE</span>
+                                                <span id="billnotepreview"
+                                                    style="font-size:9px;">THIS IS A RE-PRINTED OLD INVOICE</span>
                                             </div>
                                         </div>
                                     </div>

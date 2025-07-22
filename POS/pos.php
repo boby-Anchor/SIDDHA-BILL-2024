@@ -246,62 +246,61 @@ if (!isset($_SESSION['store_id'])) {
                 <!-- products grid -->
                 <div class="row productGrid" id="productGrid">
                   <?php
-                  if (isset($_SESSION['store_id'])) {
+                  // if (isset($_SESSION['store_id'])) {
 
-                    $userLoginData = $_SESSION['store_id'];
+                  //   $userLoginData = $_SESSION['store_id'];
 
-                    foreach ($userLoginData as $userData) {
-                      $shop_id = $userData['shop_id'];
+                  //   foreach ($userLoginData as $userData) {
+                  //     $shop_id = $userData['shop_id'];
 
-                      $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
-                      medicine_unit.unit AS unit , unit_category_variation.ucv_name
-                      FROM stock2
-                      INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-                      INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                      INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                      INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                      WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0
-                      ORDER BY p_medicine.name ASC");
+                  //     $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
+                  //     medicine_unit.unit AS unit , unit_category_variation.ucv_name
+                  //     FROM stock2
+                  //     INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
+                  //     INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                  //     INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+                  //     INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                  //     WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0
+                  //     ORDER BY p_medicine.name ASC");
 
-                      if (!empty($cm)) {
-                        foreach ($cm as $v) {
-
+                  //     if (!empty($cm)) {
+                  //       foreach ($cm as $v) {
+                  // 
                   ?>
-                          <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
-                            <div class="product-grid h-100 rounded-lg">
-                              <div class="product-content">
-                                <div class="title"><?php echo $v['name'];
-                                                    ?>
-                                  <br>
-                                  <?php $v['code'];
-                                  ?>
-                                </div>
-                                <div class="sub-title">
-                                  <?php echo $v['bName'];
-                                  ?>
-                                </div>
-                                <div class="f-size item-price">
-                                  I:- RS
-                                  <?php echo $v['item_s_price'];
-                                  ?>
-                                </div>
-                                <div class="f-size unit-price">
-                                  U:- RS
-                                  <?php echo $v['unit_s_price'];
-                                  ?>
-                                </div>
-                                <div class="f-size">
-                                  (<?php $v['ucv_name']
-                                    ?><?php echo $v['unit'];
-                                      ?>)</div>
-                              </div>
-                            </div>
-                          </div>
-                  <?php
-                        }
-                      }
-                    }
-                  }
+                  <!-- //         <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
+                  //           <div class="product-grid h-100 rounded-lg">
+                  //             <div class="product-content">
+                  //               <div class="title"><?php //echo $v['name']; 
+                                                      ?>
+                  //                 <br>
+                  //                 <?php //$v['code']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="sub-title">
+                  //                 <?php //echo $v['bName']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="f-size item-price">
+                  //                 I:- RS
+                  //                 <?php // echo $v['item_s_price']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="f-size unit-price">
+                  //                 U:- RS
+                  //                 <?php //echo $v['unit_s_price']; 
+                                      ?>
+                  //               </div>
+                  //               <div class="f-size">
+                  //                 (<?php // $v['ucv_name'] 
+                                      ?><?php //echo $v['unit']; 
+                                        ?>)</div>
+                  //             </div>
+                  //           </div>
+                  //         </div> -->
+                  <?php // }
+                  //     }
+                  //   }
+                  // } 
                   ?>
 
                 </div>

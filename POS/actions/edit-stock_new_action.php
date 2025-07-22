@@ -2,6 +2,20 @@
 include('../config/db.php');
 session_start();
 
+try {
+    function printErrorLog($error_message)
+    {
+        $error_log_path = "error_log.txt";
+        file_put_contents($error_log_path, $error_message, FILE_APPEND);
+    }
+} catch (Exception $exception) {
+    echo json_encode(array(
+        'status' => 'error',
+        'message' => 'path Fatal Error. Contact IT Department',
+    ));
+    exit();
+}
+
 if (isset($_SESSION['store_id'])) {
     $userLoginData = $_SESSION['store_id'][0];
     $user_id = $userLoginData['id'] ?? null;
@@ -20,7 +34,6 @@ if (isset($_POST['products'])) {
 
     $errorOccurred = false;
     $notificationMessage = "";
-    $currentDateTime = date("Y-m-d H:i:s");
 
     if (is_array($poArray) && !empty($poArray)) {
 
@@ -58,7 +71,7 @@ if (isset($_POST['products'])) {
                             $notificationMessage .= "Success " . $product_name . " updated.\n";
                         } catch (Exception $exception) {
                             $errorOccurred = true;
-                            error_log($exception->getMessage());
+                            printErrorLog($exception->getMessage());
                             $notificationMessage .= "Failed " . $product_name . " stock UPDATE. Check error_log.\n";
                         }
                     } else {
@@ -68,21 +81,18 @@ if (isset($_POST['products'])) {
                             $notificationMessage .= "Success " . $product_name . " Inserted new stock.\n";
                         } catch (Exception $exception) {
                             $errorOccurred = true;
-                            $error_message = "Error: " . $conn->error . " " . $exception->getMessage() . "Stock data insert failed of Code-" . $product_code . ", Name-"
-                                . $product_name . " qty-" . $product_qty . " min qty-" . $minimum_qty . "\n";
-                            error_log($error_message);
+                            $error_message = "Error: " . $conn->error . " " . $exception->getMessage() . " " . $grn_number . "Stock data insert failed of Code-" . $product_code . ", Name-"
+                                . $product_name . " qty-" . $product_qty . " min qty-" . $minimum_qty . ' discount-' . $item_discount . ' unit price-' . $unit_s_price . ' total cost-' . $total_cost . ' free qty-' . $free_qty . "\n";
+                            printErrorLog($error_message);
                             $notificationMessage .= "Failed " . $product_name . " stock INSERT. Check error_log.\n";
                         }
                     }
-
-                    $conn->query("INSERT INTO audit_data (user_id, shop_id, barcode, item_name, qty, price, created)
-                                VALUES ('$user_id', '$shop_id','$barcode','$item_name','$qty', '$price', '$unit_s_price', '$shop_id','$currentDateTime')");
                 }
             }
         } catch (Exception $exception) {
             $errorOccurred = true;
             $error_message = "ERROR: " . $exception->getMessage() . "\n";
-            error_log($error_message);
+            printErrorLog($error_message);
             $notificationMessage .= $exception->getMessage();
         } finally {
             if ($errorOccurred) {

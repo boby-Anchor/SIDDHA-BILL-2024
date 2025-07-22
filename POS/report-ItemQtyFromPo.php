@@ -22,8 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ");
 }
 
-$userLoginData = $_SESSION['store_id'][0];
-$shop_id = $userLoginData['shop_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -92,13 +90,11 @@ $shop_id = $userLoginData['shop_id'];
                         <?php
                         $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
                         while ($shops_row = $shops_rs->fetch_assoc()) {
-                          if ($shop_id != $shops_row['shopId']) {
                         ?>
-                            <option value="<?= $shops_row['shopId'] ?>">
-                              <?= $shops_row['shopName'] ?>
-                            </option>
+                          <option value="<?= $shops_row['shopId'] ?>">
+                            <?= $shops_row['shopName'] ?>
+                          </option>
                         <?php
-                          }
                         }
                         ?>
                       </select>
@@ -175,24 +171,25 @@ $shop_id = $userLoginData['shop_id'];
   <!-- Data Table JS end -->
 
   <!-- Page specific script -->
+  <script>
+    $(function() {
+      $("#stockTable")
+        .DataTable({
+          responsive: true,
+          lengthChange: false,
+          autoWidth: false,
+          // aaSorting: [],
+          order: [
+            [2, 'desc']
+          ],
+          buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        })
+        .buttons()
+        .container()
+        .appendTo("#stockTable_wrapper .col-md-6:eq(0)");
+    });
+  </script>
+
 </body>
-<script>
-  $(function() {
-    $("#stockTable")
-      .DataTable({
-        responsive: true,
-        lengthChange: false,
-        autoWidth: false,
-        // aaSorting: [],
-        order: [
-          [2, 'desc']
-        ],
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
-      })
-      .buttons()
-      .container()
-      .appendTo("#stockTable_wrapper .col-md-6:eq(0)");
-  });
-</script>
 
 </html>
