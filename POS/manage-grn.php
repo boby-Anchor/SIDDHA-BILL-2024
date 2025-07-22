@@ -90,8 +90,8 @@ if (!isset($_SESSION['store_id'])) {
                                                                         <thead>
                                                                             <tr>
                                                                                 <th scope="col">#</th>
+                                                                                <th scope="col">Item Code</th>
                                                                                 <th scope="col">Item Name</th>
-                                                                                <th scope="col">brand</th>
                                                                                 <th scope="col">Qty</th>
                                                                                 <th scope="col">Free Qty</th>
                                                                                 <th scope="col">Item Price</th>
@@ -104,19 +104,12 @@ if (!isset($_SESSION['store_id'])) {
                                                                         <tbody>
                                                                             <?php
                                                                             $itemCount = 1;
-                                                                            $poItems_result = $conn->query("SELECT grn_item.*, p_brand.name AS brand, p_medicine.name AS item_name,
-                                                                            medicine_unit.unit AS unit, unit_category_variation.ucv_name AS ucv
-                                                                            FROM grn_item 
-                                                                            INNER JOIN p_medicine ON grn_item.grn_p_id = p_medicine.code
-                                                                            INNER JOIN p_brand ON p_medicine.brand = p_brand.id
-                                                                            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                                            INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
-                                                                            WHERE grn_number = '" . $grn_details_data["grn_number"] . "'");
+                                                                            $poItems_result = $conn->query("SELECT * FROM grn_item INNER JOIN p_medicine ON grn_item.grn_p_id = p_medicine.code WHERE grn_number = '" . $grn_details_data["grn_number"] . "'");
                                                                             while ($poItems_data = $poItems_result->fetch_array()) { ?>
                                                                                 <tr>
                                                                                     <td><?= $itemCount++ ?></td>
-                                                                                    <td><?= $poItems_data["item_name"] ?> (<?= $poItems_data["ucv"] . $poItems_data["unit"] ?>) </td>
-                                                                                    <td><?= $poItems_data["brand"] ?></td>
+                                                                                    <td><?= $poItems_data["grn_p_id"] ?></td>
+                                                                                    <td><?= $poItems_data["name"] ?></td>
                                                                                     <td><?= $poItems_data["grn_p_qty"] ?></td>
                                                                                     <td><?= $poItems_data["p_free_qty"] ?></td>
                                                                                     <td><?= number_format($poItems_data["grn_p_price"], 0) ?></td>
