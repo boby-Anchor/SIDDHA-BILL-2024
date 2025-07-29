@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
         WHERE DATE(invoiceDate) BETWEEN '$start_date' AND '$end_date'
         AND invoices.shop_id = '$shop_id'
-        GROUP BY invoiceItem, invoiceItem_price
+        GROUP BY barcode
         ORDER BY 'invoiceItem' ASC
       ");
 }

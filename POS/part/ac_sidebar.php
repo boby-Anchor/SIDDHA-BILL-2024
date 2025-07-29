@@ -89,10 +89,17 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
             <li class="nav-item">
-              <a href="report-ItemOutQtyInDateRange.php" class="nav-link">
+              <a href="report-weeklySalesCompare.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <i class=""></i>
-                <p>Item Sale Qty Compare In Date Range</p>
+                <p>Weekly Sale Compare</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="report-monthlySaleCompare.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <i class=""></i>
+                <p>Monthly Sale Compare</p>
               </a>
             </li>
             <li class="nav-item">

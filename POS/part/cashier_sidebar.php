@@ -166,7 +166,7 @@ $userId = $userLoginData[0]['id'];
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="dm-view.php" class="nav-link">
+                  <a href="report-dm-view.php" class="nav-link">
                     <i class="nav-icon fas fa-medkit"></i>
                     <p>Doc Med Report</p>
                   </a>

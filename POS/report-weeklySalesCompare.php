@@ -7,6 +7,22 @@ if (!isset($_SESSION['store_id'])) {
   include('config/db.php');
 }
 
+// Week 1
+$week1_start = "";
+$week1_end = "";
+
+// Week 2
+$week2_start = "";
+$week2_end = "";
+
+// Week 3
+$week3_start = "";
+$week3_end = "";
+
+// Week 4
+$week4_start = "";
+$week4_end = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $start_date = $_POST['start_date'];
@@ -29,14 +45,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $week4_start = date("Y-m-d", strtotime("+21 days", strtotime($start_date)));
   $week4_end = date("Y-m-d", strtotime("+27 days", strtotime($start_date)));
 
-  $sql = $conn->query("SELECT ii.barcode, ii.invoiceItem AS item_name,
+  $sql = $conn->query("SELECT ii.barcode, ii.invoiceItem AS item_name, ii.invoiceItem_price AS item_price,
   SUM(CASE WHEN i.created BETWEEN '$week1_start' AND '$week1_end' THEN ii.invoiceItem_qty ELSE 0 END) AS week_1_total_quantity,
   SUM(CASE WHEN i.created BETWEEN '$week2_start' AND '$week2_end' THEN ii.invoiceItem_qty ELSE 0 END) AS week_2_total_quantity,
   SUM(CASE WHEN i.created BETWEEN '$week3_start' AND '$week3_end' THEN ii.invoiceItem_qty ELSE 0 END) AS week_3_total_quantity,
   SUM(CASE WHEN i.created BETWEEN '$week4_start' AND '$week4_end' THEN ii.invoiceItem_qty ELSE 0 END) AS week_4_total_quantity
   FROM invoices i
   JOIN invoiceitems ii ON i.invoice_id = ii.invoiceNumber
-  WHERE i.created BETWEEN '$week1_start' AND '$week4_end' GROUP BY ii.barcode, ii.invoiceItem ORDER BY ii.invoiceItem;
+  WHERE ii.barcode IS NOT NULL AND ii.barcode != '' AND ii.invoiceItem_price > 0 AND i.created BETWEEN '$week1_start' AND '$week4_end'
+  GROUP BY ii.barcode, ii.invoiceItem, ii.invoiceItem_price
   ");
 }
 
@@ -47,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pharmacy</title>
+  <title>Weekly Sale Compare</title>
 
   <!-- Data Table CSS -->
   <?php include("part/data-table-css.php"); ?>
@@ -78,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Card start -->
             <div class="card bg-dark">
               <div class="card-header">
-                <h1>Total Item Qty From Po</h1>
+                <h1>Weekly Sale Compare</h1>
                 <div class="border-top mb-3"></div>
                 <!-- Form start -->
                 <form method="POST" id="filterForm">
@@ -139,10 +156,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tr class="bg-info">
                   <th>Barcode</th>
                   <th>Product</th>
-                  <th>Week 1 Sale</th>
-                  <th>Week 2 Sale</th>
-                  <th>Week 3 Sale</th>
-                  <th>Week 4 Sale</th>
+                  <th>Price</th>
+                  <th>Week 1 Sale <?= isset($_POST['start_date']) ? $week1_start . " - " . $week1_end : '' ?></th>
+                  <th>Week 2 Sale <?= isset($_POST['start_date']) ? $week2_start . " - " . $week2_end : ''  ?></th>
+                  <th>Week 3 Sale <?= isset($_POST['start_date']) ? $week3_start . " - " . $week3_end : '' ?></th>
+                  <th>Week 4 Sale <?= isset($_POST['start_date']) ? $week4_start . " - " . $week4_end : '' ?></th>
                 </tr>
               </thead>
               <tbody>
@@ -157,6 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       <tr>
                         <td> <?= $row['barcode']; ?></td>
                         <td> <?= $row['item_name']; ?></td>
+                        <td> <?= $row['item_price']; ?></td>
                         <td> <?= $row['week_1_total_quantity']; ?></td>
                         <td> <?= $row['week_2_total_quantity']; ?></td>
                         <td> <?= $row['week_3_total_quantity']; ?></td>
