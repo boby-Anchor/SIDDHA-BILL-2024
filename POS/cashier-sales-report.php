@@ -34,6 +34,35 @@ if (!isset($_SESSION['store_id'])) {
             font-weight: bold;
             color: #3E8F0C;
         }
+
+        .bg-purple {
+            background-color: #6f42c1 !important;
+        }
+
+        .card {
+            border-radius: 0.5rem;
+            border: none;
+        }
+
+        .card-header {
+            border-bottom: 1px solid rgba(0, 0, 0, .05);
+        }
+
+        .table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .totalAmount {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
     </style>
 
 </head>
@@ -69,13 +98,13 @@ if (!isset($_SESSION['store_id'])) {
                     $shop_id = $userData['shop_id'];
                     $user_id = $userData['id'];
             ?>
-                    <section class="content">
+                    <section class="content py-4">
                         <div class="container-fluid">
-
-                            <div class="row">
+                            <!-- Filter Card -->
+                            <div class="row mb-4">
                                 <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-header">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body">
                                             <form method="POST" id="filterForm">
                                                 <div class="row g-3 align-items-center">
                                                     <div class="col-auto">
@@ -99,78 +128,130 @@ if (!isset($_SESSION['store_id'])) {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div id="totalValuesFilterData" class="col-12">
-                                    <div class="card">
+                            <!-- Summary Cards -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card shadow-sm">
                                         <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="card card-body bg-success">
-                                                        <h2 class="text-white text-uppercase">Sell Amount</h2>
-                                                        <p id="totalSale" class="totalAmount"></p>
-                                                        <p class="totalAmount">LKR</p>
+                                            <div class="row g-3">
+                                                <!-- Sell Amount -->
+                                                <div class="col-md-6 col-lg-2">
+                                                    <div class="card bg-success text-white h-100 shadow">
+                                                        <div class="card-body text-center py-4">
+                                                            <i class="fas fa-shopping-cart fa-2x mb-3"></i>
+                                                            <h5 class="card-title text-uppercase mb-3">Sell Amount</h5>
+                                                            <h2 id="totalSale" class="mb-1 fw-bold">0.00</h2>
+                                                            <small class="opacity-75">LKR</small>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="card card-body bg-info">
-                                                        <h2 class="text-white text-uppercase">Cash Payments</h2>
-                                                        <p id="totalCash" class="totalAmount"></p>
-                                                        <p class="totalAmount"> LKR</p>
+
+                                                <!-- Invoice Total -->
+                                                <div class="col-md-6 col-lg-2">
+                                                    <div class="card bg-purple text-white h-100 shadow">
+                                                        <div class="card-body text-center py-4">
+                                                            <i class="fas fa-file-invoice-dollar fa-2x mb-3"></i>
+                                                            <h5 class="card-title text-uppercase mb-3">Invoice Total</h5>
+                                                            <h2 id="totalInvoice" class="mb-1 fw-bold">0.00</h2>
+                                                            <small class="opacity-75">LKR</small>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="card card-body bg-primary">
-                                                        <h2 class="text-white text-uppercase">Card Payments</h2>
-                                                        <p id="totalCard" class="totalAmount"></p>
-                                                        <p class="totalAmount"> LKR</p>
+
+                                                <!-- Cash Payments -->
+                                                <div class="col-md-6 col-lg-2">
+                                                    <div class="card bg-info text-white h-100 shadow">
+                                                        <div class="card-body text-center py-4">
+                                                            <i class="fas fa-money-bill-wave fa-2x mb-3"></i>
+                                                            <h5 class="card-title text-uppercase mb-3">Cash Payments</h5>
+                                                            <h2 id="totalCash" class="mb-1 fw-bold">0.00</h2>
+                                                            <small class="opacity-75">LKR</small>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="card card-body bg-danger">
-                                                        <h2 class="text-white text-uppercase">Cash Out</h2>
-                                                        <p id="totalOut" class="totalAmount"></p>
-                                                        <p class="totalAmount"> LKR</p>
+
+                                                <!-- Card Payments -->
+                                                <div class="col-md-6 col-lg-2">
+                                                    <div class="card bg-primary text-white h-100 shadow">
+                                                        <div class="card-body text-center py-4">
+                                                            <i class="fas fa-credit-card fa-2x mb-3"></i>
+                                                            <h5 class="card-title text-uppercase mb-3">Card Payments</h5>
+                                                            <h2 id="totalCard" class="mb-1 fw-bold">0.00</h2>
+                                                            <small class="opacity-75">LKR</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Cash Out -->
+                                                <div class="col-md-6 col-lg-2">
+                                                    <div class="card bg-danger text-white h-100 shadow">
+                                                        <div class="card-body text-center py-4">
+                                                            <i class="fas fa-sign-out-alt fa-2x mb-3"></i>
+                                                            <h5 class="card-title text-uppercase mb-3">Cash Out</h5>
+                                                            <h2 id="totalOut" class="mb-1 fw-bold">0.00</h2>
+                                                            <small class="opacity-75">LKR</small>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
+                            <!-- Data Table -->
+                            <div class="row">
                                 <div class="col-12">
-                                    <div class="card">
+                                    <div class="card shadow-sm">
+                                        <div class="card-header bg-light">
+                                            <h5 class="card-title mb-0 text-dark">
+                                                <i class="fas fa-table me-2"></i>Sales Details
+                                            </h5>
+                                        </div>
                                         <div class="card-body">
-                                            <!-- <button class="no-print btn btn-primary" onclick="window.print()">Print Table</button> -->
-                                            <table class="table table-hover table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Invoice Number</th>
-                                                        <th>Patient Name</th>
-                                                        <th>REG Number</th>
-                                                        <th>Contact No.</th>
-                                                        <th>Doctor Name</th>
-                                                        <th>Total Amount</th>
-                                                        <th>Paid Amount</th>
-                                                        <th>Payment Type</th>
-                                                        <th>Bill Type</th>
-                                                        <th>Chashier</th>
-                                                        <th>Shop</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="saleInvoiceData">
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr class="bg-dark">
-                                                        <td colspan="8" class="fw-bold" style="font-size:larger;">Total Sales</td>
-                                                        <td colspan="3" id="totalSales" class="fw-bold text-right" style="font-size:larger;"><?php //number_format($result['total_amount'], 2); 
-                                                                                                                                                ?> LKR</td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-striped table-bordered">
+                                                    <thead class="table-dark">
+                                                        <tr>
+                                                            <th>Invoice #</th>
+                                                            <th>Patient Name</th>
+                                                            <th>REG Number</th>
+                                                            <th>Contact No.</th>
+                                                            <th>Doctor Name</th>
+                                                            <th>Total Amount</th>
+                                                            <th>Paid Amount</th>
+                                                            <th>Payment Type</th>
+                                                            <th>Bill Type</th>
+                                                            <th>Cashier</th>
+                                                            <th>Shop</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="saleInvoiceData" class="align-middle">
+                                                        <!-- Data will be inserted here -->
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr class="bg-dark text-white">
+                                                            <td colspan="8" class="fw-bold fs-5">TOTAL SALES</td>
+                                                            <td colspan="3" id="totalSales" class="fw-bold fs-5 text-end">0.00 LKR</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-light">
+                                            <button class="btn btn-outline-primary me-2">
+                                                <i class="fas fa-file-excel me-2"></i>Export to Excel
+                                            </button>
+                                            <button class="btn btn-outline-secondary" onclick="window.print()">
+                                                <i class="fas fa-print me-2"></i>Print Report
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </section>
             <?php
                 }
@@ -223,20 +304,18 @@ if (!isset($_SESSION['store_id'])) {
                     sortDates: JSON.stringify(sortDates),
                 },
                 success: function(response) {
+                    var invoice_total = 0;
 
                     var result = JSON.parse(response);
 
                     if (result.status === 'success') {
 
-                        $("#totalSale").text(result.sellAmount);
-                        // $("#totalSales").text(result.sellAmount);
-                        $("#totalCash").text(result.cashpayment);
-                        $("#totalCard").text(result.cardPayment);
-                        $("#totalOut").text(result.cashOut);
-
                         $('#saleInvoiceData').empty();
 
                         result.tableData.forEach(function(item) {
+
+                            invoice_total += (1 - (item.discount_percentage / 100)) * item.total_amount;
+
                             var row = '<tr>' +
                                 '<td><lable class="labInvo">' + item.invoice_id + '</lable> <br> ' + item.created + '</td>' +
                                 '<td>' + item.p_name + '</td>' +
@@ -253,6 +332,13 @@ if (!isset($_SESSION['store_id'])) {
                             // $('#saleInvoiceData').append(row);
                             document.getElementById('saleInvoiceData').insertAdjacentHTML('beforeend', row);
                         });
+
+                        $("#totalSale").text(result.sellAmount);
+                        // $("#totalSales").text(result.sellAmount);
+                        $("#totalCash").text(result.cashpayment);
+                        $("#totalCard").text(result.cardPayment);
+                        $("#totalOut").text(result.cashOut);
+                        $("#totalInvoice").text(Number(invoice_total).toLocaleString());
 
                     } else {
                         alert('response failed');
