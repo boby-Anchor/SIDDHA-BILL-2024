@@ -39,6 +39,7 @@ if (is_array($itemData) && !empty($itemData)) {
         $isPaththu = $product['isPaththu'];
         // $product_code = isset($product['code']) ? $product['code'] : '';
         $product_name = isset($product['product_name']) ? $product['product_name'] : '';
+        $product_brand = isset($product['product_brand']) ? $product['product_brand'] : '';
         $product_cost = isset($product['product_cost']) ? $product['product_cost'] : '';
         $product_qty = isset($product['product_qty']) ? $product['product_qty'] : '';
         $product_unit = isset($product['product_unit']) ? $product['product_unit'] : '';
@@ -50,6 +51,8 @@ if (is_array($itemData) && !empty($itemData)) {
                 <div class="row">
                     <div class="col-12">
                         <span class="product_name"><?= $product_name ?></span>
+                        <br/>
+                        <span class="product_brand"><?= $product_brand ?></span>
                     </div>
                     <div class="col-4">
                         <span class="product_cost"><?= $product_cost ?></span>

@@ -26,10 +26,21 @@ if (isset($_GET['barcode'])) {
         foreach ($userLoginData as $userData) {
             $shop_id = $userData['shop_id'];
 
-            $barcodeResult = $conn->query("SELECT * FROM stock2
+            $barcodeResult = $conn->query("SELECT 
+            stock2.item_s_price AS item_s_price,
+            stock2.unit_s_price AS unit_s_price,
+            stock2.stock_item_cost AS stock_item_cost,
+            p_medicine.id AS id,
+            p_medicine.code AS code,
+            p_medicine.name AS name,
+            unit_category_variation.ucv_name AS ucv_name,
+            p_brand.name AS brand,
+            medicine_unit.unit AS unit
+            FROM stock2
             INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
             INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
             INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+            INNER JOIN p_brand ON p_medicine.brand = p_brand.id
             WHERE stock_shop_id = '$shop_id' AND stock2.stock_id = '$barcode' ");
             if ($barcodeResult->num_rows > 0) {
 
@@ -61,6 +72,7 @@ if (isset($_GET['barcode'])) {
                             <td id="ucv" class="d-none"><?= $barcodeData['ucv_name'] ?></td>
                             <td id="item_price" class="d-none"><?= $barcodeData['item_s_price'] ?></td>
                             <td id="unit_price" class="d-none"><?= $barcodeData['unit_s_price'] ?></td>
+                            <td id="brand" class="d-none"><?= $barcodeData['brand'] ?></td>
 
                             <td id="product_name"><?= $barcodeData['name'] ?></td>
                             <td id="product_price"><?= $barcodeData['item_s_price'] ?></td>
@@ -100,6 +112,7 @@ if (isset($_GET['barcode'])) {
                             <td id="ucv" class="d-none"><?= $barcodeData['ucv_name'] ?></td>
                             <td id="item_price" class="d-none"><?= $barcodeData['item_s_price'] ?></td>
                             <td id="unit_price" class="d-none"><?= $barcodeData['unit_s_price'] ?></td>
+                            <td id="brand" class="d-none"><?= $barcodeData['brand'] ?></td>
 
                             <td id="product_name"><?= $barcodeData['name'] ?></td>
                             <td id="product_price"><?= $barcodeData['unit_s_price'] ?></td>

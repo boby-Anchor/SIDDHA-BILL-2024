@@ -533,7 +533,6 @@ function printInvoice() {
 }
 
 function dataCheck() {
-    console.log("in data check");
 
     var itemData = [];
     var paththuTotal = parseFloat($("#paththuTotal").text());
@@ -548,6 +547,7 @@ function dataCheck() {
         var item_price = $(this).find("#item_price").text();
         var unit_price = $(this).find("#unit_price").text();
         var product_name = $(this).find("#product_name").text();
+        var product_brand = $(this).find("#brand").text();
         var product_cost = parseFloat($(this).find("#product_price").text());
         var product_qty = parseInt($(this).find("#qty").val());
         var product_unit = $(this).find("#unit").text();
@@ -569,6 +569,7 @@ function dataCheck() {
             item_price: item_price,
             unit_price: unit_price,
             product_name: product_name,
+            product_brand: product_brand,
             product_cost: product_cost,
             product_qty: product_qty,
             product_unit: product_unit,
@@ -721,7 +722,7 @@ function checkout(itemData) {
 
 function issetInvoiceNumber() {
     getInvoiceNumber()
-        .then(function (response) {})
+        .then(function (response) { })
         .catch(function (xhr) {
             console.error(xhr.responseText);
             ErrorMessageDisplay(xhr.responseText);
