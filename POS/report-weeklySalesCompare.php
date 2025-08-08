@@ -156,6 +156,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tr class="bg-info">
                   <th>Barcode</th>
                   <th>Product</th>
+                  <th>Brand</th>
+                  <th>Unit</th>
                   <th>Price</th>
                   <th>Week 1 Sale <?= isset($_POST['start_date']) ? $week1_start . " - " . $week1_end : '' ?></th>
                   <th>Week 2 Sale <?= isset($_POST['start_date']) ? $week2_start . " - " . $week2_end : ''  ?></th>
@@ -168,13 +170,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (isset($_POST['start_date'])) {
                   if (isset($sql)) {
                     while ($row = mysqli_fetch_assoc($sql)) {
-                      // $item_price = $row['invoiceItem_price'];
-                      // $total_qty = $row['total_qty'];
-                      // $total_price = $item_price * $total_qty;
+                      $barcode = $row['barcode'];
+
+                      $p_data_sql = $conn->query("SELECT mu.unit AS unit, ucv.ucv_name AS volume, pb.name AS brand
+                      from p_medicine pm
+                      JOIN p_brand pb ON pm.brand = pb.id
+                      JOIN unit_category_variation ucv ON ucv.ucv_id = pm.unit_variation
+                      JOIN medicine_unit mu ON mu.id = pm.medicine_unit_id
+                      WHERE pm.code = '$barcode'
+                      ");
+                      $p_data_row = mysqli_fetch_assoc($p_data_sql);
+                      $volume = $p_data_row["volume"];
+                      $unit = $p_data_row["unit"];
+                      $brand = $p_data_row["brand"];
                 ?>
                       <tr>
-                        <td> <?= $row['barcode']; ?></td>
+                        <td> <?= $barcode; ?></td>
                         <td> <?= $row['item_name']; ?></td>
+                        <td> <?= $brand; ?></td>
+                        <td> <?= $volume . $unit ?></td>
                         <td> <?= $row['item_price']; ?></td>
                         <td> <?= $row['week_1_total_quantity']; ?></td>
                         <td> <?= $row['week_2_total_quantity']; ?></td>
