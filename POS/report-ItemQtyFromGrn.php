@@ -9,17 +9,27 @@ if (!isset($_SESSION['store_id'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  $start_date = $_POST['start_date'];
-  $end_date = $_POST['end_date'];
+  $start_date = date("Y-m-d 00:00:00", strtotime($_POST['start_date']));
+  $end_date = date("Y-m-d 23:59:59", strtotime($_POST['end_date']));
 
-  $sql = $conn->query("SELECT SUM(gi.grn_p_qty) AS total_quantity, pm.code AS code, pm.name AS name, gi.grn_p_price AS item_price
-  FROM grn g
-  JOIN grn_item gi ON g.grn_number = gi.grn_number
-  LEFT JOIN p_medicine pm ON gi.grn_p_id = pm.code
-  WHERE g.grn_date BETWEEN '$start_date' AND '$end_date' AND grn_shop_id ='1'
-  GROUP BY gi.grn_p_id");
+  $sql = $conn->query("  SELECT
+            SUM(gi.grn_p_qty) AS total_quantity, 
+            pm.code AS code, 
+            pm.name AS name, 
+            gi.grn_p_price AS item_price,
+            pb.name AS brand,
+            ucv.ucv_name AS volume,
+            mu.unit AS unit
+        FROM grn g
+        JOIN grn_item gi ON g.grn_number = gi.grn_number
+        LEFT JOIN p_medicine pm ON gi.grn_p_id = pm.code
+        LEFT JOIN p_brand pb ON pm.brand = pb.id
+        LEFT JOIN unit_category_variation ucv ON ucv.ucv_id = pm.unit_variation
+        LEFT JOIN medicine_unit mu ON mu.id = pm.medicine_unit_id
+        WHERE g.grn_date BETWEEN '$start_date' AND '$end_date'
+          AND g.grn_shop_id = '1'
+        GROUP BY gi.grn_p_id");
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pharmacy</title>
+  <title>
+    Qty from GRN
+    <?php
+    if (isset($_POST["start_date"])) {
+      echo ("Between " . date("Y M d", strtotime($start_date)) . " And " . date("Y M d", strtotime($end_date)));
+    }
+    ?>
+  </title>
 
   <!-- Data Table CSS -->
   <?php include("part/data-table-css.php"); ?>
@@ -58,7 +75,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card bg-dark">
               <!-- Card Header start -->
               <div class="card-header">
-                <h1>Total Item Qty From Grn</h1>
+                <h1>
+                  Total Item Qty From Grn
+                  <?php
+                  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    echo "Between " . $_POST['start_date'] . " and " . $_POST['end_date'];
+                  }
+                  ?>
+                </h1>
                 <div class="border-top mb-3"></div>
                 <!-- Form start -->
                 <form method="POST" id="filterForm">
@@ -97,6 +121,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tr class="bg-info">
                   <th>Barcode</th>
                   <th>Product</th>
+                  <th>Brand</th>
+                  <th>Unit</th>
                   <th>Qty</th>
                   <th>Item Price</th>
                   <th>Total Value</th>
@@ -120,6 +146,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       <tr>
                         <td> <?= $row['code']; ?></td>
                         <td> <?= $row['name']; ?></td>
+                        <td> <?= $row['brand']; ?></td>
+                        <td><?= $row['volume'] . $row['unit']; ?> </td>
                         <td> <?= number_format($total_qty, 0)  ?> </td>
                         <td> <?= number_format($item_price, 0) ?> </td>
                         <td> <?= number_format($total_price, 0) ?> </td>
@@ -132,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </tbody>
               <tfoot>
                 <tr class="bg-blue">
-                  <td colspan="4">Total</td>
+                  <td colspan="6">Total</td>
                   <td> <?= number_format($fullTotal, 0); ?></td>
                 </tr>
               </tfoot>
@@ -170,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           autoWidth: false,
           // aaSorting: [],
           order: [
-            [2, 'desc']
+            [1, 'asc']
           ],
           buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
         })

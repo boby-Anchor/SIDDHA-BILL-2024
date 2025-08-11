@@ -9,16 +9,41 @@ if (!isset($_SESSION['store_id'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  $start_date = $_POST['start_date'];
-  $end_date = $_POST['end_date'];
+  $start_date = date("Y-m-d 00:00:00", strtotime($_POST['start_date']));
+  $end_date = date("Y-m-d 23:59:59", strtotime($_POST['end_date']));
   $po_shop = $_POST['po_shop'];
 
-  $sql = $conn->query("SELECT invoiceItem, invoiceItem_price, item_code,
-  SUM(invoiceItem_qty) AS total_qty
-  FROM poinvoiceitems
-  INNER JOIN poinvoices ON poinvoiceitems.invoiceNumber = poinvoices.invoice_id
-  WHERE poinvoices.created BETWEEN '$start_date' AND '$end_date' AND poinvoices.po_shop_id = '$po_shop'
-  GROUP BY invoiceItem
+  $sql = $conn->query("SELECT 
+    poi.invoiceItem,
+    poi.invoiceItem_price,
+    poi.item_code,
+    SUM(poi.invoiceItem_qty) AS total_qty,
+    ucv.ucv_name AS volume,
+    mu.unit AS unit,
+    pb.name AS brand
+FROM (
+    SELECT invoice_id
+    FROM poinvoices
+    WHERE created BETWEEN '$start_date' AND '$end_date'
+      AND po_shop_id = '$po_shop'
+) AS po
+JOIN poinvoiceitems AS poi 
+    ON poi.invoiceNumber = po.invoice_id
+JOIN p_medicine AS pm 
+    ON poi.item_code = pm.code
+JOIN unit_category_variation AS ucv 
+    ON pm.unit_variation = ucv.ucv_id
+JOIN medicine_unit AS mu 
+    ON ucv.p_unit_id = mu.id
+JOIN p_brand AS pb 
+    ON pm.brand = pb.id
+GROUP BY 
+    poi.invoiceItem,
+    poi.invoiceItem_price,
+    poi.item_code,
+    ucv.ucv_name,
+    mu.unit,
+    pb.name
   ");
 }
 
@@ -29,7 +54,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pharmacy</title>
+  <title>
+    Qty from PO
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      echo "Between " . $_POST['start_date'] . " and " . $_POST['end_date'];
+    } else {
+      echo "";
+    }
+    ?>
+  </title>
+
 
   <!-- Data Table CSS -->
   <?php include("part/data-table-css.php"); ?>
@@ -60,7 +95,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Card start -->
             <div class="card bg-dark">
               <div class="card-header">
-                <h1>Total Item Qty From Po</h1>
+                <h1>
+                  Total Item Qty From Po
+                  <?php
+                  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    echo "Between " . $_POST['start_date'] . " and " . $_POST['end_date'];
+                  }
+                  ?>
+                </h1>
                 <div class="border-top mb-3"></div>
                 <!-- Form start -->
                 <form method="POST" id="filterForm">
@@ -118,6 +160,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tr class="bg-info">
                   <th>Barcode</th>
                   <th>Product</th>
+                  <th>Brand</th>
+                  <th>Unit</th>
                   <th>Qty</th>
                   <th>Item Price</th>
                   <th>Total Value</th>
@@ -135,6 +179,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       <tr>
                         <td> <?= $row['item_code']; ?></td>
                         <td> <?= $row['invoiceItem']; ?></td>
+                        <td> <?= $row['brand']; ?></td>
+                        <td> <?= $row['volume']; ?> <?= $row['unit']; ?></td>
                         <td> <?= number_format($total_qty, 0)  ?> </td>
                         <td> <?= number_format($item_price, 0) ?> </td>
                         <td> <?= number_format($total_price, 0) ?> </td>
@@ -180,7 +226,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           autoWidth: false,
           // aaSorting: [],
           order: [
-            [2, 'desc']
+            [1, 'asc']
           ],
           buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
         })
