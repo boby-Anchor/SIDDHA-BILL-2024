@@ -29,21 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // $end_date = $_POST['end_date'];
   // $po_shop = $_POST['po_shop'];
 
-  // Week 1
-  $week1_start = date("Y-m-d", strtotime($start_date));
-  $week1_end = date("Y-m-d", strtotime("+6 days", strtotime($start_date)));
+  $week1_start = date("Y-m-d 00:00:00", strtotime($start_date));
+  $week1_end = date("Y-m-d 23:59:59", strtotime("+6 days", strtotime($start_date)));
 
-  // Week 2
-  $week2_start = date("Y-m-d", strtotime("+7 days", strtotime($start_date)));
-  $week2_end = date("Y-m-d", strtotime("+13 days", strtotime($start_date)));
+  $week2_start = date("Y-m-d 00:00:00", strtotime("+7 days", strtotime($start_date)));
+  $week2_end = date("Y-m-d 23:59:59", strtotime("+13 days", strtotime($start_date)));
 
-  // Week 3
-  $week3_start = date("Y-m-d", strtotime("+14 days", strtotime($start_date)));
-  $week3_end = date("Y-m-d", strtotime("+20 days", strtotime($start_date)));
+  $week3_start = date("Y-m-d 00:00:00", strtotime("+14 days", strtotime($start_date)));
+  $week3_end = date("Y-m-d 23:59:59", strtotime("+20 days", strtotime($start_date)));
 
-  // Week 4
-  $week4_start = date("Y-m-d", strtotime("+21 days", strtotime($start_date)));
-  $week4_end = date("Y-m-d", strtotime("+27 days", strtotime($start_date)));
+  $week4_start = date("Y-m-d 00:00:00", strtotime("+21 days", strtotime($start_date)));
+  $week4_end = date("Y-m-d 23:59:59", strtotime("+27 days", strtotime($start_date)));
 
   $sql = $conn->query("SELECT ii.barcode, ii.invoiceItem AS item_name, ii.invoiceItem_price AS item_price,
   SUM(CASE WHEN i.created BETWEEN '$week1_start' AND '$week1_end' THEN ii.invoiceItem_qty ELSE 0 END) AS week_1_total_quantity,
@@ -52,7 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   SUM(CASE WHEN i.created BETWEEN '$week4_start' AND '$week4_end' THEN ii.invoiceItem_qty ELSE 0 END) AS week_4_total_quantity
   FROM invoices i
   JOIN invoiceitems ii ON i.invoice_id = ii.invoiceNumber
-  WHERE ii.barcode IS NOT NULL AND ii.barcode != '' AND ii.invoiceItem_price > 0 AND i.created BETWEEN '$week1_start' AND '$week4_end'
+  WHERE ii.barcode IS NOT NULL AND ii.barcode != '' AND ii.invoiceItem_price > 0
+  AND i.created BETWEEN '$week1_start' AND '$week4_end'
   GROUP BY ii.barcode, ii.invoiceItem, ii.invoiceItem_price
   ");
 }
@@ -64,7 +61,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Weekly Sale Compare</title>
+  <title>
+    Weekly Sale Compare
+    <?php
+    if (isset($_POST["start_date"])) {
+      echo ("Between" . date("Y M d", strtotime($week1_start)) . " And " . date("Y M d", strtotime($week4_end)));
+    }
+    ?>
+  </title>
 
   <!-- Data Table CSS -->
   <?php include("part/data-table-css.php"); ?>
@@ -95,7 +99,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Card start -->
             <div class="card bg-dark">
               <div class="card-header">
-                <h1>Weekly Sale Compare</h1>
+                <h1>
+                  Weekly Sale Compare
+                  <?php
+                  if (isset($_POST["start_date"])) {
+                    echo ("Between" . date("Y M d", strtotime($week1_start)) . " And " . date("Y M d", strtotime($week4_end)));
+                  }
+                  ?>
+                </h1>
                 <div class="border-top mb-3"></div>
                 <!-- Form start -->
                 <form method="POST" id="filterForm">
@@ -159,10 +170,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <th>Brand</th>
                   <th>Unit</th>
                   <th>Price</th>
-                  <th>Week 1 Sale <?= isset($_POST['start_date']) ? $week1_start . " - " . $week1_end : '' ?></th>
-                  <th>Week 2 Sale <?= isset($_POST['start_date']) ? $week2_start . " - " . $week2_end : ''  ?></th>
-                  <th>Week 3 Sale <?= isset($_POST['start_date']) ? $week3_start . " - " . $week3_end : '' ?></th>
-                  <th>Week 4 Sale <?= isset($_POST['start_date']) ? $week4_start . " - " . $week4_end : '' ?></th>
+                  <th>Week 1 Sale <?= isset($_POST['start_date']) ? date("Y M d", strtotime($week1_start)) . " - " . date("Y M d", strtotime($week1_end)) : '' ?></th>
+                  <th>Week 2 Sale <?= isset($_POST['start_date']) ? date("Y M d", strtotime($week2_start)) . " - " . date("Y M d", strtotime($week2_end)) : ''  ?></th>
+                  <th>Week 3 Sale <?= isset($_POST['start_date']) ? date("Y M d", strtotime($week3_start)) . " - " . date("Y M d", strtotime($week3_end)) : '' ?></th>
+                  <th>Week 4 Sale <?= isset($_POST['start_date']) ? date("Y M d", strtotime($week4_start)) . " - " . date("Y M d", strtotime($week4_end)) : '' ?></th>
                 </tr>
               </thead>
               <tbody>
