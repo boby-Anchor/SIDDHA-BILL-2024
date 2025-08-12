@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     Weekly Sale Compare
     <?php
     if (isset($_POST["start_date"])) {
-      echo ("Between" . date("Y M d", strtotime($week1_start)) . " And " . date("Y M d", strtotime($week4_end)));
+      echo ("Between " . date("Y M d", strtotime($week1_start)) . " And " . date("Y M d", strtotime($week4_end)));
     }
     ?>
   </title>

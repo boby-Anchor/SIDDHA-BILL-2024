@@ -7,6 +7,8 @@ if (!isset($_SESSION['store_id'])) {
     include('config/db.php');
 }
 
+$shop_name = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $start_date = $_POST['start_date'];
@@ -29,16 +31,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $threeMonthsAgoStart = date("Y-m-$startDay", strtotime("first day of -3 months", strtotime($start_date)));
     $threeMonthsAgoEnd = date("Y-m-$endDay", strtotime("first day of -3 months", strtotime($end_date)));
 
-    $thisMonthData = $conn->query("SELECT invoiceItem, invoiceItem_unit, invoiceItem_price,
-        SUM(invoiceItem_qty) AS this_month_total_qty
-        FROM
-        invoiceitems
-        INNER JOIN invoices ON invoices.invoice_id = invoiceitems.invoiceNumber
-        WHERE DATE(invoiceDate) BETWEEN '$start_date' AND '$end_date'
-        AND invoices.shop_id = '$shop_id'
-        GROUP BY barcode
-        ORDER BY 'invoiceItem' ASC
-      ");
+    $thisMonthData;
+
+    $sql = "
+    SELECT invoiceItem, invoiceItem_unit, invoiceItem_price,
+           SUM(invoiceItem_qty) AS this_month_total_qty
+    FROM invoiceitems
+    INNER JOIN invoices 
+        ON invoices.invoice_id = invoiceitems.invoiceNumber
+    WHERE DATE(invoiceDate) BETWEEN '$start_date' AND '$end_date'
+    ";
+
+    if ($shop_id != 0) {
+        $sql .= " AND invoices.shop_id = '$shop_id'";
+    }
+
+    $sql .= " GROUP BY barcode ORDER BY invoiceItem ASC";
+
+    $thisMonthData = $conn->query($sql);
+
+    $shop_name = " Of All shops";
+
+    if ($shop_id != 0) {
+        $shop_name_data = $conn->query("SELECT shopName FROM shop WHERE shopId = '$shop_id'");
+        if ($shop_row = $shop_name_data->fetch_assoc()) {
+            $shop_name = " Of " . $shop_row['shopName'];
+        }
+    }
 }
 
 ?>
@@ -48,7 +67,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pharmacy</title>
+    <title>
+        Monthly Items Sale Qty Compare
+        <?= $shop_name ?>
+    </title>
 
     <!-- Data Table CSS -->
     <?php include("part/data-table-css.php"); ?>
@@ -79,18 +101,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <!-- Card start -->
                         <div class="card bg-dark">
                             <div class="card-header">
-                                <?php
-                                if (isset($_POST['start_date'])) {
-                                    $shop_name = '';
-                                    $shop_name_data = $conn->query("SELECT shopName FROM shop WHERE shopId = '$shop_id'");
-                                    if ($shop_row = $shop_name_data->fetch_assoc()) {
-                                        $shop_name = $shop_row['shopName'];
-                                    }
-                                    echo "<h1>Total Item Sales Qty of " . htmlspecialchars($shop_name, ENT_QUOTES, 'UTF-8') . "</h1>";
-                                } else {
-                                    echo "<h1>Total Item Sales Qty</h1>";
-                                }
-                                ?>
+                                <h1>
+                                    Monthly Items Sale Qty Compare
+                                    <?= $shop_name ?>
+                                </h1>
                                 <div class="border-top mb-3"></div>
                                 <!-- Form start -->
                                 <form method="POST" id="filterForm">
@@ -117,6 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <div class="col-auto">
                                             <select name="shop_id" id="shop_id" class="form-control" required>
                                                 <option value="select_shop" disabled selected hidden>Select Shop</option>
+                                                <option value="0">All shops </option>
                                                 <?php
                                                 $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
                                                 while ($shops_row = $shops_rs->fetch_assoc()) {
