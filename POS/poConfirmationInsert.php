@@ -7,20 +7,6 @@ $productsAllTotal = 0;
 $message = "";
 
 try {
-    function printErrorLog($error_message)
-    {
-        $error_log_path = "error_log.txt";
-        file_put_contents($error_log_path, $error_message, FILE_APPEND);
-    }
-} catch (Exception $exception) {
-    echo json_encode(array(
-        'status' => 'error',
-        'message' => 'path Fatal Error. Contact IT Department',
-    ));
-    exit();
-}
-
-try {
 
     if (isset($_SESSION['store_id'])) {
 
@@ -84,7 +70,7 @@ try {
         ));
     }
 } catch (Exception $exception) {
-    printErrorLog($exception->getMessage() . $message);
+    error_log($exception->getMessage() . $message);
     echo json_encode(array(
         'status' => 'error',
         'message' => $exception->getMessage() . $message,

@@ -2,20 +2,6 @@
 include('config/db.php');
 session_start();
 
-try {
-    function printErrorLog($error_message)
-    {
-        $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "error_log.txt";
-        file_put_contents($error_log_path, $error_message, FILE_APPEND);
-    }
-} catch (Exception $exception) {
-    echo json_encode(array(
-        'status' => 'error',
-        'message' => 'path Fatal Error. Contact IT Department',
-    ));
-    exit();
-}
-
 if (isset($_SESSION['store_id'])) {
     $userLoginData = $_SESSION['store_id'][0];
     $user_id = $userLoginData['id'] ?? null;
@@ -83,7 +69,7 @@ if (isset($_POST['products'])) {
         } catch (Exception $exception) {
             $errorOccurred = true;
             $error_message = "ERROR: " . $exception->getMessage() . "\n";
-            printErrorLog($error_message);
+            error_log($error_message);
             $notificationMessage .= $exception->getMessage();
         } finally {
             if ($errorOccurred) {
