@@ -106,75 +106,136 @@ function searchProducts() {
                 $("#productGrid").html(response);
             },
         });
-    } else {
-        $("#productGrid").html("<h1 style='color: white;'>Search product name.</h1>");
     }
 }
 
 //payment type online select //
-document.getElementById("selectBillType").addEventListener("change", function () {
-    formatFields();
-});
+document
+    .getElementById("selectBillType")
+    .addEventListener("change", function () {
+        var selectedValue = this.value;
 
-function formatFields() {
-    var selectedValue = $("#selectBillType").val();
+        var discountPercentageElement = document.getElementById("discountField");
+        var deliveryChargesElement = document.getElementById(
+            "deliveryChargesField"
+        );
+        var serviceChargesElement = document.getElementById("ServiceChargesField");
+        var packingChargesElement = document.getElementById("packingChargesField");
 
-    $("#deliveryCharges").val("");
-    $("#packingCharges").val("");
+        discountPercentageElement.classList.add("d-none");
+        deliveryChargesElement.classList.add("d-none");
+        serviceChargesElement.classList.add("d-none");
+        packingChargesElement.classList.add("d-none");
 
-    $("#discountField").addClass("d-none");
-    $("#deliveryChargesField").addClass("d-none");
-    $("#packingChargesField").addClass("d-none");
-    $("#paththuTotalField").addClass("d-none");
+        switch (selectedValue) {
+            case "1":
+                discountPercentageElement.classList.remove("d-none");
+                break;
 
-    switch (selectedValue) {
-        case "1":
-            $("#discountField").removeClass("d-none");
-            $("#paththuTotalField").removeClass("d-none");
-            break;
+            case "2":
+                discountPercentageElement.classList.remove("d-none");
+                deliveryChargesElement.classList.remove("d-none");
+                serviceChargesElement.classList.remove("d-none");
+                break;
 
-        case "2":
-            $("#discountField").removeClass("d-none");
-            $("#deliveryChargesField").removeClass("d-none");
-            $("#packingChargesField").removeClass("d-none");
-            break;
+            case "3":
+                discountPercentageElement.classList.remove("d-none");
+                break;
 
-        case "3":
-            $("#deliveryChargesField").removeClass("d-none");
-            $("#packingChargesField").removeClass("d-none");
-            $("#paththuTotalField").removeClass("d-none");
-            break;
-    }
-    checkNetTotal();
-}
+            case "4":
+                deliveryChargesElement.classList.remove("d-none");
+                packingChargesElement.classList.remove("d-none");
+                break;
+        }
+    });
 
 // if select cash + card //
-document.getElementById("payment-method-selector").addEventListener("change", function () {
-    var selectedValue = this.value;
-    var cashAmountField = document.getElementById("cashAmountField");
-    var cardAmountField = document.getElementById("cardAmountField");
+document
+    .getElementById("payment-method-selector")
+    .addEventListener("change", function () {
+        var selectedValue = this.value;
+        var cashAmountField = document.getElementById("cashAmountField");
+        var cardAmountField = document.getElementById("cardAmountField");
 
-    $("#cashAmount").val("");
-    $("#cardAmount").val("");
+        cashAmountField.classList.add("d-none");
+        cardAmountField.classList.add("d-none");
 
-    cashAmountField.classList.add("d-none");
-    cardAmountField.classList.add("d-none");
+        switch (selectedValue) {
+            case "1":
+                cashAmountField.classList.remove("d-none");
+                break;
 
-    switch (selectedValue) {
-        case "1":
-            cashAmountField.classList.remove("d-none");
-            break;
+            case "2":
+                cardAmountField.classList.remove("d-none");
+                break;
 
-        case "2":
-            cardAmountField.classList.remove("d-none");
-            break;
+            case "3":
+                cardAmountField.classList.remove("d-none");
+                cashAmountField.classList.remove("d-none");
+                break;
+        }
+    });
 
-        case "3":
-            cardAmountField.classList.remove("d-none");
-            cashAmountField.classList.remove("d-none");
-            break;
+$(document).on("keyup", function (e) {
+    if (e.which == 9) {
+        var selector = document.getElementById("payment-method-selector");
+        var enterAmountField = document.getElementById("cashAmount");
+        if (selector.value === "3" && enterAmountField.value.trim() !== "") {
+            var cardAmountField = document.getElementById("cardAmount");
+            if (cardAmountField) {
+                cardAmountField.focus();
+                e.preventDefault();
+            }
+        } else {
+            $(".cashAmount").focus();
+        }
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    var doctorNameField = document.getElementById("doctorNameField");
+    var regNoField = document.getElementById("regNoField");
+
+    // cash or card selector change
+    var selector = document.getElementById("payment-method-selector");
+    var billTypeSelector = document.getElementById("selectBillType");
+
+    billTypeSelector.selectedIndex = 0;
+
+    var event = new Event("change");
+    billTypeSelector.dispatchEvent(event);
+    event.preventDefault();
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowDown") {
+            moveSelectorDown(selector);
+        } else if (event.key === "ArrowUp") {
+            moveSelectorUp(selector);
+        }
+    });
+});
+
+function moveSelectorDown(selector) {
+    var selectedIndex = selector.selectedIndex;
+    if (selectedIndex < selector.options.length - 1) {
+        selectedIndex++;
+    }
+    selector.selectedIndex = selectedIndex;
+    var event = new Event("change");
+    selector.dispatchEvent(event);
+    event.preventDefault();
+}
+
+function moveSelectorUp(selector) {
+    var selectedIndex = selector.selectedIndex;
+    if (selectedIndex > 0) {
+        selectedIndex--;
+    }
+    selector.selectedIndex = selectedIndex;
+    var event = new Event("change");
+    selector.dispatchEvent(event);
+    event.preventDefault();
+}
 
 // set paththu name on popup
 function setPaththu(paththuSelect) {
@@ -246,7 +307,9 @@ function addDoctorMedicine() {
     var doctorMedicineResults = document.getElementById("doctorMedicineResults");
     var doctorMedicineNameElement = document.getElementById("doctorMedicineName");
     var doctorMedicineName = doctorMedicineNameElement.value.trim();
-    var doctorMedicineValueElement = document.getElementById("doctorMedicinePrice");
+    var doctorMedicineValueElement = document.getElementById(
+        "doctorMedicinePrice"
+    );
     var doctorMedicineValue = doctorMedicineValueElement.value.trim();
 
     var doctorMedicinePrice = doctorMedicineValue * 1.1;
@@ -307,7 +370,8 @@ function decreaseQuantity(button) {
 
 // qty update +
 function increaseQuantity(button) {
-    var input = button.parentElement.previousElementSibling.querySelector("input");
+    var input =
+        button.parentElement.previousElementSibling.querySelector("input");
     var quantity = parseFloat(input.value);
     quantity++;
     input.value = quantity;
@@ -322,6 +386,59 @@ function removeRow(button) {
     $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length === 0);
     $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length > 0);
     calculateSubTotal();
+}
+
+// add discount
+function addDiscount() {
+    var discountPercentage = document.getElementById("discountPercentage").value;
+    var productsAllTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
+
+    var discountedTotal = productsAllTotal * (1 - discountPercentage / 100);
+    $("#netTotal").text(discountedTotal.toLocaleString());
+}
+
+// netTotal calculation display
+function checkNetTotal() {
+    var subTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
+    var billType = document.getElementById("selectBillType");
+    var paymentMethod = document.getElementById("payment-method-selector");
+
+    var discountPercentage = parseFloat(
+        document.getElementById("discountAmount").value
+    );
+
+    var deliveryCharges = parseFloat(
+        document.getElementById("deliveryCharges").value
+    );
+
+    var vas = parseFloat(document.getElementById("serviceChargeAmount").value);
+
+    var dc = parseFloat(document.getElementById("deliveryCharges").value);
+
+    if (billType.value === "2") {
+        // online pay
+
+        if (discountPercentage === null || isNaN(discountPercentage)) {
+            // online no discount
+
+            var netTotal = subTotal + vas + dc;
+            $("#netTotal").text(netTotal.toLocaleString());
+        } else {
+            // online with discount
+
+            if (vas === null || isNaN(vas)) {
+                // online with discount no vas
+                var discountedTotal = subTotal * (1 - discountPercentage / 100);
+                var netTotal = discountedTotal + dc;
+                $("#netTotal").text(netTotal.toLocaleString());
+            } else {
+                // online with discount and vas
+                var discountedTotal = subTotal * (1 - discountPercentage / 100);
+                var netTotal = discountedTotal + dc + vas;
+                $("#netTotal").text(netTotal.toLocaleString());
+            }
+        }
+    }
 }
 
 // subTotal Calculation display
@@ -361,53 +478,72 @@ function calculateSubTotal() {
     $("#subTotal").text(productsAllTotal);
     $("#paththuTotal").text(paththuTotal);
 
-    checkNetTotal();
+    addDiscount();
+
+    // $(".barcodeResults tbody tr").each(function() {
+    //   var product_cost = $(this).find("#product_price").text();
+    //   var product_qty = $(this).find("#qty").val();
+    //   var isPaththu = $(this).find("#isPaththu").prop("checked");
+
+    //   if (product_qty === "" || product_qty === "0") {
+    //     Swal.mixin({
+    //       toast: true,
+    //       position: "top-end",
+    //       showConfirmButton: false,
+    //       timer: 3000,
+    //     }).fire({
+    //       icon: "error",
+    //       title: "Error: Product Quantity!",
+    //     });
+    //     $("#checkoutBtn").removeAttr("data-toggle data-target");
+    //   } else {
+    //     var productTotal = product_cost * product_qty;
+    //     if (isPaththu) {
+    //       paththuTotal += productTotal;
+    //       document.getElementById("paththuTotal").innerHTML = paththuTotal;
+    //     } else {
+    //       productsAllTotal += productTotal;
+    //       document.getElementById("subTotal").innerHTML = productsAllTotal;
+    //     }
+    //     addDiscount();
+    //   }
+    // });
 }
 
-function checkNetTotal() {
-    var discountPercentage = parseFloat($("#discountPercentage").val() || 0);
-    var deliveryCharges = parseFloat($("#deliveryCharges").val() || 0);
-    var packingCharges = parseFloat($("#packingCharges").val() || 0);
-    var productsAllTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
+function checkBalance(input) {
+    const selector = document.getElementById("payment-method-selector");
+    const productsAllTotal = parseFloat($("#netTotal").text().replace(/,/g, ""));
+    let totalEnteredAmount;
 
-    var discountedTotal = productsAllTotal * (1 - discountPercentage / 100);
-    finalTotal = discountedTotal + deliveryCharges + packingCharges;
-    $("#netTotal").text(finalTotal.toLocaleString());
-}
-
-function checkBalance() {
-    console.log("in check balance");
-
-    let paymentMethod = $("payment-method-selector").val();
-
-    if (paymentMethod != 3 || paymentMethod != 4) {
-        const netTotal = parseFloat($("#netTotal").text().replace(/,/g, ""));
-
+    if (selector.value === "3") {
+        // Case for mixed payment (cash + card)
         const cashAmount = parseFloat($("#cashAmount").val()) || 0;
         const cardAmount = parseFloat($("#cardAmount").val()) || 0;
-        // Total payed amount
-        let totalEnteredAmount = cashAmount + cardAmount;
+        totalEnteredAmount = cashAmount + cardAmount;
+    } else {
+        // Case for single payment method
+        totalEnteredAmount = parseFloat(input.value) || 0;
+    }
 
-        // Calculate balance
-        const balance = totalEnteredAmount - netTotal;
-        $(".balance").text(balance.toLocaleString("en-US", {}));
+    // Calculate balance
+    const balance = totalEnteredAmount - productsAllTotal;
+    $(".balance").text(balance.toLocaleString("en-US", {}));
 
-        // Update balance styling
-        if (balance > 0) {
-            $(".balance").addClass("positive-balance").removeClass("negative-balance");
-        } else if (balance < 0) {
-            $(".balance").addClass("negative-balance").removeClass("positive-balance");
-        } else {
-            $(".balance").removeClass("positive-balance negative-balance");
-        }
+    // Update balance styling
+    if (balance > 0) {
+        $(".balance").addClass("positive-balance").removeClass("negative-balance");
+    } else if (balance < 0) {
+        $(".balance").addClass("negative-balance").removeClass("positive-balance");
+    } else {
+        $(".balance").removeClass("positive-balance negative-balance");
+    }
 
-        // Handle Enter keypress for data check
-        if (event.which === 13) {
-            event.preventDefault();
-            const displayedBalance = parseFloat($("#balance").text().replace(/,/g, ""));
-            if (displayedBalance >= 0) {
-                dataCheck();
-            }
+    // Handle Enter keypress for data check
+    if (event.which === 13) {
+        event.preventDefault();
+        const displayedBalance = parseFloat($("#balance").text().replace(/,/g, ""));
+        if (displayedBalance >= 0) {
+            dataCheck();
         }
     }
 }
@@ -498,7 +634,9 @@ function printInvoice() {
         printWindow.document.write("</style>");
 
         printWindow.document.write("</head><body>");
-        printWindow.document.write(document.getElementById("invoice-POS").innerHTML);
+        printWindow.document.write(
+            document.getElementById("invoice-POS").innerHTML
+        );
         printWindow.document.write("</body></html>");
         printWindow.document.close();
         printWindow.focus();
@@ -516,7 +654,8 @@ function printInvoice() {
 
     var bootstrapLink = printWindow.document.createElement("link");
     bootstrapLink.rel = "stylesheet";
-    bootstrapLink.href = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
+    bootstrapLink.href =
+        "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
     bootstrapLink.onload = stylesheetLoaded;
     printWindow.document.head.appendChild(bootstrapLink);
 
@@ -541,7 +680,7 @@ function dataCheck() {
     var billHasCombine;
 
     $("#barcodeResults tr").each(function () {
-        var isPaththu = $(this).find("#isPaththu").prop("checked");
+        var isPaththu = $(this).find("#isPaththu").prop("checked") ? 1 : 0;
         var code = $(this).find("#code").text();
         var ucv = $(this).find("#ucv").text();
         var item_price = $(this).find("#item_price").text();
@@ -558,6 +697,7 @@ function dataCheck() {
             billHasCombine = true;
         }
 
+        console.log(isPaththu);
         if (isPaththu) {
             billHasPaththu = true;
         }
@@ -592,7 +732,6 @@ function dataCheck() {
 }
 
 function checkout(itemData) {
-    console.log("checkout");
 
     var billData = [];
     var dMData = [];
@@ -604,117 +743,109 @@ function checkout(itemData) {
         var regNo = $("#regNo").val();
 
         var balance = $("#balance").text().replace(/,/g, "");
-        var discountPercentage = $("#discountPercentage").val() || null;
-        var subTotal = $("#subTotal").text() || null;
-        var netTotal = $("#netTotal").text() || null;
+        var discountPercentage = $("#discountPercentage").val() || 0;
+        var subTotal = $("#subTotal").text();
+        var netTotal = $("#netTotal").text();
 
-        var deliveryCharges = $("#deliveryCharges").val() || null;
-        var valueAddedServices = $("#valueAddedServices").val() || null;
-        var cashAmount = $("#cashAmount").val() || null;
-        var cardAmount = $("#cardAmount").val() || null;
+        var deliveryCharges = $("#deliveryCharges").val();
+        var valueAddedServices = $("#valueAddedServices").val();
+        var cashAmount = $("#cashAmount").val();
+        var cardAmount = $("#cardAmount").val();
         var paymentMethodSelector = $("#payment-method-selector").val();
         var selectBillType = $("#selectBillType").val();
 
         document.getElementById("invoicePatientName").innerText = patientName;
         document.getElementById("InvoiceContactNumber").innerText = contactNo;
 
-        console.log("in checkout");
-        console.log(discountPercentage);
-        console.log(subTotal);
-        console.log(netTotal);
-        console.log(deliveryCharges);
-        console.log(valueAddedServices);
-        console.log(cashAmount);
-        console.log(cardAmount);
+        var bData = {
+            patientName: patientName,
+            contactNo: contactNo,
+            doctorName: doctorName,
+            regNo: regNo,
 
-        // var bData = {
-        //     patientName: patientName,
-        //     contactNo: contactNo,
-        //     doctorName: doctorName,
-        //     regNo: regNo,
+            balance: balance,
+            subTotal: subTotal,
+            netTotal: netTotal,
+            discountPercentage: discountPercentage,
+            deliveryCharges: deliveryCharges,
+            valueAddedServices: valueAddedServices,
+            cashAmount: cashAmount,
+            cardAmount: cardAmount,
+            paymentMethodSelector: paymentMethodSelector,
+            selectBillType: selectBillType,
+        };
 
-        //     balance: balance,
-        //     subTotal: subTotal,
-        //     netTotal: netTotal,
-        //     discountPercentage: discountPercentage,
-        //     deliveryCharges: deliveryCharges,
-        //     valueAddedServices: valueAddedServices,
-        //     cashAmount: cashAmount,
-        //     cardAmount: cardAmount,
-        //     paymentMethodSelector: paymentMethodSelector,
-        //     selectBillType: selectBillType,
-        // };
+        billData.push(bData);
 
-        // billData.push(bData);
+        $("#doctorMedicineResults tr").each(function () {
+            var product_name = $(this).find("#product_name").text();
+            var item_cost = $(this).find("#item_price").text().trim();
+            var item_price = $(this).find("#totalprice").text();
 
-        // $.ajax({
-        //     url: "invoiceConfirmation.php",
-        //     method: "POST",
-        //     success: function (response) {
-        //         var result = JSON.parse(response);
-        //         // console.log(result);
-        //         if (result.status === "success") {
-        //             console.log(result.message);
-        //             document.getElementById("invoiceNumber").innerHTML = result.message;
+            var productData = {
+                product_name: product_name,
+                item_cost: item_cost,
+                item_price: item_price,
+            };
+            dMData.push(productData);
+        });
 
-        //             $("#doctorMedicineResults tr").each(function () {
-        //                 var product_name = $(this).find("#product_name").text();
-        //                 var item_cost = $(this).find("#item_price").text().trim();
-        //                 var item_price = $(this).find("#totalprice").text();
+        $.ajax({
+            url: "invoiceSave.php",
+            method: "POST",
+            data: {
+                billData: JSON.stringify(billData),
+                itemData: JSON.stringify(itemData),
+                dMData: JSON.stringify(dMData),
+            },
 
-        //                 var productData = {
-        //                     product_name: product_name,
-        //                     item_cost: item_cost,
-        //                     item_price: item_price,
-        //                 };
-        //                 dMData.push(productData);
-        //             });
+            success: function (response) {
 
-        //             $.ajax({
-        //                 url: "invoiceConfirmationInsert.php",
-        //                 method: "POST",
-        //                 data: {
-        //                     billData: JSON.stringify(billData),
-        //                     itemData: JSON.stringify(itemData),
-        //                     dMData: JSON.stringify(dMData),
-        //                 },
-        //                 success: function (response) {
-        //                     SuccessMessageDisplay("Order Placed Successfully!");
+                console.log(response);
+                var result = JSON.parse(response);
+                console.log(result);
+                if (result.status === 'success') {
 
-        //                     //invoice print add data
-        //                     $.ajax({
-        //                         url: "invoicePrintAddData.php",
-        //                         method: "POST",
-        //                         data: {
-        //                             billData: JSON.stringify(billData),
-        //                             itemData: JSON.stringify(itemData),
-        //                             dMData: JSON.stringify(dMData),
-        //                         },
-        //                         success: function (response) {
-        //                             document.getElementById("printInvoiceData").innerHTML = response;
-        //                             printInvoice();
-        //                         },
-        //                         error: function (xhr, status, error) {
-        //                             console.error(xhr.responseText);
-        //                         },
-        //                     });
-        //                 },
-        //                 error: function (xhr, status, error) {
-        //                     console.error(xhr.responseText);
-        //                     ErrorMessageDisplay("Error: Something went wrong!");
-        //                 },
-        //             });
-        //         } else if (result.status === "sessionExpired") {
-        //             ErrorMessageDisplay(result.message);
-        //             setTimeout(function () {
-        //                 window.open(window.location.href, "_blank");
-        //             }, 4000);
-        //             return;
-        //         } else {
-        //             ErrorMessageDisplay("Invoice number failed");
-        //         }
-        //     },
-        // });
+                    document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
+                    SuccessMessageDisplay(result.message);
+
+                    //invoice print add data
+                    $.ajax({
+                        url: "invoicePrintAddData.php",
+                        method: "POST",
+                        data: {
+                            billData: JSON.stringify(billData),
+                            itemData: JSON.stringify(itemData),
+                            dMData: JSON.stringify(dMData),
+                        },
+                        success: function (response) {
+                            document.getElementById("printInvoiceData").innerHTML = response;
+                            printInvoice();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        },
+                    });
+
+                } else if (result.status === 'sessionExpired') {
+                    ErrorMessageDisplay(result.message);
+                    setTimeout(function () {
+                        window.open(window.location.href, '_blank');
+                    }, 4000);
+                    return;
+                } else if (result.status === 'sessionDataError') {
+                    ErrorMessageDisplay(result.message);
+                    setTimeout(function () {
+                        window.open(window.location.href, '_blank');
+                    }, 4000);
+                    return;
+                } else {
+                    ErrorMessageDisplay(result.message);
+                }
+
+            }
+        });
+
     } else {
         ErrorMessageDisplay("Enter Patient's Details");
     }
@@ -722,7 +853,8 @@ function checkout(itemData) {
 
 function issetInvoiceNumber() {
     getInvoiceNumber()
-        .then(function (response) { })
+        .then(function (response) {
+        })
         .catch(function (xhr) {
             console.error(xhr.responseText);
             ErrorMessageDisplay(xhr.responseText);
