@@ -142,7 +142,7 @@ if (!isset($_SESSION['store_id'])) {
                                                             <th>Card Amount</th>
                                                             <th>Payment Type</th>
                                                             <th>Bill Type</th>
-                                                            <th>Chashier</th>
+                                                            <th>Cashier</th>
                                                             <th>Shop</th>
                                                         </tr>
                                                     </thead>

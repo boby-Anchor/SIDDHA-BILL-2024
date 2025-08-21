@@ -64,11 +64,17 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
             <li class="nav-item">
-                  <a href="stock.php" class="nav-link">
-                    <i class="nav-icon fas fa-copy"></i>
-                    <p>View Hub Stock</p>
-                  </a>
-                </li>
+              <a href="stock.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>View Hub Stock</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="report-ItemQtyFromInvoice.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Invoice Item Qty Report</p>
+              </a>
+            </li>
             <li class="nav-item">
               <a href="report-ItemQtyFromGrn.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
