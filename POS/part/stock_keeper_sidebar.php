@@ -181,12 +181,12 @@ if (isset($_SESSION['store_id'])) {
                 <?php
                 if ($user_shop_data['shop_id'] == 1) {
                 ?>
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                     <a href="view_all_stock.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>View all Stock</p>
                     </a>
-                  </li>
+                  </li> -->
                   <li class="nav-item">
                     <a href="add-stock.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
@@ -198,7 +198,7 @@ if (isset($_SESSION['store_id'])) {
                 ?>
                 <!-- hub admin and hub stock keeper only End-->
                 <li class="nav-item" disabled>
-                  <a href="return-invoice.php" class="nav-link">
+                  <a href="return.php" class="nav-link">
                     <i class="nav-icon fas fa-reply-all"></i>
                     <p>Return stock to HUB</p>
                   </a>
@@ -437,6 +437,12 @@ if (isset($_SESSION['store_id'])) {
                       <i class="nav-icon fas fa-copy"></i>
                       <i class=""></i>
                       <p>Monthly Sale Compare</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="report-ViewInvoices.php" class="nav-link">
+                      <i class="nav-icon fas fa-copy"></i>
+                      <p>View Invoices</p>
                     </a>
                   </li>
                   <li class="nav-item">
