@@ -13,38 +13,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $end_date = date("Y-m-d 23:59:59", strtotime($_POST['end_date']));
   $po_shop = $_POST['po_shop'];
 
-  $sql = $conn->query("SELECT 
-    poi.invoiceItem,
-    poi.invoiceItem_price,
-    poi.item_code,
-    SUM(poi.invoiceItem_qty) AS total_qty,
-    ucv.ucv_name AS volume,
-    mu.unit AS unit,
-    pb.name AS brand
-FROM (
-    SELECT invoice_id
-    FROM poinvoices
-    WHERE created BETWEEN '$start_date' AND '$end_date'
-      AND po_shop_id = '$po_shop'
-) AS po
-JOIN poinvoiceitems AS poi 
-    ON poi.invoiceNumber = po.invoice_id
-JOIN p_medicine AS pm 
-    ON poi.item_code = pm.code
-JOIN unit_category_variation AS ucv 
-    ON pm.unit_variation = ucv.ucv_id
-JOIN medicine_unit AS mu 
-    ON ucv.p_unit_id = mu.id
-JOIN p_brand AS pb 
-    ON pm.brand = pb.id
-GROUP BY 
-    poi.invoiceItem,
-    poi.invoiceItem_price,
-    poi.item_code,
-    ucv.ucv_name,
-    mu.unit,
-    pb.name
-  ");
+  $shopCondition = ($po_shop == 0) ? "" : "AND po_shop_id = '$po_shop'";
+
+  $sql = $conn->query("SELECT
+        poi.invoiceItem,
+        poi.invoiceItem_price,
+        poi.item_code,
+        SUM(poi.invoiceItem_qty) AS total_qty,
+        ucv.ucv_name AS volume,
+        mu.unit AS unit,
+        pb.name AS brand
+    FROM (
+        SELECT invoice_id
+        FROM poinvoices
+        WHERE created BETWEEN '$start_date' AND '$end_date'
+        $shopCondition
+    ) AS po
+    JOIN poinvoiceitems AS poi 
+        ON poi.invoiceNumber = po.invoice_id
+    JOIN p_medicine AS pm 
+        ON poi.item_code = pm.code
+    JOIN unit_category_variation AS ucv 
+        ON pm.unit_variation = ucv.ucv_id
+    JOIN medicine_unit AS mu 
+        ON ucv.p_unit_id = mu.id
+    JOIN p_brand AS pb 
+        ON pm.brand = pb.id
+    GROUP BY 
+        poi.invoiceItem,
+        poi.invoiceItem_price,
+        poi.item_code,
+        ucv.ucv_name,
+        mu.unit,
+        pb.name
+");
 }
 
 ?>
@@ -129,6 +131,7 @@ GROUP BY
                     <div class="col-auto">
                       <select name="po_shop" id="po_shop" class="form-control" required>
                         <option value="" disabled selected hidden>Select Shop</option>
+                        <option value="0">All Shops</option>
                         <?php
                         $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
                         while ($shops_row = $shops_rs->fetch_assoc()) {
