@@ -121,7 +121,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                             <?php } ?>
                                                                         </tbody>
                                                                     </table>
-                                                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
+                                                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['grn_date'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
                                                                 </ul>
                                                             </td>
                                                             <td><?= $grn_details_data["grn_date"] ?></td>
@@ -156,7 +156,7 @@ if (!isset($_SESSION['store_id'])) {
     <!-- All JS end -->
 
     <script>
-        function printTable(grnNumber) {
+        function printTable(grnNumber, grnDate) {
             var printWindow = window.open('', '_blank');
             printWindow.document.write('<html><head><title>Print Preview</title>');
             printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
@@ -166,13 +166,13 @@ if (!isset($_SESSION['store_id'])) {
             printWindow.document.write('<div class="col-12" style="margin-top: 50px;margin-bottom: 20px;font-family: monospace;">');
             printWindow.document.write('<div class="row">');
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h5>GRN NUMBER : ' + grnNumber + '</h5>');
+            printWindow.document.write('<h5>GRN Number : ' + grnNumber + '</h5>');
             printWindow.document.write('</div>');
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h6>ADDED DATE : <?= date('Y-m-d') ?></h6>');
+            printWindow.document.write('<h6>Added : ' + grnDate + '</h6>');
             printWindow.document.write('</div>');
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h6>ADDED TIME : <?= date('H:i:s') ?></h6>');
+            printWindow.document.write('<h6>Printed : <?= date('Y-m-d H:i:s') ?></h6>');
             printWindow.document.write('</div>');
             printWindow.document.write('</div>');
             printWindow.document.write('</div>');
