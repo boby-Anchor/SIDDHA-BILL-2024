@@ -733,6 +733,8 @@ function dataCheck() {
 
 function checkout(itemData) {
 
+    updateBillStatus("3");
+
     var billData = [];
     var dMData = [];
     var patientName = $("#patientName").val().trim();
@@ -801,9 +803,8 @@ function checkout(itemData) {
 
             success: function (response) {
 
-                console.log(response);
                 var result = JSON.parse(response);
-                console.log(result);
+
                 if (result.status === 'success') {
 
                     document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
@@ -849,6 +850,72 @@ function checkout(itemData) {
     } else {
         ErrorMessageDisplay("Enter Patient's Details");
     }
+}
+
+function updateBillStatus(value) {
+
+    var token = $("#token").val();
+
+    switch (value) {
+        case "1":
+            $.ajax({
+                url: "https://pharmacy-order-backend.siddha.lk/order/",
+                // url: "http://localhost:5000/order/",
+                method: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    order_number: token,
+                }),
+                success: function (response) {
+                    SuccessMessageDisplay(response.message);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                },
+            });
+
+            break;
+        case "2":
+            $.ajax({
+                url: "https://pharmacy-order-backend.siddha.lk/order/",
+                method: "PATCH",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    order_number: token,
+                }),
+                success: function (response) {
+                    SuccessMessageDisplay(response.message);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    ErrorMessageDisplay(xhr.responseText);
+                },
+            });
+
+            break;
+        case "3":
+            $.ajax({
+                url: "https://pharmacy-order-backend.siddha.lk/order/" + token,
+                method: "PATCH",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    order_number: token,
+                }),
+                success: function (response) {
+                    SuccessMessageDisplay(response.message);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    ErrorMessageDisplay(xhr.responseText);
+                },
+            });
+
+            break;
+    }
+
 }
 
 function issetInvoiceNumber() {

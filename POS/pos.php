@@ -62,15 +62,19 @@ if (!isset($_SESSION['store_id'])) {
 
                   <!--id="deliveryCharges" amountDiv-->
                   <div class="col-2 p-2 " id="deliveryChargesField">
-                    <input type="text" class="form-control col-10" id="deliveryCharges"
-                      name="deliveryCharges"
-                      placeholder="DC" onkeyup="checkNetTotal()">
+                    <input type="text" placeholder="DC" class="form-control col-10" id="deliveryCharges"
+                      name="deliveryCharges" onkeyup="checkNetTotal()">
+                  </div>
+
+                  <!--id="valueAddedServices" name="valueAddedServices"-->
+                  <div class="col-2 p-2 " id="ServiceChargesField">
+                    <input type="text" class="form-control col-10" id="valueAddedServices" name="valueAddedServices"
+                      placeholder="VAS" onkeyup="checkNetTotal()">
                   </div>
 
                   <!--id="packingChargesField" name="packingChargesField"-->
                   <div class="col-2 p-2 " id="packingChargesField">
-                    <input type="text" class="form-control col-10" id="packingCharges"
-                      name="packingCharges"
+                    <input type="text" class="form-control col-10" id="packingChargesField" name="packingChargesField"
                       placeholder="PC" onkeyup="checkNetTotal()">
                   </div>
 
@@ -86,7 +90,7 @@ if (!isset($_SESSION['store_id'])) {
                     <label class="subTotal">RS(NT)</label>
                   </div>
 
-                  <div class="col-3 text-right" id="paththuTotalField">
+                  <div class="col-3 text-right ">
                     <label class="subTotal" id="paththuTotal"></label>
                     <label class="subTotal">RS(PT)</label>
                   </div>
@@ -98,19 +102,19 @@ if (!isset($_SESSION['store_id'])) {
                   <!-- discountPercentage -->
                   <div class="col-4 p-2 " id="discountField" style="color:#000 !important; background: #000;">
                     <input type="text" placeholder="Discount %" class="form-control col-8" id="discountPercentage"
-                      name="discountPercentage" onkeyup="checkNetTotal()">
+                      name="discountPercentage" onkeyup="addDiscount()">
                   </div>
 
                   <!-- cashAmount -->
                   <div class="col-4 p-2 " id="cashAmountField">
                     <input type="text" placeholder="Enter Cash Amount" class="form-control col-10" id="cashAmount"
-                      name="cashAmount" onkeyup="checkBalance()">
+                      name="cashAmount" onkeyup="checkBalance(this)">
                   </div>
 
                   <!-- cardAmount -->
                   <div class="col-4 p-2  d-none" id="cardAmountField">
                     <input type="text" placeholder="Enter Card Amount" class="form-control col-10" id="cardAmount"
-                      name="cardAmount" onkeyup="checkBalance()">
+                      name="cardAmount" onkeyup="checkBalance(this)">
                   </div>
                 </div>
               </div>
@@ -133,11 +137,11 @@ if (!isset($_SESSION['store_id'])) {
                       <?php
                       $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
-                      ?>
+                        ?>
                         <option value="<?= $payment_type_row['payment_type_id'] ?>">
                           <?= $payment_type_row['payment_type'] ?>
                         </option>
-                      <?php
+                        <?php
                       }
                       ?>
                     </select>
@@ -168,11 +172,11 @@ if (!isset($_SESSION['store_id'])) {
                     <?php
                     $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
                     while ($doctors_row = $doctors_rs->fetch_assoc()) {
-                    ?>
+                      ?>
                       <option value="<?= $doctors_row['name'] ?>">
                         <?= $doctors_row['name'] ?>
                       </option>
-                    <?php
+                      <?php
                     }
                     ?>
                   </select>
@@ -183,9 +187,23 @@ if (!isset($_SESSION['store_id'])) {
               </div>
               <br>
 
-              <div id="barcodeInputField" class="col-4 mb-2 p-2">
+              <div class="col-4 mb-2 p-2 d-none">
                 <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
                   onchange="getBarcode2(this.value);">
+              </div>
+              <div class="col-4 mb-2 p-2">
+                <div class="row">
+                  <div class="col-6">
+                    <input type="number" id="token" class="form-control" placeholder="Token">
+                  </div>
+                  <div class="col-6">
+                    <select id="bill_status" class="form-control" onchange="updateBillStatus(value)">
+                      <option value="0" selected hidden disabled>Select Status</option>
+                      <option value="1">Billing</option>
+                      <option value="2">Ready</option>
+                    </select>
+                  </div>
+                </div>
               </div>
               <div class="col-4 mb-2 p-2">
                 <select class="form-control" id="selectPrices" onchange="getBarcode3()"></select>
@@ -195,11 +213,11 @@ if (!isset($_SESSION['store_id'])) {
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
                   while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
-                  ?>
+                    ?>
                     <option value="<?= $bill_type_row['bill_type_id'] ?>">
                       <?= $bill_type_row['bill_type_name'] ?>
                     </option>
-                  <?php
+                    <?php
                   }
                   ?>
                 </select>
@@ -246,62 +264,54 @@ if (!isset($_SESSION['store_id'])) {
                 <!-- products grid -->
                 <div class="row productGrid" id="productGrid">
                   <?php
-                  // if (isset($_SESSION['store_id'])) {
+                  if (isset($_SESSION['store_id'])) {
 
-                  //   $userLoginData = $_SESSION['store_id'];
+                    $userLoginData = $_SESSION['store_id'];
 
-                  //   foreach ($userLoginData as $userData) {
-                  //     $shop_id = $userData['shop_id'];
+                    foreach ($userLoginData as $userData) {
+                      $shop_id = $userData['shop_id'];
 
-                  //     $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
-                  //     medicine_unit.unit AS unit , unit_category_variation.ucv_name
-                  //     FROM stock2
-                  //     INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-                  //     INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                  //     INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                  //     INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                  //     WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty > 0
-                  //     ORDER BY p_medicine.name ASC");
+                      $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
+                      medicine_unit.unit AS unit , unit_category_variation.ucv_name
+                      FROM stock2
+                      INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
+                      INNER JOIN p_brand ON p_brand.id = p_medicine.brand
+                      INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+                      INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+                      WHERE stock2.stock_shop_id = '$shop_id'
+                      AND stock2.stock_item_qty > 0
+                      ORDER BY p_medicine.name ASC");
 
-                  //     if (!empty($cm)) {
-                  //       foreach ($cm as $v) {
-                  // 
-                  ?>
-                  <!-- //         <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
-                  //           <div class="product-grid h-100 rounded-lg">
-                  //             <div class="product-content">
-                  //               <div class="title"><?php //echo $v['name']; 
-                                                      ?>
-                  //                 <br>
-                  //                 <?php //$v['code']; 
-                                      ?>
-                  //               </div>
-                  //               <div class="sub-title">
-                  //                 <?php //echo $v['bName']; 
-                                      ?>
-                  //               </div>
-                  //               <div class="f-size item-price">
-                  //                 I:- RS
-                  //                 <?php // echo $v['item_s_price']; 
-                                      ?>
-                  //               </div>
-                  //               <div class="f-size unit-price">
-                  //                 U:- RS
-                  //                 <?php //echo $v['unit_s_price']; 
-                                      ?>
-                  //               </div>
-                  //               <div class="f-size">
-                  //                 (<?php // $v['ucv_name'] 
-                                      ?><?php //echo $v['unit']; 
-                                        ?>)</div>
-                  //             </div>
-                  //           </div>
-                  //         </div> -->
-                  <?php // }
-                  //     }
-                  //   }
-                  // } 
-                  ?>
+                      if (!empty($cm)) {
+                        foreach ($cm as $v) {
+                          ?>
+                          <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
+                            <div class="product-grid h-100 rounded-lg">
+                              <div class="product-content">
+                                <div class="title"><?php echo $v['name']; ?>
+                                  <br>
+                                  <?= $v['code']; ?>
+                                </div>
+                                <div class="sub-title">
+                                  <?php echo $v['bName']; ?>
+                                </div>
+                                <div class="f-size item-price">
+                                  I:- RS
+                                  <?php echo $v['item_s_price']; ?>
+                                </div>
+                                <div class="f-size unit-price">
+                                  U:- RS
+                                  <?php echo $v['unit_s_price']; ?>
+                                </div>
+                                <div class="f-size">
+                                  (<?= $v['ucv_name'] ?><?php echo $v['unit']; ?>)</div>
+                              </div>
+                            </div>
+                          </div>
+                        <?php }
+                      }
+                    }
+                  } ?>
 
                 </div>
               </div>
@@ -449,7 +459,7 @@ if (!isset($_SESSION['store_id'])) {
           WHERE `customize_bill_shop-id` = '$shop_id'
           ");
           $bill_data = $bill_data_rs->fetch_assoc();
-      ?>
+          ?>
           <div class="d-flex justify-content-center">
             <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
               <div class="row gap-1">
@@ -465,7 +475,7 @@ if (!isset($_SESSION['store_id'])) {
                             <h3>
                               <b>
                                 <?php //echo $bill_data['shopName'] 
-                                ?>
+                                    ?>
                               </b>
                             </h3>
                           </label>
@@ -558,7 +568,7 @@ if (!isset($_SESSION['store_id'])) {
               </table>
             </div>
           </div>
-      <?php
+          <?php
         }
       }
       ?>
@@ -572,11 +582,9 @@ if (!isset($_SESSION['store_id'])) {
 <script src="dist/js/messageDisplay.js"> </script>
 
 <script>
-  $(function() {
+  $(function () {
     //Initialize Select2 Elements
     $(".select2").select2();
-    searchProducts();
-    formatFields();
 
     //Initialize Select2 Elements
     // $(".select2bs4").select2({
