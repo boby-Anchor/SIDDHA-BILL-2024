@@ -13,7 +13,7 @@ if (isset($_SESSION['store_id'])) {
     WHERE id = '$userId'
     ");
     $user_shop_data = $user_shop_rs->fetch_assoc();
-?>
+    ?>
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <div class="shopLogoMain">
@@ -56,7 +56,7 @@ if (isset($_SESSION['store_id'])) {
 
             <?php
             if ($user_shop_data['user_role'] == "Stock Keeper") {
-            ?>
+              ?>
               <li class="nav-header">Special</li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -77,7 +77,7 @@ if (isset($_SESSION['store_id'])) {
                   </li>
                   <?php
                   if ($userId == 13) {
-                  ?>
+                    ?>
                     <li class="nav-item">
                       <a href="report-shopWiseItemsSale.php" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
@@ -92,12 +92,12 @@ if (isset($_SESSION['store_id'])) {
                         <p>Weekly Siddha Sale Compare Report</p>
                       </a>
                     </li>
-                  <?php
+                    <?php
                   }
                   ?>
                 </ul>
               </li>
-            <?php
+              <?php
             }
             ?>
             <li class="nav-header"> Stock Item functions</li>
@@ -114,14 +114,14 @@ if (isset($_SESSION['store_id'])) {
 
                 <?php
                 if ($user_shop_data['shop_id'] != 1) {
-                ?>
+                  ?>
                   <li class="nav-item">
                     <a href="add-purchase.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Add Purchase Order</p>
                     </a>
                   </li>
-                <?php
+                  <?php
                 }
                 ?>
 
@@ -135,7 +135,7 @@ if (isset($_SESSION['store_id'])) {
                 <!-- PO bill and view for hub Start -->
                 <?php
                 if ($user_shop_data['shop_id'] == 1) {
-                ?>
+                  ?>
                   <li class="nav-item">
                     <a href="po.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
@@ -154,7 +154,7 @@ if (isset($_SESSION['store_id'])) {
                       <p>Add Stock from PO</p>
                     </a>
                   </li>
-                <?php
+                  <?php
                 }
                 ?>
                 <!-- PO bill and view for hub End -->
@@ -180,7 +180,7 @@ if (isset($_SESSION['store_id'])) {
                 <!-- hub admin and hub stock keeper only Start-->
                 <?php
                 if ($user_shop_data['shop_id'] == 1) {
-                ?>
+                  ?>
                   <!-- <li class="nav-item">
                     <a href="view_all_stock.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
@@ -188,12 +188,18 @@ if (isset($_SESSION['store_id'])) {
                     </a>
                   </li> -->
                   <li class="nav-item">
+                    <a href="report-viewAllShopStock.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>View all Shop Stock</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="add-stock.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Add New Stock (GRN)</p>
                     </a>
                   </li>
-                <?php
+                  <?php
                 }
                 ?>
                 <!-- hub admin and hub stock keeper only End-->
@@ -211,7 +217,7 @@ if (isset($_SESSION['store_id'])) {
                 </li>
                 <?php
                 if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 2) {
-                ?>
+                  ?>
                   <li class="nav-item">
                     <a href="report-monthlySaleCompare.php" class="nav-link">
                       <i class="nav-icon fas fa-copy"></i>
@@ -219,7 +225,7 @@ if (isset($_SESSION['store_id'])) {
                       <p>Item Sale Qty Compare In Date Range</p>
                     </a>
                   </li>
-                <?php
+                  <?php
                 }
                 ?>
               </ul>
@@ -227,18 +233,18 @@ if (isset($_SESSION['store_id'])) {
 
             <?php
             if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 9) {
-            ?>
+              ?>
               <li class="nav-item">
                 <a href="manage-products.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Edit Barcode</p>
                 </a>
               </li>
-            <?php
+              <?php
             }
 
             if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 1) {
-            ?>
+              ?>
               <!-- Products management start -->
               <li class="nav-header">PRODUCT INFORMATION</li>
               <li class="nav-item">
@@ -387,7 +393,7 @@ if (isset($_SESSION['store_id'])) {
               </li>
               <!-- Supplier management end -->
 
-            <?php
+              <?php
             }
             ?>
             <li class="nav-header">Item Qty Reports</li>
@@ -424,7 +430,7 @@ if (isset($_SESSION['store_id'])) {
                 </li>
                 <?php
                 if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 1) {
-                ?>
+                  ?>
                   <li class="nav-item">
                     <a href="report-weeklySalesCompare.php" class="nav-link">
                       <i class="nav-icon fas fa-copy"></i>
@@ -463,14 +469,14 @@ if (isset($_SESSION['store_id'])) {
                       <p>PO Item Qty Report</p>
                     </a>
                   </li>
-                <?php
+                  <?php
                 }
                 ?>
               </ul>
             </li>
             <?php
             if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 2) {
-            ?>
+              ?>
               <!-- <li class="nav-header">Item Qty Reports</li> -->
               <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -491,11 +497,11 @@ if (isset($_SESSION['store_id'])) {
                   </li>
                 </ul>
               </li>
-            <?php
+              <?php
             }
 
             if ($user_shop_data['user_role'] == "Stock Keeper" && $user_shop_data['shop_id'] == 7) {
-            ?>
+              ?>
               <!-- Testing Area -->
               <li class="nav-header"></li>
               <li class="nav-header"></li>
@@ -561,7 +567,7 @@ if (isset($_SESSION['store_id'])) {
                   </li>
                 </ul>
               </li>
-            <?php
+              <?php
             }
             ?>
             <li class="nav-header"></li>
@@ -572,7 +578,7 @@ if (isset($_SESSION['store_id'])) {
       </div>
 
     </aside>
-<?php
+    <?php
   }
 } else {
   echo "  ";
