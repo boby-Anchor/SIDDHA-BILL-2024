@@ -201,6 +201,7 @@ if (!isset($_SESSION['store_id'])) {
                       <option value="0" selected hidden disabled>Select Status</option>
                       <option value="1">Billing</option>
                       <option value="2">Ready</option>
+                      <option value="4">Abandon</option>
                     </select>
                   </div>
                 </div>
