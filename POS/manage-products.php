@@ -13,7 +13,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pharmacy</title>
+    <title>Manage Products</title>
 
     <!-- Data Table CSS -->
     <?php include("part/data-table-css.php"); ?>
@@ -76,9 +76,9 @@ if (!isset($_SESSION['store_id'])) {
                                                     <td class="text-center">
                                                         <div class="btn-group">
                                                             <button class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-cogs"> Manage</i> </button>
-                                                            <!-- <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; top: 30px; left: 0px; will-change: top, left;">
-                                                                <a class="dropdown-item text-success" href="#" data-toggle="modal" data-target="#edit<?php //echo $row['pid']; ?>"> <i class="fa fa-edit"></i> Edit </a>
-                                                            </div> -->
+                                                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; top: 30px; left: 0px; will-change: top, left;">
+                                                                <a class="dropdown-item text-success" href="#" data-toggle="modal" data-target="#edit<?= $row['pid']; ?>"> <i class="fa fa-edit"></i> Edit </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -98,8 +98,9 @@ if (!isset($_SESSION['store_id'])) {
                                                                     <div class="form-group">
                                                                         <div class="row">
                                                                             <label for="name">Product Name</label>
-                                                                            <input type="text" class="form-control" id="po_product_name" placeholder="Product Name" name="po_product_name" value="<?php echo $row['pname']; ?>" required>
+                                                                            <input type="text" class="form-control" id="po_product_name" placeholder="Product Name" name="po_product_name" value="<?php echo $row['pname']; ?>" required disabled>
                                                                             <input type="text" class="form-control d-none" id="po_product_id" placeholder="Product id" name="po_product_id" value="<?php echo $row['pid']; ?>" required>
+                                                                            <input type="text" class="form-control d-none" id="original_barcode" placeholder="Product id" name="original_barcode" value="<?php echo $row['code']; ?>" required>
                                                                         </div>
                                                                         <div class="row">
                                                                             <label for="name">Product Code</label>
