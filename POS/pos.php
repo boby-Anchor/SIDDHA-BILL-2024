@@ -15,7 +15,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home | Inv 1</title>
+  <title id="titleName">Home | Inv 1</title>
 
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -158,15 +158,26 @@ if (!isset($_SESSION['store_id'])) {
           <!--top-->
           <div class="col-12">
             <div class="row">
-              <div class="d-flex justify-content-evenly">
-                <div class="col-3 p-2">
-                  <input type="text" id="patientName" name="patientName" class="form-control"
-                    placeholder="Patient Name">
+              <div class="d-flex">
+                <div class="col-2 mb-2 p-2">
+                  <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
+                    onchange="getBarcode2(this.value);">
                 </div>
-                <div class="col-3 p-2">
-                  <input type="text" id="contactNo" name="contactNo" class="form-control" placeholder="Contact No.">
+                <div class="input-group col-4 pt-2">
+                  <div class="col-1 m-2">
+                    <input type="checkbox" id="hasChy" onclick="$('#regNo').prop('disabled', !this.checked).val('');" checked>
+
+                  </div>
+                  <div class="col-8" id="regNoField">
+                    <input type="text" id="regNo" name="regNo" class="form-control" placeholder="CHY/"
+                      oninput="fetchPatient(this.value)">
+                  </div>
                 </div>
-                <div id="doctorNameField" class="col-3 p-2">
+                <div class="col-3 pt-2">
+                  <label id="patientName" name="patientName"></label>
+                  <label id="contactNo" name="contactNo"></label>
+                </div>
+                <div id="doctorNameField" class="col-3 pt-2">
                   <select class="form-control select2" id="doctorName" name="doctorName">
                     <option value="" disabled selected hidden>Select a doctor</option>
                     <?php
@@ -181,16 +192,9 @@ if (!isset($_SESSION['store_id'])) {
                     ?>
                   </select>
                 </div>
-                <div id="regNoField" class="col-3 p-2">
-                  <input type="text" id="regNo" name="regNo" class="form-control" placeholder="REG No">
-                </div>
               </div>
               <br>
 
-              <div class="col-4 mb-2 p-2 d-none">
-                <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
-                  onchange="getBarcode2(this.value);">
-              </div>
               <div class="col-4 mb-2 p-2">
                 <div class="row">
                   <div class="col-6">

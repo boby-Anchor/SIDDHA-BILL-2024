@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $("#barcodeInput").focus();
 });
 
@@ -6,11 +6,40 @@ $(document).ready(function() {
 //     updateBillStatus(4);
 // });
 
+function fetchPatient(chyNumber) {
+
+    if (chyNumber.length > 8) {
+
+        $.ajax({
+            url: "https://admin.ceylonhospitals.com/api/v1/siddha/patient/",
+            // url: "http://localhost:5001/api/v1/siddha/patient/",
+            method: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                chy: chyNumber,
+            }),
+            success: function (response) {
+
+                $("#patientName").text(response.profileData.name);
+                $("#titleName").text(response.profileData.name);
+                $("#contactNo").text(response.profileData.whatsapp_no);
+
+                SuccessMessageDisplay(response.message);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                ErrorMessageDisplay(xhr.responseText);
+            },
+        });
+    }
+}
+
 function getBarcode3() {
     var selectPrices = document.getElementById("selectPrices").value;
 
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
         if (req.readyState == 4 && req.status == 200) {
             var txt = req.responseText;
             var barcodeResults = document.getElementById("barcodeResults");
@@ -46,7 +75,7 @@ function getBarcode3() {
 
 function getBarcode2(barcode) {
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
         if (req.readyState == 4 && req.status == 200) {
             var txt = req.responseText;
             document.getElementById("selectPrices").innerHTML = txt;
@@ -61,7 +90,7 @@ function getBarcode2(barcode) {
 
 function getBarcode(barcode, stock_s_price) {
     var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
         if (req.readyState == 4 && req.status == 200) {
             var txt = req.responseText;
             var barcodeResults = document.getElementById("barcodeResults");
@@ -106,7 +135,7 @@ function searchProducts() {
             data: {
                 searchName: searchInput,
             },
-            success: function(response) {
+            success: function (response) {
                 $("#productGrid").html(response);
             },
         });
@@ -116,7 +145,7 @@ function searchProducts() {
 //payment type online select //
 document
     .getElementById("selectBillType")
-    .addEventListener("change", function() {
+    .addEventListener("change", function () {
         var selectedValue = this.value;
 
         var discountPercentageElement = document.getElementById("discountField");
@@ -156,7 +185,7 @@ document
 // if select cash + card //
 document
     .getElementById("payment-method-selector")
-    .addEventListener("change", function() {
+    .addEventListener("change", function () {
         var selectedValue = this.value;
         var cashAmountField = document.getElementById("cashAmountField");
         var cardAmountField = document.getElementById("cardAmountField");
@@ -180,7 +209,7 @@ document
         }
     });
 
-$(document).on("keyup", function(e) {
+$(document).on("keyup", function (e) {
     if (e.which == 9) {
         var selector = document.getElementById("payment-method-selector");
         var enterAmountField = document.getElementById("cashAmount");
@@ -196,7 +225,7 @@ $(document).on("keyup", function(e) {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     var doctorNameField = document.getElementById("doctorNameField");
     var regNoField = document.getElementById("regNoField");
 
@@ -210,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function() {
     billTypeSelector.dispatchEvent(event);
     event.preventDefault();
 
-    document.addEventListener("keydown", function(event) {
+    document.addEventListener("keydown", function (event) {
         if (event.key === "ArrowDown") {
             moveSelectorDown(selector);
         } else if (event.key === "ArrowUp") {
@@ -287,7 +316,7 @@ function addPaththu() {
       </div>
   </td>
 
-  <td class="total" id="totalprice">${paththuPrice}</td>
+  <td class="total" id="paththuTotalPrice">${paththuPrice}</td>
   <td>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
           <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
@@ -331,7 +360,7 @@ function addDoctorMedicine() {
   <td id="product_price">${doctorMedicineValue}</td>
   
   <td class="text-right">Price</td>
-  <td class="total" id="totalprice">${doctorMedicinePrice}</td>
+  <td class="total" id="doctorMedicineTotalPrice">${doctorMedicinePrice}</td>
   <td>
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
@@ -453,12 +482,12 @@ function calculateSubTotal() {
 
     // var ajaxRequests = [];
 
-    $(".doctorMedicineResults tbody tr").each(function() {
-        var dmPrice = parseFloat($(this).find("#totalprice").text());
+    $(".doctorMedicineResults tbody tr").each(function () {
+        var dmPrice = parseFloat($(this).find("#doctorMedicineTotalPrice").text());
         doctorMedicineTotal += dmPrice;
     });
 
-    $(".barcodeResults tbody tr").each(function() {
+    $(".barcodeResults tbody tr").each(function () {
         var $this = $(this);
         var product_cost = parseFloat($this.find("#product_price").text()) || 0;
         var product_qty = parseFloat($this.find("#qty").val()) || 0;
@@ -668,7 +697,7 @@ function printInvoice() {
     }
 
     // After printing, reload the pos.php file
-    printWindow.onafterprint = function() {
+    printWindow.onafterprint = function () {
         printWindow.close(); // Close the print window
         window.location.reload();
         // Reload the pos.php file in the main window
@@ -683,7 +712,7 @@ function dataCheck() {
     var billHasPaththu;
     var billHasCombine;
 
-    $("#barcodeResults tr").each(function() {
+    $("#barcodeResults tr").each(function () {
         var isPaththu = $(this).find("#isPaththu").prop("checked") ? 1 : 0;
         var code = $(this).find("#code").text();
         var ucv = $(this).find("#ucv").text();
@@ -701,7 +730,6 @@ function dataCheck() {
             billHasCombine = true;
         }
 
-        console.log(isPaththu);
         if (isPaththu) {
             billHasPaththu = true;
         }
@@ -741,119 +769,121 @@ function checkout(itemData) {
 
     var billData = [];
     var dMData = [];
-    var patientName = $("#patientName").val().trim();
+    var patientName = $("#patientName").text().trim() || null;
 
-    if (patientName !== "") {
-        var contactNo = $("#contactNo").val().trim();
-        var doctorName = $("#doctorName").val();
-        var regNo = $("#regNo").val();
+    var hasChy = $("#hasChy").prop("checked");
+    var regNo = $("#regNo").val();
 
-        var balance = $("#balance").text().replace(/,/g, "");
-        var discountPercentage = $("#discountPercentage").val() || 0;
-        var subTotal = $("#subTotal").text();
-        var netTotal = $("#netTotal").text();
-
-        var deliveryCharges = $("#deliveryCharges").val();
-        var valueAddedServices = $("#valueAddedServices").val();
-        var cashAmount = $("#cashAmount").val();
-        var cardAmount = $("#cardAmount").val();
-        var paymentMethodSelector = $("#payment-method-selector").val();
-        var selectBillType = $("#selectBillType").val();
-
-        document.getElementById("invoicePatientName").innerText = patientName;
-        document.getElementById("InvoiceContactNumber").innerText = contactNo;
-
-        var bData = {
-            patientName: patientName,
-            contactNo: contactNo,
-            doctorName: doctorName,
-            regNo: regNo,
-
-            balance: balance,
-            subTotal: subTotal,
-            netTotal: netTotal,
-            discountPercentage: discountPercentage,
-            deliveryCharges: deliveryCharges,
-            valueAddedServices: valueAddedServices,
-            cashAmount: cashAmount,
-            cardAmount: cardAmount,
-            paymentMethodSelector: paymentMethodSelector,
-            selectBillType: selectBillType,
-        };
-
-        billData.push(bData);
-
-        $("#doctorMedicineResults tr").each(function() {
-            var product_name = $(this).find("#product_name").text();
-            var item_cost = $(this).find("#item_price").text().trim();
-            var item_price = $(this).find("#totalprice").text();
-
-            var productData = {
-                product_name: product_name,
-                item_cost: item_cost,
-                item_price: item_price,
-            };
-            dMData.push(productData);
-        });
-
-        $.ajax({
-            url: "invoiceSave.php",
-            method: "POST",
-            data: {
-                billData: JSON.stringify(billData),
-                itemData: JSON.stringify(itemData),
-                dMData: JSON.stringify(dMData),
-            },
-
-            success: function(response) {
-
-                var result = JSON.parse(response);
-
-                if (result.status === 'success') {
-
-                    document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
-                    SuccessMessageDisplay(result.message);
-
-                    //invoice print add data
-                    $.ajax({
-                        url: "invoicePrintAddData.php",
-                        method: "POST",
-                        data: {
-                            billData: JSON.stringify(billData),
-                            itemData: JSON.stringify(itemData),
-                            dMData: JSON.stringify(dMData),
-                        },
-                        success: function(response) {
-                            document.getElementById("printInvoiceData").innerHTML = response;
-                            printInvoice();
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                        },
-                    });
-
-                } else if (result.status === 'sessionExpired') {
-                    ErrorMessageDisplay(result.message);
-                    setTimeout(function() {
-                        window.open(window.location.href, '_blank');
-                    }, 4000);
-                    return;
-                } else if (result.status === 'sessionDataError') {
-                    ErrorMessageDisplay(result.message);
-                    setTimeout(function() {
-                        window.open(window.location.href, '_blank');
-                    }, 4000);
-                    return;
-                } else {
-                    ErrorMessageDisplay(result.message);
-                }
-
-            }
-        });
-
-    } else {
-        ErrorMessageDisplay("Enter Patient's Details");
+    if (hasChy && !patientName) {
+        return (ErrorMessageDisplay("Search with CHY to Assign patient"))
     }
+
+    var contactNo = $("#contactNo").text().trim();
+    var doctorName = $("#doctorName").val();
+    var regNo = $("#regNo").val();
+
+    var balance = $("#balance").text().replace(/,/g, "");
+    var discountPercentage = $("#discountPercentage").val() || 0;
+    var subTotal = $("#subTotal").text();
+    var netTotal = $("#netTotal").text();
+
+    var deliveryCharges = $("#deliveryCharges").val();
+    var valueAddedServices = $("#valueAddedServices").val();
+    var cashAmount = $("#cashAmount").val();
+    var cardAmount = $("#cardAmount").val();
+    var paymentMethodSelector = $("#payment-method-selector").val();
+    var selectBillType = $("#selectBillType").val();
+
+    document.getElementById("invoicePatientName").innerText = patientName;
+    document.getElementById("InvoiceContactNumber").innerText = contactNo;
+
+    var bData = {
+        patientName: patientName,
+        contactNo: contactNo,
+        doctorName: doctorName,
+        regNo: regNo,
+
+        balance: balance,
+        subTotal: subTotal,
+        netTotal: netTotal,
+        discountPercentage: discountPercentage,
+        deliveryCharges: deliveryCharges,
+        valueAddedServices: valueAddedServices,
+        cashAmount: cashAmount,
+        cardAmount: cardAmount,
+        paymentMethodSelector: paymentMethodSelector,
+        selectBillType: selectBillType,
+    };
+
+    billData.push(bData);
+
+    $("#doctorMedicineResults tr").each(function () {
+        var product_name = $(this).find("#product_name").text();
+        var item_cost = $(this).find("#item_price").text().trim();
+        var item_price = $(this).find("#doctorMedicineTotalPrice").text();
+
+        var productData = {
+            product_name: product_name,
+            item_cost: item_cost,
+            item_price: item_price,
+        };
+        dMData.push(productData);
+    });
+
+    $.ajax({
+        url: "invoiceSave.php",
+        method: "POST",
+        data: {
+            billData: JSON.stringify(billData),
+            itemData: JSON.stringify(itemData),
+            dMData: JSON.stringify(dMData),
+        },
+
+        success: function (response) {
+
+            var result = JSON.parse(response);
+
+            if (result.status === 'success') {
+
+                document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
+                SuccessMessageDisplay(result.message);
+
+                //invoice print add data
+                $.ajax({
+                    url: "invoicePrintAddData.php",
+                    method: "POST",
+                    data: {
+                        billData: JSON.stringify(billData),
+                        itemData: JSON.stringify(itemData),
+                        dMData: JSON.stringify(dMData),
+                    },
+                    success: function (response) {
+                        document.getElementById("printInvoiceData").innerHTML = response;
+                        printInvoice();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    },
+                });
+
+            } else if (result.status === 'sessionExpired') {
+                ErrorMessageDisplay(result.message);
+                setTimeout(function () {
+                    window.open(window.location.href, '_blank');
+                }, 4000);
+                return;
+            } else if (result.status === 'sessionDataError') {
+                ErrorMessageDisplay(result.message);
+                setTimeout(function () {
+                    window.open(window.location.href, '_blank');
+                }, 4000);
+                return;
+            } else {
+                ErrorMessageDisplay(result.message);
+            }
+
+        }
+    });
 }
 
 function updateBillStatus(value) {
@@ -872,10 +902,10 @@ function updateBillStatus(value) {
                     data: JSON.stringify({
                         order_number: token,
                     }),
-                    success: function(response) {
+                    success: function (response) {
                         SuccessMessageDisplay(response.message);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                     },
                 });
@@ -890,10 +920,10 @@ function updateBillStatus(value) {
                     data: JSON.stringify({
                         order_number: token,
                     }),
-                    success: function(response) {
+                    success: function (response) {
                         SuccessMessageDisplay(response.message);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                         ErrorMessageDisplay(xhr.responseText);
                     },
@@ -906,10 +936,10 @@ function updateBillStatus(value) {
                     method: "PATCH",
                     contentType: "application/json",
                     dataType: "json",
-                    success: function(response) {
+                    success: function (response) {
                         SuccessMessageDisplay(response.message);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                         ErrorMessageDisplay(xhr.responseText);
                     },
@@ -917,8 +947,6 @@ function updateBillStatus(value) {
 
                 break;
             case "4":
-
-                var token = $("#token").val();
                 $.ajax({
                     url: "https://pharmacy-order-backend.siddha.lk/order/",
                     method: "PUT",
@@ -927,10 +955,10 @@ function updateBillStatus(value) {
                     data: JSON.stringify({
                         order_number: token,
                     }),
-                    success: function(response) {
+                    success: function (response) {
                         SuccessMessageDisplay(response.message);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                         ErrorMessageDisplay(xhr.responseText);
                     },
@@ -943,8 +971,8 @@ function updateBillStatus(value) {
 
 function issetInvoiceNumber() {
     getInvoiceNumber()
-        .then(function(response) {})
-        .catch(function(xhr) {
+        .then(function (response) { })
+        .catch(function (xhr) {
             console.error(xhr.responseText);
             ErrorMessageDisplay(xhr.responseText);
         });
