@@ -1,16 +1,6 @@
 // ==============================================================================
 
 $(document).on("click", "#proceedGrnBtn", function () {
-
-  var hasInvoiceNumber = $("#hasInvoiceNumber").prop("checked");
-  var invoice_number = $("#invoice_number").val();
-
-  if (hasInvoiceNumber && !invoice_number) {
-
-    return (ErrorMessageDisplay("කෝ Invoice Number එක?"))
-
-  }
-
   var poArray = [];
   var hasErrors = false; // Flag to track if there are any errors
 
@@ -308,8 +298,6 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
   // $(this).prop('disabled', true);
   $(".confirmPObtn").prop('disabled', true);
 
-  var invoice_number = $("#invoice_number").val().trim() || null;
-
   var poArray = [];
 
   $("#grnConfirmationTableBody tr").each(function () {
@@ -349,7 +337,6 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
     url: "grnConfirmationInsert.php",
     method: "POST",
     data: {
-      invoice_number: invoice_number,
       products: JSON.stringify(poArray),
     },
     success: function (response) {

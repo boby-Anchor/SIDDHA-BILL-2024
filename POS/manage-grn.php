@@ -8,6 +8,9 @@ if (!isset($_SESSION['store_id'])) {
 } else {
     include('config/db.php');
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +59,6 @@ if (!isset($_SESSION['store_id'])) {
                                         <thead>
                                             <tr class="bg-info">
                                                 <th class="adThText">GRN Number</th>
-                                                <th class="adThText">Invoice Number</th>
                                                 <th class="adThText">Items</th>
                                                 <th class="adThText">GRN Added Date</th>
                                                 <th class="adThText">Total Price</th>
@@ -77,7 +79,6 @@ if (!isset($_SESSION['store_id'])) {
                                                     <?php while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
                                                         <tr>
                                                             <td><?= $grn_details_data["grn_number"] ?></td>
-                                                            <td><?= $grn_details_data["invoice_number"] ?></td>
                                                             <td>
                                                                 <?php
                                                                 $itemCount_result = $conn->query("SELECT COUNT(grn_number) AS grnItemsCount FROM grn_item WHERE grn_item.grn_number = '" . $grn_details_data["grn_number"] . "'");
@@ -120,7 +121,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                             <?php } ?>
                                                                         </tbody>
                                                                     </table>
-                                                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['invoice_number'] ?>','<?= $grn_details_data['grn_date'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
+                                                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['grn_date'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
                                                                 </ul>
                                                             </td>
                                                             <td><?= $grn_details_data["grn_date"] ?></td>
@@ -155,7 +156,7 @@ if (!isset($_SESSION['store_id'])) {
     <!-- All JS end -->
 
     <script>
-        function printTable(grnNumber, invoice_number, grnDate) {
+        function printTable(grnNumber, grnDate) {
             var printWindow = window.open('', '_blank');
             printWindow.document.write('<html><head><title>Print Preview</title>');
             printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
@@ -167,11 +168,6 @@ if (!isset($_SESSION['store_id'])) {
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
             printWindow.document.write('<h5>GRN Number : ' + grnNumber + '</h5>');
             printWindow.document.write('</div>');
-            if (invoice_number) {
-                printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                printWindow.document.write('<h5>Invoice Number : ' + invoice_number + '</h5>');
-                printWindow.document.write('</div>');
-            }
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
             printWindow.document.write('<h6>Added : ' + grnDate + '</h6>');
             printWindow.document.write('</div>');
