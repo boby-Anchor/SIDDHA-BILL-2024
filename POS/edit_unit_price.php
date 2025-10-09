@@ -244,9 +244,9 @@ if (!isset($_SESSION['store_id'])) {
 
                     <!-- add to stock table -->
                     <div class="col-12 d-flex flex-column align-items-center overflow-hidden ">
-                        <div class="grn_tittle">
-                            <h3>Edit Unit Price</h3>
-                        </div>
+                        <h3 class="bg-cyan text-white p-1 rounded-lg">
+                            Edit Unit Price
+                        </h3>
                         <div class="col-12">
                             <table class="table table-dark table-hover addedProTable">
                                 <thead class="text-center">
