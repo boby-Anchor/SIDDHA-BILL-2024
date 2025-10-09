@@ -16,12 +16,11 @@ if (isset($_SESSION['store_id'])) {
 
 if (isset($_POST['products'])) {
 
+    $invoice_number = $_POST['invoice_number'];
     $poArray = json_decode($_POST['products'], true);
 
     $grnTotalCost = 0;
     $grnTotalValue = 0;
-    $updated_qty = 0;
-    $updated_minimum_qty = 0;
     $newDateTime = date("Y-m-d H:i:s");
     $errorOccurred = false;
     $notificationMessage = "";
@@ -64,7 +63,7 @@ if (isset($_POST['products'])) {
                     $total_value = $product['total_value'];
                     $free_qty = $product['free_qty'] ?? 0;
 
-                    // Add product cost to the totalcost
+                    // Add product cost to the total cost
                     $grnTotalCost += $total_cost;
                     $grnTotalValue += $total_value;
 
@@ -74,12 +73,12 @@ if (isset($_POST['products'])) {
 
                     try {
                         // Insert into grn_item
-                        $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_u_cost, grn_p_cost, grn_p_price, p_plus_discount, p_free_qty)
-                            VALUES ('$grn_number', '$product_code','$product_qty', '$cost_per_unit','$total_cost','$item_price','$item_discount','$free_qty')");
+                        $conn->query("INSERT INTO grn_item (grn_number, grn_p_id, grn_p_qty, grn_u_cost, grn_p_cost, grn_item_cost, grn_p_price, p_plus_discount, p_free_qty)
+                            VALUES ('$grn_number', '$product_code','$product_qty', '$cost_per_unit','$total_cost','$cost_per_item', '$item_price','$item_discount','$free_qty')");
                     } catch (Exception $exception) {
                         $error_message = "Error: " . $conn->error . " " . $exception->getMessage() . "GRN item data insert failed. Date-" . $newDateTime . " GRN no-" . $grn_number . " Code-" . $product_code . ", Name-"
                             . $product_name . " Qty-" . $product_qty . " min qty-" . $minimum_qty . ' Discount-' . $item_discount . ' Unit Price-' . $unit_s_price . ' Total cost-' . $total_cost . ' Free qty-' . $free_qty . "\n";
-                            error_log($error_message);
+                        error_log($error_message);
                         $notificationMessage . "Failed " . $product_name . " GRN Item insert. Check error_log.";
                     }
 
@@ -90,13 +89,18 @@ if (isset($_POST['products'])) {
                     // Update or Insert into stock
 
                     if ($stock_result && $stock_result->num_rows > 0) {
+                        $updated_qty = 0.0;
+                        $updated_minimum_qty = 0.0;
                         $stock_data = $stock_result->fetch_assoc();
-                        if (floatval($stock_data["stock_item_qty"]) < 0) {
-                            $updated_qty = $product_qty;
+
+                        $current_stock = $stock_data["stock_item_qty"];
+
+                        if ($current_stock < 0) {
+                            $updated_qty = $product_total_qty;
                             $update_minimum_qty = $minimum_qty;
                         } else {
-                            $updated_qty = floatval($stock_data["stock_item_qty"]) + floatval($product_total_qty);
-                            $updated_minimum_qty = floatval($stock_data["stock_mu_qty"]) + floatval($minimum_qty);
+                            $updated_qty = $current_stock + $product_total_qty;
+                            $updated_minimum_qty = $stock_data["stock_mu_qty"] + $minimum_qty;
                         }
                         try {
                             $conn->query("UPDATE stock2 SET stock_item_qty = '$updated_qty', stock_mu_qty = '$updated_minimum_qty', unit_s_price = '$unit_s_price', added_discount='$item_discount', stock_item_cost='$cost_per_item', unit_cost='$cost_per_unit'
@@ -107,19 +111,19 @@ if (isset($_POST['products'])) {
                             $errorOccurred = true;
                             $error_message = "Error: " . $conn->error . " " . $exception->getMessage() . " " . $grn_number . "Stock data UPDATE Failed of Code-" . $product_code . ", Name-"
                                 . $product_name . " qty-" . $product_qty . " min qty-" . $minimum_qty . ' discount-' . $item_discount . ' unit price-' . $unit_s_price . ' total cost-' . $total_cost . ' free qty-' . $free_qty . "\n";
-                                error_log($error_message);
+                            error_log($error_message);
                             $notificationMessage .= "Failed " . $product_name . " stock UPDATE. Check error_log.\n";
                         }
                     } else {
                         try {
                             $conn->query("INSERT INTO stock2 (stock_item_code, stock_item_name, stock_item_qty, stock_mu_qty, stock_item_cost, unit_cost, item_s_price, unit_s_price, added_discount, stock_shop_id)
-                                VALUES ('$product_code','$product_name','$product_qty','$minimum_qty', '$cost_per_item', '$cost_per_unit', '$item_price', '$unit_s_price', '$item_discount', '$shop_id')");
+                                VALUES ('$product_code','$product_name','$product_total_qty','$minimum_qty', '$cost_per_item', '$cost_per_unit', '$item_price', '$unit_s_price', '$item_discount', '$shop_id')");
                             $notificationMessage .= "Success " . $product_name . " Inserted new stock.\n";
                         } catch (Exception $exception) {
                             $errorOccurred = true;
                             $error_message = "Error: " . $conn->error . " " . $exception->getMessage() . " " . $grn_number . "Stock data insert failed of Code-" . $product_code . ", Name-"
                                 . $product_name . " qty-" . $product_qty . " min qty-" . $minimum_qty . ' discount-' . $item_discount . ' unit price-' . $unit_s_price . ' total cost-' . $total_cost . ' free qty-' . $free_qty . "\n";
-                                error_log($error_message);
+                            error_log($error_message);
                             $notificationMessage .= "Failed " . $product_name . " stock INSERT. Check error_log.\n";
                         }
                     }
@@ -133,8 +137,8 @@ if (isset($_POST['products'])) {
 
             try {
                 // Insert into GRN table
-                $conn->query("INSERT INTO grn (grn_number, grn_date, grn_shop_id, user_id, grn_sub_total, grn_total_value)
-                VALUES ('$grn_number','$newDateTime', '$shop_id', '$user_id', '$grnTotalCost', '$grnTotalValue')");
+                $conn->query("INSERT INTO grn (grn_number, invoice_number, grn_date, grn_shop_id, user_id, grn_sub_total, grn_total_value)
+                VALUES ('$grn_number', '$invoice_number', '$newDateTime', '$shop_id', '$user_id', '$grnTotalCost', '$grnTotalValue')");
                 $notificationMessage .= "Successfully inserted GRN.\n";
             } catch (Exception $exception) {
                 $errorOccurred = true;

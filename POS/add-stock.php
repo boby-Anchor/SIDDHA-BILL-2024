@@ -14,7 +14,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | Pharmacy</title>
+    <title>GRN | Add Stock</title>
 
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -138,7 +138,7 @@ if (!isset($_SESSION['store_id'])) {
             <div class="col-12">
                 <div class="row w-100">
 
-                    <!-- left side desing start -->
+                    <!-- left side design start -->
                     <div class="col-12">
                         <div class="card-body h-100 bg-dark overflow-hidden">
                             <div class="row">
@@ -149,7 +149,7 @@ if (!isset($_SESSION['store_id'])) {
                                 <!-- supplier selector start -->
                                 <!-- <div class="col-12 p-4">
                                     <label for="select-supplier">Select Supplier</label>
-                                    <select name="select-supplier" id="select-supplier" class="form-control bg-dark" onchange="select_suplier(this.value);">
+                                    <select name="select-supplier" id="select-supplier" class="form-control bg-dark" onchange="select_supplier(this.value);">
                                         <option value="0">select supplier</option> -->
 
                                 <?php
@@ -201,7 +201,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         <th scope="col">Product Brand</th>
                                                         <th scope="col">Sell Price</th>
                                                         <th scope="col">Product Unit</th>
-                                                        <th scope="col"></th>
+                                                        <th scope="col">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="filterBySupTable">
@@ -213,6 +213,7 @@ if (!isset($_SESSION['store_id'])) {
 
                                                         foreach ($userLoginData as $userData) {
                                                             $shop_id = $userData['shop_id'];
+                                                            $user_id = $userData['id'];
                                                             $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid, p_medicine.name AS p_name, 
                                                             p_medicine.code AS code,
                                                             p_medicine.img AS img,
@@ -275,14 +276,28 @@ if (!isset($_SESSION['store_id'])) {
                             </div>
                         </div>
                     </div>
-                    <!-- left side desing end -->
+                    <!-- left side design end -->
 
                     <!-- add to stock table -->
-
-                    <div class="col-12 d-flex flex-column align-items-center overflow-hidden ">
-                        <div class="grn_tittle">
-                            <h3>ADD TO STOCK</h3>
+                    <div class="row">
+                        <div class="col-12 d-flex flex-row align-items-center overflow-hidden">
+                            <div class="col-4 bg-red"></div>
+                            <div class="col-4">
+                                <label class="bg-cyan p-1 rounded-lg text-lg">
+                                    ADD TO STOCK
+                                </label>
+                            </div>
+                            <div class="col-4 input-group">
+                                <label class="col-3 form-check-label bg-dark border-0" for="invoice_number">
+                                    Inv. No
+                                </label>
+                                <input type="text" class="col-6 form-control bg-dark" id="invoice_number" placeholder="Invoice Number">
+                                <div class="col-2 my-2 mx-3">
+                                    <input type="checkbox" class="form-check-input" id="hasInvoiceNumber" onclick="$('#invoice_number').prop('disabled', !this.checked).val('');" checked>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="col-12">
                             <table class="table table-dark table-hover addedProTable">
                                 <thead class="text-center">
@@ -303,12 +318,11 @@ if (!isset($_SESSION['store_id'])) {
                                 <tbody></tbody>
                             </table>
                         </div>
-
                     </div>
                     <div class="po_btn col-6 d-none flex-column">
                         <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
                     </div>
-                    <!-- right side desing end -->
+                    <!-- right side design end -->
                 </div>
             </div>
         </div>
@@ -421,6 +435,10 @@ if (!isset($_SESSION['store_id'])) {
 
 </body>
 
-<script src="dist/js/add-stock.js"></script>
+<script>
+    const user_id = <?php echo $user_id; ?>;
+</script>
+
+<script src="dist/js/add-stock_new2.js"></script>
 
 </html>
