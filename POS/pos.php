@@ -165,8 +165,8 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
                 <div class="input-group col-4 pt-2">
                   <div class="col-1 m-2">
-                    <input type="checkbox" id="hasChy" onclick="$('#regNo').prop('disabled', !this.checked).val('');" checked>
-
+                    <input type="checkbox" id="hasChy" onclick="$('#regNo').prop('disabled', !this.checked).val('');
+                      $('#patientName').prop('disabled', this.checked).val('').focus();" checked>
                   </div>
                   <div class="col-8" id="regNoField">
                     <input type="text" id="regNo" name="regNo" class="form-control" placeholder="CHY/"
@@ -174,8 +174,11 @@ if (!isset($_SESSION['store_id'])) {
                   </div>
                 </div>
                 <div class="col-3 pt-2">
-                  <label id="patientName" name="patientName"></label>
-                  <label id="contactNo" name="contactNo"></label>
+                  <div>
+                    <input type="text" class="col-12 form-control" id="patientName" name="patientName" placeholder="Patient Name" disabled />
+
+                    <label id="contactNo" class="col-12" name="contactNo"></label>
+                  </div>
                 </div>
                 <div id="doctorNameField" class="col-3 pt-2">
                   <select class="form-control select2" id="doctorName" name="doctorName">
@@ -192,8 +195,10 @@ if (!isset($_SESSION['store_id'])) {
                     ?>
                   </select>
                 </div>
+
               </div>
               <br>
+
 
               <div class="col-4 mb-2 p-2">
                 <div class="row">
@@ -251,10 +256,6 @@ if (!isset($_SESSION['store_id'])) {
 
               <!-- Company Product list -->
               <div class="col-12 bg-dark" style="height: 100vh; overflow:auto;">
-                <!-- <div class="form-row input-group">
-                  <button class="btn btn-success ">Paththu</button>
-                  <input type="search" class="" name="search21" id="search21" onkeyup="searchProducts(); return false;" placeholder="Search...">
-                </div> -->
 
                 <!-- Search and paththu button -->
                 <div class="input-group mt-3 form-group ">

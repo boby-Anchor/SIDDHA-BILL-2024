@@ -11,7 +11,7 @@ function fetchPatient(chyNumber) {
     if (chyNumber.length > 8) {
 
         $.ajax({
-            url: "https://admin.ceylonhospitals.com/api/v1/siddha/patient/",
+            url: "https://app.ceylonhospitals.com/api/v1/siddha/patient/",
             // url: "http://localhost:5001/api/v1/siddha/patient/",
             method: "POST",
             contentType: "application/json",
@@ -21,7 +21,7 @@ function fetchPatient(chyNumber) {
             }),
             success: function (response) {
 
-                $("#patientName").text(response.profileData.name);
+                $("#patientName").val(response.profileData.name);
                 $("#titleName").text(response.profileData.name);
                 $("#contactNo").text(response.profileData.whatsapp_no);
 
@@ -769,7 +769,7 @@ function checkout(itemData) {
 
     var billData = [];
     var dMData = [];
-    var patientName = $("#patientName").text().trim() || null;
+    var patientName = $("#patientName").val().trim() || null;
 
     var hasChy = $("#hasChy").prop("checked");
     var regNo = $("#regNo").val();
@@ -794,8 +794,8 @@ function checkout(itemData) {
     var paymentMethodSelector = $("#payment-method-selector").val();
     var selectBillType = $("#selectBillType").val();
 
-    document.getElementById("invoicePatientName").innerText = patientName;
-    document.getElementById("InvoiceContactNumber").innerText = contactNo;
+    $('#invoicePatientName').text(patientName);
+    $('#InvoiceContactNumber').text(contactNo);
 
     var bData = {
         patientName: patientName,
@@ -969,21 +969,22 @@ function updateBillStatus(value) {
     }
 }
 
-function issetInvoiceNumber() {
-    getInvoiceNumber()
-        .then(function (response) { })
-        .catch(function (xhr) {
-            console.error(xhr.responseText);
-            ErrorMessageDisplay(xhr.responseText);
-        });
-}
+// function issetInvoiceNumber() {
+//     getInvoiceNumber()
+//         .then(function (response) {
+//         })
+//         .catch(function (xhr) {
+//             console.error(xhr.responseText);
+//             ErrorMessageDisplay(xhr.responseText);
+//         });
+// }
 
-function getInvoiceNumber() {
-    return $.ajax({
-        url: "invoiceConfirmation.php",
-        method: "POST",
-        // data: {
-        //   products: inArray,
-        // },
-    });
-}
+// function getInvoiceNumber() {
+//     return $.ajax({
+//         url: "invoiceConfirmation.php",
+//         method: "POST",
+//         // data: {
+//         //   products: inArray,
+//         // },
+//     });
+// }
