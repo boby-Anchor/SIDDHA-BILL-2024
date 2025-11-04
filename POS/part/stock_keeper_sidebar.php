@@ -489,9 +489,8 @@ if (isset($_SESSION['store_id'])) {
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="manage-doctors.php" class="nav-link">
                       <i class="nav-icon fas fa-copy"></i>
-                      <i class=""></i>
                       <p>Add doctor</p>
                     </a>
                   </li>
