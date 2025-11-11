@@ -137,11 +137,11 @@ if (!isset($_SESSION['store_id'])) {
                       <?php
                       $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
-                        ?>
+                      ?>
                         <option value="<?= $payment_type_row['payment_type_id'] ?>">
                           <?= $payment_type_row['payment_type'] ?>
                         </option>
-                        <?php
+                      <?php
                       }
                       ?>
                     </select>
@@ -161,7 +161,7 @@ if (!isset($_SESSION['store_id'])) {
               <div class="d-flex">
                 <div class="col-2 mb-2 p-2">
                   <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
-                    onchange="getBarcode2(this.value);">
+                    onchange="getPrices(this.value);">
                 </div>
                 <div class="input-group col-4 pt-2">
                   <div class="col-1 m-2">
@@ -186,11 +186,11 @@ if (!isset($_SESSION['store_id'])) {
                     <?php
                     $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
                     while ($doctors_row = $doctors_rs->fetch_assoc()) {
-                      ?>
+                    ?>
                       <option value="<?= $doctors_row['name'] ?>">
                         <?= $doctors_row['name'] ?>
                       </option>
-                      <?php
+                    <?php
                     }
                     ?>
                   </select>
@@ -223,11 +223,11 @@ if (!isset($_SESSION['store_id'])) {
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
                   while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
-                    ?>
+                  ?>
                     <option value="<?= $bill_type_row['bill_type_id'] ?>">
                       <?= $bill_type_row['bill_type_name'] ?>
                     </option>
-                    <?php
+                  <?php
                   }
                   ?>
                 </select>
@@ -290,8 +290,8 @@ if (!isset($_SESSION['store_id'])) {
 
                       if (!empty($cm)) {
                         foreach ($cm as $v) {
-                          ?>
-                          <div class="col-md-4 col-sm-6 mt-3" onclick="getBarcode2('<?= $v['code']; ?>')">
+                  ?>
+                          <div class="col-md-4 col-sm-6 mt-3" onclick="getPrices('<?= $v['code']; ?>')">
                             <div class="product-grid h-100 rounded-lg">
                               <div class="product-content">
                                 <div class="title"><?php echo $v['name']; ?>
@@ -314,7 +314,7 @@ if (!isset($_SESSION['store_id'])) {
                               </div>
                             </div>
                           </div>
-                        <?php }
+                  <?php }
                       }
                     }
                   } ?>
@@ -431,6 +431,36 @@ if (!isset($_SESSION['store_id'])) {
       </div>
     </div>
     <!-- doctor medicine add end -->
+
+    <!-- Select selling price modal start -->
+    <div class="container">
+      <div class="modal" id="sellingPriceModal" role="dialog">
+        <div class="modal-dialog d-flex justify-content-between ">
+          <div class="modal-content bg-dark align-items-center">
+            <div class="mt-3">
+              <h4>Select selling price</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table" id="sellingPriceModalTable">
+                <thead>
+                  <tr>
+                    <th>Unit price</th>
+                    <th>Item price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="document.querySelector('#sellingPriceModalTable tbody').innerHTML = ''">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Select selling price modal end -->
+
     <!-- Footer -->
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
@@ -465,7 +495,7 @@ if (!isset($_SESSION['store_id'])) {
           WHERE `customize_bill_shop-id` = '$shop_id'
           ");
           $bill_data = $bill_data_rs->fetch_assoc();
-          ?>
+      ?>
           <div class="d-flex justify-content-center">
             <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
               <div class="row gap-1">
@@ -481,7 +511,7 @@ if (!isset($_SESSION['store_id'])) {
                             <h3>
                               <b>
                                 <?php //echo $bill_data['shopName'] 
-                                    ?>
+                                ?>
                               </b>
                             </h3>
                           </label>
@@ -574,7 +604,7 @@ if (!isset($_SESSION['store_id'])) {
               </table>
             </div>
           </div>
-          <?php
+      <?php
         }
       }
       ?>
@@ -588,7 +618,7 @@ if (!isset($_SESSION['store_id'])) {
 <script src="dist/js/messageDisplay.js"> </script>
 
 <script>
-  $(function () {
+  $(function() {
     //Initialize Select2 Elements
     $(".select2").select2();
 
