@@ -49,8 +49,17 @@ if (isset($_POST['products'])) {
                     if ($stock_result && $stock_result->num_rows > 0) {
                         try {
                             $stock_data = $stock_result->fetch_assoc();
-                            $updated_qty = floatval($stock_data["stock_item_qty"]) + floatval($product_qty);
-                            $updated_minimum_qty = floatval($stock_data["stock_mu_qty"]) + floatval($minimum_qty);
+
+                            if ($stock_data["stock_item_qty"] < 0) {
+                                $updated_qty = floatval($product_qty);
+                                $updated_minimum_qty = floatval($minimum_qty);
+                            } else {
+                                $updated_qty =  floatval($product_qty) + floatval($stock_data["stock_item_qty"]);
+                                $updated_minimum_qty = floatval($minimum_qty);+ floatval($stock_data["stock_mu_qty"]);
+                            }
+
+                            // $updated_qty = floatval($stock_data["stock_item_qty"]) + floatval($product_qty);
+                            // $updated_minimum_qty = floatval($stock_data["stock_mu_qty"]) + floatval($minimum_qty);
 
                             $conn->query("UPDATE stock2 SET stock_item_qty = '$updated_qty', stock_mu_qty = '$updated_minimum_qty', unit_s_price = '$unit_s_price'
                             WHERE stock_item_code = '$product_code' AND item_s_price='$item_price' AND stock_shop_id = '$shop_id'");
@@ -69,7 +78,7 @@ if (isset($_POST['products'])) {
                             $errorOccurred = true;
                             $error_message = "Error: " . $conn->error . " " . $exception->getMessage() . " " . $grn_number . "Stock data insert failed of Code-" . $product_code . ", Name-"
                                 . $product_name . " qty-" . $product_qty . " min qty-" . $minimum_qty . ' discount-' . $item_discount . ' unit price-' . $unit_s_price . ' total cost-' . $total_cost . ' free qty-' . $free_qty . "\n";
-                                error_log($error_message);
+                            error_log($error_message);
                             $notificationMessage .= "Failed " . $product_name . " stock INSERT. Check error_log.\n";
                         }
                     }

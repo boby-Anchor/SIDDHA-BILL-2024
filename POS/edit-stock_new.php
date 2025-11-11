@@ -14,7 +14,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home | Pharmacy</title>
+  <title>Edit Stock | Special</title>
 
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
