@@ -423,7 +423,7 @@ if (!isset($_SESSION['store_id'])) {
   <?php include("part/data-table-js.php"); ?>
   <!-- Data Table JS end -->
 
-  <script src="dist/js/edit-stock_new.js"></script>
+  <script src="dist/js/edit-stock.js"></script>
 
 </body>
 

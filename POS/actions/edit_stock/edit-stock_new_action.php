@@ -1,5 +1,5 @@
 <?php
-include('../config/db.php');
+include('../../config/db.php');
 session_start();
 
 if (isset($_SESSION['store_id'])) {

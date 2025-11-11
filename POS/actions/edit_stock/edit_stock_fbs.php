@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config/db.php');
+include('../../config/db.php');
 $bnInput = $_POST["bnInput"];
 $pcInput = $_POST["pcInput"];
 $pnInput = $_POST["pnInput"];
