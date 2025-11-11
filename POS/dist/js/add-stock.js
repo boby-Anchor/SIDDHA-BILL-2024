@@ -6,9 +6,11 @@ $(document).on("click", "#proceedGrnBtn", function () {
   var invoice_number = $("#invoice_number").val();
 
   if (hasInvoiceNumber && !invoice_number) {
-
-    return (ErrorMessageDisplay("කෝ Invoice Number එක?"))
-
+    if (user_id == 44) {
+      return (ErrorMessageDisplay("කෝ දැහැමි Invoice Number එක?"))
+    } else {
+      return (ErrorMessageDisplay("කෝ Invoice Number එක?"))
+    }
   }
 
   var poArray = [];

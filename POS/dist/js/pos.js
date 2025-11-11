@@ -35,6 +35,93 @@ function fetchPatient(chyNumber) {
     }
 }
 
+function getPrices(barcode) {
+
+    $.ajax({
+        url: "actions/pos/getPrices.php",
+        method: "POST",
+        data: {
+            barcode,
+        },
+        success: function (response) {
+            const result = JSON.parse(response);
+
+            switch (result.status) {
+                case 'success':
+
+                    const tableBody = document.querySelector('#sellingPriceModalTable tbody');
+
+                    result.data.forEach(row => {
+                        const newRow = document.createElement('tr');
+
+                        newRow.innerHTML = `
+                <td>
+                  <button class="w-100 btn btn-lg btn-primary"
+                    ${row.unit_price < 1 ? 'disabled' : ''}>
+                      ${row.unit_price}
+                  </button>
+                </td>
+                <td>
+                  <button class="w-100 btn btn-lg btn-warning"
+                    ${row.item_price < 1 ? 'disabled' : ''}>
+                      ${row.item_price}
+                  </button>
+                </td>
+              `;
+                        tableBody.appendChild(newRow);
+                    });
+                    $('#sellingPriceModal').modal('show');
+                    break;
+
+                case 'sessionExpired':
+                    handleExpiredSession(result.message);
+                    break;
+
+                default:
+                    ErrorMessageDisplay(result.message);
+                    break;
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        },
+    });
+}
+
+function selectProduct() {
+    $.ajax({
+        url: "actions/pos/selectProduct.php",
+        method: "POST",
+        data: {
+            barcode,
+        },
+        success: function (response) {
+
+            const result = JSON.parse(response);
+
+            switch (result.status) {
+                case 'success':
+
+                    $('#sellingPriceModal').modal('hide');
+                    break;
+
+                case 'sessionExpired':
+                    handleExpiredSession(result.message);
+                    break;
+
+                default:
+                    ErrorMessageDisplay(result.message);
+                    break;
+            }
+
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            ErrorMessageDisplay(xhr.responseText);
+        },
+    });
+}
+
 function getBarcode3() {
     var selectPrices = document.getElementById("selectPrices").value;
 
@@ -42,23 +129,20 @@ function getBarcode3() {
     req.onreadystatechange = function () {
         if (req.readyState == 4 && req.status == 200) {
             var txt = req.responseText;
-            var barcodeResults = document.getElementById("barcodeResults");
-            var existingRows = barcodeResults.querySelectorAll("tr[data-barcode]");
 
-            for (var i = 0; i < existingRows.length; i++) {
-                var existingBarcode = existingRows[i].getAttribute("data-barcode");
-                if (existingBarcode === selectPrices) {
-                    alert("Product already added");
-                    document.getElementById("barcodeInput").value = "";
-                    document.getElementById("barcodeInput").focus();
-                    return;
-                }
+            const barcodeResults = document.getElementById("barcodeResults");
+            const barcodeInput = document.getElementById("barcodeInput");
+            const existingRow = barcodeResults.querySelector(`tr[data-barcode="${selectPrices}"]`);
+
+            if (existingRow) {
+                ErrorMessageDisplay("Product already added to the bill!");
+            } else {
+                barcodeResults.insertAdjacentHTML("beforeend", txt);
             }
 
-            barcodeResults.insertAdjacentHTML("beforeend", txt);
-
-            document.getElementById("barcodeInput").value = "";
-            document.getElementById("barcodeInput").focus();
+            // reset input and selection
+            barcodeInput.value = "";
+            barcodeInput.focus();
             document.getElementById("selectPrices").selectedIndex = -1;
             calculateSubTotal();
         }
@@ -74,6 +158,7 @@ function getBarcode3() {
 }
 
 function getBarcode2(barcode) {
+
     var req = new XMLHttpRequest();
     req.onreadystatechange = function () {
         if (req.readyState == 4 && req.status == 200) {
@@ -88,55 +173,53 @@ function getBarcode2(barcode) {
     $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
 }
 
-function getBarcode(barcode, stock_s_price) {
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-        if (req.readyState == 4 && req.status == 200) {
-            var txt = req.responseText;
-            var barcodeResults = document.getElementById("barcodeResults");
-            var existingRows = barcodeResults.querySelectorAll("tr[data-barcode]");
-
-            for (var i = 0; i < existingRows.length; i++) {
-                var existingBarcode = existingRows[i].getAttribute("data-barcode");
-                if (existingBarcode === barcode + stock_s_price) {
-                    alert("Product already added");
-                    document.getElementById("barcodeInput").value = "";
-                    document.getElementById("barcodeInput").focus();
-                    return;
-                }
-            }
-
-            barcodeResults.insertAdjacentHTML("beforeend", txt);
-
-            document.getElementById("barcodeInput").value = "";
-            document.getElementById("barcodeInput").focus();
-            calculateSubTotal();
-        }
-    };
-
-    var url =
-        "search_barcode.php?barcode=" +
-        encodeURIComponent(barcode) +
-        "&stock_s_price=" +
-        encodeURIComponent(stock_s_price);
-
-    req.open("GET", url, true);
-    req.send();
-    $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
-    $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
-}
-
 function searchProducts() {
     var searchInput = document.getElementById("search21").value.trim();
     if (searchInput !== "") {
         $.ajax({
             type: "POST",
-            url: "actions/searchNameProductPos.php",
+            url: "actions/pos/searchProductByName.php",
             data: {
                 searchName: searchInput,
             },
             success: function (response) {
-                $("#productGrid").html(response);
+
+                const result = JSON.parse(response);
+
+                switch (result.status) {
+                    case 'success':
+                        $("#productGrid").html("");
+                        result.data.forEach(item => {
+
+                            let component = `
+                <div class="col-md-4 col-sm-6 mt-3" onclick="getPrices('${item.code}')">
+                  <div class="product-grid h-100">
+                    <div class="product-content">
+                      <div class="name" style="color: #fff;">${item.name}<br>${item.code}</div>
+                      <div class="name" style="color: #f67019; font-size:20px;">${item.bName}</div>
+                      <div class="price" style="color: #3dce12;">I:- RS ${item.item_s_price}</div>
+                      <div class="price" style="color: #d8f13b;">U:- RS ${item.unit_s_price}</div>
+                      <div class="title" style="color: #fff;">${item.ucv_name2} - ${item.unit2}</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+                            $("#productGrid").append(component);
+                        });
+                        break;
+
+                    case 'empty':
+                        $("#productGrid").html("<h1 style='color: white;'>" + result.message + ".</h1>");
+                        break;
+
+                    case 'error':
+                        ErrorMessageDisplay(result.message);
+                        break;
+
+                    case 'sessionExpired':
+                        handleExpiredSession(result.message);
+                        break;
+                }
             },
         });
     }
@@ -316,7 +399,7 @@ function addPaththu() {
       </div>
   </td>
 
-  <td class="total" id="paththuTotalPrice">${paththuPrice}</td>
+  <td class="total" id="totalprice">${paththuPrice}</td>
   <td>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
           <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
@@ -843,45 +926,42 @@ function checkout(itemData) {
 
             var result = JSON.parse(response);
 
-            if (result.status === 'success') {
+            switch (result.status) {
+                case 'success':
+                    document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
+                    SuccessMessageDisplay(result.message);
 
-                document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
-                SuccessMessageDisplay(result.message);
+                    //invoice print add data
+                    $.ajax({
+                        url: "invoicePrintAddData.php",
+                        method: "POST",
+                        data: {
+                            billData: JSON.stringify(billData),
+                            itemData: JSON.stringify(itemData),
+                            dMData: JSON.stringify(dMData),
+                        },
+                        success: function (response) {
+                            document.getElementById("printInvoiceData").innerHTML = response;
+                            printInvoice();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        },
+                    });
+                    break;
 
-                //invoice print add data
-                $.ajax({
-                    url: "invoicePrintAddData.php",
-                    method: "POST",
-                    data: {
-                        billData: JSON.stringify(billData),
-                        itemData: JSON.stringify(itemData),
-                        dMData: JSON.stringify(dMData),
-                    },
-                    success: function (response) {
-                        document.getElementById("printInvoiceData").innerHTML = response;
-                        printInvoice();
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                    },
-                });
+                case 'sessionExpired':
+                    handleExpiredSession(result.message);
+                    break;
 
-            } else if (result.status === 'sessionExpired') {
-                ErrorMessageDisplay(result.message);
-                setTimeout(function () {
-                    window.open(window.location.href, '_blank');
-                }, 4000);
-                return;
-            } else if (result.status === 'sessionDataError') {
-                ErrorMessageDisplay(result.message);
-                setTimeout(function () {
-                    window.open(window.location.href, '_blank');
-                }, 4000);
-                return;
-            } else {
-                ErrorMessageDisplay(result.message);
+                case 'sessionDataError':
+                    handleExpiredSession(result.message);
+                    break;
+
+                default:
+                    ErrorMessageDisplay(result.message);
+                    break;
             }
-
         }
     });
 }
@@ -969,22 +1049,10 @@ function updateBillStatus(value) {
     }
 }
 
-// function issetInvoiceNumber() {
-//     getInvoiceNumber()
-//         .then(function (response) {
-//         })
-//         .catch(function (xhr) {
-//             console.error(xhr.responseText);
-//             ErrorMessageDisplay(xhr.responseText);
-//         });
-// }
 
-// function getInvoiceNumber() {
-//     return $.ajax({
-//         url: "invoiceConfirmation.php",
-//         method: "POST",
-//         // data: {
-//         //   products: inArray,
-//         // },
-//     });
-// }
+function handleExpiredSession(message) {
+    ErrorMessageDisplay(message);
+    setTimeout(function () {
+        window.open(window.location.href, '_blank');
+    }, 4000);
+}
