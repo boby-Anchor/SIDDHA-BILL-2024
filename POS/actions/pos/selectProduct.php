@@ -29,7 +29,6 @@ if (isset($_GET['barcode'])) {
             $barcodeResult = $conn->query("SELECT 
             stock2.item_s_price AS item_s_price,
             stock2.unit_s_price AS unit_s_price,
-            stock2.stock_item_cost AS stock_item_cost,
             p_medicine.id AS id,
             p_medicine.code AS code,
             p_medicine.name AS name,
@@ -44,23 +43,12 @@ if (isset($_GET['barcode'])) {
             WHERE stock_shop_id = '$shop_id' AND stock2.stock_id = '$barcode' ");
             if ($barcodeResult->num_rows > 0) {
 
-                $displayedProducts = array();
-                $productsAllTotal = 0;
-
                 while ($barcodeData = $barcodeResult->fetch_assoc()) {
 
                     // $totalPrice = number_format($barcodeData['stock_s_price'], 2);
                     $totalPrice = $barcodeData['item_s_price'];
                     $totalPriceunit = $barcodeData['unit_s_price'];
 
-                    $productsAllTotal += $barcodeData['stock_item_cost'];
-
-                    if (in_array($barcodeData['id'], $displayedProducts)) {
-
-                        continue;
-                    }
-
-                    $displayedProducts[] = $barcodeData['id'];
 
                     if ($type === "ip") {
                         // echo 'stock_id- '.$barcodeData['stock_id'].'<br>';
