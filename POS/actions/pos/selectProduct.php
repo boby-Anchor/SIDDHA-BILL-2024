@@ -1,140 +1,53 @@
 <?php
 session_start();
-require "config/db.php";
+require "../../config/db.php";
 
-if (isset($_GET['barcode'])) {
-    $barcode = $_GET['barcode'];  // 1-1350_ip  or 1-0.35_up
+$stock_id;
 
-    list($stockId, $remaining) = explode('-', $barcode);
-
-    // Split the remaining part by the underscore
-    list($price, $type) = explode('_', $remaining);
-
-    // Convert the first part to an integer
-    $stockId = (int)$stockId;
-
-    // Convert the second part to a float
-    $price = (float)$price;
-
-    // The third part remains a string
-    $type = (string)$type;
-
-    if (isset($_SESSION['store_id'])) {
-
-        $userLoginData = $_SESSION['store_id'];
-
-        foreach ($userLoginData as $userData) {
-            $shop_id = $userData['shop_id'];
-
-            $barcodeResult = $conn->query("SELECT 
-            stock2.item_s_price AS item_s_price,
-            stock2.unit_s_price AS unit_s_price,
-            p_medicine.id AS id,
-            p_medicine.code AS code,
-            p_medicine.name AS name,
-            unit_category_variation.ucv_name AS ucv_name,
-            p_brand.name AS brand,
-            medicine_unit.unit AS unit
-            FROM stock2
-            INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-            INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-            INNER JOIN p_brand ON p_medicine.brand = p_brand.id
-            WHERE stock_shop_id = '$shop_id' AND stock2.stock_id = '$barcode' ");
-            if ($barcodeResult->num_rows > 0) {
-
-                while ($barcodeData = $barcodeResult->fetch_assoc()) {
-
-                    // $totalPrice = number_format($barcodeData['stock_s_price'], 2);
-                    $totalPrice = $barcodeData['item_s_price'];
-                    $totalPriceunit = $barcodeData['unit_s_price'];
-
-
-                    if ($type === "ip") {
-                        // echo 'stock_id- '.$barcodeData['stock_id'].'<br>';
-?>
-                        <tr data-barcode="<?= $barcodeData['code'] ?><?= $barcodeData['item_s_price'] ?>">
-                            <!-- <th scope="row">#</th> -->
-                            <th><input type="checkbox" name="isPaththu" id="isPaththu" onchange="calculateSubTotal()"> </th>
-                            <td id="code" class="d-none"><?= $barcodeData['code'] ?></td>
-                            <td id="ucv" class="d-none"><?= $barcodeData['ucv_name'] ?></td>
-                            <td id="item_price" class="d-none"><?= $barcodeData['item_s_price'] ?></td>
-                            <td id="unit_price" class="d-none"><?= $barcodeData['unit_s_price'] ?></td>
-                            <td id="brand" class="d-none"><?= $barcodeData['brand'] ?></td>
-
-                            <td id="product_name"><?= $barcodeData['name'] ?></td>
-                            <td id="product_price"><?= $barcodeData['item_s_price'] ?></td>
-                            <td>
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-2 d-flex justify-content-center">
-                                            <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
-                                        </div>
-                                        <div class="col-4">
-                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" onchange="updateTotal(this)" data-price="<?= $barcodeData['item_s_price'] ?>">
-                                        </div>
-                                        <div class="col-2 d-flex justify-content-center">
-                                            <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
-                                        </div>
-                                        <div class="col-2">
-                                            <label for="" id="unit"><?= $barcodeData['unit'] ?></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-
-                            <td class="total" id="totalprice"><?= $totalPrice ?></td>
-                            <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
-                                </svg>
-                            </td>
-                        </tr>
-                    <?php
-                    } else {
-
-                    ?>
-                        <tr data-barcode="<?= $barcodeData['code'] ?><?= $barcodeData['unit_s_price'] ?>">
-                            <!-- <th scope="row">#</th> -->
-                            <th scope="row"><input type="checkbox" name="isPaththu" id="isPaththu" onchange="calculateSubTotal()"> </th>
-                            <td id="code" class="d-none"><?= $barcodeData['code'] ?></td>
-                            <td id="ucv" class="d-none"><?= $barcodeData['ucv_name'] ?></td>
-                            <td id="item_price" class="d-none"><?= $barcodeData['item_s_price'] ?></td>
-                            <td id="unit_price" class="d-none"><?= $barcodeData['unit_s_price'] ?></td>
-                            <td id="brand" class="d-none"><?= $barcodeData['brand'] ?></td>
-
-                            <td id="product_name"><?= $barcodeData['name'] ?></td>
-                            <td id="product_price"><?= $barcodeData['unit_s_price'] ?></td>
-                            <td>
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-2 d-flex justify-content-center">
-                                            <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
-                                        </div>
-                                        <div class="col-4">
-                                            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" onchange="updateTotal(this)" data-price="<?= $barcodeData['unit_s_price'] ?>">
-                                        </div>
-                                        <div class="col-2 d-flex justify-content-center">
-                                            <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
-                                        </div>
-                                        <div class="col-2">
-                                            <label for="" id="unit"><?= $barcodeData['unit'] ?></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-
-                            <td class="total" id="totalprice"><?= $totalPriceunit ?></td>
-                            <td><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
-                                </svg>
-                            </td>
-                        </tr>
-<?php
-                    }
-                }
-            }
-        }
-    }
+if (isset($_POST['stock_id'])) {
+    $stock_id = $_POST['stock_id'];
+} else {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Data not received.',
+    ]);
+    exit();
 }
 
-?>
+try {
+    $barcodeResult = $conn->query("SELECT 
+    stock2.item_s_price AS item_s_price,
+    stock2.unit_s_price AS unit_s_price,
+    p_medicine.id AS id,
+    p_medicine.code AS code,
+    p_medicine.name AS name,
+    unit_category_variation.ucv_name AS ucv_name,
+    p_brand.name AS brand,
+    medicine_unit.unit AS unit
+    FROM stock2
+    INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
+    INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
+    INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
+    INNER JOIN p_brand ON p_medicine.brand = p_brand.id
+    WHERE stock_id ='$stock_id' ");
+
+    if ($barcodeResult && $barcodeResult->num_rows > 0) {
+        echo json_encode([
+            'status' => 'success',
+            'data' => $barcodeResult->fetch_all(MYSQLI_ASSOC),
+        ]);
+        exit();
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'No data found!',
+        ]);
+        exit();
+    }
+} catch (Exception $exception) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => $exception->getMessage(),
+    ]);
+    exit();
+}

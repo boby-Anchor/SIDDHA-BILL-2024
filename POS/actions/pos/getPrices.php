@@ -37,12 +37,8 @@ if (isset($_POST['barcode'])) {
 }
 
 try {
-    // $itemDetails = $conn->query("SELECT p_medicine.name AS name,
-    // p_brand.name AS brand,
-    // stock2.");
-
-
-    $barcodeResult = $conn->query("SELECT stock2.unit_s_price AS unit_price,
+    $barcodeResult = $conn->query("SELECT stock2.stock_id,
+    stock2.unit_s_price AS unit_price,
     stock2.item_s_price AS item_price
     FROM stock2
     WHERE stock_shop_id = '$shop_id'

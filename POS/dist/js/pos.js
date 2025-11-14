@@ -2,14 +2,18 @@ $(document).ready(function () {
     $("#barcodeInput").focus();
 });
 
+// reset prices modal table body on modal close
+$("#sellingPriceModal").on("hidden.bs.modal", function () {
+    $("#sellingPriceModalTable tbody").empty();
+});
+
+// update bill status to abandoned when invoice tab closes
 // window.addEventListener("unload", function () {
 //     updateBillStatus(4);
 // });
 
 function fetchPatient(chyNumber) {
-
     if (chyNumber.length > 8) {
-
         $.ajax({
             url: "https://app.ceylonhospitals.com/api/v1/siddha/patient/",
             // url: "http://localhost:5001/api/v1/siddha/patient/",
@@ -20,7 +24,6 @@ function fetchPatient(chyNumber) {
                 chy: chyNumber,
             }),
             success: function (response) {
-
                 $("#patientName").val(response.profileData.name);
                 $("#titleName").text(response.profileData.name);
                 $("#contactNo").text(response.profileData.whatsapp_no);
@@ -36,7 +39,6 @@ function fetchPatient(chyNumber) {
 }
 
 function getPrices(barcode) {
-
     $.ajax({
         url: "actions/pos/getPrices.php",
         method: "POST",
@@ -47,33 +49,32 @@ function getPrices(barcode) {
             const result = JSON.parse(response);
 
             switch (result.status) {
-                case 'success':
+                case "success":
+                    const tableBody = document.querySelector("#sellingPriceModalTable tbody");
 
-                    const tableBody = document.querySelector('#sellingPriceModalTable tbody');
-
-                    result.data.forEach(row => {
-                        const newRow = document.createElement('tr');
+                    result.data.forEach((row) => {
+                        const newRow = document.createElement("tr");
 
                         newRow.innerHTML = `
                 <td>
-                  <button class="w-100 btn btn-lg btn-primary"
-                    ${row.unit_price < 1 ? 'disabled' : ''}>
+                  <button class="w-100 btn btn-lg btn-primary" onclick="selectProduct(${row.stock_id}, 'unit')"
+                    ${row.unit_price < 1 ? "disabled" : ""}>
                       ${row.unit_price}
                   </button>
                 </td>
                 <td>
-                  <button class="w-100 btn btn-lg btn-warning"
-                    ${row.item_price < 1 ? 'disabled' : ''}>
+                  <button class="w-100 btn btn-lg btn-warning" onclick="selectProduct(${row.stock_id}, 'item')"
+                    ${row.item_price < 1 ? "disabled" : ""}>
                       ${row.item_price}
                   </button>
                 </td>
               `;
                         tableBody.appendChild(newRow);
                     });
-                    $('#sellingPriceModal').modal('show');
+                    $("#sellingPriceModal").modal("show");
                     break;
 
-                case 'sessionExpired':
+                case "sessionExpired":
                     handleExpiredSession(result.message);
                     break;
 
@@ -88,32 +89,34 @@ function getPrices(barcode) {
     });
 }
 
-function selectProduct() {
+function selectProduct(stock_id, type) {
     $.ajax({
         url: "actions/pos/selectProduct.php",
         method: "POST",
         data: {
-            barcode,
+            stock_id,
         },
         success: function (response) {
-
             const result = JSON.parse(response);
 
             switch (result.status) {
-                case 'success':
-
-                    $('#sellingPriceModal').modal('hide');
+                case "success":
+                    addProductRow(result.data[0], type);
+                    $("#sellingPriceModal").modal("hide");
                     break;
 
-                case 'sessionExpired':
+                case "sessionExpired":
+                    handleExpiredSession(result.message);
+                    break;
+
+                case "error":
                     handleExpiredSession(result.message);
                     break;
 
                 default:
-                    ErrorMessageDisplay(result.message);
+                    ErrorMessageDisplay("An unknown error occurred.");
                     break;
             }
-
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -122,55 +125,65 @@ function selectProduct() {
     });
 }
 
-function getBarcode3() {
-    var selectPrices = document.getElementById("selectPrices").value;
+function addProductRow(barcodeData, type) {
+    const tableBody = document.querySelector("#barcodeResults");
+    const totalPrice = barcodeData.item_s_price;
+    const totalPriceUnit = barcodeData.unit_s_price;
 
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-        if (req.readyState == 4 && req.status == 200) {
-            var txt = req.responseText;
+    const priceToShow = type === "item" ? barcodeData.item_s_price : barcodeData.unit_s_price;
+    const totalToShow = type === "item" ? totalPrice : totalPriceUnit;
+    const dataBarcode = barcodeData.code + priceToShow;
 
-            const barcodeResults = document.getElementById("barcodeResults");
-            const barcodeInput = document.getElementById("barcodeInput");
-            const existingRow = barcodeResults.querySelector(`tr[data-barcode="${selectPrices}"]`);
+    const newRow = document.createElement("tr");
+    newRow.setAttribute("data-barcode", dataBarcode);
 
-            if (existingRow) {
-                ErrorMessageDisplay("Product already added to the bill!");
-            } else {
-                barcodeResults.insertAdjacentHTML("beforeend", txt);
-            }
+    newRow.innerHTML = `
+    <th><input type="checkbox" name="isPaththu" id="isPaththu" onchange="calculateSubTotal()"></th>
+    <td id="code" class="d-none">${barcodeData.code}</td>
+    <td id="ucv" class="d-none">${barcodeData.ucv_name}</td>
+    <td id="item_price" class="d-none">${barcodeData.item_s_price}</td>
+    <td id="unit_price" class="d-none">${barcodeData.unit_s_price}</td>
+    <td id="brand" class="d-none">${barcodeData.brand}</td>
 
-            // reset input and selection
-            barcodeInput.value = "";
-            barcodeInput.focus();
-            document.getElementById("selectPrices").selectedIndex = -1;
-            calculateSubTotal();
-        }
-    };
+    <td id="product_name">${barcodeData.name}</td>
+    <td id="product_price">${priceToShow}</td>
 
-    var url = "search_barcode3.php?barcode=" + encodeURIComponent(selectPrices);
+    <td>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-2 d-flex justify-content-center">
+            <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+          </div>
+          <div class="col-4">
+            <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '');"
+              onchange="updateTotal(this)"
+              data-price="${priceToShow}">
+          </div>
+          <div class="col-2 d-flex justify-content-center">
+            <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+          </div>
+          <div class="col-2">
+            <label id="unit">${barcodeData.unit}</label>
+          </div>
+        </div>
+      </div>
+    </td>
 
-    req.open("GET", url, true);
-    req.send();
-    // alert($("#barcodeResults tr").length);
-    $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
-    $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
-}
-
-function getBarcode2(barcode) {
-
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function () {
-        if (req.readyState == 4 && req.status == 200) {
-            var txt = req.responseText;
-            document.getElementById("selectPrices").innerHTML = txt;
-        }
-    };
-    req.open("GET", "search_barcode2.php?barcode=" + barcode, true);
-    req.send();
-    // alert($("#barcodeResults tr").length);
-    $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length >= 0);
-    $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length < 0);
+    <td class="total" id="totalprice">${totalToShow}</td>
+    <td>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+        fill="currentColor" class="bi bi-x-circle-fill text-danger"
+        viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293
+        8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5
+        0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5
+        0 0 0-.708-.708L8 7.293z"></path>
+      </svg>
+    </td>
+  `;
+    tableBody.appendChild(newRow);
+    calculateSubTotal();
 }
 
 function searchProducts() {
@@ -183,14 +196,12 @@ function searchProducts() {
                 searchName: searchInput,
             },
             success: function (response) {
-
                 const result = JSON.parse(response);
 
                 switch (result.status) {
-                    case 'success':
+                    case "success":
                         $("#productGrid").html("");
-                        result.data.forEach(item => {
-
+                        result.data.forEach((item) => {
                             let component = `
                 <div class="col-md-4 col-sm-6 mt-3" onclick="getPrices('${item.code}')">
                   <div class="product-grid h-100">
@@ -208,15 +219,15 @@ function searchProducts() {
                         });
                         break;
 
-                    case 'empty':
+                    case "empty":
                         $("#productGrid").html("<h1 style='color: white;'>" + result.message + ".</h1>");
                         break;
 
-                    case 'error':
+                    case "error":
                         ErrorMessageDisplay(result.message);
                         break;
 
-                    case 'sessionExpired':
+                    case "sessionExpired":
                         handleExpiredSession(result.message);
                         break;
                 }
@@ -225,95 +236,73 @@ function searchProducts() {
     }
 }
 
-//payment type online select //
-document
-    .getElementById("selectBillType")
-    .addEventListener("change", function () {
-        var selectedValue = this.value;
+//payment type online select
+document.getElementById("selectBillType").addEventListener("change", function () {
+    var selectedValue = this.value;
 
-        var discountPercentageElement = document.getElementById("discountField");
-        var deliveryChargesElement = document.getElementById(
-            "deliveryChargesField"
-        );
-        var serviceChargesElement = document.getElementById("ServiceChargesField");
-        var packingChargesElement = document.getElementById("packingChargesField");
+    var discountPercentageElement = document.getElementById("discountField");
+    var deliveryChargesElement = document.getElementById("deliveryChargesField");
+    var serviceChargesElement = document.getElementById("ServiceChargesField");
+    var packingChargesElement = document.getElementById("packingChargesField");
 
-        discountPercentageElement.classList.add("d-none");
-        deliveryChargesElement.classList.add("d-none");
-        serviceChargesElement.classList.add("d-none");
-        packingChargesElement.classList.add("d-none");
+    discountPercentageElement.classList.add("d-none");
+    deliveryChargesElement.classList.add("d-none");
+    serviceChargesElement.classList.add("d-none");
+    packingChargesElement.classList.add("d-none");
 
-        switch (selectedValue) {
-            case "1":
-                discountPercentageElement.classList.remove("d-none");
-                break;
+    switch (selectedValue) {
+        case "1":
+            discountPercentageElement.classList.remove("d-none");
+            break;
 
-            case "2":
-                discountPercentageElement.classList.remove("d-none");
-                deliveryChargesElement.classList.remove("d-none");
-                serviceChargesElement.classList.remove("d-none");
-                break;
+        case "2":
+            discountPercentageElement.classList.remove("d-none");
+            deliveryChargesElement.classList.remove("d-none");
+            serviceChargesElement.classList.remove("d-none");
+            break;
 
-            case "3":
-                discountPercentageElement.classList.remove("d-none");
-                break;
+        case "3":
+            discountPercentageElement.classList.remove("d-none");
+            break;
 
-            case "4":
-                deliveryChargesElement.classList.remove("d-none");
-                packingChargesElement.classList.remove("d-none");
-                break;
-        }
-    });
+        case "4":
+            deliveryChargesElement.classList.remove("d-none");
+            packingChargesElement.classList.remove("d-none");
+            break;
+    }
+});
 
 // if select cash + card //
-document
-    .getElementById("payment-method-selector")
-    .addEventListener("change", function () {
-        var selectedValue = this.value;
-        var cashAmountField = document.getElementById("cashAmountField");
-        var cardAmountField = document.getElementById("cardAmountField");
+document.getElementById("payment-method-selector").addEventListener("change", function () {
+    var selectedValue = this.value;
+    var cashAmountField = document.getElementById("cashAmountField");
+    var cardAmountField = document.getElementById("cardAmountField");
 
-        cashAmountField.classList.add("d-none");
-        cardAmountField.classList.add("d-none");
+    $("#cashAmount").val("");
+    $("#cardAmount").val("");
+    // -----------------------------------------------------------------------------------------------------------------
 
-        switch (selectedValue) {
-            case "1":
-                cashAmountField.classList.remove("d-none");
-                break;
+    cashAmountField.classList.add("d-none");
+    cardAmountField.classList.add("d-none");
 
-            case "2":
-                cardAmountField.classList.remove("d-none");
-                break;
+    switch (selectedValue) {
+        case "1":
+            cashAmountField.classList.remove("d-none");
+            break;
 
-            case "3":
-                cardAmountField.classList.remove("d-none");
-                cashAmountField.classList.remove("d-none");
-                break;
-        }
-    });
+        case "2":
+            cardAmountField.classList.remove("d-none");
+            break;
 
-$(document).on("keyup", function (e) {
-    if (e.which == 9) {
-        var selector = document.getElementById("payment-method-selector");
-        var enterAmountField = document.getElementById("cashAmount");
-        if (selector.value === "3" && enterAmountField.value.trim() !== "") {
-            var cardAmountField = document.getElementById("cardAmount");
-            if (cardAmountField) {
-                cardAmountField.focus();
-                e.preventDefault();
-            }
-        } else {
-            $(".cashAmount").focus();
-        }
+        case "3":
+            cardAmountField.classList.remove("d-none");
+            cashAmountField.classList.remove("d-none");
+            break;
     }
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    var doctorNameField = document.getElementById("doctorNameField");
-    var regNoField = document.getElementById("regNoField");
-
     // cash or card selector change
-    var selector = document.getElementById("payment-method-selector");
     var billTypeSelector = document.getElementById("selectBillType");
 
     billTypeSelector.selectedIndex = 0;
@@ -321,37 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var event = new Event("change");
     billTypeSelector.dispatchEvent(event);
     event.preventDefault();
-
-    document.addEventListener("keydown", function (event) {
-        if (event.key === "ArrowDown") {
-            moveSelectorDown(selector);
-        } else if (event.key === "ArrowUp") {
-            moveSelectorUp(selector);
-        }
-    });
 });
-
-function moveSelectorDown(selector) {
-    var selectedIndex = selector.selectedIndex;
-    if (selectedIndex < selector.options.length - 1) {
-        selectedIndex++;
-    }
-    selector.selectedIndex = selectedIndex;
-    var event = new Event("change");
-    selector.dispatchEvent(event);
-    event.preventDefault();
-}
-
-function moveSelectorUp(selector) {
-    var selectedIndex = selector.selectedIndex;
-    if (selectedIndex > 0) {
-        selectedIndex--;
-    }
-    selector.selectedIndex = selectedIndex;
-    var event = new Event("change");
-    selector.dispatchEvent(event);
-    event.preventDefault();
-}
 
 // set paththu name on popup
 function setPaththu(paththuSelect) {
@@ -369,43 +328,43 @@ function addPaththu() {
 
     if (paththuName !== "" && paththuPrice !== "") {
         var txt = `
-  <tr data-barcode="code_price">
-  <th><input type="checkbox" class="d-none" name="isPaththu" id="isPaththu"></th>
-  
-  <td id="code" class="d-none"></td>
-  <td id="ucv" class="d-none">1</td>
-  <td id="item_price" class="d-none">${paththuPrice}</td>
-  <td id="unit_price" class="d-none">0</td>
+        <tr data-barcode="code_price">
+        <th><input type="checkbox" class="d-none" name="isPaththu" id="isPaththu"></th>
 
-  <td id="product_name" ><label>${paththuName}</label></td>
+        <td id="code" class="d-none"></td>
+        <td id="ucv" class="d-none">1</td>
+        <td id="item_price" class="d-none">${paththuPrice}</td>
+        <td id="unit_price" class="d-none">0</td>
 
-  <td id="product_price">${paththuPrice}</td>
-  <td>
-      <div class="col-12">
-          <div class="row">
-              <div class="col-2 d-flex justify-content-center">
-                  <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
-              </div>
-              <div class="col-4">
-                  <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" onchange="updateTotal(this)" data-price="${paththuPrice}">
-              </div>
-              <div class="col-2 d-flex justify-content-center">
-                  <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
-              </div>
-              <div class="col-2">
-                  <labe id="unit">combine</labe>
-              </div>
-          </div>
-      </div>
-  </td>
+        <td id="product_name" ><label>${paththuName}</label></td>
 
-  <td class="total" id="totalprice">${paththuPrice}</td>
-  <td>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
-          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
-      </svg>
-  </td>
-</tr>
+        <td id="product_price">${paththuPrice}</td>
+        <td>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-2 d-flex justify-content-center">
+                        <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+                    </div>
+                    <div class="col-4">
+                        <input class="form-control text-center" id="qty" name="qty" type="number" min="1" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" onchange="updateTotal(this)" data-price="${paththuPrice}">
+                    </div>
+                    <div class="col-2 d-flex justify-content-center">
+                        <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+                    </div>
+                    <div class="col-2">
+                        <labe id="unit">combine</labe>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td class="total" id="totalprice">${paththuPrice}</td>
+        <td>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16" onclick="removeRow(this)" style="cursor: pointer;">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path>
+            </svg>
+        </td>
+      </tr>
 `;
 
         barcodeResults.insertAdjacentHTML("beforeend", txt);
@@ -415,6 +374,8 @@ function addPaththu() {
 
         $("#addPaththuModal").modal("hide");
         calculateSubTotal();
+    } else {
+        ErrorMessageDisplay("Enter all the paththu details.");
     }
 }
 
@@ -423,9 +384,7 @@ function addDoctorMedicine() {
     var doctorMedicineResults = document.getElementById("doctorMedicineResults");
     var doctorMedicineNameElement = document.getElementById("doctorMedicineName");
     var doctorMedicineName = doctorMedicineNameElement.value.trim();
-    var doctorMedicineValueElement = document.getElementById(
-        "doctorMedicinePrice"
-    );
+    var doctorMedicineValueElement = document.getElementById("doctorMedicinePrice");
     var doctorMedicineValue = doctorMedicineValueElement.value.trim();
 
     var doctorMedicinePrice = doctorMedicineValue * 1.1;
@@ -486,8 +445,7 @@ function decreaseQuantity(button) {
 
 // qty update +
 function increaseQuantity(button) {
-    var input =
-        button.parentElement.previousElementSibling.querySelector("input");
+    var input = button.parentElement.previousElementSibling.querySelector("input");
     var quantity = parseFloat(input.value);
     quantity++;
     input.value = quantity;
@@ -511,6 +469,7 @@ function addDiscount() {
 
     var discountedTotal = productsAllTotal * (1 - discountPercentage / 100);
     $("#netTotal").text(discountedTotal.toLocaleString());
+    checkBalance();
 }
 
 // netTotal calculation display
@@ -519,13 +478,9 @@ function checkNetTotal() {
     var billType = document.getElementById("selectBillType");
     var paymentMethod = document.getElementById("payment-method-selector");
 
-    var discountPercentage = parseFloat(
-        document.getElementById("discountAmount").value
-    );
+    var discountPercentage = parseFloat(document.getElementById("discountAmount").value);
 
-    var deliveryCharges = parseFloat(
-        document.getElementById("deliveryCharges").value
-    );
+    var deliveryCharges = parseFloat(document.getElementById("deliveryCharges").value);
 
     var vas = parseFloat(document.getElementById("serviceChargeAmount").value);
 
@@ -626,20 +581,20 @@ function calculateSubTotal() {
     // });
 }
 
-function checkBalance(input) {
+function checkBalance() {
     const selector = document.getElementById("payment-method-selector");
     const productsAllTotal = parseFloat($("#netTotal").text().replace(/,/g, ""));
     let totalEnteredAmount;
 
-    if (selector.value === "3") {
-        // Case for mixed payment (cash + card)
-        const cashAmount = parseFloat($("#cashAmount").val()) || 0;
-        const cardAmount = parseFloat($("#cardAmount").val()) || 0;
-        totalEnteredAmount = cashAmount + cardAmount;
-    } else {
-        // Case for single payment method
-        totalEnteredAmount = parseFloat(input.value) || 0;
-    }
+    // if (selector.value === "3") {
+    // Case for mixed payment (cash + card)
+    const cashAmount = parseFloat($("#cashAmount").val()) || 0;
+    const cardAmount = parseFloat($("#cardAmount").val()) || 0;
+    totalEnteredAmount = cashAmount + cardAmount;
+    // } else {
+    //   // Case for single payment method
+    //   totalEnteredAmount = parseFloat(input.value) || 0;
+    // }
 
     // Calculate balance
     const balance = totalEnteredAmount - productsAllTotal;
@@ -750,9 +705,7 @@ function printInvoice() {
         printWindow.document.write("</style>");
 
         printWindow.document.write("</head><body>");
-        printWindow.document.write(
-            document.getElementById("invoice-POS").innerHTML
-        );
+        printWindow.document.write(document.getElementById("invoice-POS").innerHTML);
         printWindow.document.write("</body></html>");
         printWindow.document.close();
         printWindow.focus();
@@ -770,8 +723,7 @@ function printInvoice() {
 
     var bootstrapLink = printWindow.document.createElement("link");
     bootstrapLink.rel = "stylesheet";
-    bootstrapLink.href =
-        "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
+    bootstrapLink.href = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
     bootstrapLink.onload = stylesheetLoaded;
     printWindow.document.head.appendChild(bootstrapLink);
 
@@ -788,7 +740,6 @@ function printInvoice() {
 }
 
 function dataCheck() {
-
     var itemData = [];
     var paththuTotal = parseFloat($("#paththuTotal").text());
     var combinePrice;
@@ -847,7 +798,6 @@ function dataCheck() {
 }
 
 function checkout(itemData) {
-
     updateBillStatus("3");
 
     var billData = [];
@@ -858,7 +808,7 @@ function checkout(itemData) {
     var regNo = $("#regNo").val();
 
     if (hasChy && !patientName) {
-        return (ErrorMessageDisplay("Search with CHY to Assign patient"))
+        return ErrorMessageDisplay("Search with CHY to Assign patient");
     }
 
     var contactNo = $("#contactNo").text().trim();
@@ -877,8 +827,8 @@ function checkout(itemData) {
     var paymentMethodSelector = $("#payment-method-selector").val();
     var selectBillType = $("#selectBillType").val();
 
-    $('#invoicePatientName').text(patientName);
-    $('#InvoiceContactNumber').text(contactNo);
+    $("#invoicePatientName").text(patientName);
+    $("#InvoiceContactNumber").text(contactNo);
 
     var bData = {
         patientName: patientName,
@@ -923,11 +873,10 @@ function checkout(itemData) {
         },
 
         success: function (response) {
-
             var result = JSON.parse(response);
 
             switch (result.status) {
-                case 'success':
+                case "success":
                     document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
                     SuccessMessageDisplay(result.message);
 
@@ -950,11 +899,11 @@ function checkout(itemData) {
                     });
                     break;
 
-                case 'sessionExpired':
+                case "sessionExpired":
                     handleExpiredSession(result.message);
                     break;
 
-                case 'sessionDataError':
+                case "sessionDataError":
                     handleExpiredSession(result.message);
                     break;
 
@@ -962,12 +911,11 @@ function checkout(itemData) {
                     ErrorMessageDisplay(result.message);
                     break;
             }
-        }
+        },
     });
 }
 
 function updateBillStatus(value) {
-
     var token = $("#token").val();
 
     if (token > 0) {
@@ -1049,10 +997,9 @@ function updateBillStatus(value) {
     }
 }
 
-
 function handleExpiredSession(message) {
     ErrorMessageDisplay(message);
     setTimeout(function () {
-        window.open(window.location.href, '_blank');
+        window.open(window.location.href, "_blank");
     }, 4000);
 }

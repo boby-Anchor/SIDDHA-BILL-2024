@@ -94,9 +94,6 @@ $cost = 0;
                       ?>
                             <tr>
                               <td style="padding:5px" class="text-center">
-                                <?= $totalRows; ?> -
-                                <?= $row['stock_id']; ?>
-                                <br>
                                 <?= $row['p_code']; ?>
                               </td>
                               <td> <?= $row['p_name']; ?>
