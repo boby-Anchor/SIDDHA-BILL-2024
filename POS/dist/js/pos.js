@@ -24,6 +24,7 @@ function fetchPatient(chyNumber) {
                 chy: chyNumber,
             }),
             success: function (response) {
+                $("#regNo").val(response.profileData.ch_patient_id);
                 $("#patientName").val(response.profileData.name);
                 $("#titleName").text(response.profileData.name);
                 $("#contactNo").text(response.profileData.whatsapp_no);
@@ -286,15 +287,15 @@ document.getElementById("payment-method-selector").addEventListener("change", fu
     cardAmountField.classList.add("d-none");
 
     switch (selectedValue) {
-        case "1":
+        case "1": // Cash
             cashAmountField.classList.remove("d-none");
             break;
 
-        case "2":
+        case "2": // Card
             cardAmountField.classList.remove("d-none");
             break;
 
-        case "3":
+        case "3": // Cash + Card
             cardAmountField.classList.remove("d-none");
             cashAmountField.classList.remove("d-none");
             break;
@@ -365,7 +366,7 @@ function addPaththu() {
             </svg>
         </td>
       </tr>
-`;
+      `;
 
         barcodeResults.insertAdjacentHTML("beforeend", txt);
 
@@ -456,9 +457,6 @@ function increaseQuantity(button) {
 function removeRow(button) {
     var row = button.closest("tr");
     row.remove();
-    // alert($(".table tbody tr").length);
-    $(".checkoutBtn").toggleClass("d-none", $("#barcodeResults tr").length === 0);
-    $(".checkoutBtn").toggleClass("d-flex", $("#barcodeResults tr").length > 0);
     calculateSubTotal();
 }
 
@@ -533,7 +531,6 @@ function calculateSubTotal() {
 
         if (product_qty <= 0) {
             ErrorMessageDisplay("Invalid Product Quantity!");
-            $("#checkoutBtn").removeAttr("data-toggle data-target");
             return;
         }
         var productTotal = product_cost * product_qty;
@@ -550,35 +547,6 @@ function calculateSubTotal() {
     $("#paththuTotal").text(paththuTotal);
 
     addDiscount();
-
-    // $(".barcodeResults tbody tr").each(function() {
-    //   var product_cost = $(this).find("#product_price").text();
-    //   var product_qty = $(this).find("#qty").val();
-    //   var isPaththu = $(this).find("#isPaththu").prop("checked");
-
-    //   if (product_qty === "" || product_qty === "0") {
-    //     Swal.mixin({
-    //       toast: true,
-    //       position: "top-end",
-    //       showConfirmButton: false,
-    //       timer: 3000,
-    //     }).fire({
-    //       icon: "error",
-    //       title: "Error: Product Quantity!",
-    //     });
-    //     $("#checkoutBtn").removeAttr("data-toggle data-target");
-    //   } else {
-    //     var productTotal = product_cost * product_qty;
-    //     if (isPaththu) {
-    //       paththuTotal += productTotal;
-    //       document.getElementById("paththuTotal").innerHTML = paththuTotal;
-    //     } else {
-    //       productsAllTotal += productTotal;
-    //       document.getElementById("subTotal").innerHTML = productsAllTotal;
-    //     }
-    //     addDiscount();
-    //   }
-    // });
 }
 
 function checkBalance() {
@@ -611,12 +579,317 @@ function checkBalance() {
 
     // Handle Enter keypress for data check
     if (event.which === 13) {
-        event.preventDefault();
-        const displayedBalance = parseFloat($("#balance").text().replace(/,/g, ""));
-        if (displayedBalance >= 0) {
-            dataCheck();
-        }
+        InfoMessageDisplay('Click checkout button to save the bill.');
     }
+}
+
+// Checkout Button Clicked
+function handleCheckout() {
+    $('#checkoutBtn').prop('disabled', true);
+    $('#checkoutBtn').html('Processing...');
+    const displayedBalance = parseFloat($("#balance").text().replace(/,/g, ""));
+    if (displayedBalance >= 0) {
+        dataCheck();
+    } else {
+        enableCheckoutButton();
+        ErrorMessageDisplay('Invalid payment amount!');
+    }
+}
+
+function enableCheckoutButton() {
+    $('#checkoutBtn').prop('disabled', false);
+    $('#checkoutBtn').html('Checkout <i class="bi bi-arrow-right-circle-fill"></i>');
+}
+
+// Data validation
+function dataCheck() {
+    var itemData = [];
+    var paththuTotal = parseFloat($("#paththuTotal").text());
+    var combinePrice;
+    var billHasPaththu;
+    var billHasCombine;
+
+    $("#barcodeResults tr").each(function () {
+        var isPaththu = $(this).find("#isPaththu").prop("checked") ? 1 : 0;
+        var code = $(this).find("#code").text();
+        var ucv = $(this).find("#ucv").text();
+        var item_price = $(this).find("#item_price").text();
+        var unit_price = $(this).find("#unit_price").text();
+        var product_name = $(this).find("#product_name").text();
+        var product_brand = $(this).find("#brand").text();
+        var product_cost = parseFloat($(this).find("#product_price").text());
+        var product_qty = parseInt($(this).find("#qty").val());
+        var product_unit = $(this).find("#unit").text();
+        var productTotal = parseFloat($(this).find("#totalprice").text());
+
+        if (product_unit == "combine") {
+            combinePrice = productTotal;
+            billHasCombine = true;
+        }
+
+        if (isPaththu) {
+            billHasPaththu = true;
+        }
+
+        var productData = {
+            isPaththu: isPaththu,
+            code: code,
+            ucv: ucv,
+            item_price: item_price,
+            unit_price: unit_price,
+            product_name: product_name,
+            product_brand: product_brand,
+            product_cost: product_cost,
+            product_qty: product_qty,
+            product_unit: product_unit,
+            productTotal: productTotal,
+        };
+        itemData.push(productData);
+    });
+
+    if (billHasPaththu && billHasCombine && paththuTotal === combinePrice) {
+        checkout(itemData);
+    } else if (billHasPaththu && billHasCombine) {
+        enableCheckoutButton();
+        ErrorMessageDisplay("පත්තුවේ ගාන වැරදී.");
+    } else if (billHasPaththu) {
+        enableCheckoutButton()
+        ErrorMessageDisplay("පත්තු හදන්නේ නැද්ද..??");
+    } else if (billHasCombine) {
+        enableCheckoutButton()
+        ErrorMessageDisplay("පත්තුවට බඩු දාන්න.");
+    } else {
+        checkout(itemData);
+    }
+}
+
+// Checkout function
+function checkout(itemData) {
+    updateBillStatus("3");
+
+    var billData = [];
+    var dMData = [];
+    var patientName = $("#patientName").val().trim() || null;
+
+    var hasChy = $("#hasChy").prop("checked");
+    var regNo = $("#regNo").val();
+
+    if (hasChy && !patientName) {
+        enableCheckoutButton();
+        return ErrorMessageDisplay("Search with CHY to Assign patient");
+    }
+
+    var contactNo = $("#contactNo").text().trim();
+    var doctorName = $("#doctorName").val();
+    var regNo = $("#regNo").val();
+
+    var balance = $("#balance").text().replace(/,/g, "");
+    var discountPercentage = $("#discountPercentage").val() || 0;
+    var subTotal = $("#subTotal").text();
+    var netTotal = $("#netTotal").text();
+
+    var deliveryCharges = $("#deliveryCharges").val();
+    var valueAddedServices = $("#valueAddedServices").val();
+    var cashAmount = $("#cashAmount").val();
+    var cardAmount = $("#cardAmount").val();
+    var paymentMethodSelector = $("#payment-method-selector").val();
+    var selectBillType = $("#selectBillType").val();
+
+    $("#invoicePatientName").text(patientName);
+    $("#InvoiceContactNumber").text(contactNo);
+
+    var bData = {
+        patientName: patientName,
+        contactNo: contactNo,
+        doctorName: doctorName,
+        regNo: regNo,
+
+        balance: balance,
+        subTotal: subTotal,
+        netTotal: netTotal,
+        discountPercentage: discountPercentage,
+        deliveryCharges: deliveryCharges,
+        valueAddedServices: valueAddedServices,
+        cashAmount: cashAmount,
+        cardAmount: cardAmount,
+        paymentMethodSelector: paymentMethodSelector,
+        selectBillType: selectBillType,
+    };
+
+    billData.push(bData);
+
+    $("#doctorMedicineResults tr").each(function () {
+        var product_name = $(this).find("#product_name").text();
+        var item_cost = $(this).find("#item_price").text().trim();
+        var item_price = $(this).find("#doctorMedicineTotalPrice").text();
+
+        var productData = {
+            product_name: product_name,
+            item_cost: item_cost,
+            item_price: item_price,
+        };
+        dMData.push(productData);
+    });
+
+    $.ajax({
+        url: "invoiceSave.php",
+        method: "POST",
+        data: {
+            billData: JSON.stringify(billData),
+            itemData: JSON.stringify(itemData),
+            dMData: JSON.stringify(dMData),
+        },
+
+        success: function (response) {
+            var result = JSON.parse(response);
+
+            switch (result.status) {
+                case "success":
+                    document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
+                    SuccessMessageDisplay(result.message);
+
+                    //invoice print add data
+                    const html = generateInvoiceHTML(itemData, dMData, billData);
+                    document.getElementById("printInvoiceData").innerHTML = html;
+                    printInvoice();
+                    break;
+
+                case "sessionExpired":
+                    enableCheckoutButton();
+                    handleExpiredSession(result.message);
+                    break;
+
+                case "sessionDataError":
+                    enableCheckoutButton();
+                    handleExpiredSession(result.message);
+                    break;
+
+                default:
+                    enableCheckoutButton();
+                    ErrorMessageDisplay(result.message);
+                    break;
+            }
+        },
+        error: function (xhr, status, error) {
+            enableCheckoutButton();
+            ErrorMessageDisplay("Connection error!");
+            console.error(xhr.responseText);
+        },
+    });
+}
+
+// Add data to invoice
+function generateInvoiceHTML(itemData, dMData, billData) {
+
+    let html = "";
+
+    // 1. dMData items
+    if (Array.isArray(dMData) && dMData.length > 0) {
+        dMData.forEach(product => {
+            const product_name = product.product_name || "Product";
+            const item_price = product.item_price || "Price";
+
+            html += `
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <span class="product_name">${product_name}</span>
+                        </div>
+                        <div class="col-4">
+                            <span class="product_cost">${item_price}</span>
+                        </div>
+                        <div class="col-4 text-center">
+                            <span class="product_qty">1</span>
+                        </div>
+                        <div class="col-4 text-center">
+                            <span class="productTotal">${item_price}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // 2. itemData (non-Paththu only)
+    if (Array.isArray(itemData) && itemData.length > 0) {
+        itemData.forEach(product => {
+            if (product.isPaththu === 0) {
+                const product_name = product.product_name || "Product";
+                const product_brand = product.product_brand || "";
+                const product_cost = product.product_cost || "Price";
+                const product_qty = product.product_qty || "Qty";
+                const productTotal = product.productTotal || "Total";
+
+                html += `
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="product_name">${product_name}</span><br/>
+                                <span class="product_brand">${product_brand}</span>
+                            </div>
+                            <div class="col-4">
+                                <span class="product_cost">${product_cost}</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span class="product_qty">${product_qty}</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span class="productTotal">${productTotal}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    }
+
+    // 3. billData bottom totals
+    if (Array.isArray(billData) && billData.length > 0) {
+        const bill = billData[0];
+
+        const balance = bill.balance || 0;
+        const subTotal = bill.subTotal || 0;
+        const netTotal = bill.netTotal || 0;
+        const discountPercentage = bill.discountPercentage || 0;
+        const deliveryCharges = bill.deliveryCharges || 0;
+        const valueAddedServices = bill.valueAddedServices || 0;
+        const cashAmount = bill.cashAmount || 0;
+        const cardAmount = bill.cardAmount || 0;
+
+        const vas_delivery = Number(valueAddedServices) + Number(deliveryCharges);
+
+        html += `
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-start pt-2" style="border-top:#0e0e0e 0.2rem solid;">
+                        <span class="productsAllTotal">Sub total : ${subTotal}</span>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="productsAllTotal">Discount %: ${discountPercentage}</span>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="productsAllTotal">Net Total : ${netTotal}</span>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="enterAmountFiled">Cash Amount : ${cashAmount}</span>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom:#0e0e0e 0.2rem solid;">
+                        <span class="enterAmountFiled">Card Amount : ${cardAmount}</span>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom:#0e0e0e 0.2rem solid;">
+                        <span class="balance">Balance : ${balance}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    return html;
 }
 
 // print invoice
@@ -739,182 +1012,7 @@ function printInvoice() {
     };
 }
 
-function dataCheck() {
-    var itemData = [];
-    var paththuTotal = parseFloat($("#paththuTotal").text());
-    var combinePrice;
-    var billHasPaththu;
-    var billHasCombine;
-
-    $("#barcodeResults tr").each(function () {
-        var isPaththu = $(this).find("#isPaththu").prop("checked") ? 1 : 0;
-        var code = $(this).find("#code").text();
-        var ucv = $(this).find("#ucv").text();
-        var item_price = $(this).find("#item_price").text();
-        var unit_price = $(this).find("#unit_price").text();
-        var product_name = $(this).find("#product_name").text();
-        var product_brand = $(this).find("#brand").text();
-        var product_cost = parseFloat($(this).find("#product_price").text());
-        var product_qty = parseInt($(this).find("#qty").val());
-        var product_unit = $(this).find("#unit").text();
-        var productTotal = parseFloat($(this).find("#totalprice").text());
-
-        if (product_unit == "combine") {
-            combinePrice = productTotal;
-            billHasCombine = true;
-        }
-
-        if (isPaththu) {
-            billHasPaththu = true;
-        }
-
-        var productData = {
-            isPaththu: isPaththu,
-            code: code,
-            ucv: ucv,
-            item_price: item_price,
-            unit_price: unit_price,
-            product_name: product_name,
-            product_brand: product_brand,
-            product_cost: product_cost,
-            product_qty: product_qty,
-            product_unit: product_unit,
-            productTotal: productTotal,
-        };
-        itemData.push(productData);
-    });
-
-    if (billHasPaththu && billHasCombine && paththuTotal === combinePrice) {
-        checkout(itemData);
-    } else if (billHasPaththu && billHasCombine) {
-        alert("පත්තුවේ ගාන වැරදී.");
-    } else if (billHasPaththu) {
-        alert("පත්තු හදන්නේ නැද්ද..??");
-    } else if (billHasCombine) {
-        alert("පත්තුවට බඩු දාන්න.");
-    } else {
-        checkout(itemData);
-    }
-}
-
-function checkout(itemData) {
-    updateBillStatus("3");
-
-    var billData = [];
-    var dMData = [];
-    var patientName = $("#patientName").val().trim() || null;
-
-    var hasChy = $("#hasChy").prop("checked");
-    var regNo = $("#regNo").val();
-
-    if (hasChy && !patientName) {
-        return ErrorMessageDisplay("Search with CHY to Assign patient");
-    }
-
-    var contactNo = $("#contactNo").text().trim();
-    var doctorName = $("#doctorName").val();
-    var regNo = $("#regNo").val();
-
-    var balance = $("#balance").text().replace(/,/g, "");
-    var discountPercentage = $("#discountPercentage").val() || 0;
-    var subTotal = $("#subTotal").text();
-    var netTotal = $("#netTotal").text();
-
-    var deliveryCharges = $("#deliveryCharges").val();
-    var valueAddedServices = $("#valueAddedServices").val();
-    var cashAmount = $("#cashAmount").val();
-    var cardAmount = $("#cardAmount").val();
-    var paymentMethodSelector = $("#payment-method-selector").val();
-    var selectBillType = $("#selectBillType").val();
-
-    $("#invoicePatientName").text(patientName);
-    $("#InvoiceContactNumber").text(contactNo);
-
-    var bData = {
-        patientName: patientName,
-        contactNo: contactNo,
-        doctorName: doctorName,
-        regNo: regNo,
-
-        balance: balance,
-        subTotal: subTotal,
-        netTotal: netTotal,
-        discountPercentage: discountPercentage,
-        deliveryCharges: deliveryCharges,
-        valueAddedServices: valueAddedServices,
-        cashAmount: cashAmount,
-        cardAmount: cardAmount,
-        paymentMethodSelector: paymentMethodSelector,
-        selectBillType: selectBillType,
-    };
-
-    billData.push(bData);
-
-    $("#doctorMedicineResults tr").each(function () {
-        var product_name = $(this).find("#product_name").text();
-        var item_cost = $(this).find("#item_price").text().trim();
-        var item_price = $(this).find("#doctorMedicineTotalPrice").text();
-
-        var productData = {
-            product_name: product_name,
-            item_cost: item_cost,
-            item_price: item_price,
-        };
-        dMData.push(productData);
-    });
-
-    $.ajax({
-        url: "invoiceSave.php",
-        method: "POST",
-        data: {
-            billData: JSON.stringify(billData),
-            itemData: JSON.stringify(itemData),
-            dMData: JSON.stringify(dMData),
-        },
-
-        success: function (response) {
-            var result = JSON.parse(response);
-
-            switch (result.status) {
-                case "success":
-                    document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
-                    SuccessMessageDisplay(result.message);
-
-                    //invoice print add data
-                    $.ajax({
-                        url: "invoicePrintAddData.php",
-                        method: "POST",
-                        data: {
-                            billData: JSON.stringify(billData),
-                            itemData: JSON.stringify(itemData),
-                            dMData: JSON.stringify(dMData),
-                        },
-                        success: function (response) {
-                            document.getElementById("printInvoiceData").innerHTML = response;
-                            printInvoice();
-                        },
-                        error: function (xhr, status, error) {
-                            console.error(xhr.responseText);
-                        },
-                    });
-                    break;
-
-                case "sessionExpired":
-                    handleExpiredSession(result.message);
-                    break;
-
-                case "sessionDataError":
-                    handleExpiredSession(result.message);
-                    break;
-
-                default:
-                    ErrorMessageDisplay(result.message);
-                    break;
-            }
-        },
-    });
-}
-
+// Bill status update
 function updateBillStatus(value) {
     var token = $("#token").val();
 
@@ -937,8 +1035,8 @@ function updateBillStatus(value) {
                         console.error(xhr.responseText);
                     },
                 });
-
                 break;
+
             case "2":
                 $.ajax({
                     url: "https://pharmacy-order-backend.siddha.lk/order/",
@@ -956,8 +1054,8 @@ function updateBillStatus(value) {
                         ErrorMessageDisplay(xhr.responseText);
                     },
                 });
-
                 break;
+
             case "3":
                 $.ajax({
                     url: "https://pharmacy-order-backend.siddha.lk/order/" + token,
@@ -972,8 +1070,8 @@ function updateBillStatus(value) {
                         ErrorMessageDisplay(xhr.responseText);
                     },
                 });
-
                 break;
+
             case "4":
                 $.ajax({
                     url: "https://pharmacy-order-backend.siddha.lk/order/",
@@ -991,12 +1089,12 @@ function updateBillStatus(value) {
                         ErrorMessageDisplay(xhr.responseText);
                     },
                 });
-
                 break;
         }
     }
 }
 
+// Session Expiry Handling
 function handleExpiredSession(message) {
     ErrorMessageDisplay(message);
     setTimeout(function () {

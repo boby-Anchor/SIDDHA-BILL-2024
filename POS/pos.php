@@ -108,30 +108,26 @@ if (!isset($_SESSION['store_id'])) {
                   <!-- cashAmount -->
                   <div class="col-4 p-2 " id="cashAmountField">
                     <input type="text" placeholder="Enter Cash Amount" class="form-control col-10" id="cashAmount"
-                      name="cashAmount" onkeyup="checkBalance(this)">
+                      name="cashAmount" onkeyup="checkBalance()">
                   </div>
 
                   <!-- cardAmount -->
                   <div class="col-4 p-2  d-none" id="cardAmountField">
                     <input type="text" placeholder="Enter Card Amount" class="form-control col-10" id="cardAmount"
-                      name="cardAmount" onkeyup="checkBalance(this)">
+                      name="cardAmount" onkeyup="checkBalance()">
                   </div>
                 </div>
               </div>
 
-              <!--"payment-method-selector"-->
-              <!--balance-->
-              <!--checkoutBtn-->
               <div class="col-12 " style="background: #0000004a;">
                 <div class="row">
-                  <!--class="balance" id="balance"-->
+                  <!--balance-->
                   <div class="col-6">
-                    <!--class="balance" id="balance"-->
                     <div class="col-12">
                       <label class="balance" id="balance">000</label>
                     </div>
                   </div>
-                  <!--name="payment-method-selector" id="payment-method-selector" class="payment-method-selector"-->
+                  <!-- Payment Method Selector -->
                   <div class="col-6 d-flex justify-content-end align-items-center">
                     <select name="payment-method-selector" id="payment-method-selector" class="payment-method-selector">
                       <?php
@@ -145,8 +141,8 @@ if (!isset($_SESSION['store_id'])) {
                       }
                       ?>
                     </select>
-                    <!--id="checkoutBtn"-->
-                    <button class="btn check-outBtn col-6" id="checkoutBtn" onclick="checkBalance()">Checkout <i
+                    <!-- Checkout Button-->
+                    <button class="btn check-outBtn col-6" id="checkoutBtn" onclick="handleCheckout()">Checkout <i
                         class="bi bi-arrow-right-circle-fill"></i></button>
                   </div>
 
@@ -453,7 +449,7 @@ if (!isset($_SESSION['store_id'])) {
               </table>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="document.querySelector('#sellingPriceModalTable tbody').innerHTML = ''">Close</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
