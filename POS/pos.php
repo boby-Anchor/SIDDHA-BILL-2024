@@ -157,7 +157,7 @@ if (!isset($_SESSION['store_id'])) {
               <div class="d-flex">
                 <div class="col-2 mb-2 p-2">
                   <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
-                    onchange="getPrices(this.value);">
+                    onchange="getPrices(this.value);" onfocus="this.value=''">
                 </div>
                 <div class="input-group col-4 pt-2">
                   <div class="col-1 m-2">
@@ -256,7 +256,7 @@ if (!isset($_SESSION['store_id'])) {
                 <!-- Search and paththu button -->
                 <div class="input-group mt-3 form-group ">
                   <input type="search" class="form-control mx-1" name="search21" id="search21"
-                    onkeyup="searchProducts(); return false;" placeholder="Search...">
+                    onkeyup="searchProducts(); return false;" placeholder="Search..." onfocus="this.value='';">
                   <button class="btn btn-outline-success mx-1" data-toggle="modal"
                     data-target="#addPaththuModal">Paththu</button>
                   <button class="btn btn-outline-info mx-1" data-toggle="modal"
