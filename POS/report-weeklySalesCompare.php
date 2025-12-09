@@ -191,9 +191,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       WHERE pm.code = '$barcode'
                       ");
                       $p_data_row = mysqli_fetch_assoc($p_data_sql);
-                      $volume = $p_data_row["volume"];
-                      $unit = $p_data_row["unit"];
-                      $brand = $p_data_row["brand"];
+                      $volume = $p_data_row['volume'] ?? 0;
+                      $unit = $p_data_row["unit"] ?? '';
+                      $brand = $p_data_row["brand"] ?? '';
                 ?>
                       <tr>
                         <td> <?= $barcode; ?></td>

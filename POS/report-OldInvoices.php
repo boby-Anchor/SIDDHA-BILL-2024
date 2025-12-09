@@ -376,19 +376,6 @@ $totalValue = 0;
 
                                     <div class="col-12">
                                         <div class="row">
-                                            <!-- <div>
-                                            <div class="col-12 d-flex justify-content-start pt-2" style="border-top: #0e0e0e 0.2rem solid;">
-                                                <span class="productsAllTotal">Sub total : <?= $subTotal ?></span>
-                                            </div>
-                                        </div> -->
-
-                                            <!-- <div class="col-12 d-flex justify-content-start pt-2">
-                                            <span class="productsAllTotal">Discount %: <?= $discountPercentage ?></span>
-                                        </div> -->
-
-                                            <!-- <div class="col-12 d-flex justify-content-start pt-2">
-                                            <span class="productsAllTotal">VAS & delivery: <?= $vas_delivery ?></span>
-                                        </div> -->
 
                                             <div class="col-12 d-flex justify-content-start pt-2"
                                                 style="border-top: #0e0e0e 0.2rem solid;">
