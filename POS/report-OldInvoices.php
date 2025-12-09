@@ -48,7 +48,7 @@ $totalValue = 0;
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | Pharmacy</title>
+    <title>Home | Old Invoices Print</title>
 
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -239,198 +239,210 @@ $totalValue = 0;
 
             $currentDate = date("Y-m-d");
             $currentTime = date("H:i:s");
+            if (!empty($invoiceData)) {
+                foreach ($userLoginData as $userData) {
+                    $shop_id = $userData['shop_id'];
+                    $user_name = $userData['name'];
 
-            foreach ($userLoginData as $userData) {
-                $shop_id = $userData['shop_id'];
-                $user_name = $userData['name'];
-
-                $bill_data_rs = $conn->query("SELECT shop.shopName AS shopName, customize_bills.*
-    FROM `customize_bills`
-    INNER JOIN shop ON shopId = customize_bills.`customize_bill_shop-id`
-    WHERE `customize_bill_shop-id` = '$shop_id'
-    ");
-                $bill_data = $bill_data_rs->fetch_assoc();
+                    $bill_data_rs = $conn->query("SELECT shop.shopName AS shopName, customize_bills.*
+                    FROM `customize_bills`
+                    INNER JOIN shop ON shopId = customize_bills.`customize_bill_shop-id`
+                    WHERE `customize_bill_shop-id` = '$shop_id'
+                    ");
+                    $bill_data = $bill_data_rs->fetch_assoc();
         ?>
-                <div class="d-flex justify-content-center">
-                    <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
-                        <div class="row gap-1">
-                            <table>
-                                <tr>
-                                    <td colspan="3">
-                                        <div class="col-12 d-flex justify-content-center p-2">
-                                            <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>"
-                                                style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class="col-12 d-flex justify-content-center">
-                                            <label class="contactNumber"
-                                                id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
-                                        </div>
-                                        <div class="col-12 d-flex justify-content-center text-center center">
-                                            <label id="addresspreview"
-                                                class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="col-12" style="text-align: center;">
-                                        <span><span class="text-left" style="font-size: 10px;"><?= date("Y-m-d", strtotime($invData['created'])) ?>
-                                            </span><span class="text-right"> <?= date("H:i:s", strtotime($invData['created'])); ?></span> </span>
-                                        <br>
-                                        <span><span class="invoicePatientName" id="invoicePatientName"><?= $invData['p_name'] ?></span> <span
-                                                id="InvoiceContactNumber"><?= $invData['contact_no'] ?></span></span>
-                                        <br>
-                                        <span><span class="fw-bold"><?= $invData['cashier'] ?> Inv.</span> <span class="fw-bolder"
-                                                style="font-size: 10px;" id="invoiceNumber"><?= $invoiceNumber ?></span></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12" style="border-bottom: #0e0e0e 0.2rem solid;"></div>
-                        </div>
-                        <!-- table header start -->
-                        <div class="row">
-                            <div class="col-4">
-                                <span class="product_cost">U.Price</span>
-                            </div>
-                            <div class="col-4 text-center">
-                                <span class="product_qty">
-                                    QTY
-                                </span>
-                            </div>
-                            <div class="col-4 text-center">
-                                <span class="productTotal">Total</span>
-                            </div>
-                        </div>
-                        <!-- table header end -->
-                        <div class="printInvoiceData" id="printInvoiceData">
-                            <?php
-                            if (!empty($dmItems) || !empty($items)) {
-
-                                if (!empty($dmItems)) {
-
-                                    foreach ($dmItems as $dmItem) {
-
-                            ?>
-                                        <div class="col-12">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <span class="product_name"><?= $dmItem['dmName'] ?></span>
-                                                </div>
-                                                <div class="col-4">
-                                                    <span class="product_cost"><?= $dmItem['totalPrice'] ?></span>
-                                                </div>
-                                                <div class="col-4 text-center">
-                                                    <span class="product_qty">
-                                                        1
-                                                    </span>
-                                                </div>
-                                                <div class="col-4 text-center">
-                                                    <span class="productTotal"><?= $dmItem['totalPrice'] ?></span>
+                    <div class="d-flex justify-content-center">
+                        <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
+                            <div class="row gap-1">
+                                <table>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="col-12 d-flex justify-content-center p-2">
+                                                <div class="billpreviewlogo<?= $bill_data['print_paper_size'] ?>"
+                                                    style="background-image:url('<?= $bill_data['customize_bills_logo'] ?>');">
                                                 </div>
                                             </div>
-                                        </div>
-                                    <?php
-                                    }
-                                }
+                                        </td>
+                                    </tr>
 
-                                if (!empty($items)) {
-
-                                    foreach ($items as $item) {
-
-                                    ?>
-                                        <div class="col-12">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <span class="product_name"><?= $item['invoiceItem'] ?></span>
-                                                </div>
-                                                <div class="col-4">
-                                                    <span class="product_cost"><?= $item['invoiceItem_price'] ?></span>
-                                                </div>
-                                                <div class="col-4 text-center">
-                                                    <span class="product_qty"> <?= $item['invoiceItem_qty'] ?> </span>
-                                                </div>
-                                                <div class="col-4 text-center">
-                                                    <span class="productTotal"><?= $item['invoiceItem_total'] ?></span>
-                                                </div>
+                                    <tr>
+                                        <td>
+                                            <div class="col-12 d-flex justify-content-center">
+                                                <label class="contactNumber"
+                                                    id="contactNumberPreview"><?= $bill_data['customize_bills_mobile'] ?></label>
                                             </div>
-                                        </div>
-                                <?php
-                                    }
-                                }
-
-                                ?>
+                                            <div class="col-12 d-flex justify-content-center text-center center">
+                                                <label id="addresspreview"
+                                                    class="address<?= $bill_data['print_paper_size'] ?>"><?= $bill_data['customize_bills_address'] ?>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
 
                                 <div class="col-12">
                                     <div class="row">
-                                        <!-- <div>
+                                        <div class="col-12" style="text-align: center;">
+                                            <span><span class="text-left"
+                                                    style="font-size: 10px;"><?= date("Y-m-d", strtotime($invData['created'])) ?>
+                                                </span><span class="text-right">
+                                                    <?= date("H:i:s", strtotime($invData['created'])); ?></span> </span>
+                                            <br>
+                                            <span><span class="invoicePatientName"
+                                                    id="invoicePatientName"><?= $invData['p_name'] ?></span> <span
+                                                    id="InvoiceContactNumber"><?= $invData['contact_no'] ?></span></span>
+                                            <br>
+                                            <span><span class="fw-bold"><?= $invData['cashier'] ?> Inv.</span> <span
+                                                    class="fw-bolder" style="font-size: 10px;"
+                                                    id="invoiceNumber"><?= $invoiceNumber ?></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12" style="border-bottom: #0e0e0e 0.2rem solid;"></div>
+                            </div>
+                            <!-- table header start -->
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="product_cost">U.Price</span>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <span class="product_qty">
+                                        QTY
+                                    </span>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <span class="productTotal">Total</span>
+                                </div>
+                            </div>
+                            <!-- table header end -->
+                            <div class="printInvoiceData" id="printInvoiceData">
+                                <?php
+                                if (!empty($dmItems) || !empty($items)) {
+
+                                    if (!empty($dmItems)) {
+
+                                        foreach ($dmItems as $dmItem) {
+
+                                ?>
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span class="product_name"><?= $dmItem['dmName'] ?></span>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <span class="product_cost"><?= $dmItem['totalPrice'] ?></span>
+                                                    </div>
+                                                    <div class="col-4 text-center">
+                                                        <span class="product_qty">
+                                                            1
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-4 text-center">
+                                                        <span class="productTotal"><?= $dmItem['totalPrice'] ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php
+                                        }
+                                    }
+
+                                    if (!empty($items)) {
+
+                                        foreach ($items as $item) {
+
+                                        ?>
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span class="product_name"><?= $item['invoiceItem'] ?></span>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <span class="product_cost"><?= $item['invoiceItem_price'] ?></span>
+                                                    </div>
+                                                    <div class="col-4 text-center">
+                                                        <span class="product_qty"> <?= $item['invoiceItem_qty'] ?> </span>
+                                                    </div>
+                                                    <div class="col-4 text-center">
+                                                        <span class="productTotal"><?= $item['invoiceItem_total'] ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php
+                                        }
+                                    }
+
+                                    ?>
+
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <!-- <div>
                                             <div class="col-12 d-flex justify-content-start pt-2" style="border-top: #0e0e0e 0.2rem solid;">
                                                 <span class="productsAllTotal">Sub total : <?= $subTotal ?></span>
                                             </div>
                                         </div> -->
 
-                                        <!-- <div class="col-12 d-flex justify-content-start pt-2">
+                                            <!-- <div class="col-12 d-flex justify-content-start pt-2">
                                             <span class="productsAllTotal">Discount %: <?= $discountPercentage ?></span>
                                         </div> -->
 
-                                        <!-- <div class="col-12 d-flex justify-content-start pt-2">
+                                            <!-- <div class="col-12 d-flex justify-content-start pt-2">
                                             <span class="productsAllTotal">VAS & delivery: <?= $vas_delivery ?></span>
                                         </div> -->
 
-                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-top: #0e0e0e 0.2rem solid;">
-                                            <span class="productsAllTotal">Net Total : <?= $invData['total_amount'] ?></span>
-                                        </div>
+                                            <div class="col-12 d-flex justify-content-start pt-2"
+                                                style="border-top: #0e0e0e 0.2rem solid;">
+                                                <span class="netTotal">Net Total : <?= $invData['total_amount'] ?></span>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-start pt-2"
+                                                style="border-top: #0e0e0e 0.2rem solid;">
+                                                <span class="productsAllTotal">DDiscount % : <?= $invData['discountPercentage'] ?></span>
+                                            </div>
 
-                                        <div class="col-12 d-flex justify-content-start pt-2">
-                                            <span class="enterAmountFiled">Cash Amount :<?= $invData['paidAmount'] ?></span>
-                                        </div>
-                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
-                                            <span class="enterAmountFiled">Card Amount :<?= $invData['cardPaidAmount'] ?></span>
-                                        </div>
+                                            <div class="col-12 d-flex justify-content-start pt-2">
+                                                <span class="enterAmountFiled">Cash Amount :<?= $invData['paidAmount'] ?></span>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-start pt-2"
+                                                style="border-bottom: #0e0e0e 0.2rem solid;">
+                                                <span class="enterAmountFiled">Card Amount :<?= $invData['cardPaidAmount'] ?></span>
+                                            </div>
 
-                                        <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom: #0e0e0e 0.2rem solid;">
-                                            <span class="balance">Balance : <?= $invData['balance'] ?></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            <?php
-
-                            } else {
-                            ?>
-                                <tr>
-                                    <td colspan="5" class="text-center">No Data</td>
-                                </tr>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                        <table>
-                            <tr style="font-weight: 600;">
-                                <td>
-                                    <div class="col-12 pt-2">
-                                        <div class="row">
-                                            <div class="col-12 d-flex justify-content-center text-center">
-                                                <span id="billnotepreview"
-                                                    style="font-size:9px;">THIS IS A RE-PRINTED OLD INVOICE</span>
+                                            <div class="col-12 d-flex justify-content-start pt-2"
+                                                style="border-bottom: #0e0e0e 0.2rem solid;">
+                                                <span class="balance">Balance : <?= $invData['balance'] ?></span>
                                             </div>
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                        </table>
+
+                                <?php
+
+                                } else {
+                                ?>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No Data</td>
+                                    </tr>
+                                <?php
+                                }
+                                ?>
+                            </div>
+                            <table>
+                                <tr style="font-weight: 600;">
+                                    <td>
+                                        <div class="col-12 pt-2">
+                                            <div class="row">
+                                                <div class="col-12 d-flex justify-content-center text-center">
+                                                    <span id="billnotepreview" style="font-size:9px;">THIS IS A RE-PRINTED OLD
+                                                        INVOICE</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
         <?php
+                }
             }
         }
         ?>
