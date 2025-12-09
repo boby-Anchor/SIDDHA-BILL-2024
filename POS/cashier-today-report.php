@@ -42,12 +42,12 @@ if (!isset($_SESSION['store_id'])) {
         <?php include("part/sidebar.php"); ?>
         <!--  Sidebar end -->
 
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-dark">
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Cashier's Today's Report</h1>
+                            <h1>My Today Sale Report</h1>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@ if (!isset($_SESSION['store_id'])) {
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
-                                        <div class="card-body">
+                                        <div class="card-body bg-dark">
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="card card-body bg-success">
@@ -103,13 +103,13 @@ if (!isset($_SESSION['store_id'])) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row w-100">
                                     <div class="col-12">
                                         <div class="card">
 
-                                            <div class="card-body">
+                                            <div class="card-body bg-dark">
 
-                                                <table id="mytable" class="table table-bordered table-hover">
+                                                <table id="SalesTable" class="table table-bordered">
                                                     <thead>
                                                         <tr class="bg-info">
                                                             <td>#</td>
@@ -148,7 +148,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                         <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
                                                                             <!-- <span class="caret"></span> -->
                                                                         </button>
-                                                                        <ul class="dropdown-menu">
+                                                                        <ul class="dropdown-menu bg-dark">
                                                                             <table class="table" id="poItemsTable<?= $row['invoice_id']; ?>">
                                                                                 <thead>
                                                                                     <tr>
@@ -206,13 +206,13 @@ if (!isset($_SESSION['store_id'])) {
                                         </div>
                                     </div>
 
-                                    <div class="col-6">
-                                        <div class="card">
+                                    <!-- <div class="col-6">
+                                        <div class="card bg-dark">
                                             <div class="card-header">
                                                 <h4>Cash Received</h4>
                                             </div>
                                             <div class="card-body">
-                                                <table id="mytable4" class="table table-bordered table-hover">
+                                                <table id="CashTable" class="table table-bordered">
                                                     <thead>
                                                         <tr class="bg-info">
                                                             <th>#</th>
@@ -231,7 +231,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                     </section>
@@ -274,7 +274,7 @@ if (!isset($_SESSION['store_id'])) {
     <script>
         $(document).ready(function() {
 
-            //     $('#mytable').DataTable({
+            //     $('#SalesTable').DataTable({
             //         order: [
             //             [0, 'asc']
             //         ],
@@ -292,7 +292,7 @@ if (!isset($_SESSION['store_id'])) {
             //         }
             //     });
 
-            $('#mytable').DataTable({
+            $('#SalesTable').DataTable({
                     order: [
                         [0, 'asc']
                     ],
@@ -300,61 +300,27 @@ if (!isset($_SESSION['store_id'])) {
                     responsive: true,
                     lengthChange: false,
                     autoWidth: false,
-                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis']
+                    buttons: ['copy', 'csv', 'pdf', 'print', 'colvis']
                 }).buttons()
                 .container()
-                .appendTo("#mytable_wrapper .col-md-6:eq(0)");
+                .appendTo("#SalesTable_wrapper .col-md-6:eq(0)");
 
-            $('#mytable2').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    // console.log(data);
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
-                    }
-                    // console.log(totalAmount);
-                    $("#totalExpense").text(totalAmount);
-                }
-            });
-
-            $('#mytable3').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    // console.log(data);
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][3]);
-                    }
-                    // console.log(totalAmount);
-                    $("#totalPurchase").text(totalAmount);
-                }
-            });
-
-            $('#mytable4').DataTable({
-                // order: [[0, 'desc']],
-                dom: 'Bfrtip',
-                aaSorting: [],
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                "footerCallback": function(row, data, start, end, display) {
-                    //Get data here
-                    // console.log(data);
-                    var totalAmount = 0;
-                    for (var i = 0; i < data.length; i++) {
-                        totalAmount += parseFloat(data[i][4]);
-                    }
-                    // console.log(totalAmount);
-                    $("#totalReceived").text(totalAmount);
-                }
-            });
+            // $('#CashTable').DataTable({
+            //     // order: [[0, 'desc']],
+            //     dom: 'Bfrtip',
+            //     aaSorting: [],
+            //     buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+            //     "footerCallback": function(row, data, start, end, display) {
+            //         //Get data here
+            //         // console.log(data);
+            //         var totalAmount = 0;
+            //         for (var i = 0; i < data.length; i++) {
+            //             totalAmount += parseFloat(data[i][4]);
+            //         }
+            //         // console.log(totalAmount);
+            //         $("#totalReceived").text(totalAmount);
+            //     }
+            // });
         });
     </script>
 
