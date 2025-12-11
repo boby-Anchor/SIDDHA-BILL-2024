@@ -46,6 +46,7 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/sidebar.php"); ?>
     <!--  Sidebar end -->
 
+    <!-- Main POS Content Start -->
     <div class="content-wrapper bg-dark">
 
       <div class="row w-100">
@@ -170,33 +171,16 @@ if (!isset($_SESSION['store_id'])) {
                   </div>
                 </div>
                 <div class="col-3 pt-2">
-                  <div>
-                    <input type="text" class="col-12 form-control" id="patientName" name="patientName" placeholder="Patient Name" disabled />
-
-                    <label id="contactNo" class="col-12" name="contactNo"></label>
-                  </div>
+                  <input type="text" class="col-12 form-control" id="patientName" name="patientName" placeholder="Patient Name" disabled />
                 </div>
-                <div id="doctorNameField" class="col-3 pt-2">
-                  <select class="form-control select2" id="doctorName" name="doctorName">
-                    <option value="" disabled selected hidden>Select a doctor</option>
-                    <?php
-                    $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
-                    while ($doctors_row = $doctors_rs->fetch_assoc()) {
-                    ?>
-                      <option value="<?= $doctors_row['name'] ?>">
-                        <?= $doctors_row['name'] ?>
-                      </option>
-                    <?php
-                    }
-                    ?>
-                  </select>
+                <div id="patientContactNumberField" class="col-3 d-flex align-items-center">
+                  <label id="contactNo" class="col-12 text-center" name="contactNo"></label>
                 </div>
-
               </div>
               <br>
 
 
-              <div class="col-4 mb-2 p-2">
+              <div class="col-5 mb-2 p-2">
                 <div class="row">
                   <div class="col-6">
                     <input type="number" id="token" class="form-control" placeholder="Token">
@@ -212,9 +196,21 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
               </div>
               <div class="col-4 mb-2 p-2">
-                <select class="form-control" id="selectPrices" onchange="getBarcode3()"></select>
+                <select class="form-control doctorSelect" id="doctorName" name="doctorName">
+                  <option value="" disabled selected hidden>Select doctor</option>
+                  <?php
+                  $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
+                  while ($doctors_row = $doctors_rs->fetch_assoc()) {
+                  ?>
+                    <option value="<?= $doctors_row['name'] ?>">
+                      <?= $doctors_row['name'] ?>
+                    </option>
+                  <?php
+                  }
+                  ?>
+                </select>
               </div>
-              <div class="col-4 mb-2 p-2">
+              <div class="col-3 mb-2 p-2">
                 <select class="form-control" name="selectBillType" id="selectBillType">
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
@@ -249,14 +245,13 @@ if (!isset($_SESSION['store_id'])) {
           <div class="card-body bg-light">
 
             <div class="row">
-
               <!-- Company Product list -->
               <div class="col-12 bg-dark" style="height: 100vh; overflow:auto;">
 
                 <!-- Search and paththu button -->
                 <div class="input-group mt-3 form-group ">
-                  <input type="search" class="form-control mx-1" name="search21" id="search21"
-                    onkeyup="searchProducts(); return false;" placeholder="Search..." onfocus="this.value='';">
+                  <input type="search" class="form-control mx-1" name="productSearch" id="productSearch"
+                    onkeyup="searchProducts(this.value.trim()); return false;" placeholder="Search..." onfocus="this.value='';">
                   <button class="btn btn-outline-success mx-1" data-toggle="modal"
                     data-target="#addPaththuModal">Paththu</button>
                   <button class="btn btn-outline-info mx-1" data-toggle="modal"
@@ -323,8 +318,7 @@ if (!isset($_SESSION['store_id'])) {
         </div>
       </div>
     </div>
-
-    <!-- confirm po modal end -->
+    <!-- Main POS Content End -->
 
     <!-- Paththu add -->
     <div class="container">
@@ -616,16 +610,7 @@ if (!isset($_SESSION['store_id'])) {
 <script>
   $(function() {
     //Initialize Select2 Elements
-    $(".select2").select2();
-
-    //Initialize Select2 Elements
-    // $(".select2bs4").select2({
-    //   theme: "bootstrap4",
-    // });
-
-    // $('.medicine-unit-select').select2({
-    //   placeholder: "Select medicine unit"
-    // });
+    $(".doctorSelect").select2();
   });
 </script>
 
