@@ -15,7 +15,7 @@ include('config/db.php');
   <!-- Font Awesome -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css"> -->
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
 
@@ -35,12 +35,12 @@ include('config/db.php');
       font-weight: bold;
     }
 
-    .lable-wight {
+    .label-wight {
       color: #fff !important;
       font-size: 20px;
     }
 
-    .text-feld {
+    .text-field {
       color: black !important;
       font-size: 20px !important;
     }
@@ -104,14 +104,11 @@ include('config/db.php');
     <!-- /.login-logo -->
     <div class="card">
       <div class="card-body login-card-body body-box">
-        <p class="login-box-msg lable-wight">Sign in to start Your Day</p>
+        <p class="login-box-msg label-wight">Sign in to start Your Day</p>
 
         <form action="actions/login.php" method="post">
           <div class="input-group mb-3">
-            <input type="text" class="form-control" class="text-feld" placeholder="User ID" name="userid"
-              value="<?php if (isset($_GET['adminlog'])) {
-                        echo base64_decode($_GET['user']);
-                      } ?>" required>
+            <input type="text" class="form-control" class="text-field" placeholder="Username" name="username" required>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -119,10 +116,7 @@ include('config/db.php');
             </div>
           </div>
           <div class="input-group mb-3">
-            <input type="password" class="form-control" class="text-feld" placeholder="Password" name="pwd"
-              value="<?php if (isset($_GET['adminlog'])) {
-                        echo base64_decode($_GET['pass']);
-                      } ?>" required>
+            <input type="password" class="form-control" class="text-field" placeholder="Password" name="password" required>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
@@ -130,14 +124,14 @@ include('config/db.php');
             </div>
           </div>
           <div class="row">
-            <div class="col-8">
+            <!-- <div class="col-8">
               <div class="icheck-primary">
                 <input type="checkbox" id="remember">
                 <label for="remember">
                   Remember Me
                 </label>
               </div>
-            </div>
+            </div> -->
             <!-- /.col -->
             <div class="col-4">
               <button type="submit" class="btn btn-primary btn-block" name="btnLogin">Sign In</button>
@@ -157,12 +151,12 @@ include('config/db.php');
         <!--</div>-->
         <!-- /.social-auth-links -->
 
-        <p class="mb-1">
+        <!-- <p class="mb-1">
           <a href="#">I forgot my password</a>
         </p>
         <p class="mb-0">
           <a href="#" class="text-center">Register a new membership</a>
-        </p>
+        </p> -->
       </div>
       <!-- /.login-card-body -->
     </div>

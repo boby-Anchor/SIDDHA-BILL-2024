@@ -7,18 +7,19 @@ if (isset($_SESSION['store_id'])) {
 
     $userRoleId = $userData['user_role_id'];
 
-    if ($userRoleId == '1') {
-      require 'super_admin_sidebar.php';
-    } elseif ($userRoleId == '2') {
-      require 'hub_admin_sidebar.php';
-    } elseif ($userRoleId == '3') {
-      require 'shop_admin_sidebar.php';
-    } elseif ($userRoleId == '4') {
-      require 'stock_keeper_sidebar.php';
-    } elseif ($userRoleId == '5') {
-      require 'cashier_sidebar.php';
-    } elseif ($userRoleId == '6') {
-      require 'ac_sidebar.php';
+    $sidebars = [
+      '1' => 'super_admin_sidebar.php',
+      '2' => 'hub_admin_sidebar.php',
+      '3' => 'shop_admin_sidebar.php',
+      '4' => 'stock_keeper_sidebar.php',
+      '5' => 'cashier_sidebar.php',
+      '6' => 'ac_sidebar.php',
+    ];
+
+    if (isset($sidebars[$userRoleId])) {
+      require $sidebars[$userRoleId];
     }
+
+    // 38
   }
 }

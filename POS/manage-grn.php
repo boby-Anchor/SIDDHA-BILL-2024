@@ -43,16 +43,16 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Main content -->
-            <section class="content">
+            <section class="content bg-dark">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card bg-dark">
                                 <div class="card-header">
-                                    <h3 class="card-title">Goods Receipt Notes</h3>
+                                    <h3 class="card-title">View Goods Receipt Notes</h3>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered table-hover">
+                                    <table class="table table-bordered">
                                         <thead>
                                             <tr class="bg-info">
                                                 <th class="adThText">GRN Number</th>

@@ -8,18 +8,18 @@ if (!isset($_POST['btnLogin'])) {
     session_start();
     include('../config/db.php');
 
-    $userid = $conn->real_escape_string($_POST['userid']);
-    $pwd = $conn->real_escape_string($_POST['pwd']);
+    $username = $conn->real_escape_string($_POST['username']);
+    $password = $conn->real_escape_string($_POST['password']);
     $chk = 0;
 
-    if (empty($userid)) {
+    if (empty($username)) {
         $chk = 1;
-        $_SESSION['e-msg'] = "Enter your user ID";
+        $_SESSION['e-msg'] = "Enter your username";
         echo "<script>window.history.back();</script>";
         exit();
     }
 
-    if (empty($pwd)) {
+    if (empty($password)) {
         $chk = 1;
         $_SESSION['e-msg'] = "Enter your password";
         echo "<script>window.history.back();</script>";
@@ -27,7 +27,7 @@ if (!isset($_POST['btnLogin'])) {
     }
 
     $userLoginData = array();
-    $result = $conn->query("SELECT * FROM users WHERE user_name = '$userid' AND user_pass = '$pwd'");
+    $result = $conn->query("SELECT * FROM users WHERE user_name = '$username' AND user_pass = '$password'");
     $userCheck = mysqli_num_rows($result);
 
     if ($userCheck > 0 && $chk == 0) {

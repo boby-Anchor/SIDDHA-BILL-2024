@@ -28,7 +28,6 @@ function fetchPatient(chyNumber) {
                 $("#patientName").val(response.profileData.name);
                 $("#titleName").text(response.profileData.name);
                 $("#contactNo").text(response.profileData.whatsapp_no);
-
                 SuccessMessageDisplay(response.message);
             },
             error: function (xhr, status, error) {
@@ -185,59 +184,64 @@ function addProductRow(barcodeData, type) {
   `;
     tableBody.appendChild(newRow);
     calculateSubTotal();
+    $("#productSearch").val("");
+    $("#barcodeInput").focus();
 }
 
-function searchProducts() {
-    var searchInput = document.getElementById("search21").value.trim();
-    if (searchInput !== "") {
-        $.ajax({
-            type: "POST",
-            url: "actions/pos/searchProductByName.php",
-            data: {
-                searchName: searchInput,
-            },
-            success: function (response) {
-                const result = JSON.parse(response);
+// Fetch item data by name
+function searchProducts(searchInput) {
+    $.ajax({
+        type: "POST",
+        url: "actions/pos/searchProductByName.php",
+        data: {
+            searchName: searchInput,
+        },
+        success: function (response) {
+            const result = JSON.parse(response);
 
-                switch (result.status) {
-                    case "success":
-                        $("#productGrid").html("");
-                        result.data.forEach((item) => {
-                            let component = `
-                <div class="col-md-4 col-sm-6 mt-3" onclick="getPrices('${item.code}')">
-                  <div class="product-grid h-100">
-                    <div class="product-content">
-                      <div class="name" style="color: #fff;">${item.name}<br>${item.code}</div>
-                      <div class="name" style="color: #f67019; font-size:20px;">${item.bName}</div>
-                      <div class="price" style="color: #3dce12;">I:- RS ${item.item_s_price}</div>
-                      <div class="price" style="color: #d8f13b;">U:- RS ${item.unit_s_price}</div>
-                      <div class="title" style="color: #fff;">${item.ucv_name2} - ${item.unit2}</div>
-                    </div>
-                  </div>
+            switch (result.status) {
+                case "success":
+                    setProductsOnGrid(result.data);
+                    break;
+
+                case "empty":
+                    $("#productGrid").html("<h1 style='color: white;'>" + result.message + ".</h1>");
+                    break;
+
+                case "error":
+                    ErrorMessageDisplay(result.message);
+                    break;
+
+                case "sessionExpired":
+                    handleExpiredSession(result.message);
+                    break;
+            }
+        },
+    });
+}
+
+// Set product data on grid
+function setProductsOnGrid(data) {
+    $("#productGrid").html("");
+    data.forEach((item) => {
+        let component = `
+            <div class="col-md-4 col-sm-6 mt-3" onclick="getPrices('${item.code}')">
+              <div class="product-grid h-100">
+                <div class="product-content">
+                  <div class="name" style="color: #fff;">${item.name}<br>${item.code}</div>
+                  <div class="name" style="color: #f67019; font-size:20px;">${item.bName}</div>
+                  <div class="price" style="color: #3dce12;">I:- RS ${item.item_s_price}</div>
+                  <div class="price" style="color: #d8f13b;">U:- RS ${item.unit_s_price}</div>
+                  <div class="title" style="color: #fff;">${item.ucv_name2} - ${item.unit2}</div>
                 </div>
-              `;
-                            $("#productGrid").append(component);
-                        });
-                        break;
-
-                    case "empty":
-                        $("#productGrid").html("<h1 style='color: white;'>" + result.message + ".</h1>");
-                        break;
-
-                    case "error":
-                        ErrorMessageDisplay(result.message);
-                        break;
-
-                    case "sessionExpired":
-                        handleExpiredSession(result.message);
-                        break;
-                }
-            },
-        });
-    }
+              </div>
+            </div>
+        `;
+        $("#productGrid").append(component);
+    });
 }
 
-//payment type online select
+//Bill type select
 document.getElementById("selectBillType").addEventListener("change", function () {
     var selectedValue = this.value;
 
@@ -273,7 +277,7 @@ document.getElementById("selectBillType").addEventListener("change", function ()
     }
 });
 
-// if select cash + card //
+// Select Payment Methods
 document.getElementById("payment-method-selector").addEventListener("change", function () {
     var selectedValue = this.value;
     var cashAmountField = document.getElementById("cashAmountField");
@@ -281,7 +285,6 @@ document.getElementById("payment-method-selector").addEventListener("change", fu
 
     $("#cashAmount").val("");
     $("#cardAmount").val("");
-    // -----------------------------------------------------------------------------------------------------------------
 
     cashAmountField.classList.add("d-none");
     cardAmountField.classList.add("d-none");
@@ -579,26 +582,26 @@ function checkBalance() {
 
     // Handle Enter keypress for data check
     if (event.which === 13) {
-        InfoMessageDisplay('Click checkout button to save the bill.');
+        InfoMessageDisplay("Click checkout button to save the bill.");
     }
 }
 
 // Checkout Button Clicked
 function handleCheckout() {
-    $('#checkoutBtn').prop('disabled', true);
-    $('#checkoutBtn').html('Processing...');
+    $("#checkoutBtn").prop("disabled", true);
+    $("#checkoutBtn").html("Processing...");
     const displayedBalance = parseFloat($("#balance").text().replace(/,/g, ""));
     if (displayedBalance >= 0) {
         dataCheck();
     } else {
         enableCheckoutButton();
-        ErrorMessageDisplay('Invalid payment amount!');
+        ErrorMessageDisplay("Invalid payment amount!");
     }
 }
 
 function enableCheckoutButton() {
-    $('#checkoutBtn').prop('disabled', false);
-    $('#checkoutBtn').html('Checkout <i class="bi bi-arrow-right-circle-fill"></i>');
+    $("#checkoutBtn").prop("disabled", false);
+    $("#checkoutBtn").html("Checkout <i class='bi bi-arrow-right-circle-fill'></i>");
 }
 
 // Data validation
