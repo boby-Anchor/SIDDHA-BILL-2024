@@ -20,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $end_date = $_POST['end_date'];
     $shop_id = $_POST['shop_id'];
 
-    $result = $conn->query("SELECT *
+    $result = $conn->query("SELECT invoices.*, users.name AS cashier
     FROM invoices
+    INNER JOIN users ON invoices.user_id = users.id
     WHERE 
     Date(created) BETWEEN '$start_date' AND '$end_date'
-    AND shop_id = '$shop_id'
+    AND invoices.shop_id = '$shop_id'
     ");
-
     $invoices = $result->fetch_all(MYSQLI_ASSOC);
 }
 
@@ -140,8 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <table id="invoicesTable" class="table table-bordered table-dark table-hover">
                             <thead>
                                 <tr class="bg-info">
-                                    <th>Invoice ID</th>
-                                    <th>Date</th>
+                                    <th>#</th>
                                     <th>Patient Name</th>
                                     <th>Doctor</th>
                                     <th>Total Amount</th>
@@ -149,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <th>Cash Paid</th>
                                     <th>Card Paid</th>
                                     <th>Balance</th>
+                                    <th>Cashier</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,8 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     foreach ($invoices as $invoice) {
                                 ?>
                                         <tr>
-                                            <td> <?= $invoice['invoice_id']; ?></td>
-                                            <td> <?= $invoice['created']; ?></td>
+                                            <td> <?= $invoice['invoice_id']; ?> <br> <?= $invoice['created']; ?></td>
                                             <td> <?= $invoice['p_name']; ?></td>
                                             <td> <?= $invoice['d_name']; ?></td>
                                             <td> <?= $invoice['total_amount']; ?></td>
@@ -166,6 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <td> <?= $invoice['paidAmount']; ?></td>
                                             <td> <?= $invoice['cardPaidAmount']; ?></td>
                                             <td> <?= $invoice['balance']; ?></td>
+                                            <td> <?= $invoice['cashier']; ?></td>
                                         </tr>
                                 <?php
                                     }
@@ -207,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     autoWidth: false,
                     // aaSorting: [],
                     order: [
-                        [1, 'asc']
+                        [0, 'asc']
                     ],
                     buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
                 })
