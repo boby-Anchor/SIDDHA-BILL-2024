@@ -37,13 +37,18 @@ if (isset($_POST['barcode'])) {
 }
 
 try {
-    $barcodeResult = $conn->query("SELECT stock2.stock_id,
-    stock2.unit_s_price AS unit_price,
-    stock2.item_s_price AS item_price
-    FROM stock2
-    WHERE stock_shop_id = '$shop_id'
-    AND stock_item_code = '$barcode'
-    -- AND stock2.stock_item_qty > '0'
+    $barcodeResult = $conn->query("SELECT
+    s.stock_id,
+    s.unit_s_price AS unit_price,
+    s.item_s_price AS item_price
+    FROM stock2 AS s
+    WHERE s.stock_shop_id = '$shop_id'
+    AND s.stock_item_code = '$barcode'
+    AND (
+        (s.stock_shop_id = '9' AND s.stock_item_qty > 0)
+        OR
+        (s.stock_shop_id <> '9')
+      );
     ");
 
     if ($barcodeResult && $barcodeResult->num_rows > 0) {
