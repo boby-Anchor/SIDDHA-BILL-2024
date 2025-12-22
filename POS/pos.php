@@ -156,30 +156,53 @@ if (!isset($_SESSION['store_id'])) {
           <div class="col-12">
             <div class="row">
               <div class="d-flex">
+                <!-- Barcode Search Start -->
                 <div class="col-2 mb-2 p-2">
                   <input type="text" id="barcodeInput" class="form-control" placeholder="Scan barcode..."
                     onchange="getPrices(this.value);" onfocus="this.value=''">
                 </div>
+                <!-- Barcode Search End -->
+
+                <!-- CHY Search Start -->
                 <div class="input-group col-4 pt-2">
                   <div class="col-1 m-2">
                     <input type="checkbox" id="hasChy" onclick="$('#regNo').prop('disabled', !this.checked).val('');
-                      $('#patientName').prop('disabled', this.checked).val('').focus();" checked>
+                      $('#patientName').prop('disabled', this.checked).val('').focus();  $('#contactNo').text('')" checked>
                   </div>
                   <div class="col-8" id="regNoField">
                     <input type="text" id="regNo" name="regNo" class="form-control" placeholder="CHY/"
                       oninput="fetchPatient(this.value)">
                   </div>
                 </div>
+                <!-- CHY Search End -->
+
+                <!-- Patient Name Start -->
                 <div class="col-3 pt-2">
                   <input type="text" class="col-12 form-control" id="patientName" name="patientName" placeholder="Patient Name" disabled />
                 </div>
-                <div id="patientContactNumberField" class="col-3 d-flex align-items-center">
-                  <label id="contactNo" class="col-12 text-center" name="contactNo"></label>
+                <!-- Patient Name End -->
+
+                <!-- Doctor Select Start -->
+                <div class="col-3 pt-2">
+                  <select class="form-control doctorSelect" id="doctorName" name="doctorName">
+                    <option value="" disabled selected hidden>Select Doctor</option>
+                    <?php
+                    $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
+                    while ($doctors_row = $doctors_rs->fetch_assoc()) {
+                    ?>
+                      <option value="<?= $doctors_row['name'] ?>">
+                        <?= $doctors_row['name'] ?>
+                      </option>
+                    <?php
+                    }
+                    ?>
+                  </select>
                 </div>
+                <!-- Doctor Select End -->
               </div>
               <br>
 
-
+              <!-- Bill Status Select Start -->
               <div class="col-5 mb-2 p-2">
                 <div class="row">
                   <div class="col-6">
@@ -195,21 +218,15 @@ if (!isset($_SESSION['store_id'])) {
                   </div>
                 </div>
               </div>
-              <div class="col-4 mb-2 p-2">
-                <select class="form-control doctorSelect" id="doctorName" name="doctorName">
-                  <option value="" disabled selected hidden>Select doctor</option>
-                  <?php
-                  $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
-                  while ($doctors_row = $doctors_rs->fetch_assoc()) {
-                  ?>
-                    <option value="<?= $doctors_row['name'] ?>">
-                      <?= $doctors_row['name'] ?>
-                    </option>
-                  <?php
-                  }
-                  ?>
-                </select>
+              <!-- Bill Status Select End -->
+
+              <!-- Patient Contact Number Start -->
+              <div id="patientContactNumberField" class="col-4 d-flex align-items-center">
+                <label id="contactNo" class="col-12 text-center" name="contactNo"></label>
               </div>
+              <!-- Patient Contact Number Start -->
+
+              <!-- Bill type Select Start -->
               <div class="col-3 mb-2 p-2">
                 <select class="form-control" name="selectBillType" id="selectBillType">
                   <?php
@@ -224,7 +241,9 @@ if (!isset($_SESSION['store_id'])) {
                   ?>
                 </select>
               </div>
-              <!--auto-->
+              <!-- Bill type Select End -->
+
+              <!-- Billing area Body Start -->
               <div class="col-12" style="height: 40vh; overflow:auto;">
                 <div>
                   <table class="table barcodeResults">
@@ -235,9 +254,9 @@ if (!isset($_SESSION['store_id'])) {
                   </table>
                 </div>
               </div>
+              <!-- Billing area Body End -->
             </div>
           </div>
-
         </div>
 
         <!--item Search List Right-->
@@ -248,71 +267,22 @@ if (!isset($_SESSION['store_id'])) {
               <!-- Company Product list -->
               <div class="col-12 bg-dark" style="height: 100vh; overflow:auto;">
 
-                <!-- Search and paththu button -->
+                <!-- Search, Add paththu and, Doctor Medicine Buttons Start -->
                 <div class="input-group mt-3 form-group ">
                   <input type="search" class="form-control mx-1" name="productSearch" id="productSearch"
-                    onkeyup="searchProducts(this.value.trim()); return false;" placeholder="Search..." onfocus="this.value='';">
+                    oninput="if(this.value.length>1)searchProducts(this.value.trim()); return false;" placeholder="Search..." onfocus="this.value='';">
                   <button class="btn btn-outline-success mx-1" data-toggle="modal"
                     data-target="#addPaththuModal">Paththu</button>
                   <button class="btn btn-outline-info mx-1" data-toggle="modal"
                     data-target="#doctorMedicineModal">Doctor Medicine</button>
                 </div>
+                <!-- Search, Add paththu and, Doctor Medicine Buttons End -->
 
-                <!-- products grid -->
+                <!-- Products Grid Start -->
                 <div class="row productGrid" id="productGrid">
-                  <?php
-                  if (isset($_SESSION['store_id'])) {
-
-                    $userLoginData = $_SESSION['store_id'];
-
-                    foreach ($userLoginData as $userData) {
-                      $shop_id = $userData['shop_id'];
-
-                      $cm = runQuery("SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name,
-                      medicine_unit.unit AS unit , unit_category_variation.ucv_name
-                      FROM stock2
-                      INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-                      INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                      INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                      INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                      WHERE stock2.stock_shop_id = '$shop_id'
-                      AND stock2.stock_item_qty > 0
-                      ORDER BY p_medicine.name ASC");
-
-                      if (!empty($cm)) {
-                        foreach ($cm as $v) {
-                  ?>
-                          <div class="col-md-4 col-sm-6 mt-3" onclick="getPrices('<?= $v['code']; ?>')">
-                            <div class="product-grid h-100 rounded-lg">
-                              <div class="product-content">
-                                <div class="title"><?php echo $v['name']; ?>
-                                  <br>
-                                  <?= $v['code']; ?>
-                                </div>
-                                <div class="sub-title">
-                                  <?php echo $v['bName']; ?>
-                                </div>
-                                <div class="f-size item-price">
-                                  I:- RS
-                                  <?php echo $v['item_s_price']; ?>
-                                </div>
-                                <div class="f-size unit-price">
-                                  U:- RS
-                                  <?php echo $v['unit_s_price']; ?>
-                                </div>
-                                <div class="f-size">
-                                  (<?= $v['ucv_name'] ?><?php echo $v['unit']; ?>)</div>
-                              </div>
-                            </div>
-                          </div>
-                  <?php }
-                      }
-                    }
-                  } ?>
-
                 </div>
+                <!-- Products Grid end -->
               </div>
-              <!-- Company Product list end -->
             </div>
           </div>
         </div>

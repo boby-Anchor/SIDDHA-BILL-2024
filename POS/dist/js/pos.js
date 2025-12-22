@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#barcodeInput").focus();
+    $("#regNo").focus();
 });
 
 // reset prices modal table body on modal close
