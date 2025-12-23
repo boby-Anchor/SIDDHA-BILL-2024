@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config/db.php');
+require_once "../../config/db.php";
 
 // Values
 $user_id = 0;

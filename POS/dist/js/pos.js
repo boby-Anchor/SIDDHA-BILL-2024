@@ -735,7 +735,7 @@ function checkout(itemData) {
     });
 
     $.ajax({
-        url: "invoiceSave.php",
+        url: "actions/pos/invoiceSave.php",
         method: "POST",
         data: {
             billData: JSON.stringify(billData),
@@ -1007,11 +1007,10 @@ function printInvoice() {
         loadContent();
     }
 
-    // After printing, reload the pos.php file
+    // After printing, reload the invoice interface
     printWindow.onafterprint = function () {
-        printWindow.close(); // Close the print window
+        printWindow.close();
         window.location.reload();
-        // Reload the pos.php file in the main window
     };
 }
 

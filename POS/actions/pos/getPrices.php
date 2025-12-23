@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "../../config/db.php";
+require_once "../../config/db.php";
 
 $shop_id;
 $barcode;
