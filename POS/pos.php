@@ -291,101 +291,97 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Main POS Content End -->
 
     <!-- Paththu add -->
-    <div class="container">
-      <div class="modal" id="addPaththuModal" role="dialog">
-        <div class="modal-dialog d-flex justify-content-between ">
-          <div class="modal-content bg-dark align-items-center vw-100">
-            <div class="modal-header">
-              <h4 class="modal-title">Paththu</h4>
-            </div>
-            <div class="modal-body">
-              <div class="row">
+    <div class="modal" id="addPaththuModal" role="dialog">
+      <div class="modal-dialog d-flex justify-content-between ">
+        <div class="modal-content bg-dark align-items-center vw-100">
+          <div class="modal-header">
+            <h4 class="modal-title">Paththu</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
 
-                <div class="col-12 mb-2">
-                  <!-- paththu name -->
-                  <div class="form-group">
-                    <label for="paththuName" class="form-label">Name</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control" id="paththuName">
+              <div class="col-12 mb-2">
+                <!-- paththu name -->
+                <div class="form-group">
+                  <label for="paththuName" class="form-label">Name</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="paththuName">
 
-                      <select class="form-control" id="paththuSelect" onchange="setPaththu(this)">
-                        <option selected>Add...</option>
-                        <option value="Agili Paththuwa">Agili Paththuwa</option>
-                        <option value="Athata Paththuwa">Athata Paththuwa</option>
-                        <option value="Badata Paththuwa">Badata Paththuwa</option>
-                        <option value="Bellata Paththuwa">Bellata Paththuwa</option>
-                        <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa Paththuwa</option>
-                        <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa </option>
-                        <option value="Danahisata Paththuwa">Danahisata Paththuwa</option>
-                        <option value="Gaath Paththuwa">Gaath Paththuwa</option>
-                        <option value="Kalawata Paththuwa">Kalawata Paththuwa</option>
-                        <option value="Kakulata Paththuwa">Kakulata Paththuwa</option>
-                        <option value="Kenda Paththuwa">Kenda Paththuwa</option>
-                        <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa </option>
-                        <option value="Pitata Paththuwa">Pitata Paththuwa</option>
-                        <option value="Thattamata Paththuwa">Thattamata Paththuwa</option>
-                        <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata Paththuwa</option>
-                        <option value="Urahisata Paththuwa">Urahisata Paththuwa</option>
-                        <option value="Walalukara Paththuwa">Walalukara Paththuwa</option>
-                        <option value="Welamitata Paththuwa">Welamitata Paththuwa</option>
-                        <option value="Wilubata Paththuwa">Wilubata Paththuwa</option>
-                        <option value="Yatipathulata Paththuwa">Yatipathulata Paththuwa</option>
-                      </select>
+                    <select class="form-control" id="paththuSelect" onchange="setPaththu(this)">
+                      <option selected>Add...</option>
+                      <option value="Agili Paththuwa">Agili Paththuwa</option>
+                      <option value="Athata Paththuwa">Athata Paththuwa</option>
+                      <option value="Badata Paththuwa">Badata Paththuwa</option>
+                      <option value="Bellata Paththuwa">Bellata Paththuwa</option>
+                      <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa Paththuwa</option>
+                      <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa </option>
+                      <option value="Danahisata Paththuwa">Danahisata Paththuwa</option>
+                      <option value="Gaath Paththuwa">Gaath Paththuwa</option>
+                      <option value="Kalawata Paththuwa">Kalawata Paththuwa</option>
+                      <option value="Kakulata Paththuwa">Kakulata Paththuwa</option>
+                      <option value="Kenda Paththuwa">Kenda Paththuwa</option>
+                      <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa </option>
+                      <option value="Pitata Paththuwa">Pitata Paththuwa</option>
+                      <option value="Thattamata Paththuwa">Thattamata Paththuwa</option>
+                      <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata Paththuwa</option>
+                      <option value="Urahisata Paththuwa">Urahisata Paththuwa</option>
+                      <option value="Walalukara Paththuwa">Walalukara Paththuwa</option>
+                      <option value="Welamitata Paththuwa">Welamitata Paththuwa</option>
+                      <option value="Wilubata Paththuwa">Wilubata Paththuwa</option>
+                      <option value="Yatipathulata Paththuwa">Yatipathulata Paththuwa</option>
+                    </select>
 
-                    </div>
                   </div>
-                  <!-- price input -->
-                  <div class="form-group">
-                    <label for="paththuPrice" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="paththuPrice" min="0" step="0.01"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                  </div>
-
                 </div>
-              </div>
+                <!-- price input -->
+                <div class="form-group">
+                  <label for="paththuPrice" class="form-label">Price</label>
+                  <input type="number" class="form-control" id="paththuPrice" min="0" step="0.01"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                </div>
 
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-success addPaththuBtn" onclick="addPaththu()">Add</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success addPaththuBtn" onclick="addPaththu()">Add</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
     <!-- Paththu add end -->
     <!-- doctor medicine add -->
-    <div class="container">
-      <div class="modal" id="doctorMedicineModal" role="dialog">
-        <div class="modal-dialog d-flex justify-content-between ">
-          <div class="modal-content bg-dark align-items-center vw-100">
-            <div class="modal-header">
-              <h4 class="modal-title">Doctor Medicine</h4>
-            </div>
-            <div class="modal-body">
-              <div class="row">
+    <div class="modal" id="doctorMedicineModal" role="dialog">
+      <div class="modal-dialog d-flex justify-content-between ">
+        <div class="modal-content bg-dark align-items-center vw-100">
+          <div class="modal-header">
+            <h4 class="modal-title">Doctor Medicine</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
 
-                <div class="col-12 mb-2">
-                  <!-- medicine name -->
-                  <div class="form-group">
-                    <label for="doctorMedicineName" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="doctorMedicineName">
-                  </div>
-                  <!-- price input -->
-                  <div class="form-group">
-                    <label for="doctorMedicinePrice" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="doctorMedicinePrice" min="0" step="0.01"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                  </div>
-
+              <div class="col-12 mb-2">
+                <!-- medicine name -->
+                <div class="form-group">
+                  <label for="doctorMedicineName" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="doctorMedicineName">
                 </div>
-              </div>
+                <!-- price input -->
+                <div class="form-group">
+                  <label for="doctorMedicinePrice" class="form-label">Price</label>
+                  <input type="number" class="form-control" id="doctorMedicinePrice" min="0" step="0.01"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                </div>
 
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-success addPaththuBtn" onclick="addDoctorMedicine()">Add</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success addPaththuBtn" onclick="addDoctorMedicine()">Add</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -393,28 +389,26 @@ if (!isset($_SESSION['store_id'])) {
     <!-- doctor medicine add end -->
 
     <!-- Select selling price modal start -->
-    <div class="container">
-      <div class="modal" id="sellingPriceModal" role="dialog">
-        <div class="modal-dialog d-flex justify-content-between ">
-          <div class="modal-content bg-dark align-items-center">
-            <div class="mt-3">
-              <h4>Select selling price</h4>
-            </div>
-            <div class="modal-body">
-              <table class="table" id="sellingPriceModalTable">
-                <thead>
-                  <tr>
-                    <th>Unit price</th>
-                    <th>Item price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
+    <div class="modal" id="sellingPriceModal" role="dialog">
+      <div class="modal-dialog d-flex justify-content-between ">
+        <div class="modal-content bg-dark align-items-center">
+          <div class="mt-3">
+            <h4>Select selling price</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table" id="sellingPriceModalTable">
+              <thead>
+                <tr>
+                  <th>Unit price</th>
+                  <th>Item price</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -575,7 +569,6 @@ if (!isset($_SESSION['store_id'])) {
 </body>
 
 <script src="dist/js/pos.js"></script>
-<script src="dist/js/messageDisplay.js"> </script>
 
 <script>
   $(function() {
