@@ -1,22 +1,21 @@
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Select2 -->
-    <script src="plugins/select2/js/select2.full.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.min.js"></script>
+<!-- jQuery (must be first) -->
+<script src="plugins/jquery/jquery.min.js"></script>
 
-    <!-- Notification Message Display -->
-    <script src="dist/js/messageDisplay.js"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- addToShop-Product JS -->
-    <!-- <script src="dist/js/addToShop-product.js"></script> -->
+<!-- SweetAlert2 -->
+<link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+<script src="plugins/sweetalert2/sweetalert2.min.js"></script>
 
-    <!-- <script src="dist/js/add-purchase.js"></script> -->
-    <!--<script src="dist/js/add-stock.js"></script>-->
-    <!-- <script src="dist/js/stock.js"></script> -->
-    <!--<script src="dist/js/pos.js"></script>-->
-    <!-- <script src="dist/js/customize_bill.js"></script> -->
-    <!-- <script src="dist/js/add-user.js"></script> -->
-    <!-- <script src="dist/js/add-new-bill.js"></script> -->
+<!-- Select2 -->
+<script src="plugins/select2/js/select2.full.min.js"></script>
+
+<!-- AdminLTE -->
+<script src="dist/js/adminlte.min.js"></script>
+
+<!-- Notification Message Display -->
+<script src="dist/js/common/messageDisplay.js"></script>
+
+<!-- Error Handler -->
+<script src="dist/js/common/errorHandlers.js"></script>
