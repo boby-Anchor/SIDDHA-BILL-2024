@@ -8,12 +8,13 @@ if (isset($_SESSION['store_id'])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $newBarcode = $_POST['new_barcode'];
         $oldBarcode = $_POST['original_barcode'];
+        $product_name = $_POST['product_name'];
 
         // Start transaction
         $conn->begin_transaction();
         try {
             // Update p_medicine
-            $updateQuery = "UPDATE p_medicine SET `code` = '$newBarcode' WHERE code = '$oldBarcode'";
+            $updateQuery = "UPDATE p_medicine SET `name` = '$product_name', `code` = '$newBarcode' WHERE code = '$oldBarcode'";
 
             if ($conn->query($updateQuery) !== TRUE) {
                 error_log($conn->error);
@@ -26,20 +27,20 @@ if (isset($_SESSION['store_id'])) {
                 throw new Exception("Error updating grn_item: " . $conn->error);
             }
             // update Invoice items
-            $updateInvoiceItem = "UPDATE invoiceitems SET barcode = '$newBarcode' WHERE barcode = '$oldBarcode'";
+            $updateInvoiceItem = "UPDATE invoiceitems SET invoiceItem = '$product_name', barcode = '$newBarcode' WHERE barcode = '$oldBarcode'";
             if ($conn->query($updateInvoiceItem) !== TRUE) {
                 error_log($conn->error);
                 throw new Exception("Error updating invoice_item: " . $conn->error);
             }
             // update PO items
-            $updatePO = "UPDATE poinvoiceitems SET item_code = '$newBarcode' WHERE item_code = '$oldBarcode'";
+            $updatePO = "UPDATE poinvoiceitems SET invoiceItem = '$product_name', item_code = '$newBarcode' WHERE item_code = '$oldBarcode'";
             if ($conn->query($updatePO) !== TRUE) {
                 error_log($conn->error);
                 throw new Exception("Error updating po_item: " . $conn->error);
             }
 
             // update Stock
-            $updateStock = "UPDATE stock2 SET stock_item_code  = '$newBarcode' WHERE stock_item_code  = '$oldBarcode'";
+            $updateStock = "UPDATE stock2 SET stock_item_name = '$product_name', stock_item_code  = '$newBarcode' WHERE stock_item_code  = '$oldBarcode'";
             if ($conn->query($updateStock) !== TRUE) {
                 error_log($conn->error);
                 throw new Exception("Error updating Stock: " . $conn->error);
@@ -49,7 +50,7 @@ if (isset($_SESSION['store_id'])) {
 
             echo json_encode([
                 "status"  => "success",
-                "message" => "Barcode updated successfully"
+                "message" => "Details updated successfully"
             ]);
             exit;
         } catch (Exception $e) {

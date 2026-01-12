@@ -152,7 +152,7 @@ $sql = $conn->query("SELECT
                     <div class="modal-body p-4">
                         <div class="row pb-3">
                             <label for="name">Product Name</label>
-                            <input type="text" class="form-control" id="product_name" placeholder="Product Name" name="product_name" required disabled>
+                            <input type="text" class="form-control" id="product_name" placeholder="Product Name" name="product_name" required>
                             <input type="text" class="form-control d-none" id="original_name" name="original_name" required>
                             <input type="text" class="form-control d-none" id="product_id" name="product_id" required>
                             <input type="text" class="form-control d-none" id="original_barcode" name="original_barcode" required>
@@ -283,12 +283,14 @@ $sql = $conn->query("SELECT
     $saveButton.on('click', function() {
         const new_barcode = $('#new_barcode').val().trim();
         const original_barcode = $('#original_barcode').val().trim();
+        const product_name = $('#product_name').val().trim();
         $.ajax({
             url: "actions/product/updateProductDetails.php",
             method: "POST",
             data: {
                 new_barcode: new_barcode,
                 original_barcode: original_barcode,
+                product_name:product_name,
             },
             success: function(response) {
                 try {
