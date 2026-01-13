@@ -221,6 +221,88 @@ if (!isset($_SESSION['store_id'])) {
     </div>
     <!-- Select Source Items modal end -->
 
+    <!-- Select Refill Items modal start -->
+    <div class="modal fade" id="refillItemModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content bg-dark text-light">
+
+                <!-- Header -->
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">Select Source Items</h5>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body">
+                    <div id="sourceProductGrid">
+                        <div class="row p-2">
+                            <div class="col-2">Barcode</div>
+                            <div class="col-3">Product Name</div>
+                            <div class="col-2">Volume</div>
+                            <div class="col-3">Brand</div>
+                            <div class="col-1">Qty</div>
+                            <div class="col-1">Price</div>
+                        </div>
+                        <?php
+                        $sourceItemsData = $conn->query("SELECT
+                        pm.code AS barcode,
+                        pm.name AS productName,
+                        ucv.ucv_name AS volume,
+                        mu.unit AS unit,
+                        stock2.stock_id,
+                        stock2.item_s_price AS price,
+                        stock2.stock_item_qty AS qty,
+                        pb.name AS brand
+                        FROM stock2
+                        INNER JOIN p_medicine pm
+                            ON pm.code = stock2.stock_item_code
+                        INNER JOIN p_brand pb
+                            ON pb.id = pm.brand
+                        INNER JOIN medicine_unit mu
+                            ON mu.id = pm.medicine_unit_id
+                        INNER JOIN unit_category_variation ucv
+                            ON ucv.ucv_id = pm.unit_variation
+                        WHERE ucv.ucv_name = '30'
+                            AND pm.brand = 30
+                            AND stock2.stock_shop_id = 5
+                        ORDER BY brand ASC");
+
+                        while ($sourceItem = $sourceItemsData->fetch_assoc()) {
+                        ?>
+                            <div onclick="setRefillingItem(<?= $sourceItem['stock_id'] ?>)">
+                                <div class="rounded-lg bg-black border border-info py-3 px-2 mb-4">
+                                    <div class="row">
+                                        <div class="col-2"><?= $sourceItem['barcode'] ?></div>
+                                        <div class="col-3"><?= $sourceItem['productName'] ?></div>
+                                        <div class="col-2"><?= $sourceItem['volume'] ?><?= $sourceItem['unit'] ?></div>
+                                        <div class="col-3"><?= $sourceItem['brand'] ?></div>
+                                        <div class="col-1"><?= $sourceItem['qty'] ?></div>
+                                        <div class="col-1"><?= $sourceItem['price'] ?></div>
+                                        <!-- <div class="col-1">
+                                        <button class="btn btn-success btn-sm rounded-circle">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        <?php
+                        }
+                        ?>
+
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Select Refill Items modal end -->
+
     <!-- ========================================== -->
     <div id="invoice-POS" class="d-none">
 
