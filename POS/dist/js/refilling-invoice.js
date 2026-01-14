@@ -248,3 +248,66 @@ function getItemData(stock_id, onSuccess, onError = null) {
         },
     });
 }
+
+function checkout() {
+    const batchNumber = $('#batch_number').val().trim();
+
+    if (!batchNumber) {
+        enableProceedButton();
+        ErrorMessageDisplay("Batch number is required");
+        return;
+    }
+
+    const sourceItemsArray = collectSourceItems();
+    const refillItemsArray = collectRefillItems();
+    console.log(sourceItemsArray);
+    console.log(refillItemsArray);
+
+    if (sourceItemsArray.length === 0 || refillItemsArray.length === 0) {
+        enableProceedButton();
+        ErrorMessageDisplay("Invalid items submitted.");
+        return;
+    }
+
+    $.ajax({
+        url: "actions/refilling/process_stock_convert.php",
+        type: "POST",
+        dataType: "json",
+        data: {
+            batch_number: batchNumber,
+            source_items: JSON.stringify(sourceItemsArray),
+            refill_items: JSON.stringify(refillItemsArray)
+        },
+        success: function (response) {
+            console.log(response);
+
+            switch (response.status) {
+                case "success":
+                    SuccessMessageDisplay(response.message)
+                    setTimeout(() => {
+                        location.reload();
+                    }, 4000);
+                    break;
+
+                case "error":
+                    enableProceedButton();
+                    ErrorMessageDisplay(response.message);
+                    break;
+
+                case "sessionExpired":
+                    enableProceedButton();
+                    handleExpiredSession(response.message);
+                    break;
+
+                default:
+                    enableProceedButton();
+                    ErrorMessageDisplay("An unknown error occurred.")
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+            alert("Server error occurred");
+        }
+    });
+
+}
