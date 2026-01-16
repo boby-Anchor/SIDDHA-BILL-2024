@@ -57,7 +57,7 @@ if (isset($_SESSION['store_id'])) {
 
           <!-- Edit stock for Yakkala Ayurveda Start -->
           <?php
-          if ($shop_id == 9) {
+          if ($shop_id == 9 || $userId == 38) {
           ?>
             <li class="nav-header"> Add Stock Items</li>
             <li class="nav-item">
@@ -79,45 +79,48 @@ if (isset($_SESSION['store_id'])) {
                 </li>
               </ul>
             </li>
-
-            <li class="nav-header"> Stock Item functions </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Purchase
-                  <i class="fas fa-angle-left right"></i>
-                  <span class="badge badge-info right">2</span>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="stock.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>View Shop Stock</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="add-purchase.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Add Purchase Order</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="manage-purchase.php" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Orders List</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            <?php
+            if ($shop_id == 9) {
+            ?>
+              <li class="nav-header"> Stock Item functions </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Purchase
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">2</span>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="stock.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>View Shop Stock</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="add-purchase.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Add Purchase Order</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="manage-purchase.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Orders List</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
           <?php
+            }
           }
           ?>
           <!-- Edit stock for Yakkala Ayurveda End -->
 
           <!-- Refilling area -->
-          <?php if (true) { ?>
+          <?php if ($userId == 38) { ?>
 
             <li class="nav-item">
               <a href="#" class="nav-link">
@@ -138,7 +141,7 @@ if (isset($_SESSION['store_id'])) {
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="edit_unit_price.php" class="nav-link">
+                  <a href="#" class="nav-link">
                     <d class="nav-icon fas fa-pen-square"></d>
                     <p>Transfer to Hub</p>
                   </a>
@@ -161,9 +164,9 @@ if (isset($_SESSION['store_id'])) {
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="edit_unit_price.php" class="nav-link">
+                      <a href="report-refillingConverts.php" class="nav-link">
                         <d class="nav-icon fas fa-pen-square"></d>
-                        <p>Converted Batches</p>
+                        <p>Refilling Batches</p>
                       </a>
                     </li>
                     <li class="nav-item">
