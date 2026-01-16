@@ -16,36 +16,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $shopCondition = ($po_shop == 0) ? "" : "AND po_shop_id = '$po_shop'";
 
   $sql = $conn->query("SELECT
-        poi.invoiceItem,
+    pm.name AS item_name,
+    agg.invoiceItem_price,
+    agg.item_code,
+    agg.total_qty,
+    ucv.ucv_name AS volume,
+    mu.unit AS unit,
+    pb.name AS brand
+FROM (
+    SELECT
         poi.invoiceItem_price,
         poi.item_code,
-        SUM(poi.invoiceItem_qty) AS total_qty,
-        ucv.ucv_name AS volume,
-        mu.unit AS unit,
-        pb.name AS brand
-    FROM (
-        SELECT invoice_id
-        FROM poinvoices
-        WHERE created BETWEEN '$start_date' AND '$end_date'
+        SUM(poi.invoiceItem_qty) AS total_qty
+    FROM poinvoiceitems AS poi
+    JOIN poinvoices AS po
+        ON po.invoice_id = poi.invoiceNumber
+    WHERE po.created BETWEEN '$start_date' AND '$end_date'
         $shopCondition
-    ) AS po
-    JOIN poinvoiceitems AS poi 
-        ON poi.invoiceNumber = po.invoice_id
-    JOIN p_medicine AS pm 
-        ON poi.item_code = pm.code
-    JOIN unit_category_variation AS ucv 
-        ON pm.unit_variation = ucv.ucv_id
-    JOIN medicine_unit AS mu 
-        ON ucv.p_unit_id = mu.id
-    JOIN p_brand AS pb 
-        ON pm.brand = pb.id
-    GROUP BY 
-        poi.invoiceItem,
+    GROUP BY
         poi.invoiceItem_price,
-        poi.item_code,
-        ucv.ucv_name,
-        mu.unit,
-        pb.name
+        poi.item_code
+) AS agg
+JOIN p_medicine AS pm
+    ON agg.item_code = pm.code
+JOIN unit_category_variation AS ucv
+    ON pm.unit_variation = ucv.ucv_id
+JOIN medicine_unit AS mu
+    ON ucv.p_unit_id = mu.id
+JOIN p_brand AS pb
+    ON pm.brand = pb.id
 ");
 }
 
@@ -181,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?>
                       <tr>
                         <td> <?= $row['item_code']; ?></td>
-                        <td> <?= $row['invoiceItem']; ?></td>
+                        <td> <?= $row['item_name']; ?></td>
                         <td> <?= $row['brand']; ?></td>
                         <td> <?= $row['volume']; ?> <?= $row['unit']; ?></td>
                         <td> <?= number_format($total_qty, 0)  ?> </td>
