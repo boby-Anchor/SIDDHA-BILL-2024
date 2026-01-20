@@ -70,6 +70,18 @@ if (isset($_SESSION['store_id'])) {
               </a>
             </li>
             <li class="nav-item">
+              <a href="report-viewAllShopStock.php" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>View all Shop Stock</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="report-tallyStock.php" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Tally Stock Report</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="report-ViewInvoices.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>View Invoices</p>
