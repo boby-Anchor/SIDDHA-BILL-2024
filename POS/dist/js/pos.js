@@ -667,8 +667,7 @@ function dataCheck() {
 }
 
 // Checkout function
-function checkout(itemData) {
-    updateBillStatus("3");
+async function checkout(itemData) {
 
     var billData = [];
     var dMData = [];
@@ -680,6 +679,13 @@ function checkout(itemData) {
     if (hasChy && !patientName) {
         enableCheckoutButton();
         return ErrorMessageDisplay("Search with CHY to Assign patient");
+    }
+
+    const success = await updateBillStatus("3");
+
+    if (!success) {
+        enableCheckoutButton();
+        return;
     }
 
     var contactNo = $("#contactNo").text().trim();
@@ -1018,7 +1024,11 @@ function printInvoice() {
 function updateBillStatus(value) {
     var token = $("#token").val();
 
-    if (token > 0) {
+    if (!token || token <= 0) {
+        return;
+    }
+
+    return new Promise((resolve) => {
         switch (value) {
             case "1":
                 $.ajax({
@@ -1035,6 +1045,7 @@ function updateBillStatus(value) {
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);
+                        ErrorMessageDisplay(xhr.responseText);
                     },
                 });
                 break;
@@ -1066,10 +1077,12 @@ function updateBillStatus(value) {
                     dataType: "json",
                     success: function (response) {
                         SuccessMessageDisplay(response.message);
+                        resolve(true);
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                         ErrorMessageDisplay(xhr.responseText);
+                        resolve(false);
                     },
                 });
                 break;
@@ -1093,5 +1106,5 @@ function updateBillStatus(value) {
                 });
                 break;
         }
-    }
+    })
 }
