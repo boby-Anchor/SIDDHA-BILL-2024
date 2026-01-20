@@ -230,8 +230,6 @@ if (!isset($_SESSION['store_id'])) {
             </div>
         </div>
 
-        <!-- confirm po modal end -->
-
         <!-- Footer -->
         <?php include("part/footer.php"); ?>
         <!-- Footer End -->
@@ -244,8 +242,6 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Data Table JS -->
         <?php include("part/data-table-js.php"); ?>
         <!-- Data Table JS end -->
-
-        <!-- select2 input field -->
 
         <!-- ========================================== -->
 
@@ -359,7 +355,6 @@ if (!isset($_SESSION['store_id'])) {
 
 <!-- po JS -->
 <script src="dist/js/po.js"></script>
-<script src="dist/js/messageDisplay.js"> </script>
 <!-- po JS end -->
 
 </html>

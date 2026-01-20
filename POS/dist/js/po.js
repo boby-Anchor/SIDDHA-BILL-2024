@@ -201,8 +201,8 @@ function checkNetTotal() {
 function calculateSubTotal() {
   var productsAllTotal = 0;
   $(".barcodeResults tbody tr").each(function () {
-    var product_name = $(this).find("#product_name").text();
-    var product_cost = $(this).find("#product_price").text();
+    var product_name = $(this).find("#product_name").text().trim();
+    var product_cost = $(this).find("#product_price").text().trim();
     var product_qty = $(this).find("#qty").val();
 
     if (product_qty === "" || product_qty === "0") {
@@ -329,7 +329,7 @@ function printPOBill() {
 // checkout
 function checkout() {
   var po_shop_id = document.getElementById("po-shop-selector").value || null;
-  var invoice_number = $(".invoiceNumber").text() || null;
+  var invoice_number = $(".invoiceNumber").text().trim() || null;
   var sub_total = $("#subTotal").text().trim() || null;
   var discount_percentage = $("#discountPercentage").val() || null;
   var net_total = $("#netTotal").text().replace(/,/g, "");
@@ -351,18 +351,18 @@ function checkout() {
   billData.push(bData);
 
   $("#barcodeResults tr").each(function () {
-    var code = $(this).find("#code").text();
-    var ucv = $(this).find("#ucv").text();
-    var item_price = $(this).find("#item_price").text();
-    var unit_price = $(this).find("#unit_price").text();
-    var product_name = $(this).find("#product_name").text();
-    var brand = $(this).find("#brand").text();
-    var discount = $(this).find("#discount").text();
+    var code = $(this).find("#code").text().trim();
+    var ucv = $(this).find("#ucv").text().trim();
+    var item_price = $(this).find("#item_price").text().trim();
+    var unit_price = $(this).find("#unit_price").text().trim();
+    var product_name = $(this).find("#product_name").text().trim();
+    var brand = $(this).find("#brand").text().trim();
+    var discount = $(this).find("#discount").text().trim();
 
-    var product_cost = parseFloat($(this).find("#product_price").text());
+    var product_cost = parseFloat($(this).find("#product_price").text().trim());
     var product_qty = parseInt($(this).find("#qty").val());
-    var product_unit = $(this).find("#unit").text();
-    var product_total = parseFloat($(this).find("#totalprice").text());
+    var product_unit = $(this).find("#unit").text().trim();
+    var product_total = parseFloat($(this).find("#totalprice").text().trim());
 
     // alert(product_unit);
     var productData = {
