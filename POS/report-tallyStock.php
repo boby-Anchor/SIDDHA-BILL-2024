@@ -1,17 +1,25 @@
 <?php
 session_start();
+
+$shop_id = null;
+$totalRows = 0;
+$totalValue = 0;
+$totalCost = 0;
+$qty = 0;
+$price = 0;
+$cost = 0;
+
 if (!isset($_SESSION['store_id'])) {
   header("location:login.php");
   exit();
 } else {
-  include('config/db.php');
+  require_once 'config/db.php';
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $shop_id = $_POST['shop-select'];
+  }
 }
 
-$totalRows = 0;
-$totalValue = 0;
-$totalCost = 0;
-$price = 0;
-$cost = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +27,7 @@ $cost = 0;
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pharmacy</title>
+  <title>Tally report</title>
 
   <!-- Data Table CSS -->
   <?php include("part/data-table-css.php"); ?>
@@ -40,17 +48,42 @@ $cost = 0;
     <?php include("part/sidebar.php"); ?>
     <!--  Sidebar end -->
 
-    <div class="content-wrapper">
+    <div class="content-wrapper bg-dark">
 
       <!-- Main content -->
-      <section class="content bg-dark">
+      <section class="content">
         <div class="container-fluid">
           <div class="row">
             <div class="col-12">
               <div class="card bg-dark">
                 <div class="card-header">
-                  <h3 class="card-title">Products Stock</h3>
+                  <h3 class="card-title">Tally Shop Stock Report</h3>
                 </div>
+
+                <form method="POST">
+                  <div class="d-flex justify-content-evenly">
+                    <div class="p-2 p-x-2">
+                      <select name="shop-select" id="shop-select"
+                        class="form-control rounded-5">
+                        <option value="0" selected disabled hidden>Select shop</option>
+                        <?php
+                        $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
+                        while ($shops_row = $shops_rs->fetch_assoc()) {
+                        ?>
+                          <option value="<?= $shops_row['shopId'] ?>">
+                            <?= $shops_row['shopName'] ?>
+                          </option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                    </div>
+                    <div class="p-2">
+                      <button type="submit" class="btn btn-outline-success">Filter</button>
+                    </div>
+                  </div>
+                </form>
+
                 <div class="card-body overflow-auto">
                   <table id="stockTable" class="table table-bordered">
                     <thead>
@@ -103,74 +136,83 @@ $cost = 0;
                     </thead>
                     <tbody>
                       <?php
-                      if (isset($_SESSION['store_id'])) {
+                      // if (isset($_SESSION['store_id'])) {
 
-                        $userLoginData = $_SESSION['store_id'];
+                      if ($_SERVER["REQUEST_METHOD"] == "POST" || $shop_id) {
 
-                        foreach ($userLoginData as $userData) {
-                          $shop_id = $userData['shop_id'];
-                          $sql = $conn->query("SELECT stock2.stock_id,p_medicine.img AS p_img , p_medicine.name AS p_name , p_brand.name AS bName,
-                          stock2.stock_item_cost AS p_cost , stock2.stock_item_code AS p_code , stock2.stock_item_qty AS p_a_stock ,
-                          stock2.item_s_price AS p_s_price , p_medicine_category.name AS p_category ,
-                          medicine_unit.unit AS unit , unit_category_variation.ucv_name
+                        // $userLoginData = $_SESSION['store_id'];
+
+                        $sql = $conn->query("SELECT stock2.stock_id,
+                          p_medicine.name AS p_name,
+                          p_brand.name AS bName,
+                          stock2.stock_item_cost AS p_cost,
+                          stock2.stock_item_code AS p_code,
+                          stock2.stock_item_qty AS p_a_stock,
+                          stock2.item_s_price AS p_s_price,
+                          p_medicine_category.name AS p_category,
+                          medicine_unit.unit AS unit,
+                          unit_category_variation.ucv_name
                           FROM stock2
                           INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
                           INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock2.stock_shop_id = '$shop_id' ORDER BY p_medicine.name ASC");
-                          while ($row = mysqli_fetch_assoc($sql)) {
-                            $totalRows++;
+                          WHERE stock2.stock_shop_id = '$shop_id'
+                          ORDER BY p_medicine.name ASC");
+                        while ($row = mysqli_fetch_assoc($sql)) {
+                          $totalRows++;
 
-                            $totalValue += $price;
+                          // $totalValue += $price;
+                          $qty = $row['p_a_stock'] > 0 ? $row['p_a_stock'] : 0;
+                          $cost = $row['p_cost'] > 0 ? $row['p_cost'] : 0;
                       ?>
-                            <tr>
-                              <td> <?= $row['p_name']; ?> </td>
-                              <td style="padding:5px" class="text-center">
-                                <?= $row['p_code']; ?>
-                              </td>
-                              <td> </td>
-                              <td> </td>
-                              <td> </td>
-                              <td><?= $row['unit']; ?></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td> <?= $row['p_category']; ?></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td> <?= $row['p_a_stock'] > 0 ? $row['p_a_stock'] : 0; ?> </td>
-                              <td> <?= number_format($row['p_cost'], 0); ?></td>
-                              <td class="text-center"> <label class="product-selling-price"><?= number_format($row['p_s_price']); ?></label> </td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <!-- <td>
+                          <tr>
+                            <td> <?= $row['p_name']; ?> </td>
+                            <td style="padding:5px" class="text-center">
+                              <?= $row['p_code']; ?>
+                            </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td><?= $row['unit']; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td> <?= $row['p_category']; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td> <?= $qty ?> </td>
+                            <td> <?= $cost; ?></td>
+                            <td class="text-center"> <label class="product-selling-price"><?= $cost * $qty; ?></label> </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <!-- <td>
                                 <?php
                                 // if ($row['p_a_stock'] > 0) {
                                 //   if ($row['unit'] == "ml") {
@@ -190,7 +232,7 @@ $cost = 0;
                                 // }
                                 ?>
                               </td> -->
-                              <!-- <td>
+                            <!-- <td>
                                 <?php
                                 // if ($row['p_a_stock'] > 0) {
                                 //   if ($row['unit'] == "ml") {
@@ -209,9 +251,9 @@ $cost = 0;
                                 // }
                                 ?>
                               </td> -->
-                              <td> <?= $row['bName']; ?></td>
-                            </tr>
-                      <?php }
+                            <td> <?= $row['bName']; ?></td>
+                          </tr>
+                      <?php
                         }
                       }
                       ?>
@@ -219,15 +261,18 @@ $cost = 0;
                     <!-- <tfoot>
                       <tr>
                         <td colspan="7" class="text-right"><strong>Total Rows:</strong></td>
-                        <td colspan="2"><?= $totalRows; ?></td>
+                        <td colspan="2"><?php // $totalRows; 
+                                        ?></td>
                       </tr>
                       <tr>
                         <td colspan="7" class="text-right"><strong>Total Cost:</strong></td>
-                        <td colspan="2"><?= number_format($totalCost, 0); ?></td>
+                        <td colspan="2"><?php // number_format($totalCost, 0); 
+                                        ?></td>
                       </tr>
                       <tr>
                         <td colspan="7" class="text-right"><strong>Total Value:</strong></td>
-                        <td colspan="2"><?= number_format($totalValue, 0); ?></td>
+                        <td colspan="2"><?php // number_format($totalValue, 0); 
+                                        ?></td>
                       </tr>
                     </tfoot> -->
                   </table>
