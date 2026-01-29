@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             pm.code AS code, 
             pm.name AS name, 
             gi.grn_p_price AS item_price,
+            gi.grn_item_cost AS item_cost,
+            gi.p_plus_discount AS discount,
             pb.name AS brand,
             ucv.ucv_name AS volume,
             mu.unit AS unit
@@ -125,6 +127,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <th>Unit</th>
                   <th>Qty</th>
                   <th>Item Price</th>
+                  <th>Discount %</th>
+                  <th>Item Cost</th>
                   <th>Total Value</th>
                 </tr>
               </thead>
@@ -150,6 +154,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td><?= $row['volume'] . $row['unit']; ?> </td>
                         <td> <?= number_format($total_qty, 0)  ?> </td>
                         <td> <?= number_format($item_price, 0) ?> </td>
+                        <td> <?= $row['discount']; ?></td>
+                        <td> <?= $row['item_cost']; ?></td>
                         <td> <?= number_format($total_price, 0) ?> </td>
                       </tr>
                 <?php
@@ -160,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </tbody>
               <tfoot>
                 <tr class="bg-blue">
-                  <td colspan="6">Total</td>
+                  <td colspan="8">Total</td>
                   <td> <?= number_format($fullTotal, 0); ?></td>
                 </tr>
               </tfoot>
