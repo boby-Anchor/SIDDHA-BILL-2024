@@ -40,7 +40,8 @@ try {
     $barcodeResult = $conn->query("SELECT
     s.stock_id,
     s.unit_s_price AS unit_price,
-    s.item_s_price AS item_price
+    s.item_s_price AS item_price,
+    s.stock_item_qty AS qty
     FROM stock2 AS s
     WHERE s.stock_shop_id = '$shop_id'
     AND s.stock_item_code = '$barcode'

@@ -57,6 +57,11 @@ function getPrices(barcode) {
 
                         newRow.innerHTML = `
                 <td>
+                  <label class="w-100 btn btn-lg border bg-dark text-white")">
+                      ${row.qty}
+                  </label>
+                </td>
+                <td>
                   <button class="w-100 btn btn-lg btn-primary" onclick="selectProduct(${row.stock_id}, 'unit')"
                     ${row.unit_price < 1 ? "disabled" : ""}>
                       ${row.unit_price}

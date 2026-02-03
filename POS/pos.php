@@ -390,7 +390,7 @@ if (!isset($_SESSION['store_id'])) {
 
     <!-- Select selling price modal start -->
     <div class="modal" id="sellingPriceModal" role="dialog">
-      <div class="modal-dialog d-flex justify-content-between ">
+      <div class="modal-dialog modal-lg d-flex justify-content-between ">
         <div class="modal-content bg-dark align-items-center">
           <div class="mt-3">
             <h4>Select selling price</h4>
@@ -399,6 +399,8 @@ if (!isset($_SESSION['store_id'])) {
             <table class="table" id="sellingPriceModalTable">
               <thead>
                 <tr>
+                  <!-- <th>Minimum Qty</th> -->
+                  <th>Item Qty</th>
                   <th>Unit price</th>
                   <th>Item price</th>
                 </tr>
