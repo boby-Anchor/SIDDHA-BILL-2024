@@ -34,10 +34,10 @@ if (!isset($_SESSION['store_id'])) {
         <?php include("part/sidebar.php"); ?>
         <!--  Sidebar end -->
 
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-dark">
 
             <!-- Main content -->
-            <section class="content bg-dark">
+            <section class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
@@ -57,6 +57,9 @@ if (!isset($_SESSION['store_id'])) {
                                                 <th>Price</th>
                                                 <th>Hub Qty</th>
                                                 <th>Pharmacy Qty</th>
+                                                <th>YA Qty</th>
+                                                <th>Refilling</th>
+                                                <th>Test</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -67,7 +70,10 @@ if (!isset($_SESSION['store_id'])) {
                                                 $sql = $conn->query("SELECT stock_item_code, stock_item_name, item_s_price, p_brand.name AS brand,
                                                 unit_category_variation.ucv_name, medicine_unit.unit,
                                                 SUM(CASE WHEN stock_shop_id = 1 THEN stock_item_qty ELSE 0 END) AS hub_qty,
-                                                SUM(CASE WHEN stock_shop_id = 2 THEN stock_item_qty ELSE 0 END) AS pharmacy_qty
+                                                SUM(CASE WHEN stock_shop_id = 2 THEN stock_item_qty ELSE 0 END) AS pharmacy_qty,
+                                                SUM(CASE WHEN stock_shop_id = 9 THEN stock_item_qty ELSE 0 END) AS YA_qty,
+                                                SUM(CASE WHEN stock_shop_id = 5 THEN stock_item_qty ELSE 0 END) AS RF_qty,
+                                                SUM(CASE WHEN stock_shop_id = 7 THEN stock_item_qty ELSE 0 END) AS test_qty
                                                 FROM stock2
                                                 INNER JOIN p_medicine ON stock2.stock_item_code = p_medicine.code
                                                 INNER JOIN p_brand ON p_brand.id = p_medicine.brand
@@ -79,7 +85,8 @@ if (!isset($_SESSION['store_id'])) {
                                                 while ($row = mysqli_fetch_assoc($sql)) {
                                                     $hub_qty = $row['hub_qty'] < 0 ? 0 : $row['hub_qty'];
                                                     $pharmacy_qty = $row['pharmacy_qty'] < 0 ? 0 : $row['pharmacy_qty'];
-                                                    ?>
+                                                    $YA_qty = $row['YA_qty'] < 0 ? 0 : $row['YA_qty'];
+                                            ?>
                                                     <tr>
                                                         <td> <?= $row['stock_item_code']; ?> </td>
                                                         <td><?= $row['stock_item_name']; ?></td>
@@ -88,8 +95,11 @@ if (!isset($_SESSION['store_id'])) {
                                                         <td><?= $row['item_s_price']; ?></td>
                                                         <td><?= $hub_qty; ?></td>
                                                         <td><?= $pharmacy_qty ?></td>
+                                                        <td><?= $YA_qty ?></td>
+                                                        <td><?= $row['RF_qty'] ?></td>
+                                                        <td><?= $row['test_qty'] ?></td>
                                                     </tr>
-                                                    <?php
+                                            <?php
                                                 }
                                             }
                                             ?>
@@ -105,11 +115,6 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Footer -->
         <?php include("part/footer.php"); ?>
         <!-- Footer End -->
-
-
-        <!-- Alert -->
-        <?php include("part/alert.php"); ?>
-        <!-- Alert end -->
     </div>
 
     <!-- All JS -->
@@ -121,7 +126,7 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Data Table JS end -->
     <!-- Page specific script -->
     <script>
-        $(function () {
+        $(function() {
             //Initialize Select2 Elements
             $(".select2").select2();
 
@@ -133,7 +138,7 @@ if (!isset($_SESSION['store_id'])) {
     </script>
 
     <script>
-        $(function () {
+        $(function() {
             $("#stockTable")
                 .DataTable({
                     responsive: true,

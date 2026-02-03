@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $conn->query("SELECT invoices.*, users.name AS cashier
     FROM invoices
     INNER JOIN users ON invoices.user_id = users.id
-    WHERE 
+    WHERE
     Date(created) BETWEEN '$start_date' AND '$end_date'
     AND invoices.shop_id = '$shop_id'
     ");
@@ -67,11 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include("part/sidebar.php"); ?>
         <!--  Sidebar end -->
 
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-dark">
 
             <!-- Main content -->
 
-            <section class="content bg-dark">
+            <section class="content">
                 <div class="row">
                     <div class="col-12">
                         <!-- Card start -->

@@ -4,7 +4,7 @@ if (!isset($_SESSION['store_id'])) {
   header("location:login.php");
   exit();
 } else {
-  include('config/db.php');
+  include 'config/db.php';
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -71,11 +71,11 @@ GROUP BY
     <?php include("part/sidebar.php"); ?>
     <!--  Sidebar end -->
 
-    <div class="content-wrapper">
+    <div class="content-wrapper bg-dark">
 
       <!-- Main content -->
 
-      <section class="content bg-dark">
+      <section class="content">
         <div class="row">
           <div class="col-12">
             <!-- Card start -->
