@@ -329,7 +329,6 @@ function printPOBill() {
 // checkout
 function checkout() {
   var po_shop_id = document.getElementById("po-shop-selector").value || null;
-  var invoice_number = $(".invoiceNumber").text().trim() || null;
   var sub_total = $("#subTotal").text().trim() || null;
   var discount_percentage = $("#discountPercentage").val() || null;
   var net_total = $("#netTotal").text().replace(/,/g, "");
@@ -382,15 +381,15 @@ function checkout() {
   });
 
   $.ajax({
-    url: "poBillConfirmationInsert.php",
+    url: "actions/po/poBillConfirmationInsert.php",
     method: "POST",
     data: {
-      invoice_number: invoice_number,
       billData: JSON.stringify(billData),
       products: JSON.stringify(poArray),
     },
     success: function (response) {
       var result = JSON.parse(response);
+      $(".invoiceNumber").text(result.invoice_number);
       if (result.status === "success") {
         SuccessMessageDisplay(result.message);
         $.ajax({
