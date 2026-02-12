@@ -1,15 +1,21 @@
 <?php
 session_start();
-include('config/db.php');
+require_once "../../config/db.php";
 
 $user_id;
 $shop_id;
+$invoice_number;
 
 try {
     if (isset($_SESSION['store_id'])) {
         $userData = $_SESSION['store_id'][0];
         $user_id = $userData['id'];
         $shop_id = $userData['shop_id'];
+
+        $invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'poinvoices'");
+        $invoiceId_row = $invoiceId_rs->fetch_assoc();
+        $invoiceId = $invoiceId_row['AUTO_INCREMENT'];
+        $invoice_number = "000" . $user_id . $shop_id . $invoiceId;
     } else {
         echo json_encode(array(
             'status' => 'session_expired',
@@ -18,17 +24,8 @@ try {
         exit();
     }
 
-    $invoice_number = isset($_POST['invoice_number']) && !empty($_POST['invoice_number']) ? $_POST['invoice_number'] : null;
     $billData = json_decode($_POST['billData'], true);
     $poArray = json_decode($_POST['products'], true);
-
-    // if (runQuery("SELECT invoice_id  FROM `poinvoices` WHERE invoice_id = '$invoice_number'")) {
-    //     echo json_encode(array(
-    //         'status' => 'error',
-    //         'message' => 'Invoice ID already exists.',
-    //     ));
-    //     exit();
-    // }
 
     $productsAllTotal = 0;
     $po_shop_id;
@@ -163,17 +160,18 @@ try {
         VALUES ('$invoice_number', '$user_id', '$shop_id', '$po_shop_id', '$currentDateTime', '$sub_total', '$discount_percentage', '$net_total')";
 
         if ($conn->query($query)) {
-            echo json_encode(array(
+            echo json_encode([
                 'status' => 'success',
                 'message' => 'Order Placed Successfully!',
-            ));
+                'invoice_number' => $invoice_number,
+            ]);
         } else {
             $error = $conn->error;
             error_log("Error in inserting invoice: " . $error);
-            echo json_encode(array(
+            echo json_encode([
                 'status' => 'error',
                 'message' => 'Invoice saving error',
-            ));
+            ]);
         }
     } else {
         echo json_encode(array(
