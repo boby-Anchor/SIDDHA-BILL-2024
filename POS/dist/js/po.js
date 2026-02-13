@@ -216,6 +216,197 @@ function calculateSubTotal() {
   });
 }
 
+// checkout
+function checkout() {
+  var po_shop_id = document.getElementById("po-shop-selector").value || null;
+  var sub_total = $("#subTotal").text().trim() || null;
+  var discount_percentage = $("#discountPercentage").val() || null;
+  var net_total = $("#netTotal").text().replace(/,/g, "");
+
+  if (po_shop_id == 0) {
+    ErrorMessageDisplay("Shop එක select කරන්නේ නැද්ද?");
+    return;
+  }
+
+  var poArray = [];
+  var billData = [];
+
+  var bData = {
+    po_shop_id: po_shop_id,
+    sub_total: sub_total,
+    discount_percentage: discount_percentage,
+    net_total: net_total,
+  }
+  billData.push(bData);
+
+  $("#barcodeResults tr").each(function () {
+    var code = $(this).find("#code").text().trim();
+    var ucv = $(this).find("#ucv").text().trim();
+    var item_price = $(this).find("#item_price").text().trim();
+    var unit_price = $(this).find("#unit_price").text().trim();
+    var product_name = $(this).find("#product_name").text().trim();
+    var brand = $(this).find("#brand").text().trim();
+    var discount = $(this).find("#discount").text().trim();
+
+    var product_cost = parseFloat($(this).find("#product_price").text().trim());
+    var product_qty = parseInt($(this).find("#qty").val());
+    var product_unit = $(this).find("#unit").text().trim();
+    var product_total = parseFloat($(this).find("#totalprice").text().trim());
+
+    // alert(product_unit);
+    var productData = {
+      code: code,
+      ucv: ucv,
+      item_price: item_price,
+      unit_price: unit_price,
+      product_name: product_name,
+      brand: brand,
+      discount: discount,
+      product_cost: product_cost,
+      product_qty: product_qty,
+      product_unit: product_unit,
+      product_total: product_total,
+    };
+    poArray.push(productData);
+  });
+
+  $.ajax({
+    url: "actions/po/poBillConfirmationInsert.php",
+    method: "POST",
+    data: {
+      billData: JSON.stringify(billData),
+      products: JSON.stringify(poArray),
+    },
+    success: function (response) {
+      var result = JSON.parse(response);
+      $(".invoiceNumber").text(result.invoice_number);
+      if (result.status === "success") {
+        SuccessMessageDisplay(result.message);
+        setDataToBill(billData, poArray)
+      } else if (result.status === "session_expired") {
+        handleExpiredSession(result.message);
+        return;
+      } else if (result.status === "error") {
+        ErrorMessageDisplay(result.message);
+        return;
+      } else {
+        ErrorMessageDisplay("PO insert failed. Check connection.");
+        return;
+      }
+      $(".confirmPObtn").prop("disabled", false);
+    },
+    error: function (xhr, status, error) {
+      ErrorMessageDisplay("Something went wrong! Check connection.");
+      $(".confirmPObtn").prop("disabled", false);
+    },
+  });
+}
+
+// Set data to bill
+function setDataToBill(billData, poArray) {
+
+  let productsAllTotal = 0;
+  let discount_percentage = 0;
+
+  if (Array.isArray(billData) && billData.length > 0) {
+    discount_percentage = billData[0].discount_percentage || 0;
+  }
+
+  let html = "";
+
+  // ===== Bill Header =====
+  html += `
+    <div class="col-12">
+      <div class="row">
+        <div class="col-3"><span class="product_cost">U.Price</span></div>
+        <div class="col-3 text-center"><span class="product_qty">QTY</span></div>
+        <div class="col-3 text-center"><span class="productTotal">D.%</span></div>
+        <div class="col-3 text-center"><span class="productTotal">Total</span></div>
+      </div>
+    </div>
+    `;
+
+  // ===== Product Loop =====
+  poArray.forEach(product => {
+    const product_name = product.product_name || "";
+    const product_brand = product.brand || "";
+    const product_discount = product.discount || 0;
+    const product_cost = parseFloat(product.product_cost) || 0;
+    const product_qty = parseFloat(product.product_qty) || 0;
+
+    const productTotal = product_cost * product_qty;
+    productsAllTotal += productTotal;
+
+    html += `
+      <div class="col-12">
+        <div class="row">
+          <div class="col-6">
+            <span class="product_name">${product_name}</span>
+          </div>
+          <div class="col-6">
+            <span class="product_cost">${product_brand}</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-3">
+            <span class="product_cost">${product_cost.toFixed(2)}</span>
+          </div>
+          <div class="col-3 text-center">
+            <span class="product_qty">${product_qty}</span>
+          </div>
+          <div class="col-3 text-center">
+            <span class="productTotal">${product_discount}</span>
+          </div>
+          <div class="col-3 text-center">
+            <span class="productTotal">${productTotal.toFixed(2)}</span>
+          </div>
+        </div>
+      </div>
+      `;
+  });
+
+  let net_total = productsAllTotal;
+
+  if (discount_percentage != 0) {
+    net_total = productsAllTotal * (1 - discount_percentage / 100);
+  }
+
+  html += `
+    <div class="col-12">
+      <div class="row">
+        <div>
+          <div class="col-12 d-flex justify-content-end pt-2" 
+               style="border-top: #0e0e0e 0.2rem solid;">
+            <span class="productsAllTotal">
+              Sub total : ${productsAllTotal.toFixed(2)}
+            </span>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end pt-2">
+          <span class="discount">
+            Discount : ${discount_percentage}%
+          </span>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end pt-2">
+          <span class="netTotal">
+            Net Total : ${net_total.toFixed(2)}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-12 d-flex justify-content-end pt-2"
+            style="border-top: #0e0e0e 0.2rem solid;">
+      </div>
+    </div>
+    `;
+
+  document.getElementById("printInvoiceData").innerHTML = html;
+  printPOBill();
+}
+
 // invoice print
 function printPOBill() {
   var printWindow = window.open("", "_blank");
@@ -324,107 +515,4 @@ function printPOBill() {
     window.location.reload();
     // Reload the pos.php file in the main window
   };
-}
-
-// checkout
-function checkout() {
-  var po_shop_id = document.getElementById("po-shop-selector").value || null;
-  var sub_total = $("#subTotal").text().trim() || null;
-  var discount_percentage = $("#discountPercentage").val() || null;
-  var net_total = $("#netTotal").text().replace(/,/g, "");
-
-  if (po_shop_id == 0) {
-    ErrorMessageDisplay("Shop එක select කරන්නේ නැද්ද?");
-    return;
-  }
-
-  var poArray = [];
-  var billData = [];
-
-  var bData = {
-    po_shop_id: po_shop_id,
-    sub_total: sub_total,
-    discount_percentage: discount_percentage,
-    net_total: net_total,
-  }
-  billData.push(bData);
-
-  $("#barcodeResults tr").each(function () {
-    var code = $(this).find("#code").text().trim();
-    var ucv = $(this).find("#ucv").text().trim();
-    var item_price = $(this).find("#item_price").text().trim();
-    var unit_price = $(this).find("#unit_price").text().trim();
-    var product_name = $(this).find("#product_name").text().trim();
-    var brand = $(this).find("#brand").text().trim();
-    var discount = $(this).find("#discount").text().trim();
-
-    var product_cost = parseFloat($(this).find("#product_price").text().trim());
-    var product_qty = parseInt($(this).find("#qty").val());
-    var product_unit = $(this).find("#unit").text().trim();
-    var product_total = parseFloat($(this).find("#totalprice").text().trim());
-
-    // alert(product_unit);
-    var productData = {
-      code: code,
-      ucv: ucv,
-      item_price: item_price,
-      unit_price: unit_price,
-      product_name: product_name,
-      brand: brand,
-      discount: discount,
-      product_cost: product_cost,
-      product_qty: product_qty,
-      product_unit: product_unit,
-      product_total: product_total,
-    };
-    poArray.push(productData);
-  });
-
-  $.ajax({
-    url: "actions/po/poBillConfirmationInsert.php",
-    method: "POST",
-    data: {
-      billData: JSON.stringify(billData),
-      products: JSON.stringify(poArray),
-    },
-    success: function (response) {
-      var result = JSON.parse(response);
-      $(".invoiceNumber").text(result.invoice_number);
-      if (result.status === "success") {
-        SuccessMessageDisplay(result.message);
-        $.ajax({
-          url: "poPrintAddData.php",
-          method: "POST",
-          data: {
-            billData: JSON.stringify(billData),
-            products: JSON.stringify(poArray),
-          },
-          success: function (response) {
-            document.getElementById("printInvoiceData").innerHTML = response;
-            printPOBill();
-          },
-          error: function (xhr, status, error) {
-            ErrorMessageDisplay("Bill print error!");
-          },
-        });
-      } else if (result.status === "session_expired") {
-        ErrorMessageDisplay(result.message);
-        setTimeout(function () {
-          window.open(window.location.href, "_blank");
-        }, 4000);
-        return;
-      } else if (result.status === "error") {
-        ErrorMessageDisplay(result.message);
-        return;
-      } else {
-        ErrorMessageDisplay("PO insert failed. Check connection.");
-        return;
-      }
-      $(".confirmPObtn").prop("disabled", false);
-    },
-    error: function (xhr, status, error) {
-      ErrorMessageDisplay("Something went wrong! Check connection.");
-      $(".confirmPObtn").prop("disabled", false);
-    },
-  });
 }

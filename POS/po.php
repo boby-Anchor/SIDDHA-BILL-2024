@@ -184,12 +184,6 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Alert -->
         <?php include("part/alert.php"); ?>
         <!-- Alert end -->
-        <!-- All JS -->
-        <?php include("part/all-js.php"); ?>
-        <!-- All JS end -->
-        <!-- Data Table JS -->
-        <?php include("part/data-table-js.php"); ?>
-        <!-- Data Table JS end -->
 
         <!-- ========================================== -->
 
@@ -281,6 +275,12 @@ if (!isset($_SESSION['store_id'])) {
     </div>
 </body>
 
+<!-- All JS -->
+<?php include("part/all-js.php"); ?>
+<!-- All JS end -->
+<!-- Data Table JS -->
+<?php include("part/data-table-js.php"); ?>
+<!-- Data Table JS end -->
 <!-- po JS -->
 <script src="dist/js/po.js"></script>
 <!-- po JS end -->
