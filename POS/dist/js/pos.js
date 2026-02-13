@@ -656,7 +656,7 @@ function dataCheck() {
     });
 
     if (billHasPaththu && billHasCombine && paththuTotal === combinePrice) {
-        checkout(itemData);
+        startCheckout(itemData);
     } else if (billHasPaththu && billHasCombine) {
         enableCheckoutButton();
         ErrorMessageDisplay("පත්තුවේ ගාන වැරදී.");
@@ -667,12 +667,44 @@ function dataCheck() {
         enableCheckoutButton()
         ErrorMessageDisplay("පත්තුවට බඩු දාන්න.");
     } else {
+        startCheckout(itemData);
+    }
+}
+
+// Bill Status Complete function
+function billStatusComplete(token) {
+    return $.ajax({
+        url: "https://pharmacy-order-backend.siddha.lk/order/" + token,
+        method: "PATCH",
+        contentType: "application/json",
+        dataType: "json",
+        timeout: 5000
+    });
+}
+
+async function startCheckout(itemData) {
+    try {
+        const token = Number($("#token").val());
+        if (token > 0) {
+            const response = await billStatusComplete(token);
+            SuccessMessageDisplay(response.message);
+        }
         checkout(itemData);
+    } catch (xhr) {
+        enableCheckoutButton();
+        if (xhr.statusText === "timeout") {
+            ErrorMessageDisplay("Server timeout. Please try again.");
+        } else if (xhr.status === 0) {
+            ErrorMessageDisplay("Network error. Check your connection.");
+        } else {
+            ErrorMessageDisplay(xhr.responseText || "Checkout failed.");
+        }
+        console.error(xhr);
     }
 }
 
 // Checkout function
-async function checkout(itemData) {
+function checkout(itemData) {
 
     var billData = [];
     var dMData = [];
@@ -684,13 +716,6 @@ async function checkout(itemData) {
     if (hasChy && !patientName) {
         enableCheckoutButton();
         return ErrorMessageDisplay("Search with CHY to Assign patient");
-    }
-
-    const success = await updateBillStatus("3");
-
-    if (!success) {
-        enableCheckoutButton();
-        return;
     }
 
     var contactNo = $("#contactNo").text().trim();
@@ -763,8 +788,7 @@ async function checkout(itemData) {
                     SuccessMessageDisplay(result.message);
 
                     //invoice print add data
-                    const html = generateInvoiceHTML(itemData, dMData, billData);
-                    document.getElementById("printInvoiceData").innerHTML = html;
+                    document.getElementById("printInvoiceData").innerHTML = generateInvoiceHTML(itemData, dMData, billData);;
                     printInvoice();
                     break;
 
@@ -1033,83 +1057,79 @@ function updateBillStatus(value) {
         return;
     }
 
-    return new Promise((resolve) => {
-        switch (value) {
-            case "1":
-                $.ajax({
-                    url: "https://pharmacy-order-backend.siddha.lk/order/",
-                    // url: "http://localhost:5000/order/",
-                    method: "POST",
-                    contentType: "application/json",
-                    dataType: "json",
-                    data: JSON.stringify({
-                        order_number: token,
-                    }),
-                    success: function (response) {
-                        SuccessMessageDisplay(response.message);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        ErrorMessageDisplay(xhr.responseText);
-                    },
-                });
-                break;
+    switch (value) {
+        case "1":
+            $.ajax({
+                url: "https://pharmacy-order-backend.siddha.lk/order/",
+                method: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    order_number: token,
+                }),
+                success: function (response) {
+                    SuccessMessageDisplay(response.message);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    ErrorMessageDisplay(xhr.responseText);
+                },
+            });
+            break;
 
-            case "2":
-                $.ajax({
-                    url: "https://pharmacy-order-backend.siddha.lk/order/",
-                    method: "PATCH",
-                    contentType: "application/json",
-                    dataType: "json",
-                    data: JSON.stringify({
-                        order_number: token,
-                    }),
-                    success: function (response) {
-                        SuccessMessageDisplay(response.message);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        ErrorMessageDisplay(xhr.responseText);
-                    },
-                });
-                break;
+        case "2":
+            $.ajax({
+                url: "https://pharmacy-order-backend.siddha.lk/order/",
+                method: "PATCH",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    order_number: token,
+                }),
+                success: function (response) {
+                    SuccessMessageDisplay(response.message);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    ErrorMessageDisplay(xhr.responseText);
+                },
+            });
+            break;
 
-            case "3":
-                $.ajax({
-                    url: "https://pharmacy-order-backend.siddha.lk/order/" + token,
-                    method: "PATCH",
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (response) {
-                        SuccessMessageDisplay(response.message);
-                        resolve(true);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        ErrorMessageDisplay(xhr.responseText);
-                        resolve(false);
-                    },
-                });
-                break;
+        case "3":
+            $.ajax({
+                url: "https://pharmacy-order-backend.siddha.lk/order/" + token,
+                method: "PATCH",
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    SuccessMessageDisplay(response.message);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    ErrorMessageDisplay(xhr.responseText);
+                },
+            });
+            break;
 
-            case "4":
-                $.ajax({
-                    url: "https://pharmacy-order-backend.siddha.lk/order/",
-                    method: "PUT",
-                    contentType: "application/json",
-                    dataType: "json",
-                    data: JSON.stringify({
-                        order_number: token,
-                    }),
-                    success: function (response) {
-                        SuccessMessageDisplay(response.message);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        ErrorMessageDisplay(xhr.responseText);
-                    },
-                });
-                break;
-        }
-    })
+        case "4":
+            $.ajax({
+                url: "https://pharmacy-order-backend.siddha.lk/order/",
+                method: "PUT",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    order_number: token,
+                }),
+                success: function (response) {
+                    SuccessMessageDisplay(response.message);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    ErrorMessageDisplay(xhr.responseText);
+                },
+            });
+            break;
+    }
+
 }
