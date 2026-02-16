@@ -24,6 +24,7 @@ if (isset($_POST['products'])) {
     $newDateTime = date("Y-m-d H:i:s");
     $errorOccurred = false;
     $notificationMessage = "";
+    $error_message = "";
 
     if (is_array($poArray) && !empty($poArray)) {
 
@@ -97,10 +98,10 @@ if (isset($_POST['products'])) {
 
                         if ($current_stock < 0) {
                             $updated_qty = $product_total_qty;
-                            $update_minimum_qty = $minimum_qty;
+                            $updated_minimum_qty = $minimum_qty;
                         } else {
                             $updated_qty = $current_stock + $product_total_qty;
-                            $updated_minimum_qty = $stock_data["stock_mu_qty"] + $minimum_qty;
+                            $updated_minimum_qty = ($stock_data["stock_mu_qty"] ?? 0) + $minimum_qty;
                         }
                         try {
                             $conn->query("UPDATE stock2 SET stock_item_qty = '$updated_qty', stock_mu_qty = '$updated_minimum_qty', unit_s_price = '$unit_s_price', added_discount='$item_discount', stock_item_cost='$cost_per_item', unit_cost='$cost_per_unit'
