@@ -16,24 +16,11 @@ if (isset($_SESSION['store_id'])) {
         INNER JOIN p_brand ON p_brand.id = p_medicine.brand
         INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
         INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-        WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty >= 0
+        WHERE stock2.stock_shop_id = '$shop_id'
+        AND stock2.stock_item_qty >= 0
+        AND p_medicine.name LIKE '%$searchName%'
+        ORDER BY bName ASC
         ";
-
-        if (!empty($searchName)) {
-            // $query .= " AND p_medicine.name LIKE '%$searchName%'";
-            $query .= " AND p_medicine.name LIKE '%$searchName%' ORDER BY bName ASC";
-        } else if ($searchName == "") {
-            $query = "SELECT stock2.*, p_brand.name AS bName, p_medicine.code AS code, p_medicine.name AS name ,
-            medicine_unit.unit AS unit2 , unit_category_variation.ucv_name AS ucv_name2 
-            FROM stock2
-            INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
-            INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-            INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-            WHERE stock2.stock_shop_id = '$shop_id' AND stock2.stock_item_qty >= 0
-            ORDER BY bName ASC
-            ";
-        }
 
         $cm = runQuery($query);
 
