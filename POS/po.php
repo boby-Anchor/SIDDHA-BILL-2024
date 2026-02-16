@@ -98,9 +98,7 @@ if (!isset($_SESSION['store_id'])) {
                                     </div>
                                     <div class="col-6 d-flex justify-content-end align-items-center">
                                         <!--id="checkoutBtn"-->
-                                        <button class="btn check-outBtn col-6" id="checkoutBtn"
-                                            onclick="checkout()">Checkout <i
-                                                class="bi bi-arrow-right-circle-fill"></i></button>
+                                        <button class="btn check-outBtn col-6" id="checkoutBtn">Checkout <i class="bi bi-arrow-right-circle-fill"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -164,8 +162,7 @@ if (!isset($_SESSION['store_id'])) {
                             <!-- Company Product list -->
                             <div class="col-12" style="height: 100vh; overflow:auto; background-color: #0e0e0e;">
                                 <!-- Added method attribute -->
-                                <input type="search" class="form-control mt-2" name="search21" id="search21"
-                                    onkeyup="searchProducts();" placeholder="Search...">
+                                <input type="search" class="form-control mt-2" onkeyup="searchProducts(this.value);" placeholder="Search...">
                                 <div class="row" id="productGrid" class="productGrid">
                                 </div>
                             </div>

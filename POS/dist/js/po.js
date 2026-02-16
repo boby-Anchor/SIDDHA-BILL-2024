@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
   $("#barcodeInput").focus();
 });
@@ -6,8 +7,7 @@ function setPoShopOnBill(selectElement) {
   $('#po_shop_on_bill').text(selectElement.options[selectElement.selectedIndex].text);
 }
 
-function searchProducts() {
-  var searchInput = document.getElementById("search21").value.trim();
+function searchProducts(searchInput) {
   if (searchInput !== "") {
     $.ajax({
       type: "POST",
@@ -50,7 +50,6 @@ function getBarcode3() {
       document.getElementById("barcodeInput").focus();
       document.getElementById("selectPrices").selectedIndex = -1;
 
-      // calculateSubTotal();
       calculateSubTotal();
     }
   };
@@ -217,16 +216,23 @@ function calculateSubTotal() {
 }
 
 // checkout
-function checkout() {
+$("#checkoutBtn").on("click", function () {
+  if ($(this).prop("disabled")) return;
   var po_shop_id = document.getElementById("po-shop-selector").value || null;
+
+  disableCheckoutButton();
+  if (po_shop_id == 0) {
+    ErrorMessageDisplay("Shop එක select කරන්නේ නැද්ද?");
+    enableCheckoutButton();
+    return;
+  }
+  checkout(po_shop_id);
+});
+
+function checkout(po_shop_id) {
   var sub_total = $("#subTotal").text().trim() || null;
   var discount_percentage = $("#discountPercentage").val() || null;
   var net_total = $("#netTotal").text().replace(/,/g, "");
-
-  if (po_shop_id == 0) {
-    ErrorMessageDisplay("Shop එක select කරන්නේ නැද්ද?");
-    return;
-  }
 
   var poArray = [];
   var billData = [];
@@ -293,13 +299,23 @@ function checkout() {
         ErrorMessageDisplay("PO insert failed. Check connection.");
         return;
       }
-      $(".confirmPObtn").prop("disabled", false);
+      enableCheckoutButton();
     },
     error: function (xhr, status, error) {
       ErrorMessageDisplay("Something went wrong! Check connection.");
-      $(".confirmPObtn").prop("disabled", false);
+      enableCheckoutButton();
     },
   });
+}
+
+function enableCheckoutButton() {
+  $("#checkoutBtn").prop("disabled", false);
+  $("#checkoutBtn").html('Checkout <i class="bi bi-arrow-right-circle-fill"></i>');
+}
+
+function disableCheckoutButton() {
+  $("#checkoutBtn").prop("disabled", true);
+  $("#checkoutBtn").text("Processing.....");
 }
 
 // Set data to bill
