@@ -121,6 +121,46 @@ if (!isset($_SESSION['store_id'])) {
         theme: "bootstrap4",
       });
     });
+
+    function updateStatus(id, status) {
+      $.ajax({
+        url: "actions/global/statusUpdate.php/update",
+        type: "POST",
+        data: {
+          id: id,
+          table: "p_supplier",
+          status: status,
+        },
+        success: function(response) {
+          const result = JSON.parse(response);
+
+          switch (result.status) {
+            case 'success':
+              SuccessMessageDisplay(result.message);
+              setTimeout(() => {
+                location.reload();
+              }, 5000);
+              break;
+            case 'session_expired':
+              handleExpiredSession(result.message);
+              return;
+              break;
+            case 'error':
+              ErrorMessageDisplay(result.message);
+              return;
+              break;
+
+            default:
+              ErrorMessageDisplay("An unknown error occurred.");
+              return;
+              break;
+          };
+        },
+        error: function(xhr, status, error) {
+          ErrorMessageDisplay("Something went wrong! Check connection.");
+        },
+      });
+    }
   </script>
 
 </body>
