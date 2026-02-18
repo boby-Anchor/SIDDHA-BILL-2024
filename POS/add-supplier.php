@@ -30,10 +30,10 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/sidebar.php"); ?>
     <!--  Sidebar end -->
 
-    <div class="content-wrapper">
+    <div class="content-wrapper bg-dark">
       <section class="container-fluid">
         <div class="row">
-          <div class="card card-default col-md-12 col-lg-9">
+          <div class="card card-default col-md-12 bg-dark">
             <div class="card-header py-2">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -73,7 +73,6 @@ if (!isset($_SESSION['store_id'])) {
                       <input type="text" class="form-control" id="phone" placeholder="Enter Customer Phone" name="phone">
                     </div>
                   </div>
-                  
 
                 </div>
                 <div class="form-row">
@@ -88,14 +87,12 @@ if (!isset($_SESSION['store_id'])) {
           </div>
           <!-- ads end  -->
         </div>
+      </section>
     </div>
-    </section>
   </div>
   <!-- Footer -->
   <?php include("part/footer.php"); ?>
   <!-- Footer End -->
-
-  </div>
 
   <!-- Alert -->
   <?php include("part/alert.php"); ?>
