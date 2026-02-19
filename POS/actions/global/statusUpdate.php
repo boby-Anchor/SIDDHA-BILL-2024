@@ -40,13 +40,20 @@ $stmt = $conn->prepare("UPDATE `$table` SET `status` = ?, `created_by` = ? WHERE
 $stmt->bind_param("iii", $status, $user_id, $id);
 
 if ($stmt->execute()) {
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'Data updated successfully.'
-    ]);
+    if ($stmt->affected_rows > 0) {
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Data updated successfully.'
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Data update failed.'
+        ]);
+    }
 } else {
     echo json_encode([
         'status' => 'error',
-        'message' => 'Data update failed.'
+        'message' => 'Data execution failed.'
     ]);
 }
