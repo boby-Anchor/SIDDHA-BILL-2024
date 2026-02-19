@@ -14,37 +14,67 @@ if (isset($_SESSION['store_id'])) {
     exit();
 }
 
-    $chk = 0;
-    $name = $conn->real_escape_string($_POST['name']);   //required
-    $email = $conn->real_escape_string($_POST['email']);
-    $phone = $conn->real_escape_string($_POST['phone']);
-    $addr1 = $conn->real_escape_string($_POST['address']);
-  
-    // -------------- Empty input field check
-    if (empty($name)) {
-        $chk = 1;
-        $_SESSION['e-msg'] = "Enter supplier name";
-        echo "<script>window.history.back();</script>";
-        exit();
-    }
+$name = $conn->real_escape_string($_POST['name']);
+$email = isset($_POST['email']) && trim($_POST['email']) !== ''
+    ? trim($_POST['email'])
+    : null;
 
-    // -------------- Empty input field check end
+$phone = isset($_POST['phone']) && trim($_POST['phone']) !== ''
+    ? trim($_POST['phone'])
+    : null;
 
-    $check = mysqli_num_rows($conn->query("SELECT `name`, `store` FROM `p_supplier` where `name`='$name' AND `created_by`='$user_id'"));
-    if ($check > 0) {
-        $chk = 1;
-        $_SESSION['e-msg'] = "This name already exist";
-        echo "<script>window.history.back();</script>";
-        exit();
-    }
+$address = isset($_POST['address']) && trim($_POST['address']) !== ''
+    ? trim($_POST['address'])
+    : null;
 
-    if ($chk == 0) {
-        $conn->query("INSERT INTO `p_supplier`(`store`, `name`, `email`, `phone`, `address`, `date`) VALUES ('$_SESSION[store_id]','$name','$email','$phone','$addr1', '$date')");
-        $_SESSION['msg'] = "Information submit successfully";
-        // echo "<script>window.history.back();</script>";
-        exit();
+if (empty($name)) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Enter Supplier Name!'
+    ]);
+    exit();
+}
+
+$stmt = $conn->prepare("SELECT 1 FROM p_supplier WHERE name = ? LIMIT 1");
+$stmt->bind_param("s", $name);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Supplier already exists.'
+    ]);
+    exit();
+}
+
+try {
+    $stmt = $conn->prepare("INSERT INTO p_supplier (name, email, phone, address, created_by) VALUES (?, ?, ?, ?, ?)");
+
+    $stmt->bind_param("ssssi", $name, $email, $phone, $address, $user_id);
+
+    if ($stmt->execute()) {
+        if ($stmt->affected_rows > 0) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Supplier saved successfully'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Supplier saving failed.'
+            ]);
+        }
     } else {
-        $_SESSION['e-msg'] = "Something went wrong. Try later !!!";
-        echo "<script>window.history.back();</script>";
-        exit();
+        echo json_encode([
+            'status' => 'error',
+            'message' => "System error . $stmt->error"
+        ]);
     }
+    $stmt->close();
+} catch (Exception $error) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => $error->getMessage()
+    ]);
+}

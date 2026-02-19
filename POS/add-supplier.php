@@ -45,7 +45,7 @@ if (!isset($_SESSION['store_id'])) {
               </div>
             </div>
             <div class="card-body">
-              <form action="actions/addSupplier.php" method="POST">
+              <form action="actions/supplier/addSupplier.php" method="POST">
                 <div class="row">
 
                   <div class="col-md-6">
@@ -57,26 +57,26 @@ if (!isset($_SESSION['store_id'])) {
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="name">Supplier Email</label>
+                      <label for="email">Supplier Email</label>
                       <input type="email" class="form-control" id="email" placeholder="Enter Supplier Email" name="email">
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="name">Address</label>
-                      <input type="text" class="form-control" id="email" placeholder="Enter Address" name="address">
+                      <label for="address">Address</label>
+                      <input type="text" class="form-control" id="address" placeholder="Enter Address" name="address">
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="name">Phone</label>
+                      <label for="phone">Phone</label>
                       <input type="text" class="form-control" id="phone" placeholder="Enter Customer Phone" name="phone">
                     </div>
                   </div>
 
                 </div>
                 <div class="form-row">
-                  <button type="submit" name="submit" class="btn btn-info"> <i class="fa fa-save mr-2"></i> Save </button>
+                  <button class="btn btn-info" id="submit_button" onclick="submitSupplier()"> <i class="fa fa-save mr-2"></i> Save </button>
                 </div>
 
               </form>
@@ -108,8 +108,61 @@ if (!isset($_SESSION['store_id'])) {
       $(".select2bs4").select2({
         theme: "bootstrap4",
       });
-
     });
+
+    function submitSupplier() {
+      $("#submit_button").prop("disabled", true);
+      const name = $("#name").val();
+      const email = $("#email").val();
+      const address = $("#address").val();
+      const phone = $("#phone").val();
+
+      try {
+        $.ajax({
+          url: "actions/supplier/addSupplier.php",
+          type: "POST",
+          data: {
+            name,
+            email,
+            address,
+            phone
+          },
+          success: function(response) {
+            const result = JSON.parse(response);
+            switch (result.status) {
+              case 'success':
+                SuccessMessageDisplay(result.message);
+                setTimeout(() => {
+                  location.reload();
+                }, 5000);
+                break;
+              case 'session_expired':
+                $("#submit_button").prop("disabled", false);
+                handleExpiredSession(result.message);
+                return;
+                break;
+              case 'error':
+                $("#submit_button").prop("disabled", false);
+                ErrorMessageDisplay(result.message);
+                return;
+                break;
+
+              default:
+                $("#submit_button").prop("disabled", false);
+                ErrorMessageDisplay("An unknown error occurred.");
+                return;
+                break;
+            };
+          },
+          error: function(xhr, status, error) {
+            $("#submit_button").prop("disabled", false);
+            ErrorMessageDisplay("Something went wrong! Check connection.");
+          },
+        });
+      } catch (error) {
+        ErrorMessageDisplay(error.message);
+      }
+    }
   </script>
 
 </body>
