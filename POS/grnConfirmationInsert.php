@@ -17,6 +17,7 @@ if (isset($_SESSION['store_id'])) {
 if (isset($_POST['products'])) {
 
     $invoice_number = $_POST['invoice_number'];
+    $supplier_id = $_POST['supplier_id'];
     $poArray = json_decode($_POST['products'], true);
 
     $grnTotalCost = 0;
@@ -138,8 +139,8 @@ if (isset($_POST['products'])) {
 
             try {
                 // Insert into GRN table
-                $conn->query("INSERT INTO grn (grn_number, invoice_number, grn_date, grn_shop_id, user_id, grn_sub_total, grn_total_value)
-                VALUES ('$grn_number', '$invoice_number', '$newDateTime', '$shop_id', '$user_id', '$grnTotalCost', '$grnTotalValue')");
+                $conn->query("INSERT INTO grn (grn_number, invoice_number, grn_date, grn_shop_id, user_id, supplier_id, grn_sub_total, grn_total_value)
+                VALUES ('$grn_number', '$invoice_number', '$newDateTime', '$shop_id', '$user_id', '$supplier_id', '$grnTotalCost', '$grnTotalValue')");
                 $notificationMessage .= "Successfully inserted GRN.\n";
             } catch (Exception $exception) {
                 $errorOccurred = true;

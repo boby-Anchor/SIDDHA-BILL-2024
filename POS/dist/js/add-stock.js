@@ -174,6 +174,13 @@ $(document).on("click", ".add-btn", function () {
     $(".po_btn").toggleClass("d-none", $(".addedProTable tbody tr").length === 0);
     $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
 
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth"
+      });
+    }, 50);
+
   } else {
     ErrorMessageDisplay("Product already exists in the list!");
   }
@@ -275,8 +282,6 @@ $(document).on("input", "#item_price", function () {
   }
 });
 
-
-
 $(document).on("input", "#item_discount", function () {
   const $row = $(this).closest("tr");
   var product_name = $row.find("#product_name").text();
@@ -311,6 +316,7 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
   $(".confirmPObtn").prop('disabled', true);
 
   var invoice_number = $("#invoice_number").val().trim() || null;
+  var supplier_id = $("#supplier_select").val()
 
   var poArray = [];
 
@@ -351,7 +357,8 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
     url: "grnConfirmationInsert.php",
     method: "POST",
     data: {
-      invoice_number: invoice_number,
+      invoice_number,
+      supplier_id,
       products: JSON.stringify(poArray),
     },
     success: function (response) {
@@ -387,6 +394,12 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
 // ==============================================================================
 
 function fbs() {
+
+  if ($("#supplier_select").val() == 0 || $("#supplier_select").val() == null) {
+    ErrorMessageDisplay("Select supplier!");
+    return
+  }
+
   var bnInput = document.getElementById("bnInput").value;
   var pcInput = document.getElementById("pcInput").value;
   var pnInput = document.getElementById("pnInput").value;

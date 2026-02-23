@@ -5,6 +5,9 @@ if (!isset($_SESSION['store_id'])) {
     exit();
 } else {
     include('config/db.php');
+    $userLoginData = $_SESSION['store_id'][0];
+    $shop_id = $userLoginData['shop_id'];
+    $user_id = $userLoginData['id'];
 }
 
 ?>
@@ -146,50 +149,20 @@ if (!isset($_SESSION['store_id'])) {
                                     <img src="dist/img/Siddha.lk (1).png" alt="" class="img-fluid">
                                 </div>
 
-                                <!-- supplier selector start -->
-                                <!-- <div class="col-12 p-4">
-                                    <label for="select-supplier">Select Supplier</label>
-                                    <select name="select-supplier" id="select-supplier" class="form-control bg-dark" onchange="select_supplier(this.value);">
-                                        <option value="0">select supplier</option> -->
-
-                                <?php
-                                // if (isset($_SESSION['store_id'])) {
-
-                                //     $userLoginData = $_SESSION['store_id'];
-
-                                //     foreach ($userLoginData as $userData) {
-                                //         $shop_id = $userData['shop_id'];
-                                //         $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
-                                //         INNER JOIN p_medicine ON p_supplier.brand_id = p_medicine.brand
-                                //         INNER JOIN producttoshop ON p_medicine.id = producttoshop.medicinId
-                                //         WHERE producttoshop.shop_id = '$shop_id'
-                                //         ");
-                                //         while ($supplier_data = $supplier_rs->fetch_assoc()) {
-                                ?>
-                                <!-- <option value="<?php // $supplier_data["id"] 
-                                                    ?>"><?php // $supplier_data["name"] 
-                                                        ?></option>
-                                        <?php
-                                        //         }
-                                        //     }
-                                        // }
-
-                                        ?>
-                                     </select>
-                                </div>  -->
-                                <!-- supplier selector end -->
-
                                 <!-- supplier products start -->
                                 <div class="col-12 p-4">
                                     <div class="row">
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number" onkeyup="fbs();" id="bnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Barcode Number"
+                                                onkeyup="fbs();" id="bnInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Code" onkeyup="fbs();" id="pcInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Code"
+                                                onkeyup="fbs();" id="pcInput">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control bg-dark" placeholder="Product Name" onkeyup="fbs();" id="pnInput">
+                                            <input type="text" class="form-control bg-dark" placeholder="Product Name"
+                                                onkeyup="fbs();" id="pnInput">
                                         </div>
                                         <div class="col-12 products-table mt-4">
                                             <table class="table table-bordered">
@@ -205,66 +178,10 @@ if (!isset($_SESSION['store_id'])) {
                                                     </tr>
                                                 </thead>
                                                 <tbody id="filterBySupTable">
-                                                    <?php
-
-                                                    if (isset($_SESSION['store_id'])) {
-
-                                                        $userLoginData = $_SESSION['store_id'];
-
-                                                        foreach ($userLoginData as $userData) {
-                                                            $shop_id = $userData['shop_id'];
-                                                            $user_id = $userData['id'];
-                                                            $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid, p_medicine.name AS p_name, 
-                                                            p_medicine.code AS code,
-                                                            p_medicine.img AS img,
-                                                            p_medicine_category.name AS category, p_brand.name AS brand,
-                                                            medicine_unit.unit AS unit, unit_category_variation.ucv_name,
-                                                            stock2.stock_id AS stock_id,
-                                                            stock2.item_s_price AS itemSprice,
-                                                            stock2.unit_s_price AS unitSprice
-                                                            FROM producttoshop
-                                                            INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
-                                                            INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
-                                                            INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                                                            INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                                                            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                            LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-                                                            WHERE
-                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
-                                                            GROUP BY p_medicine.name, itemSprice
-                                                            ORDER BY p_medicine.name ASC
-                                                            ");
-
-                                                            $tableRowCount = 1;
-                                                            while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
-                                                    ?>
-                                                                <tr>
-                                                                    <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
-                                                                    <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
-                                                                    <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
-                                                                    <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
-                                                                    <th scope="row"><?= $tableRowCount ?></th>
-                                                                    <!-- <td>
-                                                                        <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
-                                                                    </td> -->
-                                                                    <td>
-                                                                        <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
-                                                                        (<?= $p_medicine_data['ucv_name'] ?>
-                                                                        <?= $p_medicine_data['unit'] ?>)
-                                                                    </td>
-                                                                    <td id="product_category"><?= $p_medicine_data['category'] ?></td>
-                                                                    <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
-                                                                    <td id="itemSprice"><?= $p_medicine_data['itemSprice'] ?></td>
-                                                                    <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
-                                                                    <td><button class="btn btn-outline-success add-btn">Add</button></td>
-                                                                </tr>
-                                                    <?php
-                                                                $tableRowCount++;
-                                                            }
-                                                        }
-                                                    }
-                                                    ?>
-
+                                                    <tr>
+                                                        <td colspan="7" class="text-center text-lg font-weight-bold">
+                                                            Search Product</td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
 
@@ -281,7 +198,20 @@ if (!isset($_SESSION['store_id'])) {
                     <!-- add to stock table -->
                     <div class="row">
                         <div class="col-12 d-flex flex-row align-items-center overflow-hidden">
-                            <div class="col-4 bg-red"></div>
+                            <div class="col-4 input-group">
+                                <select class="col-6 form-control bg-dark" name="supplier_select" id="supplier_select">
+                                    <option value="0" selected disabled>Select Supplier</option>
+                                    <?php
+                                    $sql = $conn->query("SELECT * FROM `p_supplier` WHERE `status` = 1 ORDER BY `name` ASC");
+                                    while ($row = mysqli_fetch_assoc($sql)) {
+                                    ?>
+                                        <option value="<?= $row["id"] ?>"><?= $row["name"] ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                                <a href="add-supplier.php" class="btn btn-info mx-2"><i class="fas fa-plus"></i></a>
+                            </div>
                             <div class="col-4">
                                 <label class="bg-cyan p-1 rounded-lg text-lg">
                                     ADD TO STOCK
@@ -320,7 +250,8 @@ if (!isset($_SESSION['store_id'])) {
                         </div>
                     </div>
                     <div class="po_btn col-6 d-none flex-column">
-                        <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
+                        <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i
+                                class="fas fa-arrow-right"></i></a>
                     </div>
                     <!-- right side design end -->
                 </div>
@@ -373,7 +304,8 @@ if (!isset($_SESSION['store_id'])) {
                                                 <label for="grnDate">Date</label>
                                             </div>
                                             <div class="col-8">
-                                                <span class="fs-2 text-dark fw-bold" name="grnDate" id="grnDate"><?= $grnDate ?></span>
+                                                <span class="fs-2 text-dark fw-bold" name="grnDate"
+                                                    id="grnDate"><?= $grnDate ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -381,7 +313,8 @@ if (!isset($_SESSION['store_id'])) {
 
                                 <div class="col-4 text-center">
                                     <label for="grnTime">Added time</label>
-                                    <span class="fs-2 text-dark fw-bold" name="grnTime" id="grnTime"><?= $grnTime ?></span>
+                                    <span class="fs-2 text-dark fw-bold" name="grnTime"
+                                        id="grnTime"><?= $grnTime ?></span>
                                 </div>
                                 <div class="orderItem col-12 mt-4 mb-3">
                                     <table class="table table-bordered">
@@ -439,6 +372,6 @@ if (!isset($_SESSION['store_id'])) {
     const user_id = <?php echo $user_id; ?>;
 </script>
 
-<script src="dist/js/add-stock_new2.js"></script>
+<script src="dist/js/add-stock.js"></script>
 
 </html>

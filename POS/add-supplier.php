@@ -13,7 +13,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pharmacy</title>
+  <title>Add New Supplier</title>
 
   <!-- All CSS -->
   <?php include("part/all-css.php"); ?>
