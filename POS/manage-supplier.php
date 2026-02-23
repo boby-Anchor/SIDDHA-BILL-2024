@@ -55,7 +55,7 @@ if (!isset($_SESSION['store_id'])) {
                   <table id="example1" class="table table-bordered">
                     <thead>
                       <tr class="bg-info">
-                        <th>SL</th>
+                        <th>#</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
@@ -123,9 +123,7 @@ if (!isset($_SESSION['store_id'])) {
     });
 
     function updateStatus(id, status) {
-
       try {
-
         $.ajax({
           url: "actions/global/statusUpdate.php/update",
           type: "POST",
@@ -135,10 +133,7 @@ if (!isset($_SESSION['store_id'])) {
             status: status,
           },
           success: function(response) {
-            console.log(response);
-
             const result = JSON.parse(response);
-
             switch (result.status) {
               case 'success':
                 SuccessMessageDisplay(result.message);
@@ -168,10 +163,8 @@ if (!isset($_SESSION['store_id'])) {
       } catch (error) {
         ErrorMessageDisplay(error.message)
       }
-
     }
   </script>
-
 </body>
 
 </html>
