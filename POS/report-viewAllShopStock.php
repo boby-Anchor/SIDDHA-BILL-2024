@@ -55,11 +55,11 @@ if (!isset($_SESSION['store_id'])) {
                                                 <th>Brand</th>
                                                 <th>Volume</th>
                                                 <th>Price</th>
-                                                <th>Hub Qty</th>
-                                                <th>Pharmacy Qty</th>
-                                                <th>YA Qty</th>
+                                                <th>Hub</th>
+                                                <th>Pharmacy</th>
+                                                <th>YA</th>
                                                 <th>Refilling</th>
-                                                <th>Test</th>
+                                                <th>Online</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -73,7 +73,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 SUM(CASE WHEN stock_shop_id = 2 THEN stock_item_qty ELSE 0 END) AS pharmacy_qty,
                                                 SUM(CASE WHEN stock_shop_id = 9 THEN stock_item_qty ELSE 0 END) AS YA_qty,
                                                 SUM(CASE WHEN stock_shop_id = 5 THEN stock_item_qty ELSE 0 END) AS RF_qty,
-                                                SUM(CASE WHEN stock_shop_id = 7 THEN stock_item_qty ELSE 0 END) AS test_qty
+                                                SUM(CASE WHEN stock_shop_id = 10 THEN stock_item_qty ELSE 0 END) AS OS_qty
                                                 FROM stock2
                                                 INNER JOIN p_medicine ON stock2.stock_item_code = p_medicine.code
                                                 INNER JOIN p_brand ON p_brand.id = p_medicine.brand
@@ -97,7 +97,7 @@ if (!isset($_SESSION['store_id'])) {
                                                         <td><?= $pharmacy_qty ?></td>
                                                         <td><?= $YA_qty ?></td>
                                                         <td><?= $row['RF_qty'] ?></td>
-                                                        <td><?= $row['test_qty'] ?></td>
+                                                        <td><?= $row['OS_qty'] ?></td>
                                                     </tr>
                                             <?php
                                                 }
