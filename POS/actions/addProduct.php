@@ -1,20 +1,24 @@
 <?php
-
 session_start();
-include('../config/db.php');
+if (!isset($_SESSION['store_id'])) {
+    echo json_encode([
+        'status' => 'session_expired',
+        'message' => 'Session expired. Login again',
+    ]);
+    exit();
+}
+
+require_once '../config/db.php';
 
 $chk = 0;
 $datetime = date('Y-m-d H:i:s');
-$product_details = (isset($_POST['product_details']));
 
 function errorThrow($message)
 {
-    echo json_encode(
-        array(
-            'status' => 'error',
-            'message' => $message,
-        )
-    );
+    echo json_encode([
+        'status' => 'error',
+        'message' => $message,
+    ]);
 }
 
 if (isset($_POST['product_details'])) {
@@ -55,23 +59,11 @@ if (isset($_POST['product_details'])) {
 
         $conn->query("UPDATE producttoshop  SET productToShopStatus = 'added'  WHERE shop_id = '1' AND medicinId ='$product_id'");
 
-        // $conn->query("INSERT INTO stock2 (stock_item_id, stock_qty, stock_item_cost, stock_s_price, stock_shop_id, stock_item_unit) VALUES ('$product_code', '$new_stock', '$cost', '$product_price', '1', '$unit')");
-        // $_SESSION['msg'] = "Information submit successfully";
-        // if (!empty($filename)) {
-        //     move_uploaded_file($tempname, $folder);
-        // }
-        echo json_encode(
-            array(
-                'status' => 'success',
-                'message' => 'New item added successfully',
-            )
-        );
-        // exit();
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'New item added successfully',
+        ]);
     }
 } else {
     errorThrow("No product details received.");
 }
-
-// Default return
-// echo "<script>window.history.back();</script>";
-// exit();
