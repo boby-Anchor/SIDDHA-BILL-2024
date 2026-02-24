@@ -13,7 +13,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pharmacy</title>
+  <title>Add New Product</title>
   <!-- All CSS -->
   <?php include("part/all-css.php"); ?>
   <!-- All CSS end -->
@@ -36,12 +36,12 @@ if (!isset($_SESSION['store_id'])) {
     <!--  Sidebar end -->
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper bg-dark">
       <!-- Main content -->
       <section class="container-fluid">
         <div class="row">
           <!-- medicine form start  -->
-          <div class="card card-default col-md-12 col-lg-9">
+          <div class="card card-default col-md-12 bg-dark">
             <div class="card-header py-2">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -202,157 +202,151 @@ if (!isset($_SESSION['store_id'])) {
   <!-- All JS -->
   <?php include("part/all-js.php"); ?>
   <!-- All JS end -->
-  <script>
-    $(function() {
-      //Initialize Select2 Elements
-      $(".select2").select2();
+</body>
 
-      //Initialize Select2 Elements
-      $(".select2bs4").select2({
-        theme: "bootstrap4",
-      });
+<script>
+  $(function() {
+    //Initialize Select2 Elements
+    $(".select2").select2();
 
-      $('.medicine-unit-select').select2({
-        placeholder: "Select medicine unit"
-      });
+    //Initialize Select2 Elements
+    $(".select2bs4").select2({
+      theme: "bootstrap4",
     });
-  </script>
 
-  <script>
-    $(document).on("click", "#add_item", function() {
+    $('.medicine-unit-select').select2({
+      placeholder: "Select medicine unit"
+    });
+  });
 
-      var product_name = document.getElementById("product_name").value;
-      var product_code = document.getElementById("product_code").value;
-      var unit = document.getElementById("unit").value;
-      var category_product = document.getElementById("category_product").value;
-      var unit_variation = document.getElementById("unit_variation").value;
-      var brand_product = document.getElementById("brand_product").value;
-      var details = document.getElementById("details").value;
+  $(document).on("click", "#add_item", function() {
 
-      // Validation checks
-      if (brand_product === "") {
-        errorMessageDisplay("Select brand");
-        return;
-      }
+    var product_name = document.getElementById("product_name").value;
+    var product_code = document.getElementById("product_code").value;
+    var unit = document.getElementById("unit").value;
+    var category_product = document.getElementById("category_product").value;
+    var unit_variation = document.getElementById("unit_variation").value;
+    var brand_product = document.getElementById("brand_product").value;
+    var details = document.getElementById("details").value;
 
-      if (category_product === "") {
-        errorMessageDisplay("Select category");
-        return;
-      }
+    // Validation checks
+    if (brand_product === "") {
+      ErrorMessageDisplay("Select brand");
+      return;
+    }
 
-      if (unit === "") {
-        errorMessageDisplay("Select unit");
-        return;
-      }
+    if (category_product === "") {
+      ErrorMessageDisplay("Select category");
+      return;
+    }
 
-      if (unit_variation === "") {
-        errorMessageDisplay("Select Unit variation");
-        return;
-      }
+    if (unit === "") {
+      ErrorMessageDisplay("Select unit");
+      return;
+    }
 
-      if (product_name === "") {
-        errorMessageDisplay("Enter product name");
-        return;
-      }
+    if (unit_variation === "") {
+      ErrorMessageDisplay("Select product volume");
+      return;
+    }
 
-      if (product_code === "") {
-        errorMessageDisplay("Enter barcode");
-        return;
-      }
+    if (product_name === "") {
+      ErrorMessageDisplay("Enter product name");
+      return;
+    }
 
-      var productData = {
-        product_name: product_name,
-        product_code: product_code,
-        unit: unit,
-        category_product: category_product,
-        unit_variation: unit_variation,
-        brand_product: brand_product,
-        details: details
-      };
+    if (product_code === "") {
+      ErrorMessageDisplay("Enter barcode");
+      return;
+    }
 
-      $.ajax({
-        url: "actions/addProduct.php",
-        method: "POST",
-        data: {
-          product_details: productData,
-        },
-        success: function(response) {
+    var product_details = {
+      product_name: product_name,
+      product_code: product_code,
+      unit: unit,
+      category_product: category_product,
+      unit_variation: unit_variation,
+      brand_product: brand_product,
+      details: details
+    };
 
-          var result;
-          try {
-            result = JSON.parse(response);
-          } catch (e) {
-            console.error("Error: ", response);
-            errorMessageDisplay(response);
-          }
+    $.ajax({
+      url: "actions/addProduct.php",
+      method: "POST",
+      data: {
+        product_details,
+      },
+      success: function(response) {
 
-          if (result.status === 'success') {
-            successMessageDisplay(result.message);
+        var result;
+        try {
+          result = JSON.parse(response);
+        } catch (e) {
+          console.error("Error: ", response);
+          ErrorMessageDisplay(response);
+        }
+
+        switch (result.status) {
+          case 'success':
+            SuccessMessageDisplay(result.message);
             setTimeout(function() {
               location.reload();
-            }, 3400);
-          } else {
-            errorMessageDisplay(result.message);
-          }
+            }, 3000);
+            break;
+
+          case 'error':
+            ErrorMessageDisplay(result.message);
+            break;
+
+          case 'session_expired':
+            handleExpiredSession(result.message);
+            break;
+
+          default:
+            ErrorMessageDisplay('An unknown error occurred.')
+            break;
+        }
+
+        if (result.status === 'success') {
+
+        } else if (result.status === 'session_expired') {
+
+          return;
+        } else {
+          ErrorMessageDisplay(result.message);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error(xhr.responseText);
+        ErrorMessageDisplay(xhr.responseText);
+      },
+    });
+  });
+
+  $(document).ready(function() {
+    $('.medicine-unit-select').change(function() {
+      var unitId = $(this).val();
+      $.ajax({
+        url: 'get_unit_category_variations.php',
+        type: 'POST',
+        data: {
+          unitId: unitId
+        },
+        dataType: 'json',
+        success: function(response) {
+          var options = '<option value="" selected="selected">Select Type</option>';
+          $.each(response, function(key, value) {
+            options += '<option value="' + value.ucv_id + '">' + value.ucv_name + ' ' + value.unit + ' ' + '</option>';
+          });
+          $('select[name="unit_variation"]').html(options);
         },
         error: function(xhr, status, error) {
           console.error(xhr.responseText);
-          errorMessageDisplay(xhr.responseText);
-        },
-      });
-    });
-
-    function successMessageDisplay(message) {
-      MessageDisplay("success", "Success", message)
-    }
-
-    function errorMessageDisplay(message) {
-      MessageDisplay("error", "Error", message)
-    }
-
-    function MessageDisplay(icon, status, message) {
-      Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer);
-          toast.addEventListener('mouseleave', Swal.resumeTimer);
+          ErrorMessageDisplay(xhr.responseText);
         }
-      }).fire({
-        icon: icon,
-        title: status + ": " + message + "!",
-      });
-    }
-
-    $(document).ready(function() {
-      $('.medicine-unit-select').change(function() {
-        var unitId = $(this).val();
-        $.ajax({
-          url: 'get_unit_category_variations.php',
-          type: 'POST',
-          data: {
-            unitId: unitId
-          },
-          dataType: 'json',
-          success: function(response) {
-            var options = '<option value="" selected="selected">Select Type</option>';
-            $.each(response, function(key, value) {
-              options += '<option value="' + value.ucv_id + '">' + value.ucv_name + ' ' + value.unit + ' ' + '</option>';
-            });
-            $('select[name="unit_variation"]').html(options);
-          },
-          error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            errorMessageDisplay(xhr.responseText);
-          }
-        });
       });
     });
-  </script>
-
-</body>
+  });
+</script>
 
 </html>
