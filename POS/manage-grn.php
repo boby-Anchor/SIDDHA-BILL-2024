@@ -57,6 +57,7 @@ if (!isset($_SESSION['store_id'])) {
                                             <tr class="bg-info">
                                                 <th class="adThText">GRN Number</th>
                                                 <th class="adThText">Invoice Number</th>
+                                                <th class="adThText">Supplier</th>
                                                 <th class="adThText">Items</th>
                                                 <th class="adThText">GRN Added Date</th>
                                                 <th class="adThText">Total Price</th>
@@ -71,13 +72,17 @@ if (!isset($_SESSION['store_id'])) {
 
                                                 foreach ($userLoginData as $userData) {
                                                     $shop_id = $userData['shop_id'];
-                                                    $grn_details_result = $conn->query("SELECT * FROM `grn` WHERE grn_shop_id = '$shop_id' ORDER BY grn_date DESC LIMIT 100");
+                                                    $grn_details_result = $conn->query("SELECT `grn`.*, p_supplier.name AS supplier
+                                                    FROM `grn`
+                                                    LEFT JOIN p_supplier ON grn.supplier_id = p_supplier.id
+                                                    WHERE grn_shop_id = '$shop_id' ORDER BY grn_date DESC LIMIT 100");
 
                                             ?>
                                                     <?php while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
                                                         <tr>
                                                             <td><?= $grn_details_data["grn_number"] ?></td>
                                                             <td><?= $grn_details_data["invoice_number"] ?></td>
+                                                            <td><?= $grn_details_data["supplier"] ?></td>
                                                             <td>
                                                                 <?php
                                                                 $itemCount_result = $conn->query("SELECT COUNT(grn_number) AS grnItemsCount FROM grn_item WHERE grn_item.grn_number = '" . $grn_details_data["grn_number"] . "'");
@@ -120,7 +125,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                             <?php } ?>
                                                                         </tbody>
                                                                     </table>
-                                                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['invoice_number'] ?>','<?= $grn_details_data['grn_date'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
+                                                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['invoice_number'] ?>','<?= $grn_details_data['grn_date'] ?>','<?= $grn_details_data['supplier'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
                                                                 </ul>
                                                             </td>
                                                             <td><?= $grn_details_data["grn_date"] ?></td>
@@ -155,7 +160,7 @@ if (!isset($_SESSION['store_id'])) {
     <!-- All JS end -->
 
     <script>
-        function printTable(grnNumber, invoice_number, grnDate) {
+        function printTable(grnNumber, invoice_number, grnDate, supplier_name) {
             var printWindow = window.open('', '_blank');
             printWindow.document.write('<html><head><title>Print Preview</title>');
             printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
@@ -167,6 +172,11 @@ if (!isset($_SESSION['store_id'])) {
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
             printWindow.document.write('<h5>GRN Number : ' + grnNumber + '</h5>');
             printWindow.document.write('</div>');
+            if (supplier_name) {
+                printWindow.document.write('<div class="col-12" style="text-align: start;">');
+                printWindow.document.write('<h5>Supplier Name : ' + supplier_name + '</h5>');
+                printWindow.document.write('</div>');
+            }
             if (invoice_number) {
                 printWindow.document.write('<div class="col-12" style="text-align: start;">');
                 printWindow.document.write('<h5>Invoice Number : ' + invoice_number + '</h5>');
