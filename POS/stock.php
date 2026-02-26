@@ -76,6 +76,7 @@ $cost = 0;
 
                         foreach ($userLoginData as $userData) {
                           $shop_id = $userData['shop_id'];
+                          $user_id = $userData['id'];
                           $sql = $conn->query("SELECT stock2.stock_id,p_medicine.img AS p_img , p_medicine.name AS p_name , p_brand.name AS bName,
                           stock2.stock_item_cost AS p_cost , stock2.stock_item_code AS p_code , stock2.stock_item_qty AS p_a_stock ,
                           stock2.item_s_price AS p_s_price , p_medicine_category.name AS p_category ,
@@ -86,7 +87,9 @@ $cost = 0;
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock2.stock_shop_id = '$shop_id' ORDER BY p_medicine.name ASC");
+                          WHERE stock2.stock_shop_id = '$shop_id'
+                          AND p_medicine.status = '1'
+                          ORDER BY p_medicine.name ASC");
                           while ($row = mysqli_fetch_assoc($sql)) {
                             $totalRows++;
 
@@ -199,9 +202,7 @@ $cost = 0;
         theme: "bootstrap4",
       });
     });
-  </script>
 
-  <script>
     $(function() {
       $("#stockTable")
         .DataTable({

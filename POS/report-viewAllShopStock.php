@@ -79,6 +79,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                                                 INNER JOIN unit_category_variation ON p_medicine.unit_variation = unit_category_variation.ucv_id
                                                 INNER JOIN medicine_unit ON unit_category_variation.p_unit_id = medicine_unit.id
+                                                WHERE p_medicine.status = '1'
                                                 GROUP BY stock_item_code, item_s_price
                                                 ");
 
