@@ -14,22 +14,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $shop_id = $_POST['po_shop'];
 
   $sql = $conn->query("SELECT
-  ii.invoiceItem,
-  ii.invoiceItem_price,
-  ii.barcode,
-  SUM(ii.invoiceItem_qty) AS total_qty
-FROM (
-  SELECT invoice_id
-  FROM invoices
-  WHERE created BETWEEN '$start_date' AND '$end_date'
-    AND shop_id = '$shop_id'
-) AS inv
-JOIN invoiceitems AS ii
-  ON ii.invoiceNumber = inv.invoice_id
-GROUP BY 
-  ii.invoiceItem,
-  ii.invoiceItem_price,
-  ii.barcode
+    t.barcode,
+    t.invoiceItem_price,
+    t.total_qty,
+    ucv.ucv_name AS volume,
+    mu.unit AS unit,
+    pb.name AS brand,
+    pm.name AS itemName
+    FROM (
+      SELECT
+        ii.barcode,
+        ii.invoiceItem_price,
+        SUM(ii.invoiceItem_qty) AS total_qty
+        FROM invoices i
+        JOIN invoiceitems ii
+          ON ii.invoiceNumber = i.invoice_id
+        WHERE i.created BETWEEN '$start_date' AND '$end_date'
+        AND i.shop_id = '$shop_id'
+        GROUP BY
+          ii.barcode,
+          ii.invoiceItem_price
+    ) AS t
+    JOIN p_medicine pm
+      ON pm.code = t.barcode
+    JOIN unit_category_variation ucv
+      ON pm.unit_variation = ucv.ucv_id
+    JOIN medicine_unit mu
+      ON ucv.p_unit_id = mu.id
+    JOIN p_brand pb
+      ON pm.brand = pb.id
   ");
 }
 
@@ -151,28 +164,15 @@ GROUP BY
                   if (isset($sql)) {
                     while ($row = mysqli_fetch_assoc($sql)) {
 
-                      $barcode = $row['barcode'];
                       $item_price = $row['invoiceItem_price'];
                       $total_qty = $row['total_qty'];
                       $total_price = $item_price * $total_qty;
-
-
-                      $row_item_data = mysqli_fetch_assoc($conn->query("SELECT
-                      ucv.ucv_name AS volume,
-                      mu.unit AS unit,
-                      pb.name AS brand
-                      FROM p_medicine AS pm
-                      JOIN unit_category_variation AS ucv ON pm.unit_variation = ucv.ucv_id
-                      JOIN medicine_unit AS mu ON ucv.p_unit_id = mu.id
-                      JOIN p_brand AS pb ON pm.brand = pb.id
-                      WHERE pm.code = '$barcode'
-                      "));
                 ?>
                       <tr>
-                        <td> <?= $barcode ?></td>
-                        <td> <?= $row['invoiceItem']; ?></td>
-                        <td> <?= $row_item_data['brand']; ?></td>
-                        <td> <?= $row_item_data['volume']; ?> <?= $row_item_data['unit']; ?></td>
+                        <td> <?= $row['barcode'] ?></td>
+                        <td> <?= $row['itemName']; ?></td>
+                        <td> <?= $row['brand']; ?></td>
+                        <td> <?= $row['volume']; ?> <?= $row['unit']; ?></td>
                         <td> <?= number_format($total_qty, 0)  ?> </td>
                         <td> <?= number_format($item_price, 0) ?> </td>
                         <td> <?= number_format($total_price, 0) ?> </td>
