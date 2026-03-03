@@ -67,6 +67,7 @@ $sql = $conn->query("SELECT
                                                 <!-- <th>Image</th> -->
                                                 <th>Code</th>
                                                 <th>Name</th>
+                                                <th>Volume</th>
                                                 <th>Category</th>
                                                 <th>Brand</th>
                                                 <th>Status</th>
@@ -82,7 +83,8 @@ $sql = $conn->query("SELECT
                                                                                         ?>" alt="<?php //echo $row['pname']; 
                                                                                                     ?>" style="max-width: 50px;"></td> -->
                                                     <td><?php echo $row['barcode']; ?></td>
-                                                    <td><?php echo $row['pname']; ?> ( <?php echo $row['ucv_name']; ?><?php echo $row['unit']; ?> ) </td>
+                                                    <td><?php echo $row['pname']; ?> </td>
+                                                    <td> <?= $row['ucv_name'] ?><?= $row['unit']; ?></td>
                                                     <td><?php echo $row['categoryname']; ?></td>
                                                     <td><?php echo $row['brandName']; ?></td>
                                                     <td class="text-center">
@@ -290,7 +292,7 @@ $sql = $conn->query("SELECT
             data: {
                 new_barcode: new_barcode,
                 original_barcode: original_barcode,
-                product_name:product_name,
+                product_name: product_name,
             },
             success: function(response) {
                 try {
