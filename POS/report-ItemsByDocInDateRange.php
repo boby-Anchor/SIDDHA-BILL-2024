@@ -7,7 +7,6 @@ if (!isset($_SESSION['store_id'])) {
     include('config/db.php');
 }
 
-$selected_date = '';
 $invoices = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,18 +14,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $end_date = $_POST['end_date'] ?? null;
     $doctor = $_POST['doctorName'] ?? null;
 
-    $result = $conn->query("SELECT 
-    ii.invoiceItem AS item_name,
-    SUM(ii.invoiceItem_qty) AS total_qty
-FROM 
-    invoices i
-JOIN 
-    invoiceitems ii ON i.invoice_id = ii.invoiceNumber
-WHERE 
-    i.d_name = '$doctor' -- Replace with your input value
-    AND i.created BETWEEN '$start_date' AND '$end_date' -- Replace with your date inputs
-GROUP BY 
-    ii.invoiceItem;
+    $result = $conn->query("SELECT
+    t.item_name,
+    t.barcode,
+    pb.name AS brandName,
+    mu.unit,
+    ucv.ucv_name,
+    t.unit_price,
+    t.total_qty,
+    (t.unit_price * t.total_qty) AS total_amount
+    FROM (
+    SELECT
+        ii.barcode,
+        ii.invoiceItem AS item_name,
+        SUM(ii.invoiceItem_qty) AS total_qty,
+        ii.invoiceItem_price AS unit_price
+    FROM invoices i
+    INNER JOIN invoiceitems ii 
+        ON i.invoice_id = ii.invoiceNumber
+    WHERE
+        i.d_name = '$doctor'
+        AND i.created BETWEEN '$start_date' AND '$end_date'
+    GROUP BY
+        ii.barcode,
+        ii.invoiceItem
+    ) t
+INNER JOIN p_medicine pm 
+    ON pm.code = t.barcode
+INNER JOIN p_brand pb 
+    ON pb.id = pm.brand
+INNER JOIN medicine_unit mu 
+    ON mu.id = pm.medicine_unit_id
+INNER JOIN unit_category_variation ucv 
+    ON ucv.ucv_id = pm.unit_variation;
     ");
 
     if (!$result) {
@@ -45,7 +65,7 @@ $totalValue = 0;
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Report | <?= $doctor ?? $doctor ?><?php echo isset($_POST['start_date']) ? " between $start_date and $end_date" : ""; ?>
+    <title>Report | Items qty by <?php echo isset($_POST['start_date']) ? "$doctor between $start_date and $end_date" : "doctor"; ?>
     </title>
 
     <!-- overlayScrollbars -->
@@ -93,8 +113,8 @@ $totalValue = 0;
                             <!-- Doctor Select -->
                             <div class="col-md-3">
                                 <label for="doctorName" class="form-label">Doctor</label>
-                                <select class="form-control select2" id="doctorName" name="doctorName" value="<?= htmlspecialchars($doctor); ?>" required>
-                                    <option value="" disabled selected hidden>Select a doctor</option>
+                                <select class="form-control select2" id="doctorName" name="doctorName" value="<?= $doctor; ?>" required>
+                                    <option value="0" disabled selected hidden>Select a doctor</option>
                                     <?php
                                     $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
                                     while ($doctors_row = $doctors_rs->fetch_assoc()) {
@@ -111,13 +131,13 @@ $totalValue = 0;
                             <!-- Date 1 -->
                             <div class="col-md-3">
                                 <label for="date1" class="form-label">From Date</label>
-                                <input type="date" id="start_date" name="start_date" class="form-control bg-dark text-white" value="<?= htmlspecialchars($selected_date); ?>" required>
+                                <input type="date" id="start_date" name="start_date" class="form-control bg-dark text-white" value="<?= htmlspecialchars(isset($_POST['start_date']) ? $start_date : null) ?>" required>
                             </div>
 
                             <!-- Date 2 -->
                             <div class="col-md-3">
                                 <label for="date2" class="form-label">To Date</label>
-                                <input type="date" id="end_date" name="end_date" class="form-control bg-dark text-white" value="<?= htmlspecialchars($selected_date); ?>" required>
+                                <input type="date" id="end_date" name="end_date" class="form-control bg-dark text-white" value="<?= htmlspecialchars(isset($_POST['end_date']) ? $end_date : null) ?>" required>
                             </div>
 
                             <!-- Submit Button -->
@@ -126,58 +146,40 @@ $totalValue = 0;
                                     <i class="fas fa-search me-1"></i> Search
                                 </button>
                             </div>
-
                         </div>
-
                     </form>
 
                     <div class="row p-4">
                         <div class="col-12">
                             <table id="dm_data_table" class="table table-dark table-striped table-bordered table-hover">
                                 <thead class="">
-                                    <th>Invoice ID</th>
-                                    <th>Item Quantity</th>
+                                    <th class="bg-info">Barcode</th>
+                                    <th class="bg-info">Item Name</th>
+                                    <th class="bg-info">Brand</th>
+                                    <th class="bg-info">Volume</th>
+                                    <th class="bg-info">Price</th>
+                                    <th class="bg-info">Quantity</th>
                                 </thead>
                                 <tbody>
                                     <?php
                                     if (!empty($invoices)) {
                                         foreach ($invoices as $invoice):
-                                            // $totalValue += $invoice['itemPrice'];
-                                            // $totalPrice += $invoice['totalPrice'];
                                     ?>
                                             <tr>
+                                                <td><?php echo htmlspecialchars($invoice['barcode']); ?></td>
                                                 <td><?php echo htmlspecialchars($invoice['item_name']); ?></td>
-                                                <td class="text-center"><?php echo htmlspecialchars($invoice['total_qty']); ?></td>
+                                                <td><?php echo htmlspecialchars($invoice['brandName']); ?></td>
+                                                <td><?php echo htmlspecialchars($invoice['ucv_name']);
+                                                    echo htmlspecialchars($invoice['unit']); ?></td>
+                                                <td class="text-center"><?php echo htmlspecialchars($invoice['unit_price']); ?>
+                                                <td class="text-center"><?php echo htmlspecialchars($invoice['total_qty']); ?>
+                                                </td>
                                             </tr>
                                         <?php endforeach;
+                                    } else {
                                         ?>
                                         <tr>
-                                            <td class=""><strong>Start Date:</strong></td>
-                                            <!-- <td></td>
-                                            <td></td>
-                                            <td></td> -->
-                                            <td><?= $start_date; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td class=""><strong>Ends Date:</strong></td>
-                                            <!-- <td></td>
-                                            <td></td>
-                                            <td></td> -->
-                                            <td><?= $end_date; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td class=""><strong>Total Price:</strong></td>
-                                            <!-- <td></td>
-                                            <td></td>
-                                            <td></td> -->
-                                            <td><?= $totalPrice; ?></td>
-                                        </tr>
-                                    <?php
-
-                                    } else {
-                                    ?>
-                                        <tr>
-                                            <td colspan="5" class="text-center">No Items Data</td>
+                                            <td colspan="6" class="text-center">No Items Data</td>
                                         </tr>
                                     <?php
                                     }
@@ -212,13 +214,20 @@ $totalValue = 0;
 </body>
 
 <script>
+    $(document).ready(function() {
+        if (<?php echo isset($_POST['doctorName']) ? 'true' : 'false'; ?>) {
+
+            $("#doctorName").val(<?php echo json_encode($doctor); ?>);
+        }
+    })
+
     $(function() {
         $("#dm_data_table")
             .DataTable({
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,
-                searching: false,
+                searching: true,
                 order: [
                     [1, 'asc']
                 ],
@@ -242,6 +251,7 @@ $totalValue = 0;
                             doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
                         }
                     },
+                    "excel",
                     "print",
                     "colvis"
                 ],
