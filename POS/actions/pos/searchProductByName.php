@@ -58,9 +58,9 @@ INNER JOIN unit_category_variation
 WHERE stock2.stock_shop_id = '$shop_id'
   AND p_medicine.name LIKE '%$searchName%'
   AND (
-        (stock2.stock_shop_id IN ('7','9') AND stock2.stock_item_qty > 0)
+        (stock2.stock_shop_id IN ('1','7','9') AND stock2.stock_item_qty > 0)
         OR
-        (stock2.stock_shop_id NOT IN ('7','9'))
+        (stock2.stock_shop_id NOT IN ('1','7','9'))
       )
 ORDER BY bName ASC;
     ");
