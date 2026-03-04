@@ -66,10 +66,12 @@ if (!isset($_SESSION['store_id'])) {
                       <?php
                       $grn_details_result = $conn->query("SELECT wastage_batches.*,
                       shop.shopName AS shop,
-                      users.name AS user
+                      us1.name AS user,
+                      us2.name AS approver
                       FROM `wastage_batches`
                       INNER JOIN shop ON wastage_batches.shop_id = shop.shopId
-                      INNER JOIN users ON wastage_batches.created_by = users.id
+                      INNER JOIN users us1 ON wastage_batches.created_by = us1.id
+                      INNER JOIN users us2 ON wastage_batches.approved_by = us2.id
                       ORDER BY created DESC LIMIT 100");
                       while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
                         <tr>
@@ -127,18 +129,17 @@ if (!isset($_SESSION['store_id'])) {
                             <?php
                               } else {
                             ?>
-                              <button class="button bg-dark border rounded border-success" onclick="showDetailsModal(this)">
-                                <i class="nav-icon fas fa-eye p-2"></i>
-                              </button>
+                              Approved by:- <?= $grn_details_data["approver"] ?>
+                              <br>
+                              Description:- <?= $grn_details_data["approval_description"] ?>
                             <?php
                               }
-
                             ?>
                           </td>
                         </tr>
-                      <?php }
+                      <?php
+                      }
                       ?>
-
                     </tbody>
                   </table>
                 </div>
@@ -306,7 +307,5 @@ if (!isset($_SESSION['store_id'])) {
 
   }
 </script>
-
-
 
 </html>
