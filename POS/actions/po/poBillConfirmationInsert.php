@@ -129,7 +129,7 @@ try {
                     $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $minimum_new_qty) ,
                                         stock_mu_qty = (stock_mu_qty - '$minimum_new_qty')
                                         WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                                        AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
+                                        AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
                 } else {
 
                     $qty_rs = $conn->query("SELECT * FROM stock2 WHERE (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
@@ -146,7 +146,7 @@ try {
                     $new_stock_item_qty = $new_minimum_qty / $minimum_new_qty;
 
                     $conn->query("UPDATE stock2 SET stock_item_qty = '$new_stock_item_qty' , stock_mu_qty = (stock_mu_qty - '$product_qty')
-                            WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code') AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost' ");
+                            WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code') AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
                 }
             } else {
                 echo json_encode(array(

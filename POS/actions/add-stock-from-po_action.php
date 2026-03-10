@@ -54,7 +54,7 @@ if (isset($_SESSION['store_id'])) {
                         $update_minimum_qty = $stock_data["stock_mu_qty"] + (int) $minimum_qty;
                     }
                     $conn->query("UPDATE stock2 SET stock_item_qty = '$update_qty', stock_mu_qty = '$update_minimum_qty'
-                    WHERE stock_item_code = '$product_code' AND stock_shop_id = '$poShopId'");
+                    WHERE stock_item_code = '$product_code' AND stock_shop_id = '$poShopId' AND item_s_price = '$item_price'");
                     echo "Stock Updated Successfully";
                 } else {
 

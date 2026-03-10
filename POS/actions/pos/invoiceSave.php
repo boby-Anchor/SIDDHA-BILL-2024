@@ -265,8 +265,10 @@ if ($cm->num_rows == 0 && !empty($billData)) {
                         }
                     } else if ($product_unit == 'pack / bottle' || $product_unit == 'pieces') {
                         try {
-                            $conn->query("UPDATE stock2 SET stock_item_qty =  (stock_item_qty - $product_qty)
-                                WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost' OR unit_s_price = '$product_cost'");
+                            $conn->query("UPDATE stock2 SET stock_item_qty = (stock_item_qty - $product_qty)
+                                WHERE stock_shop_id = '$shop_id'
+                                AND stock_item_code = '$code'
+                                AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
                         } catch (Exception $exception) {
                             error_log("Item error\n" . $exception->getMessage());
                         }
