@@ -7,7 +7,7 @@ function SuccessMessageDisplay(message) {
 }
 
 function InfoMessageDisplay(message) {
-    MessageDisplay("info", "Info: ", message);
+    MessageDisplay("info", "", message);
 }
 
 // ==============================================================================
