@@ -30,7 +30,7 @@ if (isset($_POST['product_details'])) {
     $category_product = $conn->real_escape_string($productDetails['category_product']);
     $unit_variation = $conn->real_escape_string($productDetails['unit_variation']);
     $brand_product = $conn->real_escape_string($productDetails['brand_product']);
-    $details = $conn->real_escape_string($productDetails['details']);
+    $sku = $conn->real_escape_string($productDetails['sku']);
     $defaultImagePath = "../dist/img/product/not-available.png";
     $uploadFileRename = "not-available.png";
 
@@ -49,20 +49,55 @@ if (isset($_POST['product_details'])) {
     }
 
     if (!$chk > 0) {
-        $insert = $conn->query("INSERT INTO p_medicine (`name`,`details`,`category`,`brand`,`medicine_unit_id`,`code`,`img`,`date`,`unit_variation`)
-        VALUES ('$product_name','$details','$category_product','$brand_product','$unit','$product_code','$uploadFileRename','$datetime','$unit_variation')");
-        $product_id = $conn->insert_id;
-        $shop_result = $conn->query("SELECT * FROM shop");
-        while ($shop_data = $shop_result->fetch_assoc()) {
-            $conn->query("INSERT INTO producttoshop (medicinId,shop_id,productToShopStatus) VALUES ('$product_id','" . $shop_data['shopId'] . "','remove')");
+        $conn->begin_transaction();
+
+        try {
+            // Insert product
+            $insert = $conn->query("INSERT INTO p_medicine
+                (`name`,`sku`,`category`,`brand`,`medicine_unit_id`,`code`,`img`,`date`,`unit_variation`)
+                VALUES
+                ('$product_name','$sku','$category_product','$brand_product','$unit','$product_code','$uploadFileRename','$datetime','$unit_variation')");
+
+            if (!$insert) {
+                throw new Exception("Product insert failed: $conn->error");
+            }
+            $product_id = $conn->insert_id;
+
+            // Get shops
+            $shop_result = $conn->query("SELECT shopId FROM shop");
+
+            if (!$shop_result) {
+                throw new Exception("Shop fetch failed: $conn->error");
+            }
+
+            // Insert into producttoshop
+            while ($shop_data = $shop_result->fetch_assoc()) {
+                $insert_shop = $conn->query("INSERT INTO producttoshop (medicinId, shop_id, productToShopStatus)
+                    VALUES ('$product_id', '" . $shop_data['shopId'] . "', 'remove')");
+
+                if (!$insert_shop) {
+                    throw new Exception("producttoshop insert failed: $conn->error");
+                }
+            }
+
+            // Update main shop
+            $update = $conn->query("UPDATE producttoshop 
+                    SET productToShopStatus = 'added'  
+                    WHERE shop_id = '1' AND medicinId ='$product_id'");
+
+            if (!$update) {
+                throw new Exception("Status update failed: $conn->error");
+            }
+            $conn->commit();
+
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'New item added successfully'
+            ]);
+        } catch (Exception $e) {
+            $conn->rollback();
+            errorThrow($e->getMessage());
         }
-
-        $conn->query("UPDATE producttoshop  SET productToShopStatus = 'added'  WHERE shop_id = '1' AND medicinId ='$product_id'");
-
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'New item added successfully',
-        ]);
     }
 } else {
     errorThrow("No product details received.");

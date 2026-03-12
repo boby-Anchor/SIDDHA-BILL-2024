@@ -58,7 +58,7 @@ if (!isset($_SESSION['store_id'])) {
               <!-- <form action="actions/addProduct.php" method="POST" enctype="multipart/form-data"> -->
               <div class="card-body">
 
-                <div class="form-group ">
+                <div class="form-group mb-5">
                   <div class="row">
                     <div class="d-flex col-md-4">
                       <label>Brand</label>
@@ -121,39 +121,24 @@ if (!isset($_SESSION['store_id'])) {
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="row">
-                    <div class="d-flex col-md-6">
-                      <label for="name">Product Name</label>
-                    </div>
-                    <div class="d-flex col-md-4">
-                      <label for="name">Code</label>
-                    </div>
 
+                <div class="row mb-4">
+                  <div class="col-4">
+                    <label for="product_name" class="form-label fw-semibold mb-1">Product Name</label>
+                    <input type="text" class="form-control" id="product_name" placeholder="Enter Product Name" name="product_name" required>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                      <input type="text" class="form-control" id="product_name" placeholder="Enter Product Name" name="product_name" required>
-                    </div>
-                    <div class="d-flex col-md-4">
-                      <input type="text" class="form-control" id="product_code" placeholder="Enter Product Code" name="product_code" required>
-                    </div>
+
+                  <div class="col-4">
+                    <label>Product SKU Code</label>
+                    <input type="text" class="form-control" rows="4" id="sku" placeholder="Enter sku..." name="sku"></input>
                   </div>
-                </div>
-                <div class="form-group">
-                  <div class="row">
-                    <div class="d-flex col-md-4">
-                      <label>Product Details</label>
-                    </div>
-                    <!-- <div class="d-flex col-md-4">
-                      <label></label>
-                    </div> -->
+
+                  <div class="col-4">
+                    <label for="name">Barcode</label>
+                    <input type="text" class="form-control" id="product_code" placeholder="Enter Product Code" name="product_code" required>
                   </div>
-                  <div class="row">
-                    <div class="d-flex col-md-4">
-                      <textarea class="form-control" rows="4" id="details" placeholder="Enter description..." name="details"></textarea>
-                    </div>
-                    <!-- <div class="d-flex col-md-6">
+
+                  <!-- <div class="d-flex col-md-6">
                       <div class="row">
                         <div class="col-8">
                           <div class="custom-file">
@@ -168,10 +153,9 @@ if (!isset($_SESSION['store_id'])) {
                         </div>
                       </div>
                     </div> -->
-                  </div>
                 </div>
 
-                <div class="form-group pl-3">
+                <div class="flex">
                   <button class="btn btn-info" id="add_item" name="add_item">Submit</button>
                 </div>
                 <!-- </form> -->
@@ -221,44 +205,46 @@ if (!isset($_SESSION['store_id'])) {
 
   $(document).on("click", "#add_item", function() {
 
-    var product_name = document.getElementById("product_name").value;
-    var product_code = document.getElementById("product_code").value;
-    var unit = document.getElementById("unit").value;
-    var category_product = document.getElementById("category_product").value;
-    var unit_variation = document.getElementById("unit_variation").value;
-    var brand_product = document.getElementById("brand_product").value;
-    var details = document.getElementById("details").value;
+    var product_name = $("#product_name").val().trim();
+    var product_code = $("#product_code").val().trim();
+    var unit = $("#unit").val();
+    var category_product = $("#category_product").val();
+    var unit_variation = $("#unit_variation").val();
+    var brand_product = $("#brand_product").val();
+    let sku = ($("#sku").val() ?? "").trim() || null;
 
-    // Validation checks
-    if (brand_product === "") {
+    // Validation
+    if (!brand_product) {
       ErrorMessageDisplay("Select brand");
       return;
     }
 
-    if (category_product === "") {
+    if (!category_product) {
       ErrorMessageDisplay("Select category");
       return;
     }
 
-    if (unit === "") {
+    if (!unit) {
       ErrorMessageDisplay("Select unit");
       return;
     }
 
-    if (unit_variation === "") {
+    if (!unit_variation) {
       ErrorMessageDisplay("Select product volume");
       return;
     }
 
-    if (product_name === "") {
+    if (!product_name) {
       ErrorMessageDisplay("Enter product name");
       return;
     }
 
-    if (product_code === "") {
+    if (!product_code) {
       ErrorMessageDisplay("Enter barcode");
       return;
     }
+
+    $('#add_item').prop('disabled', true);
 
     var product_details = {
       product_name: product_name,
@@ -267,7 +253,7 @@ if (!isset($_SESSION['store_id'])) {
       category_product: category_product,
       unit_variation: unit_variation,
       brand_product: brand_product,
-      details: details
+      sku: sku
     };
 
     $.ajax({
@@ -284,6 +270,7 @@ if (!isset($_SESSION['store_id'])) {
         } catch (e) {
           console.error("Error: ", response);
           ErrorMessageDisplay(response);
+          $('#add_item').prop('disabled', false);
         }
 
         switch (result.status) {
@@ -296,28 +283,23 @@ if (!isset($_SESSION['store_id'])) {
 
           case 'error':
             ErrorMessageDisplay(result.message);
+            $('#add_item').prop('disabled', false);
             break;
 
           case 'session_expired':
+            $('#add_item').prop('disabled', false);
             handleExpiredSession(result.message);
             break;
 
           default:
+            $('#add_item').prop('disabled', false);
             ErrorMessageDisplay('An unknown error occurred.')
             break;
-        }
-
-        if (result.status === 'success') {
-
-        } else if (result.status === 'session_expired') {
-
-          return;
-        } else {
-          ErrorMessageDisplay(result.message);
         }
       },
       error: function(xhr, status, error) {
         console.error(xhr.responseText);
+        $('#add_item').prop('disabled', false);
         ErrorMessageDisplay(xhr.responseText);
       },
     });
