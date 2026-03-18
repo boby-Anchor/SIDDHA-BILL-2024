@@ -15,6 +15,7 @@ if (isset($_SESSION['store_id'])) {
         'status' => 'sessionExpired',
         'message' => 'Session expired! Wait to login again.'
     ]);
+    exit;
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -39,9 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'status' => 'success',
             'data' => $product
         ]);
-        exit();
+        exit;
     } catch (Exception $e) {
-
         echo json_encode([
             'status' => 'error',
             'message' => $e->getMessage()
