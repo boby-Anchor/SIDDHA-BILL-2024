@@ -149,6 +149,7 @@ $sql = $conn->query("SELECT
                         <div class="row pb-3">
                             <div class="col-4">
                                 <label for="name">Name</label>
+                                <input type="text" class="d-none" id="product_id" required>
                                 <input type="text" class="form-control" id="product_name" placeholder="Product Name" name="product_name" required>
                             </div>
                             <div class="col-4">
@@ -193,10 +194,15 @@ $sql = $conn->query("SELECT
 
                         <div class="row">
                             <div class="col-12">
-                                <label>Update product status</label>
+                                <label>Status</label>
                             </div>
                             <div class="col-12">
-                                <button id="status-button" class="btn btn-success">Active</button>
+                                <div class="col-3">
+                                    <select class="form-control border-5" name="product_status" id="product_status" onchange="handleStatus(this.value)">
+                                        <option value="1" class="text-dark bg-opacity-25 fw-semibold">✅ Active</option>
+                                        <option value="0" class="text-dark bg-opacity-25 fw-semibold">❌ Inactive</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <!--  <br>
@@ -223,13 +229,7 @@ $sql = $conn->query("SELECT
 </body>
 
 <script>
-    $(document).ready(function() {
-        getDetails(1728);
-    });
-
-    var $statusButton = $('#status-button');
     var $saveButton = $('#update-details-button');
-    let status
 
     function getDetails(id) {
         InfoMessageDisplay('Loading details...');
@@ -241,13 +241,10 @@ $sql = $conn->query("SELECT
                     id
                 },
                 success: function(response) {
-
                     const result = JSON.parse(response);
                     switch (result.status) {
                         case "success":
-                            setTimeout(() => {
-                                setData(result.data);
-                            }, 0);
+                            setData(result.data);
                             break;
 
                         case "sessionExpired":
@@ -283,33 +280,17 @@ $sql = $conn->query("SELECT
         $('#category').val(data.category);
         $('#sku').val(data.sku);
         $('#barcode').val(data.code);
-        status = data.status;
+        $('#product_status').val(data.status);
 
-        if (status == 1) {
-            $statusButton.removeClass('btn-success').addClass('btn-danger').text('Inactive').data('barcode', data.code).data('status', 1);
-            console.log('active');
+        if (data.status == 1) {
+            $('#product_status').removeClass('border-danger').addClass('border-success');
         } else {
-            $statusButton.removeClass('btn-danger').addClass('btn-success').text('Active').data('barcode', data.code).data('status', 0);
-            console.log('inactive');
+            $('#product_status').removeClass('border-success').addClass('border-danger');
         }
     }
 
-    $statusButton.on('click', function() {
-        const barcode = $(this).data('barcode');
-        const status = $(this).data('status');
-
-        switch (status) {
-            case 0:
-                handleStatus(barcode, 1);
-                break;
-
-            case 1:
-                handleStatus(barcode, 0);
-                break;
-        }
-    });
-
-    function handleStatus(barcode, status) {
+    function handleStatus(status) {
+        const barcode = $('#barcode').val();
         $.ajax({
             url: "actions/product/updateStatus.php",
             method: "POST",
@@ -324,9 +305,9 @@ $sql = $conn->query("SELECT
                         case "success":
                             $("#item-data-modal").modal("hide");
                             SuccessMessageDisplay(result.message);
-                            setTimeout(() => {
-                                location.reload();
-                            }, 4000);
+                            // setTimeout(() => {
+                            //     location.reload();
+                            // }, 4000);
                             break;
 
                         case "sessionExpired":
@@ -354,16 +335,23 @@ $sql = $conn->query("SELECT
     }
 
     $saveButton.on('click', function() {
-        const barcode = $('#barcode').val().trim();
-        const original_barcode = $('#original_barcode').val().trim();
-        const product_name = $('#product_name').val().trim();
+        const product_id = $('#product_id').val().trim() || null;
+        const product_name = $('#product_name').val().trim() || null;
+        const product_brand = $('#product_brand').val().trim() || null;
+        const category = $('#category').val().trim() || null;
+        const sku = $('#sku').val().trim() || null;
+        const barcode = $('#barcode').val().trim() || null;
+
         $.ajax({
             url: "actions/product/updateProductDetails.php",
             method: "POST",
             data: {
-                barcode,
-                original_barcode,
+                product_id,
                 product_name,
+                product_brand,
+                category,
+                sku,
+                barcode,
             },
             success: function(response) {
                 try {
@@ -374,7 +362,19 @@ $sql = $conn->query("SELECT
                             SuccessMessageDisplay(result.message);
                             setTimeout(() => {
                                 location.reload();
-                            }, 4000);
+                            }, 3000);
+                            break;
+
+                        case "sessionExpired":
+                            handleExpiredSession(result.message);
+                            break;
+
+                        case "error":
+                            ErrorMessageDisplay(result.message);
+                            break;
+
+                        default:
+                            ErrorMessageDisplay("An unknown error occurred.");
                             break;
                     }
                 } catch (error) {
