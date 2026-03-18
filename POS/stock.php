@@ -40,7 +40,7 @@ $cost = 0;
     <?php include("part/sidebar.php"); ?>
     <!--  Sidebar end -->
 
-    <div class="content-wrapper">
+    <div class="content-wrapper bgdrk">
 
       <!-- Main content -->
       <section class="content bg-dark">

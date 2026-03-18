@@ -71,7 +71,7 @@ if (!isset($_SESSION['store_id'])) {
                       FROM `wastage_batches`
                       INNER JOIN shop ON wastage_batches.shop_id = shop.shopId
                       INNER JOIN users us1 ON wastage_batches.created_by = us1.id
-                      INNER JOIN users us2 ON wastage_batches.approved_by = us2.id
+                      LEFT JOIN users us2 ON wastage_batches.approved_by = us2.id
                       ORDER BY created DESC LIMIT 100");
                       while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
                         <tr>
@@ -124,7 +124,7 @@ if (!isset($_SESSION['store_id'])) {
                               if ($grn_details_data["status"] == 0) {
                               ?>
                               <button class="btn btn-success btn-sm" onclick="showAcceptModal(this)">
-                                <i class="fa fa-edit"> Accept </i>
+                                <i class="fa fa-edit"> Finalize </i>
                               </button>
                             <?php
                               } else {
