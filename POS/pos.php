@@ -134,11 +134,11 @@ if (!isset($_SESSION['store_id'])) {
                       <?php
                       $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
-                      ?>
+                        ?>
                         <option value="<?= $payment_type_row['payment_type_id'] ?>">
                           <?= $payment_type_row['payment_type'] ?>
                         </option>
-                      <?php
+                        <?php
                       }
                       ?>
                     </select>
@@ -167,7 +167,8 @@ if (!isset($_SESSION['store_id'])) {
                 <div class="input-group col-4 pt-2">
                   <div class="col-1 m-2">
                     <input type="checkbox" id="hasChy" onclick="$('#regNo').prop('disabled', !this.checked).val('');
-                      $('#patientName').prop('disabled', this.checked).val('').focus();  $('#contactNo').text('')" checked>
+                      $('#patientName').prop('disabled', this.checked).val('').focus();  $('#contactNo').text('')"
+                      checked>
                   </div>
                   <div class="col-8" id="regNoField">
                     <input type="text" id="regNo" name="regNo" class="form-control" placeholder="CHY/"
@@ -178,7 +179,8 @@ if (!isset($_SESSION['store_id'])) {
 
                 <!-- Patient Name Start -->
                 <div class="col-3 pt-2">
-                  <input type="text" class="col-12 form-control" id="patientName" name="patientName" placeholder="Patient Name" disabled />
+                  <input type="text" class="col-12 form-control" id="patientName" name="patientName"
+                    placeholder="Patient Name" disabled />
                 </div>
                 <!-- Patient Name End -->
 
@@ -189,11 +191,11 @@ if (!isset($_SESSION['store_id'])) {
                     <?php
                     $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
                     while ($doctors_row = $doctors_rs->fetch_assoc()) {
-                    ?>
+                      ?>
                       <option value="<?= $doctors_row['name'] ?>">
                         <?= $doctors_row['name'] ?>
                       </option>
-                    <?php
+                      <?php
                     }
                     ?>
                   </select>
@@ -232,11 +234,11 @@ if (!isset($_SESSION['store_id'])) {
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
                   while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
-                  ?>
+                    ?>
                     <option value="<?= $bill_type_row['bill_type_id'] ?>">
                       <?= $bill_type_row['bill_type_name'] ?>
                     </option>
-                  <?php
+                    <?php
                   }
                   ?>
                 </select>
@@ -270,7 +272,8 @@ if (!isset($_SESSION['store_id'])) {
                 <!-- Search, Add paththu and, Doctor Medicine Buttons Start -->
                 <div class="input-group mt-3 form-group ">
                   <input type="search" class="form-control mx-1" name="productSearch" id="productSearch"
-                    oninput="if(this.value.length>1)searchProducts(this.value.trim()); return false;" placeholder="Search..." onfocus="this.value='';">
+                    oninput="if(this.value.length>1)searchProducts(this.value.trim()); return false;"
+                    placeholder="Search..." onfocus="this.value='';">
                   <button class="btn btn-outline-success mx-1" data-toggle="modal"
                     data-target="#addPaththuModal">Paththu</button>
                   <button class="btn btn-outline-info mx-1" data-toggle="modal"
@@ -314,13 +317,13 @@ if (!isset($_SESSION['store_id'])) {
                       <option value="Badata Paththuwa">Badata Paththuwa</option>
                       <option value="Bellata Paththuwa">Bellata Paththuwa</option>
                       <option value="Danahisa Idiripasa Paththuwa">Danahisa Idiripasa Paththuwa</option>
-                      <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa </option>
+                      <option value="Danahisa Pitupasa Paththuwa">Danahisa Pitupasa Paththuwa</option>
                       <option value="Danahisata Paththuwa">Danahisata Paththuwa</option>
                       <option value="Gaath Paththuwa">Gaath Paththuwa</option>
                       <option value="Kalawata Paththuwa">Kalawata Paththuwa</option>
                       <option value="Kakulata Paththuwa">Kakulata Paththuwa</option>
                       <option value="Kenda Paththuwa">Kenda Paththuwa</option>
-                      <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa </option>
+                      <option value="Konda Pitupasata Paththuwa">Konda Pitupasata Paththuwa</option>
                       <option value="Pitata Paththuwa">Pitata Paththuwa</option>
                       <option value="Thattamata Paththuwa">Thattamata Paththuwa</option>
                       <option value="Urahisa Pitupasata Paththuwa">Urahisa Pitupasata Paththuwa</option>
@@ -451,7 +454,7 @@ if (!isset($_SESSION['store_id'])) {
           WHERE `customize_bill_shop-id` = '$shop_id'
           ");
           $bill_data = $bill_data_rs->fetch_assoc();
-      ?>
+          ?>
           <div class="d-flex justify-content-center">
             <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
               <div class="row gap-1">
@@ -467,7 +470,7 @@ if (!isset($_SESSION['store_id'])) {
                             <h3>
                               <b>
                                 <?php //echo $bill_data['shopName'] 
-                                ?>
+                                    ?>
                               </b>
                             </h3>
                           </label>
@@ -491,18 +494,30 @@ if (!isset($_SESSION['store_id'])) {
                   </tr>
                 </table>
 
-                <div class="col-12">
-                  <div class="row">
-                    <div class="col-12" style="text-align: center;">
-                      <span><span class="text-left" style="font-size: 10px;"><?= $currentDate ?>
-                        </span><span class="text-right"> <?= $currentTime ?></span> </span>
-                      <br>
-                      <span><span class="invoicePatientName" id="invoicePatientName"></span> <span
-                          id="InvoiceContactNumber"></span></span>
-                      <br>
-                      <span><span class="fw-bold"><?= $user_name ?> Inv.</span> <span class="fw-bolder"
-                          style="font-size: 10px;" id="invoiceNumber"></span></span>
-                    </div>
+                <!-- <div style="text-align: center;"> -->
+                <div class="row px-2" style="font-size: 10px;">
+                  <div class="d-flex justify-content-between w-100">
+                    <span>Reg. ID :</span>
+                    <span class="fw-bolder" id="invoicePatientReg"></span>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <span>Name :</span>
+                    <span class="fw-bolder" id="invoicePatientName"></span>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <span>Contact No :</span>
+                    <span class="fw-bolder" id="invoiceContactNumber"></span>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <span>Cashier :</span>
+                    <span class="fw-bolder "><?= $user_name ?></span>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <span class="fw-bolder" id="invoiceNumber"></span>
+                    <span class="fw-bold">
+                      <?= $currentDate ?>
+                      <?= $currentTime ?>
+                    </span>
                   </div>
                 </div>
 
@@ -542,11 +557,12 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="col-12 d-flex justify-content-center">
                           <div class="check-by-box">
                             <center>
-                              <label style="font-weight:bold; margin-bottom:3px;">Checked
-                                By</label>
+                              <label style="font-weight:bold; margin-bottom:3px;">
+                                Checked BY
+                              </label>
                             </center>
 
-                            <label for="date">Date: <?= $currentDate ?><?= $currentTime ?></label>
+                            <label for="date">Date: <?= $currentDate ?>     <?= $currentTime ?></label>
 
                             <label for="emp-no">EMP No:.............................</label>
 
@@ -560,7 +576,7 @@ if (!isset($_SESSION['store_id'])) {
               </table>
             </div>
           </div>
-      <?php
+          <?php
         }
       }
       ?>
@@ -573,7 +589,7 @@ if (!isset($_SESSION['store_id'])) {
 <script src="dist/js/pos.js"></script>
 
 <script>
-  $(function() {
+  $(function () {
     //Initialize Select2 Elements
     $(".doctorSelect").select2();
   });
