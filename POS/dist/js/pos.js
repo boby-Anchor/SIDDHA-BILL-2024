@@ -25,9 +25,12 @@ function fetchPatient(chyNumber) {
             }),
             success: function (response) {
                 $("#regNo").val(response.profileData.ch_patient_id);
+                $("#invoicePatientReg").text(response.profileData.ch_patient_id);
                 $("#patientName").val(response.profileData.name);
+                $("#invoicePatientName").text(response.profileData.name);
                 $("#titleName").text(response.profileData.name);
                 $("#contactNo").text(response.profileData.whatsapp_no);
+                $("#invoiceContactNumber").text(response.profileData.whatsapp_no);
                 SuccessMessageDisplay(response.message);
             },
             error: function (xhr, status, error) {
@@ -854,11 +857,13 @@ function generateInvoiceHTML(itemData, dMData, billData) {
             if (product.isPaththu === 0) {
                 const product_name = product.product_name || "Product";
                 const product_brand = product.product_brand || "";
-                const product_cost = product.product_cost || "Price";
+                const product_cost = product.product_cost || "Cost";
+                const item_price = product.item_price || "Price";
                 const product_qty = product.product_qty || "Qty";
                 const productTotal = product.productTotal || "Total";
 
-                html += `
+                if (product_cost == item_price) {
+                    html += `
                     <div class="col-12">
                         <div class="row">
                             <div class="col-12">
@@ -877,6 +882,27 @@ function generateInvoiceHTML(itemData, dMData, billData) {
                         </div>
                     </div>
                 `;
+                } else {
+                    html += `
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="product_name">${product_name}</span><br/>
+                                <span class="product_brand">${product_brand}</span>
+                            </div>
+                            <div class="col-4">
+                                <span class="product_cost">${productTotal}</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span class="product_qty">1</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span class="productTotal">${productTotal}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                }
             }
         });
     }
