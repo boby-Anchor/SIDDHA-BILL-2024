@@ -180,16 +180,14 @@ if ($cm->num_rows == 0 && !empty($billData)) {
 
                         if ($item_price == $product_cost) {
                             try {
-                                $total_qty = $product_qty * 1000;
-                                $sell_p_qty = ($total_qty / $ucv);
+                                $total_qty = $product_qty * $ucv * 1000;
 
                                 $conn->query("UPDATE stock2 SET
                                     stock_item_qty = (stock_item_qty - $product_qty),
                                     stock_mu_qty = (stock_mu_qty - $total_qty)
-                                    WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code'
-                                    OR stock_minimum_unit_barcode = '$code')
-                                    AND (item_s_price = '$product_cost'
-                                    OR unit_s_price = '$product_cost')");
+                                    WHERE stock_shop_id = '$shop_id'
+                                    AND stock_item_code = '$code'
+                                    AND item_s_price = '$product_cost'");
                             } catch (Exception $exception) {
                                 error_log("Item error kg/l.\n" . $exception->getMessage());
                             }
@@ -198,8 +196,8 @@ if ($cm->num_rows == 0 && !empty($billData)) {
                                 $conn->query("UPDATE stock2 SET
                                 stock_item_qty = (stock_item_qty - ROUND($product_qty / ($ucv * 1000), 3)),
                                 stock_mu_qty = (stock_mu_qty - $product_qty)
-                                WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' 
-                                OR stock_minimum_unit_barcode = '$code')
+                                WHERE stock_shop_id = '$shop_id'
+                                AND stock_item_code = '$code'
                                 AND unit_s_price = '$product_cost'");
                             } catch (Exception $exception) {
                                 error_log("Mu error kg/l\n" . $exception->getMessage());
@@ -210,27 +208,23 @@ if ($cm->num_rows == 0 && !empty($billData)) {
                         if ($item_price == $product_cost) {
                             try {
                                 $total_qty = $product_qty * $ucv;
-                                $sell_p_qty = ($total_qty / $ucv);
 
                                 $conn->query("UPDATE stock2 SET
-                                    stock_item_qty = (stock_item_qty - $sell_p_qty),
+                                    stock_item_qty = (stock_item_qty - $product_qty),
                                     stock_mu_qty = (stock_mu_qty - $total_qty)
                                     WHERE stock_shop_id = '$shop_id'
-                                    AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                                    AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
+                                    AND stock_item_code = '$code'
+                                    AND item_s_price = '$product_cost'");
                             } catch (Exception $exception) {
                                 error_log("Item error g/ml\n" . $exception->getMessage());
                             }
                         } else {
                             try {
-                                $total_qty = $product_qty * 1000;
-                                $sell_p_qty = ($total_qty / $ucv);
-
                                 $conn->query("UPDATE stock2 SET
                                     stock_item_qty = (stock_item_qty - ROUND($product_qty / $ucv, 3)),
                                     stock_mu_qty = (stock_mu_qty - $product_qty)
                                     WHERE stock_shop_id = '$shop_id' 
-                                    AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                                    AND stock_item_code = '$code'
                                     AND unit_s_price = '$product_cost'");
                             } catch (Exception $exception) {
                                 error_log("Mu error g/ml\n" . $exception->getMessage());
@@ -240,13 +234,13 @@ if ($cm->num_rows == 0 && !empty($billData)) {
 
                         if ($item_price == $product_cost) {
                             try {
-                                $product_minimum_qty = $product_qty * 100;
+                                $product_minimum_qty = $product_qty * $ucv * 100;
 
                                 $conn->query("UPDATE stock2 SET
                                     stock_item_qty = (stock_item_qty -  $product_qty),
                                     stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
                                     WHERE stock_shop_id = '$shop_id'
-                                    AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
+                                    AND stock_item_code = '$code'
                                     AND item_s_price = '$product_cost'");
                             } catch (Exception $exception) {
                                 error_log("Item error m\n" . $exception->getMessage());
@@ -255,10 +249,11 @@ if ($cm->num_rows == 0 && !empty($billData)) {
                             try {
                                 $product_minimum_qty = $product_qty;
                                 $conn->query("UPDATE stock2 SET
-                            stock_item_qty = ROUND((stock_mu_qty - $product_minimum_qty) / 100, 2), 
-                            stock_mu_qty = (stock_mu_qty - $product_minimum_qty)
-                            WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' OR stock_minimum_unit_barcode = '$code')
-                            AND unit_s_price = '$product_cost'");
+                                stock_item_qty = stock_item_qty - ROUND($product_minimum_qty / ($ucv * 100), 3),
+                                stock_mu_qty   = stock_mu_qty - $product_minimum_qty
+                                WHERE stock_shop_id = '$shop_id'
+                                AND stock_item_code = '$code'
+                                AND unit_s_price = '$product_cost'");
                             } catch (Exception $exception) {
                                 error_log("Mu error m\n" . $exception->getMessage());
                             }
@@ -268,14 +263,13 @@ if ($cm->num_rows == 0 && !empty($billData)) {
                             $conn->query("UPDATE stock2 SET stock_item_qty = (stock_item_qty - $product_qty)
                                 WHERE stock_shop_id = '$shop_id'
                                 AND stock_item_code = '$code'
-                                AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
+                                AND item_s_price = '$product_cost'");
                         } catch (Exception $exception) {
                             error_log("Item error\n" . $exception->getMessage());
                         }
                     }
                     // else {
-                    //     $qty_rs = $conn->query("SELECT * FROM stock2 WHERE (stock_item_code = '$code' 
-                    // OR stock_minimum_unit_barcode = '$code')
+                    //     $qty_rs = $conn->query("SELECT * FROM stock2 WHERE stock_item_code = '$code'
                     // AND stock_shop_id = '$shop_id' AND (unit_s_price = '$product_cost' 
                     // OR item_s_price = '$product_cost')");
 
@@ -292,8 +286,7 @@ if ($cm->num_rows == 0 && !empty($billData)) {
 
                     //     $conn->query("UPDATE stock2 SET stock_item_qty = $new_stock_item_qty, 
                     // stock_mu_qty = (stock_mu_qty - $product_qty)
-                    // WHERE stock_shop_id = '$shop_id' AND (stock_item_code = '$code' 
-                    // OR stock_minimum_unit_barcode = '$code')
+                    // WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code'
                     // AND (item_s_price = '$product_cost' OR unit_s_price = '$product_cost')");
                     // }
                 } else {
