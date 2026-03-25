@@ -27,10 +27,8 @@ function fetchPatient(chyNumber) {
                 $("#regNo").val(response.profileData.ch_patient_id);
                 $("#invoicePatientReg").text(response.profileData.ch_patient_id);
                 $("#patientName").val(response.profileData.name);
-                $("#invoicePatientName").text(response.profileData.name);
                 $("#titleName").text(response.profileData.name);
                 $("#contactNo").text(response.profileData.whatsapp_no);
-                $("#invoiceContactNumber").text(response.profileData.whatsapp_no);
                 SuccessMessageDisplay(response.message);
             },
             error: function (xhr, status, error) {
@@ -738,7 +736,6 @@ function checkout(itemData) {
     var selectBillType = $("#selectBillType").val();
 
     $("#invoicePatientName").text(patientName);
-    $("#InvoiceContactNumber").text(contactNo);
 
     var bData = {
         patientName: patientName,
