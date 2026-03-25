@@ -505,15 +505,15 @@ if (!isset($_SESSION['store_id'])) {
                     <span class="fw-bolder" id="invoicePatientName"></span>
                   </div>
                   <div class="d-flex justify-content-between w-100">
-                    <span>Contact No :</span>
-                    <span class="fw-bolder" id="invoiceContactNumber"></span>
-                  </div>
-                  <div class="d-flex justify-content-between w-100">
                     <span>Cashier :</span>
                     <span class="fw-bolder "><?= $user_name ?></span>
                   </div>
                   <div class="d-flex justify-content-between w-100">
+                    <span>Invoice No :</span>
                     <span class="fw-bolder" id="invoiceNumber"></span>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <span>Time :</span>
                     <span class="fw-bold">
                       <?= $currentDate ?>
                       <?= $currentTime ?>
