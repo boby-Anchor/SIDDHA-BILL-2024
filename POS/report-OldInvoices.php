@@ -14,7 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['invoiceNumber'])) {
         $invoiceNumber = $_POST['invoiceNumber'];
 
-        $invResult = $conn->query("SELECT invoices.*, users.name AS cashier, shop.shopName AS shop, bill_type.bill_type_name AS billType,
+        $invResult = $conn->query("SELECT invoices.*,
+        users.name AS cashier,
+        shop.shopName AS shop,
+        bill_type.bill_type_name AS billType,
         payment_type.payment_type AS paymentType
         FROM invoices
         INNER JOIN users ON invoices.user_id = users.id
@@ -25,8 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
         $invoiceData = $invResult->fetch_all(MYSQLI_ASSOC);
 
-        $result = $conn->query("SELECT *
+        $result = $conn->query("SELECT invoiceitems.invoiceItem_qty,
+        invoiceitems.invoiceItem,
+        invoiceitems.invoiceItem_price,
+        invoiceitems.invoiceItem_total,
+        invoiceitems.isPaththu,
+        invoiceitems.invoiceItem_unit,
+        p_brand.name as brand
         FROM invoiceitems
+        LEFT JOIN p_medicine ON invoiceitems.barcode = p_medicine.code
+        JOIN p_brand ON p_medicine.brand = p_brand.id
         WHERE invoiceNumber = '$invoiceNumber';
         ");
         $items = $result->fetch_all(MYSQLI_ASSOC);
@@ -280,22 +291,29 @@ $totalValue = 0;
                                     </tr>
                                 </table>
 
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-12" style="text-align: center;">
-                                            <span><span class="text-left"
-                                                    style="font-size: 10px;"><?= date("Y-m-d", strtotime($invData['created'])) ?>
-                                                </span><span class="text-right">
-                                                    <?= date("H:i:s", strtotime($invData['created'])); ?></span> </span>
-                                            <br>
-                                            <span><span class="invoicePatientName"
-                                                    id="invoicePatientName"><?= $invData['p_name'] ?></span> <span
-                                                    id="InvoiceContactNumber"><?= $invData['contact_no'] ?></span></span>
-                                            <br>
-                                            <span><span class="fw-bold"><?= $invData['cashier'] ?> Inv.</span> <span
-                                                    class="fw-bolder" style="font-size: 10px;"
-                                                    id="invoiceNumber"><?= $invoiceNumber ?></span></span>
-                                        </div>
+                                <div class="row px-2" style="font-size: 10px;">
+                                    <div class="d-flex justify-content-between w-100">
+                                        <span>Reg. ID :</span>
+                                        <span class="fw-bolder"><?= $invData['reg'] ?></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between w-100">
+                                        <span>Name :</span>
+                                        <span class="fw-bolder"><?= $invData['p_name'] ?></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between w-100">
+                                        <span>Cashier :</span>
+                                        <span class="fw-bolder "><?= $invData['cashier'] ?> </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between w-100">
+                                        <span>Invoice No :</span>
+                                        <span class="fw-bolder"><?= $invoiceNumber ?></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between w-100">
+                                        <span>Time :</span>
+                                        <span class="fw-bold">
+                                            <?= date("Y-m-d", strtotime($invData['created'])) ?>
+                                            <?= date("H:i:s", strtotime($invData['created'])); ?>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -318,44 +336,44 @@ $totalValue = 0;
                             <!-- table header end -->
                             <div class="printInvoiceData" id="printInvoiceData">
                                 <?php
-                                if (!empty($dmItems) || !empty($items)) {
+                                if (!empty($dmItems)) {
 
-                                    if (!empty($dmItems)) {
-
-                                        foreach ($dmItems as $dmItem) {
+                                    foreach ($dmItems as $dmItem) {
 
                                 ?>
-                                            <div class="col-12">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <span class="product_name"><?= $dmItem['dmName'] ?></span>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <span class="product_cost"><?= $dmItem['totalPrice'] ?></span>
-                                                    </div>
-                                                    <div class="col-4 text-center">
-                                                        <span class="product_qty">
-                                                            1
-                                                        </span>
-                                                    </div>
-                                                    <div class="col-4 text-center">
-                                                        <span class="productTotal"><?= $dmItem['totalPrice'] ?></span>
-                                                    </div>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span class="product_name"><?= $dmItem['dmName'] ?></span>
+                                                </div>
+                                                <div class="col-4">
+                                                    <span class="product_cost"><?= $dmItem['totalPrice'] ?></span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="product_qty">
+                                                        1
+                                                    </span>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <span class="productTotal"><?= $dmItem['totalPrice'] ?></span>
                                                 </div>
                                             </div>
+                                        </div>
                                         <?php
-                                        }
                                     }
+                                }
 
-                                    if (!empty($items)) {
+                                if (!empty($items)) {
 
-                                        foreach ($items as $item) {
-
+                                    foreach ($items as $item) {
+                                        if ($item['isPaththu'] == 0) {
                                         ?>
                                             <div class="col-12">
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <span class="product_name"><?= $item['invoiceItem'] ?></span>
+                                                        <br>
+                                                        <span class="product_brand"><?= $item['brand'] ?></span>
                                                     </div>
                                                     <div class="col-4">
                                                         <span class="product_cost"><?= $item['invoiceItem_price'] ?></span>
@@ -368,49 +386,39 @@ $totalValue = 0;
                                                     </div>
                                                 </div>
                                             </div>
-                                    <?php
+                                <?php
                                         }
                                     }
-
-                                    ?>
-
-                                    <div class="col-12">
-                                        <div class="row">
-
-                                            <div class="col-12 d-flex justify-content-start pt-2"
-                                                style="border-top: #0e0e0e 0.2rem solid;">
-                                                <span class="netTotal">Net Total : <?= $invData['total_amount'] ?></span>
-                                            </div>
-                                            <div class="col-12 d-flex justify-content-start pt-2"
-                                                style="border-top: #0e0e0e 0.2rem solid;">
-                                                <span class="productsAllTotal">DDiscount % : <?= $invData['discountPercentage'] ?></span>
-                                            </div>
-
-                                            <div class="col-12 d-flex justify-content-start pt-2">
-                                                <span class="enterAmountFiled">Cash Amount :<?= $invData['paidAmount'] ?></span>
-                                            </div>
-                                            <div class="col-12 d-flex justify-content-start pt-2"
-                                                style="border-bottom: #0e0e0e 0.2rem solid;">
-                                                <span class="enterAmountFiled">Card Amount :<?= $invData['cardPaidAmount'] ?></span>
-                                            </div>
-
-                                            <div class="col-12 d-flex justify-content-start pt-2"
-                                                style="border-bottom: #0e0e0e 0.2rem solid;">
-                                                <span class="balance">Balance : <?= $invData['balance'] ?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                <?php
-
-                                } else {
-                                ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center">No Data</td>
-                                    </tr>
-                                <?php
                                 }
                                 ?>
+
+                                <div class="col-12">
+                                    <div class="row">
+
+                                        <div class="col-12 d-flex justify-content-start pt-2"
+                                            style="border-top: #0e0e0e 0.2rem solid;">
+                                            <span class="netTotal">Net Total : <?= $invData['total_amount'] ?></span>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-start pt-2"
+                                            style="border-top: #0e0e0e 0.2rem solid;">
+                                            <span class="productsAllTotal">Discount % : <?= $invData['discount_percentage'] ?></span>
+                                        </div>
+
+                                        <div class="col-12 d-flex justify-content-start pt-2">
+                                            <span class="enterAmountFiled">Cash Amount :<?= $invData['paidAmount'] ?></span>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-start pt-2"
+                                            style="border-bottom: #0e0e0e 0.2rem solid;">
+                                            <span class="enterAmountFiled">Card Amount :<?= $invData['cardPaidAmount'] ?></span>
+                                        </div>
+
+                                        <div class="col-12 d-flex justify-content-start pt-2"
+                                            style="border-bottom: #0e0e0e 0.2rem solid;">
+                                            <span class="balance">Balance : <?= $invData['balance'] ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                             <table>
                                 <tr style="font-weight: 600;">
