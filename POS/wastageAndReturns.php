@@ -93,6 +93,7 @@ if (!isset($_SESSION['store_id'])) {
                                     <th scope="col">#</th>
                                     <th scope="col">Barcode</th>
                                     <th scope="col">Item Name</th>
+                                    <th scope="col">Brand</th>
                                     <th scope="col">Qty</th>
                                     <th scope="col">Item Price</th>
                                     <th scope="col">Total Value</th>
@@ -101,13 +102,17 @@ if (!isset($_SESSION['store_id'])) {
                                 <tbody>
                                   <?php
                                   $itemCount = 1;
-                                  $poItems_result = $conn->query("SELECT * FROM wastage_batch_items INNER JOIN p_medicine ON wastage_batch_items.barcode = p_medicine.code 
+                                  $poItems_result = $conn->query("SELECT wastage_batch_items.*, p_brand.name AS brand, p_medicine.name
+                                  FROM wastage_batch_items
+                                  INNER JOIN p_medicine ON wastage_batch_items.barcode = p_medicine.code
+                                  INNER JOIN p_brand ON p_medicine.brand = p_brand.id
                                   WHERE wastage_batch_id = '" . $grn_details_data["id"] . "'");
                                   while ($poItems_data = $poItems_result->fetch_array()) { ?>
                                     <tr>
                                       <td><?= $itemCount++ ?></td>
                                       <td><?= $poItems_data["barcode"] ?></td>
                                       <td><?= $poItems_data["name"] ?></td>
+                                      <td><?= $poItems_data["brand"] ?></td>
                                       <td><?= $poItems_data["qty"] ?></td>
                                       <td><?= $poItems_data["item_price"] ?></td>
                                       <td><?= $poItems_data["total_price"] ?></td>
