@@ -41,14 +41,15 @@ try {
     s.stock_id,
     s.unit_s_price AS unit_price,
     s.item_s_price AS item_price,
-    s.stock_item_qty AS qty
+    s.stock_item_qty AS qty,
+    s.stock_mu_qty AS mu_qty
     FROM stock2 AS s
     WHERE s.stock_shop_id = '$shop_id'
     AND s.stock_item_code = '$barcode'
     AND (
-        (s.stock_shop_id = '9' AND s.stock_item_qty > 0)
+        (s.stock_shop_id IN ('1','2','7','9') AND s.stock_item_qty > 0)
         OR
-        (s.stock_shop_id <> '9')
+        (s.stock_shop_id NOT IN ('1','2','7','9'))
       );
     ");
 
