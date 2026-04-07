@@ -85,6 +85,17 @@ if (!isset($_SESSION['store_id'])) {
                               </button>
                               <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; top: 36px; left: 0px; will-change: top, left;">
                                 <a class="dropdown-item text-info" href="#" data-toggle="modal" data-target="#edit<?php echo $row['id']; ?>"> <i class="fa fa-edit"></i> Edit </a>
+                                <?php
+                                if ($row['status'] == 1) {
+                                ?>
+                                  <a class="dropdown-item text-dark bg-opacity-25 fw-semibold" href="actions/remove.php?removeCategory=<?php echo $row['id']; ?>&status=0"> ❌ Inactive </a>
+                                <?php
+                                } else {
+                                ?>
+                                  <a class="dropdown-item text-dark bg-opacity-25 fw-semibold" href="actions/remove.php?removeCategory=<?php echo $row['id']; ?>&status=1"> ✅ Active </a>
+                                <?php
+                                }
+                                ?>
                               </div>
                             </div>
                           </td>

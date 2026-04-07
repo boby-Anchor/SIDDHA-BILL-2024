@@ -58,7 +58,7 @@ if (isset($_POST["action2"])) {
 
 // From `category` list page
 if (isset($_GET['removeCategory'])) {
-  $conn->query("DELETE FROM `p_medicine_category` WHERE `store`='$_SESSION[store_id]' AND `id`='$_GET[removeCategory]'");
+  $conn->query("UPDATE `p_medicine_category` SET `status`='$_GET[status]'  WHERE `id`='$_GET[removeCategory]'");
   echo "<script>window.history.back();</script>";
 }
 
