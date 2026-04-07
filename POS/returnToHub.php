@@ -242,11 +242,28 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Wastage details modal start -->
     <div class="modal" id="wastageDetailsModal" role="dialog">
         <div class="modal-dialog modal-md d-flex justify-content-between ">
-            <div class="modal-content bg-dark align-items-center">
+            <div class="modal-content bg-dark p-5">
+
+                <div class="w-100">
+                    <label for="wastageReasonSelect" class="form-label">
+                        Reason
+                    </label>
+                    <select class="form-control select2 ct-select2" id="wastageReasonSelect">
+                        <option value="0" selected hidden>Select Return Reason</option>
+                        <?php
+                        $sql = $conn->query("SELECT * FROM `wastage_reasons`");
+                        while ($row = mysqli_fetch_assoc($sql)) {
+                        ?>
+                            <option><?= $row['reason']; ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
 
 
-                <div class="m-5">
-                    <label for="wastageDescription" class="form-label  fw-semibold">
+                <div class="mt-3 w-100">
+                    <label for="wastageDescription" class="form-label fw-semibold">
                         Details
                     </label>
 
@@ -461,7 +478,7 @@ if (!isset($_SESSION['store_id'])) {
                         break;
 
                     case "error":
-                        handleExpiredSession(result.message);
+                        ErrorMessageDisplay(result.message);
                         break;
 
                     default:
@@ -616,9 +633,19 @@ if (!isset($_SESSION['store_id'])) {
 
         var sub_total = $("#subTotal").text().trim() || null;
         var wastageDescription = $("#wastageDescription").val().trim() || null;
+        var wastageReasonSelect = $("#wastageReasonSelect").val().trim() || null;
 
+        console.log(wastageReasonSelect);
+
+
+        if (wastageReasonSelect == null || wastageReasonSelect == 0) {
+            ErrorMessageDisplay("Select reason.!")
+            showDetailsModal();
+            enableCheckoutButton();
+            return;
+        }
         if (wastageDescription == null || wastageDescription == '') {
-            ErrorMessageDisplay("Enter description")
+            ErrorMessageDisplay("Enter description.!")
             showDetailsModal();
             enableCheckoutButton();
             return;
@@ -629,7 +656,8 @@ if (!isset($_SESSION['store_id'])) {
 
         var bData = {
             sub_total,
-            wastageDescription
+            wastageDescription,
+            wastageReasonSelect
         }
         billData.push(bData);
 
