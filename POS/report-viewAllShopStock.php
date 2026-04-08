@@ -51,7 +51,8 @@ if (!isset($_SESSION['store_id'])) {
                                         <thead>
                                             <tr class="bg-info">
                                                 <th>Barcode</th>
-                                                <th>Product</th>
+                                                <th>Name</th>
+                                                <th>SKU</th>
                                                 <th>Brand</th>
                                                 <th>Volume</th>
                                                 <th>Price</th>
@@ -67,8 +68,13 @@ if (!isset($_SESSION['store_id'])) {
                                             if (isset($_SESSION['store_id'])) {
                                                 $userLoginData = $_SESSION['store_id'];
 
-                                                $sql = $conn->query("SELECT stock_item_code, stock_item_name, item_s_price, p_brand.name AS brand,
-                                                unit_category_variation.ucv_name, medicine_unit.unit,
+                                                $sql = $conn->query("SELECT stock_item_code,
+                                                item_s_price,
+                                                p_brand.name AS brand,
+                                                unit_category_variation.ucv_name,
+                                                medicine_unit.unit,
+                                                p_medicine.name,
+                                                p_medicine.sku,
                                                 SUM(CASE WHEN stock_shop_id = 1 THEN stock_item_qty ELSE 0 END) AS hub_qty,
                                                 SUM(CASE WHEN stock_shop_id = 2 THEN stock_item_qty ELSE 0 END) AS pharmacy_qty,
                                                 SUM(CASE WHEN stock_shop_id = 9 THEN stock_item_qty ELSE 0 END) AS YA_qty,
@@ -80,7 +86,20 @@ if (!isset($_SESSION['store_id'])) {
                                                 INNER JOIN unit_category_variation ON p_medicine.unit_variation = unit_category_variation.ucv_id
                                                 INNER JOIN medicine_unit ON unit_category_variation.p_unit_id = medicine_unit.id
                                                 WHERE p_medicine.status = '1'
-                                                GROUP BY stock_item_code, item_s_price
+                                                GROUP BY
+                                                stock_item_code,
+                                                item_s_price,
+                                                p_brand.name,
+                                                unit_category_variation.ucv_name,
+                                                medicine_unit.unit,
+                                                p_medicine.name,
+                                                p_medicine.sku
+                                                HAVING
+                                                hub_qty > 0 OR 
+                                                pharmacy_qty > 0 OR 
+                                                YA_qty > 0 OR 
+                                                RF_qty > 0 OR 
+                                                OS_qty > 0
                                                 ");
 
                                                 while ($row = mysqli_fetch_assoc($sql)) {
@@ -90,7 +109,8 @@ if (!isset($_SESSION['store_id'])) {
                                             ?>
                                                     <tr>
                                                         <td> <?= $row['stock_item_code']; ?> </td>
-                                                        <td><?= $row['stock_item_name']; ?></td>
+                                                        <td><?= $row['name']; ?></td>
+                                                        <td><?= $row['sku']; ?></td>
                                                         <td><?= $row['brand']; ?></td>
                                                         <td><?= $row['ucv_name']; ?><?= $row['unit']; ?></td>
                                                         <td><?= $row['item_s_price']; ?></td>
