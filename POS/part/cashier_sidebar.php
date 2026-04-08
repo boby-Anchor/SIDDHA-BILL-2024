@@ -3,15 +3,11 @@ if (isset($_SESSION['store_id'])) {
 
   $userLoginData = $_SESSION['store_id'];
 
-  // foreach ($userLoginData as $userData) {
-  //   $userName = $userData['name'];
-  //   $userId = $userData['id'];
-
   $userName = $userLoginData[0]['name'];
-  $userId = $userLoginData[0]['id'];
+  $user_id = $userLoginData[0]['id'];
   $shop_id = $userLoginData[0]['shop_id'];
 
-  $user_shop_rs = $conn->query("SELECT * FROM users INNER JOIN shop ON shop.shopId = users.shop_id INNER JOIN user_role ON user_role.user_role_id = users.user_role_id WHERE id = '$userId'");
+  $user_shop_rs = $conn->query("SELECT * FROM users INNER JOIN shop ON shop.shopId = users.shop_id INNER JOIN user_role ON user_role.user_role_id = users.user_role_id WHERE id = '$user_id'");
   $user_shop_data = $user_shop_rs->fetch_assoc();
 ?>
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -57,29 +53,31 @@ if (isset($_SESSION['store_id'])) {
 
           <!-- Edit stock for Yakkala Ayurveda Start -->
           <?php
-          if ($shop_id == 9 || $userId == 38) {
+          if ($shop_id == 9 || $shop_id == 1 || $user_id == 38) {
+            if ($user_id == 16) {
           ?>
-            <li class="nav-header"> Add Stock Items</li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
-                <p>
-                  Special
-                  <i class="fas fa-angle-left right"></i>
-                  <span class="badge badge-info right">1</span>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="edit-stock_new.php" class="nav-link">
-                    <i class="nav-icon fas fa-copy"></i>
-                    <i class=""></i>
-                    <p>Edit item Qty</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
+              <li class="nav-header"> Add Stock Items</li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Special CutOff
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">1</span>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="edit-stock_new.php" class="nav-link">
+                      <i class="nav-icon fas fa-copy"></i>
+                      <i class=""></i>
+                      <p>Edit item Qty</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
             <?php
+            }
             if ($shop_id == 9) {
             ?>
               <li class="nav-header"> Stock Item functions </li>
@@ -120,7 +118,7 @@ if (isset($_SESSION['store_id'])) {
           <!-- Edit stock for Yakkala Ayurveda End -->
 
           <!-- Refilling area -->
-          <?php if ($userId == 38) { ?>
+          <?php if ($user_id == 38) { ?>
 
             <li class="nav-item">
               <a href="#" class="nav-link">
@@ -170,7 +168,7 @@ if (isset($_SESSION['store_id'])) {
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="return-invoice.php" class="nav-link">
+                      <a href="returnToHub.php" class="nav-link">
                         <i class="nav-icon fas fa-reply-all"></i>
                         <p>Report</p>
                       </a>
@@ -184,6 +182,12 @@ if (isset($_SESSION['store_id'])) {
       <?php } ?>
 
       <!-- Cashier -->
+      <!-- <li class="nav-item">
+        <a href="report-cutoffStock.php" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Cutoff Stock 02-06</p>
+        </a>
+      </li> -->
       <li class="nav-header"> Cashier Functions </li>
       <li class="nav-item">
         <a href="#" class="nav-link">
@@ -209,7 +213,7 @@ if (isset($_SESSION['store_id'])) {
           </li>
 
           <li class="nav-item" disabled>
-            <a href="return-invoice.php" class="nav-link">
+            <a href="returnToHub.php" class="nav-link">
               <i class="nav-icon fas fa-reply-all"></i>
               <p>Return Invoice</p>
             </a>
@@ -294,6 +298,20 @@ if (isset($_SESSION['store_id'])) {
           </p>
         </a>
         <ul class="nav nav-treeview">
+
+          <?php
+          if ($user_id == 57) {
+          ?>
+            <li class="nav-item">
+              <a href="report-viewAllShopStock.php" class="nav-link">
+                <i class="nav-icon fas fa-medkit"></i>
+                <p>All shops item price</p>
+              </a>
+            </li>
+          <?php
+          }
+          ?>
+
           <li class="nav-item">
             <a href="report-dm-view.php" class="nav-link">
               <i class="nav-icon fas fa-medkit"></i>
