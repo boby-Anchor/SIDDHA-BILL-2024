@@ -7,6 +7,14 @@ if (!isset($_SESSION['store_id'])) {
     exit();
 } else {
     include('config/db.php');
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $start_date = $_POST['start_date'];
+        $end_date = $_POST['end_date'];
+    } else {
+        $start_date = date("Y-m-d");
+        $end_date = date("Y-m-d");
+    }
 }
 ?>
 
@@ -16,7 +24,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>View GRNs</title>
+    <title>GRNs Between <?= $start_date ?> And <?= $end_date ?></title>
 
     <!-- Data Table CSS -->
     <?php include("part/data-table-css.php"); ?>
@@ -41,7 +49,7 @@ if (!isset($_SESSION['store_id'])) {
         <!--  Sidebar end -->
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-dark">
             <!-- Main content -->
             <section class="content bg-dark">
                 <div class="container-fluid">
@@ -49,7 +57,33 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="col-12">
                             <div class="card bg-dark">
                                 <div class="card-header">
-                                    <h3 class="card-title">View Goods Receipt Notes</h3>
+                                    <h3>
+                                        View Goods Receipt Notes Between <?= $start_date ?> And <?= $end_date ?>
+                                    </h3>
+                                    <div class="border-top mb-3"></div>
+                                    <!-- Form start -->
+                                    <form method="POST" id="filterForm">
+                                        <div class="row g-3 accent-cyan align-items-center px-3">
+                                            <div class="col-auto">
+                                                <label for="start_date" class="col-form-label">Start Date:</label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="date" id="start_date" name="start_date" class="form-control"
+                                                    value="<?= $start_date ?>" required>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label for="end_date" class="col-form-label">End Date:</label>
+                                            </div>
+                                            <div class="col-auto">
+                                                <input type="date" id="end_date" name="end_date" class="form-control"
+                                                    value="<?= $end_date ?>" required>
+                                            </div>
+                                            <div class="ml-2">
+                                                <button type="submit" class="btn btn-outline-success">Filter</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <!-- Form end -->
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-bordered">
@@ -65,75 +99,77 @@ if (!isset($_SESSION['store_id'])) {
                                         </thead>
                                         <tbody>
                                             <?php
+                                            $grn_details_result = $conn->query("SELECT `grn`.*,
+                                                p_supplier.name AS supplier,
+                                                COUNT(grn_item.grn_number) AS item_count
+                                                FROM `grn`
+                                                LEFT JOIN p_supplier ON grn.supplier_id = p_supplier.id
+                                                INNER JOIN grn_item ON grn.grn_number = grn_item.grn_number
+                                                WHERE grn_date BETWEEN '" . date("Y-m-d 00:00:00", strtotime($start_date)) . "' AND '" . date("Y-m-d 00:00:00", strtotime($end_date)) .
+                                                "' GROUP BY grn.grn_number
+                                                ORDER BY grn_date DESC");
 
-                                            if (isset($_SESSION['store_id'])) {
+                                            if ($grn_details_result && $grn_details_result->num_rows > 0) {
 
-                                                $userLoginData = $_SESSION['store_id'];
-
-                                                foreach ($userLoginData as $userData) {
-                                                    $shop_id = $userData['shop_id'];
-                                                    $grn_details_result = $conn->query("SELECT `grn`.*, p_supplier.name AS supplier
-                                                    FROM `grn`
-                                                    LEFT JOIN p_supplier ON grn.supplier_id = p_supplier.id
-                                                    WHERE grn_shop_id = '$shop_id' ORDER BY grn_date DESC LIMIT 100");
-
-                                            ?>
-                                                    <?php while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
-                                                        <tr>
-                                                            <td><?= $grn_details_data["grn_number"] ?></td>
-                                                            <td><?= $grn_details_data["invoice_number"] ?></td>
-                                                            <td><?= $grn_details_data["supplier"] ?></td>
-                                                            <td>
-                                                                <?php
-                                                                $itemCount_result = $conn->query("SELECT COUNT(grn_number) AS grnItemsCount FROM grn_item WHERE grn_item.grn_number = '" . $grn_details_data["grn_number"] . "'");
-                                                                $itemCount_data = $itemCount_result->fetch_assoc();
-                                                                ?>
-                                                                <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $itemCount_data['grnItemsCount'] ?> </button>
-                                                                <ul class="dropdown-menu">
-                                                                    <table class="table" id="poItemsTable<?= $grn_details_data["grn_number"] ?>">
-                                                                        <thead>
+                                                while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
+                                                    <tr>
+                                                        <td><?= $grn_details_data["grn_number"] ?></td>
+                                                        <td><?= $grn_details_data["invoice_number"] ?></td>
+                                                        <td><?= $grn_details_data["supplier"] ?></td>
+                                                        <td>
+                                                            <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $grn_details_data["item_count"] ?> </button>
+                                                            <ul class="dropdown-menu">
+                                                                <table class="table" id="poItemsTable<?= $grn_details_data["grn_number"] ?>">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">#</th>
+                                                                            <th scope="col">Item Code</th>
+                                                                            <th scope="col">Item Name</th>
+                                                                            <th scope="col">Qty</th>
+                                                                            <th scope="col">Free Qty</th>
+                                                                            <th scope="col">Item Price</th>
+                                                                            <th scope="col">Total Value</th>
+                                                                            <th scope="col">Item Discount</th>
+                                                                            <th scope="col">Total Cost</th>
+                                                                            <th scope="col">Unit Cost</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php
+                                                                        $itemCount = 1;
+                                                                        $poItems_result = $conn->query("SELECT * FROM grn_item INNER JOIN p_medicine ON grn_item.grn_p_id = p_medicine.code WHERE grn_number = '" . $grn_details_data["grn_number"] . "'");
+                                                                        while ($poItems_data = $poItems_result->fetch_array()) { ?>
                                                                             <tr>
-                                                                                <th scope="col">#</th>
-                                                                                <th scope="col">Item Code</th>
-                                                                                <th scope="col">Item Name</th>
-                                                                                <th scope="col">Qty</th>
-                                                                                <th scope="col">Free Qty</th>
-                                                                                <th scope="col">Item Price</th>
-                                                                                <th scope="col">Total Value</th>
-                                                                                <th scope="col">Item Discount</th>
-                                                                                <th scope="col">Total Cost</th>
-                                                                                <th scope="col">Unit Cost</th>
+                                                                                <td><?= $itemCount++ ?></td>
+                                                                                <td><?= $poItems_data["grn_p_id"] ?></td>
+                                                                                <td><?= $poItems_data["name"] ?></td>
+                                                                                <td><?= $poItems_data["grn_p_qty"] ?></td>
+                                                                                <td><?= $poItems_data["p_free_qty"] ?></td>
+                                                                                <td><?= number_format($poItems_data["grn_p_price"], 0) ?></td>
+                                                                                <td><?= number_format($poItems_data["grn_p_qty"] * $poItems_data["grn_p_price"], 0) ?></td>
+                                                                                <td><?= $poItems_data["p_plus_discount"] ?></td>
+                                                                                <td><?= number_format($poItems_data["grn_p_cost"], 0) ?></td>
+                                                                                <td><?= number_format($poItems_data["grn_u_cost"], 0) ?></td>
                                                                             </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <?php
-                                                                            $itemCount = 1;
-                                                                            $poItems_result = $conn->query("SELECT * FROM grn_item INNER JOIN p_medicine ON grn_item.grn_p_id = p_medicine.code WHERE grn_number = '" . $grn_details_data["grn_number"] . "'");
-                                                                            while ($poItems_data = $poItems_result->fetch_array()) { ?>
-                                                                                <tr>
-                                                                                    <td><?= $itemCount++ ?></td>
-                                                                                    <td><?= $poItems_data["grn_p_id"] ?></td>
-                                                                                    <td><?= $poItems_data["name"] ?></td>
-                                                                                    <td><?= $poItems_data["grn_p_qty"] ?></td>
-                                                                                    <td><?= $poItems_data["p_free_qty"] ?></td>
-                                                                                    <td><?= number_format($poItems_data["grn_p_price"], 0) ?></td>
-                                                                                    <td><?= number_format($poItems_data["grn_p_qty"] * $poItems_data["grn_p_price"], 0) ?></td>
-                                                                                    <td><?= $poItems_data["p_plus_discount"] ?></td>
-                                                                                    <td><?= number_format($poItems_data["grn_p_cost"], 0) ?></td>
-                                                                                    <td><?= number_format($poItems_data["grn_u_cost"], 0) ?></td>
-                                                                                </tr>
-                                                                            <?php } ?>
-                                                                        </tbody>
-                                                                    </table>
-                                                                    <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['invoice_number'] ?>','<?= $grn_details_data['grn_date'] ?>','<?= $grn_details_data['supplier'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
-                                                                </ul>
-                                                            </td>
-                                                            <td><?= $grn_details_data["grn_date"] ?></td>
-                                                            <td><?= number_format($grn_details_data["grn_sub_total"], 0) ?></td>
-                                                        </tr>
-                                                    <?php } ?>
-                                            <?php
+                                                                        <?php } ?>
+                                                                    </tbody>
+                                                                </table>
+                                                                <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['invoice_number'] ?>','<?= $grn_details_data['grn_date'] ?>','<?= $grn_details_data['supplier'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
+                                                            </ul>
+                                                        </td>
+                                                        <td><?= $grn_details_data["grn_date"] ?></td>
+                                                        <td><?= number_format($grn_details_data["grn_sub_total"], 0) ?></td>
+                                                    </tr>
+                                                <?php
                                                 }
+                                            } else {
+                                                ?>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">
+                                                        No GRN Data Found
+                                                    </td>
+                                                </tr>
+                                            <?php
                                             }
                                             ?>
 
