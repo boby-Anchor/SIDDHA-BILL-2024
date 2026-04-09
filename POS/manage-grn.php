@@ -248,7 +248,82 @@ if (!isset($_SESSION['store_id'])) {
 
     <script>
         function getItems(grn_number) {
-            console.log(grn_number);
+            $.ajax({
+                url: "actions/grn/getItems.php",
+                method: "POST",
+                data: {
+                    grn_number,
+                },
+                success: function(response) {
+                    console.log("success");
+
+                    const result = JSON.parse(response);
+
+                    switch (result.status) {
+                        case "success":
+                            const tableBody = document.querySelector("#grn_items_table_body");
+
+                            var row_id = 0;
+
+                            result.data.forEach((row) => {
+                                const newRow = document.createElement("tr");
+
+                                newRow.innerHTML = `
+                                    <td>
+                                        ${++row_id}
+                                    </td>
+                                    <td>
+                                        ${row.grn_p_id}
+                                    </td>
+                                    <td>
+                                        ${row.item_name}
+                                    </td>
+                                    <td>
+                                        ${row.sku}
+                                    </td>
+                                    <td>
+                                        ${row.brand}
+                                    </td>
+                                    <td>
+                                        ${row.grn_p_qty}
+                                    </td>
+                                    <td>
+                                        ${row.p_free_qty}
+                                    </td>
+                                    <td>
+                                        ${row.grn_p_price}
+                                    </td>
+                                    <td>
+                                        ${row.grn_p_qty * row.grn_p_price}
+                                    </td>
+                                    <td>
+                                        ${row.p_plus_discount}
+                                    </td>
+                                    <td>
+                                        ${row.grn_p_cost}
+                                    </td>
+                                    <td>
+                                        ${row.grn_u_cost}
+                                    </td>
+                                `;
+                                tableBody.appendChild(newRow);
+                            });
+                            $("#grn-items-data-modal").modal("show");
+                            break;
+
+                        case "sessionExpired":
+                            handleExpiredSession(result.message);
+                            break;
+
+                        default:
+                            ErrorMessageDisplay(result.message);
+                            break;
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                },
+            });
 
         }
 

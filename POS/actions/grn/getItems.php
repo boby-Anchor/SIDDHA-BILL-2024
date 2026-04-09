@@ -39,6 +39,7 @@ if (isset($_POST['grn_number'])) {
 try {
     $grnItemsResult = $conn->query("SELECT
     grn_item.*,
+    p_medicine.name AS item_name,
     p_medicine.sku,
     p_brand.name AS brand
     FROM grn_item
