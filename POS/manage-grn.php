@@ -86,7 +86,7 @@ if (!isset($_SESSION['store_id'])) {
                                     <!-- Form end -->
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table id="example1" class="table table-bordered">
                                         <thead>
                                             <tr class="bg-info">
                                                 <th class="adThText">GRN Number</th>
@@ -116,7 +116,8 @@ if (!isset($_SESSION['store_id'])) {
                                                         <td><?= $grn_details_data["grn_number"] ?></td>
                                                         <td><?= $grn_details_data["invoice_number"] ?></td>
                                                         <td><?= $grn_details_data["supplier"] ?></td>
-                                                        <td>
+                                                        <td><button class="btn fa fa-eye badge badge-info p-2 text-md" onclick="getItems('<?= $grn_details_data['grn_number'] ?>')"> <?= $grn_details_data["item_count"] ?> </button></td>
+                                                        <!-- <td>
                                                             <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $grn_details_data["item_count"] ?> </button>
                                                             <ul class="dropdown-menu">
                                                                 <table class="table" id="poItemsTable<?= $grn_details_data["grn_number"] ?>">
@@ -156,7 +157,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                 </table>
                                                                 <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['invoice_number'] ?>','<?= $grn_details_data['grn_date'] ?>','<?= $grn_details_data['supplier'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
                                                             </ul>
-                                                        </td>
+                                                        </td> -->
                                                         <td><?= $grn_details_data["grn_date"] ?></td>
                                                         <td><?= number_format($grn_details_data["grn_sub_total"], 0) ?></td>
                                                     </tr>
@@ -187,6 +188,52 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Footer End -->
     </div>
 
+    <!-- GRN items Modal start -->
+    <div class="modal fade" id="grn-items-data-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">GRN Items Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <td>#</td>
+                                        <td>barcode</td>
+                                        <td>Name</td>
+                                        <td>SKU</td>
+                                        <td>Brand</td>
+                                        <td>Qty</td>
+                                        <td>Free Qty</td>
+                                        <td>Price</td>
+                                        <td>Total Value</td>
+                                        <td>Discount</td>
+                                        <td>Total Cost</td>
+                                        <td>Unit Cost</td>
+                                    </thead>
+                                    <tbody id="grn_items_table_body">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- GRN items Modal end  -->
+
     <!-- Alert -->
     <?php include("part/alert.php"); ?>
     <!-- Alert end -->
@@ -195,7 +242,16 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
 
+    <!-- Data Table JS -->
+    <?php include("part/data-table-js.php"); ?>
+    <!-- Data Table JS end -->
+
     <script>
+        function getItems(grn_number) {
+            console.log(grn_number);
+
+        }
+
         function printTable(grnNumber, invoice_number, grnDate, supplier_name) {
             var printWindow = window.open('', '_blank');
             printWindow.document.write('<html><head><title>Print Preview</title>');
