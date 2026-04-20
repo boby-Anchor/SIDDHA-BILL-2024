@@ -56,6 +56,7 @@ if (!isset($_SESSION['store_id'])) {
                         <th class="adThText">Shop</th>
                         <th class="adThText">User</th>
                         <th class="adThText">Created at</th>
+                        <th class="adThText">Return Reason</th>
                         <th class="adThText">Description</th>
                         <th class="adThText">Items</th>
                         <th class="adThText">Total Value</th>
@@ -66,10 +67,12 @@ if (!isset($_SESSION['store_id'])) {
                       <?php
                       $grn_details_result = $conn->query("SELECT wastage_batches.*,
                       shop.shopName AS shop,
+                      wastage_reasons.reason AS reason,
                       us1.name AS user,
                       us2.name AS approver
                       FROM `wastage_batches`
                       INNER JOIN shop ON wastage_batches.shop_id = shop.shopId
+                      INNER JOIN wastage_reasons ON wastage_batches.wastage_reason_id = wastage_reasons.id
                       INNER JOIN users us1 ON wastage_batches.created_by = us1.id
                       LEFT JOIN users us2 ON wastage_batches.approved_by = us2.id
                       ORDER BY created DESC LIMIT 100");
@@ -79,6 +82,7 @@ if (!isset($_SESSION['store_id'])) {
                           <td><?= $grn_details_data["shop"] ?></td>
                           <td><?= $grn_details_data["user"] ?></td>
                           <td><?= $grn_details_data["created"] ?></td>
+                          <td><?= $grn_details_data["reason"] ?></td>
                           <td><?= $grn_details_data["description"] ?></td>
                           <td>
                             <?php
