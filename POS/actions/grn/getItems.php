@@ -41,10 +41,14 @@ try {
     grn_item.*,
     p_medicine.name AS item_name,
     p_medicine.sku,
-    p_brand.name AS brand
+    p_brand.name AS brand,
+    medicine_unit.unit AS unit,
+    unit_category_variation.ucv_name
     FROM grn_item
     INNER JOIN p_medicine ON grn_item.grn_p_id = p_medicine.code
     INNER JOIN p_brand ON p_medicine.brand = p_brand.id
+    INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
+    INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
     WHERE grn_number = '$grn_number'
     ORDER BY grn_item_id ASC
     ");
