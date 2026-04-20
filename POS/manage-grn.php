@@ -33,9 +33,6 @@ if (!isset($_SESSION['store_id'])) {
     <!-- All CSS -->
     <?php include("part/all-css.php"); ?>
     <!-- All CSS end -->
-
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -105,7 +102,7 @@ if (!isset($_SESSION['store_id'])) {
                                                 FROM `grn`
                                                 LEFT JOIN p_supplier ON grn.supplier_id = p_supplier.id
                                                 INNER JOIN grn_item ON grn.grn_number = grn_item.grn_number
-                                                WHERE grn_date BETWEEN '" . date("Y-m-d 00:00:00", strtotime($start_date)) . "' AND '" . date("Y-m-d 00:00:00", strtotime($end_date)) .
+                                                WHERE grn_date BETWEEN '" . date("Y-m-d 00:00:00", strtotime($start_date)) . "' AND '" . date("Y-m-d 23:59:59", strtotime($end_date)) .
                                                 "' GROUP BY grn.grn_number
                                                 ORDER BY grn_date DESC");
 
@@ -116,48 +113,17 @@ if (!isset($_SESSION['store_id'])) {
                                                         <td><?= $grn_details_data["grn_number"] ?></td>
                                                         <td><?= $grn_details_data["invoice_number"] ?></td>
                                                         <td><?= $grn_details_data["supplier"] ?></td>
-                                                        <td><button class="btn fa fa-eye badge badge-info p-2 text-md" onclick="getItems('<?= $grn_details_data['grn_number'] ?>')"> <?= $grn_details_data["item_count"] ?> </button></td>
-                                                        <!-- <td>
-                                                            <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start"> <?= $grn_details_data["item_count"] ?> </button>
-                                                            <ul class="dropdown-menu">
-                                                                <table class="table" id="poItemsTable<?= $grn_details_data["grn_number"] ?>">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">#</th>
-                                                                            <th scope="col">Item Code</th>
-                                                                            <th scope="col">Item Name</th>
-                                                                            <th scope="col">Qty</th>
-                                                                            <th scope="col">Free Qty</th>
-                                                                            <th scope="col">Item Price</th>
-                                                                            <th scope="col">Total Value</th>
-                                                                            <th scope="col">Item Discount</th>
-                                                                            <th scope="col">Total Cost</th>
-                                                                            <th scope="col">Unit Cost</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php
-                                                                        $itemCount = 1;
-                                                                        $poItems_result = $conn->query("SELECT * FROM grn_item INNER JOIN p_medicine ON grn_item.grn_p_id = p_medicine.code WHERE grn_number = '" . $grn_details_data["grn_number"] . "'");
-                                                                        while ($poItems_data = $poItems_result->fetch_array()) { ?>
-                                                                            <tr>
-                                                                                <td><?= $itemCount++ ?></td>
-                                                                                <td><?= $poItems_data["grn_p_id"] ?></td>
-                                                                                <td><?= $poItems_data["name"] ?></td>
-                                                                                <td><?= $poItems_data["grn_p_qty"] ?></td>
-                                                                                <td><?= $poItems_data["p_free_qty"] ?></td>
-                                                                                <td><?= number_format($poItems_data["grn_p_price"], 0) ?></td>
-                                                                                <td><?= number_format($poItems_data["grn_p_qty"] * $poItems_data["grn_p_price"], 0) ?></td>
-                                                                                <td><?= $poItems_data["p_plus_discount"] ?></td>
-                                                                                <td><?= number_format($poItems_data["grn_p_cost"], 0) ?></td>
-                                                                                <td><?= number_format($poItems_data["grn_u_cost"], 0) ?></td>
-                                                                            </tr>
-                                                                        <?php } ?>
-                                                                    </tbody>
-                                                                </table>
-                                                                <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $grn_details_data['grn_number'] ?>','<?= $grn_details_data['invoice_number'] ?>','<?= $grn_details_data['grn_date'] ?>','<?= $grn_details_data['supplier'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
-                                                            </ul>
-                                                        </td> -->
+                                                        <td>
+                                                            <button class="btn fa fa-eye badge badge-info p-2 text-md"
+                                                                onclick="getItems(
+                                                                '<?= $grn_details_data['grn_number'] ?>',
+                                                                '<?= $grn_details_data['invoice_number'] ?>',
+                                                                '<?= $grn_details_data['grn_date'] ?>',
+                                                                '<?= $grn_details_data['supplier'] ?>'
+                                                                )">
+                                                                <?= $grn_details_data["item_count"] ?>
+                                                            </button>
+                                                        </td>
                                                         <td><?= $grn_details_data["grn_date"] ?></td>
                                                         <td><?= number_format($grn_details_data["grn_sub_total"], 0) ?></td>
                                                     </tr>
@@ -190,7 +156,7 @@ if (!isset($_SESSION['store_id'])) {
 
     <!-- GRN items Modal start -->
     <div class="modal fade" id="grn-items-data-modal">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content bg-dark">
                 <div>
                     <div class="modal-header">
@@ -203,11 +169,12 @@ if (!isset($_SESSION['store_id'])) {
 
                         <div class="row">
                             <div class="col-12">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered border-5" id="grn_items_table">
                                     <thead>
                                         <td>#</td>
                                         <td>barcode</td>
                                         <td>Name</td>
+                                        <td>Volume</td>
                                         <td>SKU</td>
                                         <td>Brand</td>
                                         <td>Qty</td>
@@ -219,14 +186,16 @@ if (!isset($_SESSION['store_id'])) {
                                         <td>Unit Cost</td>
                                     </thead>
                                     <tbody id="grn_items_table_body">
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <div class="row w-100 justify-content-between">
+                            <button class="btn btn-warning" onclick="handlePrint(this)">Print</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -247,25 +216,25 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Data Table JS end -->
 
     <script>
-        function getItems(grn_number) {
+        function getItems(grn_number, invoice_number, grn_date, supplier) {
+            InfoMessageDisplay("Fetching data.")
             $.ajax({
                 url: "actions/grn/getItems.php",
                 method: "POST",
                 data: {
                     grn_number,
                 },
+                dataType: 'json',
+
                 success: function(response) {
-                    console.log("success");
 
-                    const result = JSON.parse(response);
-
-                    switch (result.status) {
+                    switch (response.status) {
                         case "success":
                             const tableBody = document.querySelector("#grn_items_table_body");
-
+                            tableBody.innerHTML = '';
                             var row_id = 0;
 
-                            result.data.forEach((row) => {
+                            response.data.forEach((row) => {
                                 const newRow = document.createElement("tr");
 
                                 newRow.innerHTML = `
@@ -279,7 +248,10 @@ if (!isset($_SESSION['store_id'])) {
                                         ${row.item_name}
                                     </td>
                                     <td>
-                                        ${row.sku}
+                                        ${row.ucv_name}${row.unit}
+                                    </td>
+                                    <td>
+                                        ${row.sku ? row.sku : ''}
                                     </td>
                                     <td>
                                         ${row.brand}
@@ -308,15 +280,19 @@ if (!isset($_SESSION['store_id'])) {
                                 `;
                                 tableBody.appendChild(newRow);
                             });
+                            $("#grn-items-data-modal").data("grn", grn_number);
+                            $("#grn-items-data-modal").data("invoice_number", invoice_number);
+                            $("#grn-items-data-modal").data("grn_date", grn_date);
+                            $("#grn-items-data-modal").data("supplier", supplier);
                             $("#grn-items-data-modal").modal("show");
                             break;
 
                         case "sessionExpired":
-                            handleExpiredSession(result.message);
+                            handleExpiredSession(response.message);
                             break;
 
                         default:
-                            ErrorMessageDisplay(result.message);
+                            ErrorMessageDisplay(response.message);
                             break;
                     }
                 },
@@ -324,7 +300,15 @@ if (!isset($_SESSION['store_id'])) {
                     console.error(xhr.responseText);
                 },
             });
+        }
 
+
+        function handlePrint() {
+            const grn_number = $("#grn-items-data-modal").data("grn");
+            const invoice_number = $("#grn-items-data-modal").data("invoice_number");
+            const grn_date = $("#grn-items-data-modal").data("grn_date");
+            const supplier = $("#grn-items-data-modal").data("supplier");
+            printTable(grn_number, invoice_number, grn_date, supplier);
         }
 
         function printTable(grnNumber, invoice_number, grnDate, supplier_name) {
@@ -333,7 +317,7 @@ if (!isset($_SESSION['store_id'])) {
             printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
             printWindow.document.write('</head><body>');
             printWindow.document.write('<div class="container">');
-            printWindow.document.write('<h2 class="text-center bg-success text-light" style="margin-top:5px;padding:3px;">GOODS RECEIPT NOTES</h2>');
+            printWindow.document.write('<h2 class="text-center" style="margin-top:5px;padding:3px;">GOODS RECEIPT NOTES</h2>');
             printWindow.document.write('<div class="col-12" style="margin-top: 50px;margin-bottom: 20px;font-family: monospace;">');
             printWindow.document.write('<div class="row">');
             printWindow.document.write('<div class="col-12" style="text-align: start;">');
@@ -357,7 +341,7 @@ if (!isset($_SESSION['store_id'])) {
             printWindow.document.write('</div>');
             printWindow.document.write('</div>');
             printWindow.document.write('</div>');
-            printWindow.document.write(document.getElementById('poItemsTable' + grnNumber).outerHTML);
+            printWindow.document.write(document.getElementById('grn_items_table').outerHTML);
             printWindow.document.write('</div>');
             printWindow.document.write('</body></html>');
             printWindow.document.close();
