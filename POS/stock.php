@@ -19,7 +19,7 @@ $cost = 0;
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pharmacy</title>
+  <title>Shop Stock</title>
 
   <!-- Data Table CSS -->
   <?php include("part/data-table-css.php"); ?>
@@ -40,7 +40,7 @@ $cost = 0;
     <?php include("part/sidebar.php"); ?>
     <!--  Sidebar end -->
 
-    <div class="content-wrapper bgdrk">
+    <div class="content-wrapper bg-dark">
 
       <!-- Main content -->
       <section class="content bg-dark">
@@ -58,6 +58,7 @@ $cost = 0;
                       <tr class="bg-info">
                         <th>#</th>
                         <th>Product</th>
+                        <th>SKU</th>
                         <th>Brand</th>
                         <th>Category</th>
                         <th>Cost</th>
@@ -77,10 +78,18 @@ $cost = 0;
                         foreach ($userLoginData as $userData) {
                           $shop_id = $userData['shop_id'];
                           $user_id = $userData['id'];
-                          $sql = $conn->query("SELECT stock2.stock_id,p_medicine.img AS p_img , p_medicine.name AS p_name , p_brand.name AS bName,
-                          stock2.stock_item_cost AS p_cost , stock2.stock_item_code AS p_code , stock2.stock_item_qty AS p_a_stock ,
-                          stock2.item_s_price AS p_s_price , p_medicine_category.name AS p_category ,
-                          medicine_unit.unit AS unit , unit_category_variation.ucv_name
+                          $sql = $conn->query("SELECT stock2.stock_id,
+                          p_medicine.img AS p_img,
+                          p_medicine.name AS p_name,
+                          p_medicine.sku,
+                          p_brand.name AS bName,
+                          stock2.stock_item_cost AS p_cost,
+                          stock2.stock_item_code AS p_code,
+                          stock2.stock_item_qty AS p_a_stock,
+                          stock2.item_s_price AS p_s_price,
+                          p_medicine_category.name AS p_category,
+                          medicine_unit.unit,
+                          unit_category_variation.ucv_name
                           FROM stock2
                           INNER JOIN p_medicine ON p_medicine.code = stock2.stock_item_code
                           INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
@@ -89,6 +98,7 @@ $cost = 0;
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
                           WHERE stock2.stock_shop_id = '$shop_id'
                           AND p_medicine.status = '1'
+                          AND stock2.stock_item_qty > 0
                           ORDER BY p_medicine.name ASC");
                           while ($row = mysqli_fetch_assoc($sql)) {
                             $totalRows++;
@@ -102,6 +112,7 @@ $cost = 0;
                               <td> <?= $row['p_name']; ?>
                                 (<?= $row['ucv_name'] ?><?= $row['unit']; ?>)
                               </td>
+                              <td> <?= $row['sku']; ?></td>
                               <td> <?= $row['bName']; ?></td>
                               <td> <?= $row['p_category']; ?></td>
                               <td> <?= number_format($row['p_cost'], 0); ?></td>
@@ -154,15 +165,15 @@ $cost = 0;
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="7" class="text-right"><strong>Total Rows:</strong></td>
+                        <td colspan="8" class="text-right"><strong>Total Rows:</strong></td>
                         <td colspan="2"><?= $totalRows; ?></td>
                       </tr>
                       <tr>
-                        <td colspan="7" class="text-right"><strong>Total Cost:</strong></td>
+                        <td colspan="8" class="text-right"><strong>Total Cost:</strong></td>
                         <td colspan="2"><?= number_format($totalCost, 0); ?></td>
                       </tr>
                       <tr>
-                        <td colspan="7" class="text-right"><strong>Total Value:</strong></td>
+                        <td colspan="8" class="text-right"><strong>Total Value:</strong></td>
                         <td colspan="2"><?= number_format($totalValue, 0); ?></td>
                       </tr>
                     </tfoot>
