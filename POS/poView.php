@@ -105,12 +105,13 @@ if (!isset($_SESSION['store_id'])) {
                                                             poinvoices.created AS po_date,
                                                             Round(poinvoices.sub_total,2) AS sub_total,
                                                             poinvoices.discount_percentage AS discount,
-                                                            poinvoices.net_total AS net_total
+                                                            poinvoices.net_total AS net_total,
+                                                            poinvoices.transferred AS status
                                                             FROM poinvoices
                                                             INNER JOIN users ON users.id = poinvoices.user_id
                                                             INNER JOIN shop AS shop1 ON shop1.shopId = poinvoices.shop_id
                                                             INNER JOIN shop AS shop2 ON shop2.shopId = poinvoices.po_shop_id
-                                                            WHERE shop1.shopId = '$shop_id'
+                                                            WHERE shop2.shopId = '$shop_id'
                                                             ORDER BY po_date DESC
                                                             LIMIT 100
                                                             ");
@@ -130,56 +131,22 @@ if (!isset($_SESSION['store_id'])) {
 
                                                             $itemCount_data = $itemCount_result->fetch_assoc();
                                                             ?>
-                                                            <button class="btn dropdown-toggle badge badge-info " type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-placement="bottom-start">
+                                                            <button class="btn btn-info text-white" type="button"
+                                                                onclick='viewPoItems(
+                                                                    <?= json_encode($hub_order_details_data["invoice_id"]) ?>,
+                                                                    <?= json_encode($hub_order_details_data["shop_name"]) ?>,
+                                                                    <?= json_encode($hub_order_details_data["po_shop_name"]) ?>,
+                                                                    <?= json_encode($hub_order_details_data["user_name"]) ?>,
+                                                                    <?= json_encode($hub_order_details_data["po_date"]) ?>
+                                                                )'>
                                                                 <?= $itemCount_data['itemCount'] ?>
                                                             </button>
-                                                            <ul class="dropdown-menu">
-                                                                <table class="table" id="poItemsTable<?= $hub_order_details_data['invoice_id'] ?>">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">#</th>
-                                                                            <th scope="col">Barcode</th>
-                                                                            <th scope="col">Item Name</th>
-                                                                            <th scope="col">Item Price</th>
-                                                                            <th scope="col">Qty</th>
-                                                                            <th scope="col">Cost</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php
-
-                                                                        // $poItems_result = $conn->query("SELECT * FROM hub_order INNER JOIN p_medicine ON p_medicine.code = hub_order.HO_item WHERE HO_number = '" . $hub_order_details_data['hub_order_number'] . "'");
-
-                                                                        $poItems_result = $conn->query("SELECT * FROM poinvoiceitems 
-                                                                                INNER JOIN p_medicine ON p_medicine.code = poinvoiceitems.item_code
-                                                                                WHERE invoiceNumber = '" . $hub_order_details_data['invoice_id'] . "'  ");
-
-                                                                        $row = 1;
-                                                                        while ($poItems_data = $poItems_result->fetch_array()) {
-                                                                        ?>
-                                                                            <tr>
-                                                                                <th scope="row"><?= $row ?></th>
-                                                                                <td><?= $poItems_data["code"] ?></td>
-                                                                                <td><?= $poItems_data["name"] ?></td>
-                                                                                <td><?= number_format($poItems_data["invoiceItem_price"], 0) ?></td>
-                                                                                <td><?= number_format($poItems_data["invoiceItem_qty"], 0) ?></td>
-                                                                                <td><?= number_format($poItems_data["invoiceItem_total"], 0) ?></td>
-                                                                            </tr>
-
-                                                                        <?php
-                                                                            $row++;
-                                                                        }
-                                                                        ?>
-                                                                    </tbody>
-                                                                </table>
-                                                                <button class="btn btn-warning" style="font-weight: bold; font-family: 'Source Sans Pro';" onclick="printTable('<?= $hub_order_details_data['invoice_id'] ?>');"> <i class="nav-icon fas fa-copy"></i> PRINT</button>
-                                                            </ul>
                                                         </th>
-                                                        <th><?= $hub_order_details_data['po_date'] ?></th>
+                                                        <th><?= $hub_order_details_data["po_date"] ?></th>
                                                         <th><?= number_format($hub_order_details_data["sub_total"], 0) ?></th>
-                                                        <th><?= number_format($hub_order_details_data['discount'], 0) ?></th>
-                                                        <th><?= number_format($hub_order_details_data['net_total'], 0) ?></th>
-                                                        <th><?php echo ($hub_order_details_data['status'] == 1) ? "Transferred" : "No"; ?></th>
+                                                        <th><?= number_format($hub_order_details_data["discount"], 0) ?></th>
+                                                        <th><?= number_format($hub_order_details_data["net_total"], 0) ?></th>
+                                                        <th><?php echo ($hub_order_details_data["status"] == 1) ? "Transferred" : "No"; ?></th>
                                                     </tr>
                                             <?php
                                                 }
@@ -196,9 +163,52 @@ if (!isset($_SESSION['store_id'])) {
                     </div>
                 </section>
             </div>
-            <!-- Footer -->
-            <?php include("part/footer.php"); ?>
-            <!-- Footer End -->
+
+            <!-- PO items Modal start -->
+            <div class="modal fade" id="po-items-data-modal" tabindex="-1" aria-labelledby="poItemsModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="poItemsModalLabel">Purchase Order Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Order Number:</strong> <span id="po_modal_order_number"></span></p>
+                                    <p><strong>Order From:</strong> <span id="po_modal_shop_name"></span></p>
+                                    <p><strong>Order To:</strong> <span id="po_modal_po_shop_name"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Placed By:</strong> <span id="po_modal_user_name"></span></p>
+                                    <p><strong>Order Date:</strong> <span id="po_modal_po_date"></span></p>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="po_items_table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Barcode</th>
+                                            <th>Item Name</th>
+                                            <th>Item Price</th>
+                                            <th>Qty</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="po_items_table_body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-warning" type="button" onclick="handlePrint()">Print</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PO items Modal end -->
+
         </div>
 
         <!-- Alert -->
@@ -210,43 +220,88 @@ if (!isset($_SESSION['store_id'])) {
         <!-- All JS end -->
 
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                var dropdownButtonList = [].slice.call(document.querySelectorAll('.btn.dropdown-toggle'));
-                dropdownButtonList.map(function(button) {
-                    // Check if the button has already been initialized
-                    if (!button.classList.contains('dropdown-initialized')) {
-                        new bootstrap.Dropdown(button);
-                        // Mark the button as initialized to prevent re-initialization
-                        button.classList.add('dropdown-initialized');
+            function viewPoItems(poNumber, shopName, poShopName, userName, poDate) {
+                $.ajax({
+                    url: "actions/po/getItems.php",
+                    method: "POST",
+                    data: {
+                        poNumber: poNumber
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status === "success") {
+                            const tableBody = document.querySelector("#po_items_table_body");
+                            tableBody.innerHTML = "";
+                            let row_id = 0;
+
+                            response.items.forEach((item) => {
+                                const newRow = document.createElement("tr");
+                                newRow.innerHTML = `
+                                    <td>${++row_id}</td>
+                                    <td>${item.code || ""}</td>
+                                    <td>${item.name || item.invoiceItem || ""}</td>
+                                    <td>${item.invoiceItem_price ? Number(item.invoiceItem_price).toLocaleString() : ""}</td>
+                                    <td>${item.invoiceItem_qty ? Number(item.invoiceItem_qty).toLocaleString() : ""}</td>
+                                    <td>${item.invoiceItem_total ? Number(item.invoiceItem_total).toLocaleString() : ""}</td>
+                                `;
+                                tableBody.appendChild(newRow);
+                            });
+
+                            $("#po-items-data-modal").data("poNumber", poNumber);
+                            $("#po-items-data-modal").data("shopName", shopName);
+                            $("#po-items-data-modal").data("poShopName", poShopName);
+                            $("#po-items-data-modal").data("userName", userName);
+                            $("#po-items-data-modal").data("poDate", poDate);
+
+                            document.getElementById("po_modal_order_number").textContent = poNumber;
+                            document.getElementById("po_modal_shop_name").textContent = shopName;
+                            document.getElementById("po_modal_po_shop_name").textContent = poShopName;
+                            document.getElementById("po_modal_user_name").textContent = userName;
+                            document.getElementById("po_modal_po_date").textContent = poDate;
+
+                            if (typeof $("#po-items-data-modal").modal === 'function') {
+                                $("#po-items-data-modal").modal("show");
+                            } else if (typeof bootstrap !== 'undefined') {
+                                new bootstrap.Modal(document.getElementById("po-items-data-modal")).show();
+                            }
+                        } else {
+                            alert(response.message || "Unable to fetch PO items.");
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert("Could not load PO items.");
                     }
                 });
-            });
-        </script>
-        <script>
-            function printTable(orderNumber) {
-                var printWindow = window.open('', '_blank');
-                printWindow.document.write('<html><head><title>Print Preview</title>');
-                // Include Bootstrap CSS
+            }
+
+            function handlePrint() {
+                const poNumber = $("#po-items-data-modal").data("poNumber");
+                const shopName = $("#po-items-data-modal").data("shopName");
+                const poShopName = $("#po-items-data-modal").data("poShopName");
+                const userName = $("#po-items-data-modal").data("userName");
+                const poDate = $("#po-items-data-modal").data("poDate");
+                printTable(poNumber, shopName, poShopName, userName, poDate);
+            }
+
+            function printTable(orderNumber, shopName, poShopName, userName, poDate) {
+                const printWindow = window.open("", "_blank");
+                printWindow.document.write("<html><head><title>Print Preview</title>");
                 printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
-                printWindow.document.write('</head><body>');
+                printWindow.document.write("</head><body>");
                 printWindow.document.write('<div class="container">');
-                printWindow.document.write('<h2 class="text-center bg-success text-light" style="margin-top:5px;padding:3px;">ORDER DETAILS</h2>');
-                printWindow.document.write('<div class="col-12" style="margin-top: 50px;margin-bottom: 20px;font-family: monospace;">');
+                printWindow.document.write('<h2 class="text-center bg-success text-light" style="margin-top:5px;padding:3px;">PURCHASE ORDER DETAILS</h2>');
+                printWindow.document.write('<div class="col-12" style="margin-top: 20px;margin-bottom: 20px;font-family: monospace;">');
                 printWindow.document.write('<div class="row">');
-                printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                printWindow.document.write('<h5>ORDER NUMBER : ' + orderNumber + '</h5>');
-                printWindow.document.write('</div>');
-                printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                // printWindow.document.write('<h6>ORDER DATE : <?php //date('Y-m-d', strtotime($itemCount_data['orderDate'])) 
-                                                                ?></h6>');
-                printWindow.document.write('<h6>ORDER DATE : <?= !empty($itemCount_data['orderDate']) ? date('Y-m-d', strtotime($itemCount_data['orderDate'])) : 'No date available' ?></h6>');
-                printWindow.document.write('</div>');
-                printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                printWindow.document.write('<h6>ORDER TIME : <?= (!empty($itemCount_data['orderDate'])) ? date('H:i:s', strtotime($itemCount_data['orderDate'])) : 'No date available' ?></h6>');
+                printWindow.document.write('<div class="col-12" style="text-align: start;"><h5>ORDER NUMBER : ' + orderNumber + '</h5></div>');
+                printWindow.document.write('<div class="col-12" style="text-align: start;"><h5>ORDER FROM : ' + shopName + '</h5></div>');
+                printWindow.document.write('<div class="col-12" style="text-align: start;"><h5>ORDER TO : ' + poShopName + '</h5></div>');
+                printWindow.document.write('<div class="col-12" style="text-align: start;"><h5>PLACED BY : ' + userName + '</h5></div>');
+                printWindow.document.write('<div class="col-12" style="text-align: start;"><h6>ORDER DATE : ' + poDate + '</h6></div>');
+                printWindow.document.write('<div class="col-12" style="text-align: start;"><h6>PRINTED : ' + new Date().toLocaleString() + '</h6></div>');
                 printWindow.document.write('</div>');
                 printWindow.document.write('</div>');
-                printWindow.document.write('</div>');
-                printWindow.document.write(document.getElementById('poItemsTable' + orderNumber).outerHTML);
+                printWindow.document.write(document.getElementById('po_items_table').outerHTML);
                 printWindow.document.write('</div>');
                 printWindow.document.write('</body></html>');
                 printWindow.document.close();
