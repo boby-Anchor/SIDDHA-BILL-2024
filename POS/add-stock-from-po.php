@@ -59,15 +59,20 @@ if (!isset($_SESSION['store_id'])) {
 
                         <div class="col-12 row card-body">
                             <div class="col">
-                                <label>Stock Keeper: <label id="stockKeeper"></label> </label>
+                                <label>Stock Keeper:
+                                    <label id="stockKeeper"></label>
+                                </label>
+                                <label class="d-none" id="po_status"></label>
                             </div>
                             <div class="col">
                                 <label>From: <label class="d-none" id="shopId"></label>
                                     <label id="shopName"></label></label>
                             </div>
                             <div class="col">
-                                <label>Sent to: <label class="d-none" id="poShopId"></label>
-                                    <label id="poShopName"></label></label>
+                                <label>Sent to:
+                                    <label class="d-none" id="poShopId"></label>
+                                    <label id="poShopName"></label>
+                                </label>
                             </div>
                             <div class="col">
                                 <label>Date: <label id="date"></label></label>
