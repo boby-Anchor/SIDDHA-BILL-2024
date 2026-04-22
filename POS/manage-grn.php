@@ -11,6 +11,13 @@ if (!isset($_SESSION['store_id'])) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $start_date = $_POST['start_date'];
         $end_date = $_POST['end_date'];
+
+        // Ensure start_date is not after end_date
+        if (strtotime($start_date) > strtotime($end_date)) {
+            $temp = $start_date;
+            $start_date = $end_date;
+            $end_date = $temp;
+        }
     } else {
         $start_date = date("Y-m-d");
         $end_date = date("Y-m-d");
@@ -166,6 +173,16 @@ if (!isset($_SESSION['store_id'])) {
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>GRN Number:</strong> <span id="grn_modal_grn_number"></span></p>
+                                <p><strong>Invoice Number:</strong> <span id="grn_modal_invoice_number"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Supplier:</strong> <span id="grn_modal_supplier"></span></p>
+                                <p><strong>GRN Date:</strong> <span id="grn_modal_grn_date"></span></p>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-12">
@@ -192,10 +209,8 @@ if (!isset($_SESSION['store_id'])) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="row w-100 justify-content-between">
-                            <button class="btn btn-warning" onclick="handlePrint(this)">Print</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
+                        <button class="btn btn-warning" onclick="handlePrint(this)"><i class="fas fa-print"></i> Print</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -215,153 +230,8 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
-    <script>
-        function getItems(grn_number, invoice_number, grn_date, supplier) {
-            InfoMessageDisplay("Fetching data.")
-            $.ajax({
-                url: "actions/grn/getItems.php",
-                method: "POST",
-                data: {
-                    grn_number,
-                },
-                dataType: 'json',
-
-                success: function(response) {
-
-                    switch (response.status) {
-                        case "success":
-                            const tableBody = document.querySelector("#grn_items_table_body");
-                            tableBody.innerHTML = '';
-                            var row_id = 0;
-
-                            response.data.forEach((row) => {
-                                const newRow = document.createElement("tr");
-
-                                newRow.innerHTML = `
-                                    <td>
-                                        ${++row_id}
-                                    </td>
-                                    <td>
-                                        ${row.grn_p_id}
-                                    </td>
-                                    <td>
-                                        ${row.item_name}
-                                    </td>
-                                    <td>
-                                        ${row.ucv_name}${row.unit}
-                                    </td>
-                                    <td>
-                                        ${row.sku ? row.sku : ''}
-                                    </td>
-                                    <td>
-                                        ${row.brand}
-                                    </td>
-                                    <td>
-                                        ${row.grn_p_qty}
-                                    </td>
-                                    <td>
-                                        ${row.p_free_qty}
-                                    </td>
-                                    <td>
-                                        ${row.grn_p_price}
-                                    </td>
-                                    <td>
-                                        ${row.grn_p_qty * row.grn_p_price}
-                                    </td>
-                                    <td>
-                                        ${row.p_plus_discount}
-                                    </td>
-                                    <td>
-                                        ${row.grn_p_cost}
-                                    </td>
-                                    <td>
-                                        ${row.grn_u_cost}
-                                    </td>
-                                `;
-                                tableBody.appendChild(newRow);
-                            });
-                            $("#grn-items-data-modal").data("grn", grn_number);
-                            $("#grn-items-data-modal").data("invoice_number", invoice_number);
-                            $("#grn-items-data-modal").data("grn_date", grn_date);
-                            $("#grn-items-data-modal").data("supplier", supplier);
-                            $("#grn-items-data-modal").modal("show");
-                            break;
-
-                        case "sessionExpired":
-                            handleExpiredSession(response.message);
-                            break;
-
-                        default:
-                            ErrorMessageDisplay(response.message);
-                            break;
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                },
-            });
-        }
-
-
-        function handlePrint() {
-            const grn_number = $("#grn-items-data-modal").data("grn");
-            const invoice_number = $("#grn-items-data-modal").data("invoice_number");
-            const grn_date = $("#grn-items-data-modal").data("grn_date");
-            const supplier = $("#grn-items-data-modal").data("supplier");
-            printTable(grn_number, invoice_number, grn_date, supplier);
-        }
-
-        function printTable(grnNumber, invoice_number, grnDate, supplier_name) {
-            var printWindow = window.open('', '_blank');
-            printWindow.document.write('<html><head><title>Print Preview</title>');
-            printWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
-            printWindow.document.write('</head><body>');
-            printWindow.document.write('<div class="container">');
-            printWindow.document.write('<h2 class="text-center" style="margin-top:5px;padding:3px;">GOODS RECEIPT NOTES</h2>');
-            printWindow.document.write('<div class="col-12" style="margin-top: 50px;margin-bottom: 20px;font-family: monospace;">');
-            printWindow.document.write('<div class="row">');
-            printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h5>GRN Number : ' + grnNumber + '</h5>');
-            printWindow.document.write('</div>');
-            if (supplier_name) {
-                printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                printWindow.document.write('<h5>Supplier Name : ' + supplier_name + '</h5>');
-                printWindow.document.write('</div>');
-            }
-            if (invoice_number) {
-                printWindow.document.write('<div class="col-12" style="text-align: start;">');
-                printWindow.document.write('<h5>Invoice Number : ' + invoice_number + '</h5>');
-                printWindow.document.write('</div>');
-            }
-            printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h6>Added : ' + grnDate + '</h6>');
-            printWindow.document.write('</div>');
-            printWindow.document.write('<div class="col-12" style="text-align: start;">');
-            printWindow.document.write('<h6>Printed : <?= date('Y-m-d H:i:s') ?></h6>');
-            printWindow.document.write('</div>');
-            printWindow.document.write('</div>');
-            printWindow.document.write('</div>');
-            printWindow.document.write(document.getElementById('grn_items_table').outerHTML);
-            printWindow.document.write('</div>');
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-        }
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var dropdownButtonList = [].slice.call(document.querySelectorAll('.btn.dropdown-toggle'));
-            dropdownButtonList.map(function(button) {
-                // Check if the button has already been initialized
-                if (!button.classList.contains('dropdown-initialized')) {
-                    new bootstrap.Dropdown(button);
-                    // Mark the button as initialized to prevent re-initialization
-                    button.classList.add('dropdown-initialized');
-                }
-            });
-        });
-    </script>
 </body>
+
+<script src="dist/js/grn/grn_view.js"></script>
 
 </html>
