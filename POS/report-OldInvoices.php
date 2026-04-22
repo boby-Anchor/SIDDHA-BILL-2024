@@ -563,9 +563,8 @@ $totalValue = 0;
 
         // After printing, reload the pos.php file
         printWindow.onafterprint = function() {
-            printWindow.close(); // Close the print window
-            window.location.reload();
-            // Reload the pos.php file in the main window
+            printWindow.close();
+            // window.location.reload();
         };
     }
 </script>

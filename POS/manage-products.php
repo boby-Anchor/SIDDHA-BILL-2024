@@ -13,6 +13,7 @@ $sql = $conn->query("SELECT
     p_medicine.code AS barcode,
     p_medicine.img AS img,
     p_medicine.status,
+    p_medicine.sku,
     p_medicine_category.name AS categoryname,
     p_brand.name AS brandName,
     medicine_unit.unit AS unit,
@@ -67,6 +68,7 @@ $sql = $conn->query("SELECT
                                                 <!-- <th>Image</th> -->
                                                 <th>Code</th>
                                                 <th>Name</th>
+                                                <th>SKU</th>
                                                 <th>Volume</th>
                                                 <th>Category</th>
                                                 <th>Brand</th>
@@ -84,6 +86,7 @@ $sql = $conn->query("SELECT
                                                                                                     ?>" style="max-width: 50px;"></td> -->
                                                     <td><?php echo $row['barcode']; ?></td>
                                                     <td><?php echo $row['pname']; ?> </td>
+                                                    <td><?php echo $row['sku']; ?> </td>
                                                     <td> <?= $row['ucv_name'] ?><?= $row['unit']; ?></td>
                                                     <td><?php echo $row['categoryname']; ?></td>
                                                     <td><?php echo $row['brandName']; ?></td>
@@ -171,7 +174,7 @@ $sql = $conn->query("SELECT
                                 <select class="form-control select2" id="category" name="category" required>
                                     <option value="" selected="selected">Select Category</option>
                                     <?php
-                                    $sql = $conn->query("SELECT * FROM `p_medicine_category` ORDER BY name ASC");
+                                    $sql = $conn->query("SELECT * FROM `p_medicine_category` WHERE `status`= 1 ORDER BY name ASC");
                                     while ($row = mysqli_fetch_assoc($sql)) {
                                     ?>
                                         <option class="text-capitalize" value="<?php echo $row['id']; ?>"><?php echo ucfirst($row['name']); ?></option>

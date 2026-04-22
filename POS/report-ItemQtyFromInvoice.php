@@ -174,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td> <?= $row['brand']; ?></td>
                         <td> <?= $row['volume']; ?> <?= $row['unit']; ?></td>
                         <td> <?= number_format($total_qty, 0)  ?> </td>
-                        <td> <?= number_format($item_price, 0) ?> </td>
+                        <td> <?= $row['invoiceItem_price'] ?> </td>
                         <td> <?= number_format($total_price, 0) ?> </td>
                       </tr>
                 <?php

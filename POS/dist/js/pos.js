@@ -116,7 +116,7 @@ function selectProduct(stock_id, type) {
                     break;
 
                 case "error":
-                    handleExpiredSession(result.message);
+                    ErrorMessageDisplay(result.message);
                     break;
 
                 default:

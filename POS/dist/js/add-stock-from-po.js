@@ -101,26 +101,14 @@ $(document).on("click", "#addStockButton", function () {
             poNumber: $("#poNumber").val(),
         },
         success: function (response) {
-            Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true, // Show progress bar during timer
-                didOpen: (toast) => {
-                    // Pause timer when mouse hover
-                    toast.addEventListener('mouseenter', Swal.stopTimer);
-                    toast.addEventListener('mouseleave', Swal.resumeTimer);
-                }
-            }).fire({
-                icon: "success",
-                title: "Success: " + response,
-            }).then(() => {
-                location.reload(true);
-            });
+            SuccessMessageDisplay(response);
+            setTimeout(() => {
+                location.reload();
+            }, 3000);
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
+            ErrorMessageDisplay("Error: " + xhr.responseText);
         },
     });
 });

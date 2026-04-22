@@ -94,12 +94,12 @@ if (!isset($_SESSION['store_id'])) {
                                                 medicine_unit.unit,
                                                 p_medicine.name,
                                                 p_medicine.sku
-                                                HAVING
-                                                hub_qty > 0 OR 
-                                                pharmacy_qty > 0 OR 
-                                                YA_qty > 0 OR 
-                                                RF_qty > 0 OR 
-                                                OS_qty > 0
+                                                -- HAVING
+                                                -- hub_qty > 0 OR 
+                                                -- pharmacy_qty > 0 OR 
+                                                -- YA_qty > 0 OR 
+                                                -- RF_qty > 0 OR 
+                                                -- OS_qty > 0
                                                 ");
 
                                                 while ($row = mysqli_fetch_assoc($sql)) {

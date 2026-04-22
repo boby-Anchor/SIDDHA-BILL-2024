@@ -181,8 +181,9 @@ if (!isset($_SESSION['store_id'])) {
                             ON mu.id = pm.medicine_unit_id
                         INNER JOIN unit_category_variation ucv
                             ON ucv.ucv_id = pm.unit_variation
-                        WHERE ucv.ucv_name = '4.5' AND stock2.stock_shop_id =5
-                        ORDER BY brand ASC");
+                        WHERE ucv.ucv_name = '4.5'
+                        AND stock2.stock_shop_id = 5
+                        ORDER BY productName ASC");
 
                         while ($sourceItem = $sourceItemsData->fetch_assoc()) {
                         ?>
@@ -264,7 +265,7 @@ if (!isset($_SESSION['store_id'])) {
                         WHERE ucv.ucv_name = '30'
                             AND pm.brand = 30
                             AND stock2.stock_shop_id = 5
-                        ORDER BY brand ASC");
+                        ORDER BY productName ASC");
 
                         while ($sourceItem = $sourceItemsData->fetch_assoc()) {
                         ?>

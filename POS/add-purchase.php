@@ -385,10 +385,6 @@ if (!isset($_SESSION['store_id'])) {
         <?php include("part/footer.php"); ?>
         <!-- Footer End -->
 
-        <!-- Alert -->
-        <?php include("part/alert.php"); ?>
-        <!-- Alert end -->
-
         <!-- All JS -->
         <?php include("part/all-js.php"); ?>
         <!-- All JS end -->
@@ -397,7 +393,6 @@ if (!isset($_SESSION['store_id'])) {
 
     </html>
 
-    <script src="dist/js/messageDisplay.js"></script>
     <script src="dist/js/add-purchase.js"></script>
 
 <?php

@@ -231,7 +231,7 @@ if (!isset($_SESSION['store_id'])) {
                                     <br>
 
                                     <span>
-                                        <span class="fw-bolder" style="font-size: 10px;"><?= $user_name ?>
+                                        <span class="fw-bolder" style="font-size: 10px;"><span id="bill_user_name"><?= $user_name ?></span>
                                             <br />
                                         </span>
                                         To-

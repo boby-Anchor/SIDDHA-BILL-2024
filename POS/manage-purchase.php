@@ -267,15 +267,9 @@ if (!isset($_SESSION['store_id'])) {
           <!-- Footer End -->
         </div>
 
-        <!-- Alert -->
-        <?php include("part/alert.php"); ?>
-        <!-- Alert end -->
-
         <!-- All JS -->
         <?php include("part/all-js.php"); ?>
         <!-- All JS end -->
-
-        <script src="dist/js/messageDisplay.js"> </script>
 
         <script>
           function updateOrderStatus(orderNO, status) {
