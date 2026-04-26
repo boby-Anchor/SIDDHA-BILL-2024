@@ -53,8 +53,8 @@ if (isset($_SESSION['store_id'])) {
 
           <!-- Edit stock for Yakkala Ayurveda Start -->
           <?php
-          if ($shop_id == 9 || $shop_id == 1 || $user_id == 38) {
-            if ($user_id == 16) {
+          if ($shop_id == 9 || $shop_id == 10 || $shop_id == 1) {
+            if ($user_id == 16 || $shop_id == 10) {
           ?>
               <li class="nav-header"> Add Stock Items</li>
               <li class="nav-item">
@@ -78,7 +78,7 @@ if (isset($_SESSION['store_id'])) {
               </li>
             <?php
             }
-            if ($shop_id == 9) {
+            if ($shop_id == 9 || $shop_id == 10) {
             ?>
               <li class="nav-header"> Stock Item functions </li>
               <li class="nav-item">
@@ -95,6 +95,12 @@ if (isset($_SESSION['store_id'])) {
                     <a href="stock.php" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>View Shop Stock</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="report-viewAllShopStock.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>View all Shop Stock</p>
                     </a>
                   </li>
                   <li class="nav-item">
