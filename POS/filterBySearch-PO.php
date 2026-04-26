@@ -16,7 +16,7 @@ if (isset($_SESSION['store_id'])) {
       $searchBy .= "barcode";
 
       $p_medicine_rs = $conn->query("SELECT 
-      stock2.stock_item_code AS barcode,
+      p_medicine.code AS barcode,
       p_brand.name AS brand,
       p_medicine.name AS medicineName,
       p_medicine_category.name AS category,
@@ -24,7 +24,7 @@ if (isset($_SESSION['store_id'])) {
       medicine_unit.unit AS unit,
       stock2.item_s_price AS item_s_price
       FROM p_medicine
-      INNER JOIN stock2 ON p_medicine.code = stock2.stock_item_code
+      LEFT JOIN stock2 ON p_medicine.code = stock2.stock_item_code
       INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
       INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
       INNER JOIN p_brand ON p_medicine.brand = p_brand.id
@@ -33,8 +33,8 @@ if (isset($_SESSION['store_id'])) {
       -- WHERE producttoshop.shop_id = '$shop_id' AND productToShopStatus = 'added'
       -- WHERE stock2.stock_shop_id = '$shop_id'
       -- AND p_medicine.code LIKE '%$bnInput%'
-      WHERE p_medicine.code LIKE '%$bnInput%'
-      GROUP BY stock2.stock_item_code
+      WHERE p_medicine.code = '$bnInput'
+      AND p_medicine.status = '1'
       ORDER BY p_medicine.name ASC, volume ASC");
 
       while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
@@ -67,7 +67,7 @@ if (isset($_SESSION['store_id'])) {
       }
       $searchBy .= "product code";
       $p_medicine_rs = $conn->query("SELECT 
-      stock2.stock_item_code AS barcode,
+      p_medicine.code AS barcode,
       p_brand.name AS brand,
       p_medicine.name AS medicineName,
       p_medicine_category.name AS category,
@@ -75,7 +75,7 @@ if (isset($_SESSION['store_id'])) {
       medicine_unit.unit AS unit,
       stock2.item_s_price AS item_s_price
       FROM p_medicine
-      INNER JOIN stock2 ON p_medicine.code = stock2.stock_item_code
+      LEFT JOIN stock2 ON p_medicine.code = stock2.stock_item_code
       INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
       INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
       INNER JOIN p_brand ON p_medicine.brand = p_brand.id
@@ -85,7 +85,7 @@ if (isset($_SESSION['store_id'])) {
       -- WHERE stock2.stock_shop_id = '$shop_id'
       -- AND p_medicine.name LIKE  '%$pnInput%'
       WHERE p_medicine.name LIKE  '%$pnInput%'
-      GROUP BY stock2.stock_item_code
+      AND p_medicine.status = '1'
       ORDER BY p_medicine.name ASC, volume ASC");
 
       while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
@@ -118,7 +118,7 @@ if (isset($_SESSION['store_id'])) {
       }
       $searchBy .= "product name";
       $p_medicine_rs = $conn->query("SELECT 
-      stock2.stock_item_code AS barcode,
+      p_medicine.code AS barcode,
       p_brand.name AS brand,
       p_medicine.name AS medicineName,
       p_medicine_category.name AS category,
@@ -126,7 +126,7 @@ if (isset($_SESSION['store_id'])) {
       medicine_unit.unit AS unit,
       stock2.item_s_price AS item_s_price
       FROM p_medicine
-      INNER JOIN stock2 ON p_medicine.code = stock2.stock_item_code
+      LEFT JOIN stock2 ON p_medicine.code = stock2.stock_item_code
       INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
       INNER JOIN medicine_unit ON p_medicine.medicine_unit_id = medicine_unit.id
       INNER JOIN p_brand ON p_medicine.brand = p_brand.id
@@ -136,7 +136,7 @@ if (isset($_SESSION['store_id'])) {
       -- WHERE producttoshop.shop_id = '$shop_id' AND productToShopStatus = 'added'
       -- AND p_medicine.name LIKE  '%$pnInput%'
       WHERE p_medicine.name LIKE  '%$pnInput%'
-      GROUP BY stock2.stock_item_code
+      AND p_medicine.status = '1'
       ORDER BY p_medicine.name ASC, volume ASC");
 
       while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
