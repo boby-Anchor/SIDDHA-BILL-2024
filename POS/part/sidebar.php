@@ -14,6 +14,7 @@ if (isset($_SESSION['store_id'])) {
       '4' => 'stock_keeper_sidebar.php',
       '5' => 'cashier_sidebar.php',
       '6' => 'ac_sidebar.php',
+      '7' => 'refilling_sidebar.php',
     ];
 
     if (isset($sidebars[$userRoleId])) {

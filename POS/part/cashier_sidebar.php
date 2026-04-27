@@ -162,7 +162,7 @@ if (isset($_SESSION['store_id'])) {
                   </a>
                   <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a href="refilling_invoice.php" class="nav-link">
+                      <a href="" class="nav-link">
                         <i class="nav-icon fab fa-stack-overflow"></i>
                         <p>Refilling Stock</p>
                       </a>
@@ -170,11 +170,11 @@ if (isset($_SESSION['store_id'])) {
                     <li class="nav-item">
                       <a href="report-refillingConverts.php" class="nav-link">
                         <d class="nav-icon fas fa-pen-square"></d>
-                        <p>Refilling Batches</p>
+                        <p>Converted Batches</p>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="returnToHub.php" class="nav-link">
+                      <a href="" class="nav-link">
                         <i class="nav-icon fas fa-reply-all"></i>
                         <p>Report</p>
                       </a>

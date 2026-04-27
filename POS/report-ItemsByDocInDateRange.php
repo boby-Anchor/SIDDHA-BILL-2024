@@ -231,7 +231,8 @@ $totalValue = 0;
                 order: [
                     [1, 'asc']
                 ],
-                buttons: [{
+                buttons: ["copy",
+                    {
                         extend: "pdfHtml5",
                         text: "PDF",
                         orientation: "portrait", // or 'landscape'
