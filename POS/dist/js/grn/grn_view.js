@@ -15,9 +15,15 @@ function getItems(grn_number, invoice_number, grn_date, supplier) {
                     const tableBody = document.querySelector("#grn_items_table_body");
                     tableBody.innerHTML = '';
                     var row_id = 0;
+                    var billTotalValue = 0;
+                    var billTotalCost = 0;
 
                     response.data.forEach((row) => {
                         const newRow = document.createElement("tr");
+
+                        var totalValue = row.grn_p_qty * row.grn_p_price;
+                        billTotalValue += totalValue;
+                        billTotalCost += parseFloat(row.grn_p_cost);
 
                         newRow.innerHTML = `
                                     <td>
@@ -44,24 +50,44 @@ function getItems(grn_number, invoice_number, grn_date, supplier) {
                                     <td>
                                         ${row.p_free_qty}
                                     </td>
-                                    <td>
+                                    <td class="text-right">
                                         ${row.grn_p_price}
                                     </td>
-                                    <td>
-                                        ${row.grn_p_qty * row.grn_p_price}
+                                    <td class="text-right">
+                                        ${totalValue}
                                     </td>
                                     <td>
                                         ${row.p_plus_discount}
                                     </td>
-                                    <td>
-                                        ${row.grn_p_cost}
+                                    <td class="text-right">
+                                        ${parseFloat(row.grn_p_cost)}
                                     </td>
-                                    <td>
+                                    <td class="text-right">
                                         ${row.grn_u_cost}
                                     </td>
                                 `;
                         tableBody.appendChild(newRow);
                     });
+
+
+                    const tableFooter = document.createElement("tr");
+
+                    tableFooter.innerHTML = `
+                                <td colspan="9">
+                                    Total Amount
+                                </td>
+                                <td class="text-right">
+                                    ${billTotalValue}
+                                </td>
+                                <td></td>
+                                <td class="text-right">
+                                    ${billTotalCost}
+                                </td>
+                                <td></td>
+                            `;
+
+                    tableBody.appendChild(tableFooter);
+
                     $("#grn-items-data-modal").data("grn", grn_number);
                     $("#grn-items-data-modal").data("invoice_number", invoice_number);
                     $("#grn-items-data-modal").data("grn_date", grn_date);
