@@ -19,6 +19,7 @@ function viewPoItems(poNumber, shopName, poShopName, userName, poDate, subTotal,
                                     <td>${++row_id}</td>
                                     <td>${item.code || ""}</td>
                                     <td>${item.name || item.invoiceItem || ""}</td>
+                                    <td class="text-center">${item.ucv_name}${item.unit}</td>
                                     <td>${item.sku || ""}</td>
                                     <td>${item.brand_name || ""}</td>
                                     <td>${item.invoiceItem_price ? Number(item.invoiceItem_price).toLocaleString() : ""}</td>

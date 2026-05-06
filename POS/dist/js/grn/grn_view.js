@@ -39,15 +39,15 @@ function getItems(grn_number, invoice_number, grn_date, supplier) {
                                         ${row.ucv_name}${row.unit}
                                     </td>
                                     <td>
-                                        ${row.sku ? row.sku : ''}
+                                        ${row.sku || ""}
                                     </td>
                                     <td>
                                         ${row.brand}
                                     </td>
-                                    <td>
+                                    <td class="text-right">
                                         ${row.grn_p_qty}
                                     </td>
-                                    <td>
+                                    <td class="text-right">
                                         ${row.p_free_qty}
                                     </td>
                                     <td class="text-right">

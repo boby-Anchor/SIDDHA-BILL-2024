@@ -1,7 +1,5 @@
 <?php
 session_start();
-$shop_id;
-$user_id;
 
 if (!isset($_SESSION['store_id'])) {
     header("location:login.php");
@@ -250,6 +248,7 @@ if (!isset($_SESSION['store_id'])) {
                                         <th>#</th>
                                         <th>Barcode</th>
                                         <th>Item Name</th>
+                                        <th>Volume</th>
                                         <th>SKU</th>
                                         <th>Brand</th>
                                         <th>Item Price</th>

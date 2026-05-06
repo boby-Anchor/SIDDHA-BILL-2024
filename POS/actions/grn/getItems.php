@@ -2,9 +2,6 @@
 session_start();
 require_once "../../config/db.php";
 
-$shop_id;
-$grn_number;
-
 // Session check of login and values assign
 if (isset($_SESSION['store_id'])) {
     $userData = $_SESSION['store_id'][0];
