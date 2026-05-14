@@ -31,9 +31,8 @@ function fetchPatient(chyNumber) {
                 $("#contactNo").text(response.profileData.whatsapp_no);
                 SuccessMessageDisplay(response.message);
             },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-                ErrorMessageDisplay(xhr.responseText);
+            error: function (xhr, response) {
+                ErrorMessageDisplay(JSON.parse(xhr.responseText).message);
             },
         });
     }
@@ -1082,20 +1081,46 @@ function updateBillStatus(value) {
 
     switch (value) {
         case "1":
+
             $.ajax({
-                url: "https://pharmacy-order-backend.siddha.lk/order/",
+                url: "https://app.ceylonhospitals.com/api/v1/siddha/token",
+                // url: "http://localhost:5001/api/v1/siddha/patient/",
                 method: "POST",
                 contentType: "application/json",
                 dataType: "json",
                 data: JSON.stringify({
-                    order_number: token,
+                    token,
                 }),
                 success: function (response) {
+                    console.log(response);
+
+                    $("#regNo").val(response.profileData.appointment.patientProfile.ch_patient_id);
+                    $("#invoicePatientReg").text(response.profileData.appointment.patientProfile.ch_patient_id);
+                    $("#patientName").val(response.profileData.appointment.patientProfile.name);
+                    $("#titleName").text(response.profileData.appointment.patientProfile.name);
+                    $("#contactNo").text(response.profileData.appointment.patientProfile.whatsapp_no);
                     SuccessMessageDisplay(response.message);
+
+                    $.ajax({
+                        url: "https://pharmacy-order-backend.siddha.lk/order/",
+                        method: "POST",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: JSON.stringify({
+                            order_number: token,
+                        }),
+                        success: function (response) {
+                            SuccessMessageDisplay(response.message);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                            ErrorMessageDisplay(xhr.responseText);
+                        },
+                    });
+
                 },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                    ErrorMessageDisplay(xhr.responseText);
+                error: function (xhr, response) {
+                    ErrorMessageDisplay(JSON.parse(xhr.responseText).message);
                 },
             });
             break;
