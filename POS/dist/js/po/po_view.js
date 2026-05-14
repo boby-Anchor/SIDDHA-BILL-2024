@@ -110,11 +110,11 @@ function handleBillPrint() {
         const cells = $(this).find("td");
         const code = $(cells[1]).text().trim();
         const name = $(cells[2]).text().trim();
-        const brand = $(cells[4]).text().trim();
-        const price = parseFloat($(cells[5]).text().replace(/,/g, ''));
-        const qty = parseFloat($(cells[6]).text().replace(/,/g, ''));
-        const total = parseFloat($(cells[7]).text().replace(/,/g, ''));
-
+        const volume = $(cells[3]).text().trim();
+        const brand = $(cells[5]).text().trim();
+        const price = parseFloat($(cells[6]).text().replace(/,/g, ''));
+        const qty = parseFloat($(cells[7]).text().replace(/,/g, ''));
+        const total = parseFloat($(cells[8]).text().replace(/,/g, ''));
         poArray.push({
             code: code,
             product_name: name,
@@ -125,7 +125,7 @@ function handleBillPrint() {
             item_price: '',
             unit_price: '',
             brand: brand,
-            discount: 0,
+            volume,
             product_unit: ''
         });
     });
@@ -144,76 +144,74 @@ function handleBillPrint() {
     $('#po_bill_date').text(poDate || '');
 }
 
-function setDataToBill(billData, poArray) {
-    let productsAllTotal = 0;
-    let discount_percentage = 0;
+    function setDataToBill(billData, poArray) {
+        let productsAllTotal = 0;
+        let discount_percentage = 0;
 
-    if (Array.isArray(billData) && billData.length > 0) {
-        discount_percentage = billData[0].discount_percentage || 0;
-    }
+        if (Array.isArray(billData) && billData.length > 0) {
+            discount_percentage = billData[0].discount_percentage || 0;
+        }
 
-    let html = "";
+        let html = "";
 
-    // ===== Bill Header =====
-    html += `
+        // ===== Bill Header =====
+        html += `
                     <div class="col-12">
                       <div class="row">
-                        <div class="col-3"><span class="product_cost">U.Price</span></div>
-                        <div class="col-3 text-center"><span class="product_qty">QTY</span></div>
-                        <div class="col-3 text-center"><span class="productTotal">D.%</span></div>
-                        <div class="col-3 text-center"><span class="productTotal">Total</span></div>
+                        <div class="col-4"><span class="product_cost">U.Price</span></div>
+                        <div class="col-4 text-center"><span class="product_qty">QTY</span></div>
+                        <div class="col-4 text-center"><span class="productTotal">Total</span></div>
                       </div>
                     </div>
                     `;
 
-    // ===== Product Loop =====
-    poArray.forEach(product => {
-        const product_name = product.product_name || "";
-        const product_brand = product.brand || "";
-        const product_discount = product.discount || 0;
-        const product_cost = parseFloat(product.product_cost) || 0;
-        const product_qty = parseFloat(product.product_qty) || 0;
+        // ===== Product Loop =====
+        poArray.forEach(product => {
+            const product_name = product.product_name || "";
+            const product_volume = product.volume || "";
+            const product_brand = product.brand || "";
+            const product_discount = product.discount || 0;
+            const product_cost = parseFloat(product.product_cost) || 0;
+            const product_qty = parseFloat(product.product_qty) || 0;
 
-        const productTotal = product_cost * product_qty;
-        productsAllTotal += productTotal;
+            const productTotal = product_cost * product_qty;
+            productsAllTotal += productTotal;
 
-        html += `
-                      <div class="col-12">
-                        <div class="row">
-                          <div class="col-6">
+            html += `
+                    <div class="row">
+                        <div class="col-8">
                             <span class="product_name">${product_name}</span>
-                          </div>
-                          <div class="col-6">
+                        </div>
+                        <div class="col-4">
+                            <span class="product_name">${product_volume}</span>
+                        </div>
+                        <div class="col-12">
                             <span class="product_cost">${product_brand}</span>
                           </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                          <span class="product_cost">${product_cost}</span>
                         </div>
-
-                        <div class="row">
-                          <div class="col-3">
-                            <span class="product_cost">${product_cost}</span>
-                          </div>
-                          <div class="col-3 text-center">
-                            <span class="product_qty">${product_qty}</span>
-                          </div>
-                          <div class="col-3 text-center">
-                            <span class="productTotal">${product_discount}</span>
-                          </div>
-                          <div class="col-3 text-center">
-                            <span class="productTotal">${productTotal}</span>
-                          </div>
+                        <div class="col-4 text-center">
+                          <span class="product_qty">${product_qty}</span>
                         </div>
-                      </div>
-                      <div class="col-12" style="border-bottom: #0e0e0e 0.1rem solid;"></div>
-                      `;
-    });
+                        <div class="col-4 text-center">
+                          <span class="productTotal">${productTotal}</span>
+                        </div>
+                    </div>
+                    <div class="col-12" style="border-bottom: #0e0e0e 0.1rem solid;"></div>
+                    `;
+        });
 
-    let net_total = productsAllTotal;
+        let net_total = productsAllTotal;
 
-    if (discount_percentage != 0) {
-        net_total = productsAllTotal * (1 - discount_percentage / 100);
-    }
+        if (discount_percentage != 0) {
+            net_total = productsAllTotal * (1 - discount_percentage / 100);
+        }
 
-    html += `
+        html += `
                     <div class="col-12">
                       <div class="row">
                         <div>
@@ -242,9 +240,9 @@ function setDataToBill(billData, poArray) {
                     </div>
                     `;
 
-    document.getElementById("printInvoiceData").innerHTML = html;
-    printPOBill();
-}
+        document.getElementById("printInvoiceData").innerHTML = html;
+        printPOBill();
+    }
 
 // invoice print
 function printPOBill() {
