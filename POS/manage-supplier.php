@@ -59,6 +59,7 @@ if (!isset($_SESSION['store_id'])) {
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Address</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -70,12 +71,14 @@ if (!isset($_SESSION['store_id'])) {
                       ?>
                         <tr>
                           <th scope="row"><?php echo ++$n; ?></th>
-                          <td><?php echo $row['name']; ?></td>
-                          <td><?php echo $row['email']; ?></td>
-                          <td><?php echo $row['phone']; ?></td>
+                          <td><?= $row['name']; ?></td>
+                          <td><?= $row['email']; ?></td>
+                          <td><?= $row['phone']; ?></td>
+                          <td><?= $row['address']; ?></td>
                           <td>
-                            <a class="btn btn-info btn-sm disabled" data-toggle="modal" data-target="#edit-customer<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></a>
-
+                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit-supplier-modal" onclick="getDetails(<?= $row['id']; ?>)">
+                              <i class="fa fa-edit"></i>
+                            </button>
                             <?php
                             $isActive = $row['status'] == 1;
                             $newStatus = $isActive ? 0 : 1;
@@ -105,6 +108,51 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Footer End -->
   </div>
 
+  <!-- Edit Modal start -->
+  <div class="modal fade" id="edit-supplier-modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-dark">
+        <div>
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update Supplier Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="row pb-3">
+              <div class="col-6">
+                <label for="name">Name</label>
+                <input type="text" class="d-none" id="supplier_id" required>
+                <input type="text" class="form-control" id="supplier_name" placeholder="Product Name" name="supplier_name" required>
+              </div>
+              <div class="col-6">
+                <label>Supplier Email</label>
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email" value="" required>
+              </div>
+            </div>
+            <div class="row pb-3">
+              <div class="col-6">
+                <label for="name">Contact No</label>
+                <input type="text" class="form-control" id="contact" name="contact" placeholder="Contact Number" value="" required>
+              </div>
+              <div class="col-6">
+                <label for="name">Address</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="" required>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="update-details-button" name="updateDetailsButton" class="btn btn-primary">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Edit Modal end  -->
+
   <!-- All JS -->
   <?php include("part/all-js.php"); ?>
   <!-- All JS end -->
@@ -115,12 +163,63 @@ if (!isset($_SESSION['store_id'])) {
 
   <!-- Page specific script -->
   <script>
-    $(function() {
-      $(".select2").select2();
-      $(".select2bs4").select2({
-        theme: "bootstrap4",
-      });
-    });
+    var $saveButton = $('#update-details-button');
+
+    function getDetails(id) {
+      InfoMessageDisplay('Loading details...');
+      try {
+        $.ajax({
+          url: "actions/supplier/getSupplierDetailsById.php",
+          method: "POST",
+          data: {
+            id
+          },
+          dataType: "json",
+          success: function(response) {
+            switch (response.status) {
+              case "success":
+                setData(response.data);
+                break;
+
+              case "sessionExpired":
+                handleExpiredSession(response.message);
+                break;
+
+              case "error":
+                ErrorMessageDisplay(response.message);
+                break;
+
+              default:
+                ErrorMessageDisplay("An unknown error occurred.");
+                break;
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+            ErrorMessageDisplay(error);
+          },
+        });
+      } catch (error) {
+        ErrorMessageDisplay("Data get request failed.");
+        console.error(error.message);
+      }
+    }
+
+    function setData(data) {
+      $("#edit-supplier-modal").modal("show");
+
+      $('#supplier_id').val(data.id);
+      $('#supplier_name').val(data.name);
+      $('#email').val(data.email);
+      $('#contact').val(data.phone);
+      $('#address').val(data.address);
+
+      if (data.status == 1) {
+        $('#product_status').removeClass('border-danger').addClass('border-success');
+      } else {
+        $('#product_status').removeClass('border-success').addClass('border-danger');
+      }
+    }
 
     function updateStatus(id, status) {
       try {
@@ -164,6 +263,67 @@ if (!isset($_SESSION['store_id'])) {
         ErrorMessageDisplay(error.message)
       }
     }
+
+    $saveButton.on('click', function() {
+      const supplier_id = $('#supplier_id').val().trim() || null;
+      const supplier_name = $('#supplier_name').val().trim() || null;
+      const email = $('#email').val().trim() || null;
+      const contact = $('#contact').val().trim() || null;
+      const address = $('#address').val().trim() || null;
+
+      console.log(supplier_id);
+      console.log(supplier_name);
+      console.log(email);
+      console.log(contact);
+      console.log(address);
+
+      $.ajax({
+        url: "actions/supplier/updateSupplierDetails.php",
+        method: "POST",
+        data: {
+          supplier_id,
+          supplier_name,
+          email,
+          contact,
+          address,
+        },
+        success: function(response) {
+          console.log(response);
+
+          try {
+            const result = JSON.parse(response);
+            switch (result.status) {
+              case "success":
+                $("#edit-supplier-modal").modal("hide");
+                SuccessMessageDisplay(result.message);
+                setTimeout(() => {
+                  location.reload();
+                }, 3000);
+                break;
+
+              case "sessionExpired":
+                handleExpiredSession(result.message);
+                break;
+
+              case "error":
+                ErrorMessageDisplay(result.message);
+                break;
+
+              default:
+                ErrorMessageDisplay("An unknown error occurred.");
+                break;
+            }
+          } catch (error) {
+            ErrorMessageDisplay("Invalid server response");
+            console.error(error.message);
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+          ErrorMessageDisplay(error);
+        },
+      });
+    });
   </script>
 </body>
 
