@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#regNo").focus();
+    $("#token").focus();
 });
 
 // reset prices modal table body on modal close
@@ -1076,12 +1076,13 @@ function updateBillStatus(value) {
     var token = $("#token").val();
 
     if (!token || token <= 0) {
+        $('#bill_status').val(0);
+        ErrorMessageDisplay("Invalid token.");
         return;
     }
 
     switch (value) {
         case "1":
-
             $.ajax({
                 url: "https://app.ceylonhospitals.com/api/v1/siddha/token",
                 // url: "http://localhost:5001/api/v1/siddha/patient/",
@@ -1099,6 +1100,14 @@ function updateBillStatus(value) {
                     $("#patientName").val(response.profileData.appointment.patientProfile.name);
                     $("#titleName").text(response.profileData.appointment.patientProfile.name);
                     $("#contactNo").text(response.profileData.appointment.patientProfile.whatsapp_no);
+
+                    // ------------------------ Token Print Data Set ------------------------ //
+                    $("#token_number").text(token);
+                    $("#token_patient_chy").text(response.profileData.appointment.patientProfile.ch_patient_id);
+                    $("#token_patient_name").text(response.profileData.appointment.patientProfile.name);
+                    $("#token_date").text(response.profileData.appointment.doctorTimeslot.doctorDate.date);
+                    $("#token_time").text(response.profileData.appointment.doctorTimeslot.time_sloat);
+                    $("#token_doctor").text(response.profileData.appointment.doctorTimeslot.doctorDate.doctor.name);
                     SuccessMessageDisplay(response.message);
 
                     $.ajax({
@@ -1179,5 +1188,117 @@ function updateBillStatus(value) {
             });
             break;
     }
+}
 
+function handleTokenPrint() {
+
+    var printWindow = window.open("", "_blank");
+    printWindow.document.write("<html><head><title>Invoice</title>");
+
+    function loadContent() {
+        printWindow.document.write("<style>");
+        printWindow.document.write(
+            "\
+      span {\
+        font-size: 10px;\
+        font-weight:bold;\
+      }\
+      .paperSize48 {\
+        background-color: whitesmoke;\
+        width: 48mm;\
+      }\
+      .billpreviewlogo48 {\
+        height: 20px;\
+        width: 120px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: contain;\
+      }\
+      .address48,\
+      .datetime48,\
+      .agent48 {\
+        font-size: small;\
+        font-weight: bold;\
+      }\
+      .productTable48 {\
+        font-size: small;\
+      }\
+      .paperSize58 {\
+        background-color: whitesmoke;\
+        width: 58mm;\
+      }\
+      .billpreviewlogo {\
+        height: 70px;\
+        width: 120px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: contain;\
+      }\
+      .address58{\
+        max-width: 130px;\
+      }\
+      .address58,\
+      .datetime58,\
+      .agent58 {\
+        font-size: small;\
+        font-weight: bold;\
+      }\
+      .productTable58 {\
+        font-size: small;\
+      }\
+      .billpreviewlogo80 {\
+        height: 100px;\
+        width: 160px;\
+        background-position: center;\
+        background-repeat: no-repeat;\
+        background-size: cover;\
+      }\
+      .paperSize80 {\
+        background-color: whitesmoke;\
+        width: 80mm;\
+      }\
+      .contactNumber{\
+        font-size:medium;\
+        font-weight: bold;\
+      }\
+        .check-by-box {\
+            border: 2px solid #000 !important;\
+            width:100%;\
+            padding: 5px;\
+            font-family: Arial, sans-serif;\
+        }\
+    .check-by-box label {\
+            display: block;\
+            font-size: 10px !important;\
+        }\
+    "
+        );
+        printWindow.document.write("</style>");
+
+        printWindow.document.write("</head><body>");
+        printWindow.document.write(document.getElementById("token-print").innerHTML);
+        printWindow.document.write("</body></html>");
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+    }
+
+    function stylesheetLoaded() {
+        if (++loadedStylesheets === totalStylesheets) {
+            loadContent();
+        }
+    }
+
+    var totalStylesheets = 1;
+    var loadedStylesheets = 0;
+
+    var bootstrapLink = printWindow.document.createElement("link");
+    bootstrapLink.rel = "stylesheet";
+    bootstrapLink.href = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css";
+    bootstrapLink.onload = stylesheetLoaded;
+    printWindow.document.head.appendChild(bootstrapLink);
+
+    if (totalStylesheets === 0) {
+        loadContent();
+    }
 }

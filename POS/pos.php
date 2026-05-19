@@ -134,11 +134,11 @@ if (!isset($_SESSION['store_id'])) {
                       <?php
                       $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
-                        ?>
+                      ?>
                         <option value="<?= $payment_type_row['payment_type_id'] ?>">
                           <?= $payment_type_row['payment_type'] ?>
                         </option>
-                        <?php
+                      <?php
                       }
                       ?>
                     </select>
@@ -191,11 +191,11 @@ if (!isset($_SESSION['store_id'])) {
                     <?php
                     $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
                     while ($doctors_row = $doctors_rs->fetch_assoc()) {
-                      ?>
+                    ?>
                       <option value="<?= $doctors_row['name'] ?>">
                         <?= $doctors_row['name'] ?>
                       </option>
-                      <?php
+                    <?php
                     }
                     ?>
                   </select>
@@ -207,16 +207,19 @@ if (!isset($_SESSION['store_id'])) {
               <!-- Bill Status Select Start -->
               <div class="col-5 mb-2 p-2">
                 <div class="row">
-                  <div class="col-6">
+                  <div class="col-4">
                     <input type="number" id="token" class="form-control" placeholder="Token">
                   </div>
-                  <div class="col-6">
+                  <div class="col-5">
                     <select id="bill_status" class="form-control" onchange="updateBillStatus(value)">
                       <option value="0" selected hidden disabled>Select Status</option>
                       <option value="1">Billing</option>
                       <option value="2">Ready</option>
                       <option value="4">Abandon</option>
                     </select>
+                  </div>
+                  <div class="col-3">
+                    <button class="w-100 btn btn-primary" type="button" onclick="handleTokenPrint()"><i class="nav-icon fas fa-receipt"></i></button>
                   </div>
                 </div>
               </div>
@@ -234,11 +237,11 @@ if (!isset($_SESSION['store_id'])) {
                   <?php
                   $bill_type_rs = $conn->query("SELECT * FROM bill_type");
                   while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
-                    ?>
+                  ?>
                     <option value="<?= $bill_type_row['bill_type_id'] ?>">
                       <?= $bill_type_row['bill_type_name'] ?>
                     </option>
-                    <?php
+                  <?php
                   }
                   ?>
                 </select>
@@ -433,7 +436,7 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/data-table-js.php"); ?>
     <!-- Data Table JS end -->
 
-    <!-- ========================================== -->
+    <!-- ================== Invoice Start ================== -->
     <div id="invoice-POS" class="d-none">
 
       <?php
@@ -454,7 +457,7 @@ if (!isset($_SESSION['store_id'])) {
           WHERE `customize_bill_shop-id` = '$shop_id'
           ");
           $bill_data = $bill_data_rs->fetch_assoc();
-          ?>
+      ?>
           <div class="d-flex justify-content-center">
             <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
               <div class="row gap-1">
@@ -470,7 +473,7 @@ if (!isset($_SESSION['store_id'])) {
                             <h3>
                               <b>
                                 <?php //echo $bill_data['shopName'] 
-                                    ?>
+                                ?>
                               </b>
                             </h3>
                           </label>
@@ -562,7 +565,7 @@ if (!isset($_SESSION['store_id'])) {
                               </label>
                             </center>
 
-                            <label for="date">Date: <?= $currentDate ?>     <?= $currentTime ?></label>
+                            <label for="date">Date: <?= $currentDate ?> <?= $currentTime ?></label>
 
                             <label for="emp-no">EMP No:.............................</label>
 
@@ -576,12 +579,80 @@ if (!isset($_SESSION['store_id'])) {
               </table>
             </div>
           </div>
-          <?php
+      <?php
         }
       }
       ?>
     </div>
-    <!-- ========================================== -->
+    <!-- ================== Invoice End ================== -->
+
+    <!-- ================== Token Start ================== -->
+    <div id="token-print" class="d-none">
+
+      <?php
+      if (isset($_SESSION['store_id'])) {
+
+        $userLoginData = $_SESSION['store_id'];
+
+        $currentDate = date("Y-m-d");
+        $currentTime = date("H:i:s");
+
+        foreach ($userLoginData as $userData) {
+          $shop_id = $userData['shop_id'];
+          $user_name = $userData['name'];
+
+          $bill_data_rs = $conn->query("SELECT shop.shopName AS shopName, customize_bills.*
+          FROM `customize_bills`
+          INNER JOIN shop ON shopId = customize_bills.`customize_bill_shop-id`
+          WHERE `customize_bill_shop-id` = '$shop_id'
+          ");
+          $bill_data = $bill_data_rs->fetch_assoc();
+      ?>
+          <div class="d-flex justify-content-center">
+            <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
+              <div class="row">
+
+                <div class="col-12 p-3 border border-5">
+                  <label id="token_number" class="text-lg"></label>
+                </div>
+
+                <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div>
+                <div class="col-12">
+                  <label class="col-4">Patient:</label>
+                  <label id="token_patient_name"></label>
+                </div>
+                <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div>
+                <div class="col-12">
+                  <label class="col-4">CH No:</label>
+                  <label id="token_patient_chy"></label>
+                </div>
+                <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div>
+                <div class="col-12">
+                  <label class="col-4">Date:</label>
+                  <label id="token_date"></label>
+                </div>
+                <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div>
+                <div class="col-12">
+                  <label class="col-4">Time:</label>
+                  <label id="token_time"></label>
+                </div>
+                <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div>
+                <div class="col-12">
+                  <label class="col-4">Doctor:</label>
+                  <label id="token_doctor"></label>
+                </div>
+                <div class="col-12" style="border-bottom: #0e0e0e 0.1rem solid;"></div>
+
+                <!-- <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div> -->
+              </div>
+            </div>
+          </div>
+      <?php
+        }
+      }
+      ?>
+    </div>
+    <!-- ================== Token End ================== -->
 
   </div>
 </body>
@@ -589,7 +660,7 @@ if (!isset($_SESSION['store_id'])) {
 <script src="dist/js/pos.js"></script>
 
 <script>
-  $(function () {
+  $(function() {
     //Initialize Select2 Elements
     $(".doctorSelect").select2();
   });
