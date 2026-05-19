@@ -17,7 +17,7 @@ if (isset($_SESSION['store_id'])) {
         INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
         INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
         WHERE stock2.stock_shop_id = '$shop_id'
-        AND stock2.stock_item_qty >= 0
+        AND stock2.stock_item_qty > 0
         AND p_medicine.name LIKE '%$searchName%'
         ORDER BY bName ASC
         ";

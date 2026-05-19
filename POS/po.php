@@ -115,15 +115,13 @@ if (!isset($_SESSION['store_id'])) {
                                         class="po-shop-selector form-control rounded-5">
                                         <option value="0" selected disabled hidden>Select shop</option>
                                         <?php
-                                        $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
+                                        $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop WHERE shop.shopId != '$shop_id' AND shop.shopStatus = '1'");
                                         while ($shops_row = $shops_rs->fetch_assoc()) {
-                                            if ($shop_id != $shops_row['shopId']) {
                                         ?>
-                                                <option value="<?= $shops_row['shopId'] ?>">
-                                                    <?= $shops_row['shopName'] ?>
-                                                </option>
+                                            <option value="<?= $shops_row['shopId'] ?>">
+                                                <?= $shops_row['shopName'] ?>
+                                            </option>
                                         <?php
-                                            }
                                         }
                                         ?>
                                     </select>

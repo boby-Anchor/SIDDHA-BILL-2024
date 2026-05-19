@@ -128,7 +128,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col-auto">
                       <select name="po_shop" id="po_shop" class="form-control" required>
                         <option value="" disabled selected hidden>Select Shop</option>
-                        <option value="2">Siddha.lk</option>
+                        <option value="14">Siddha.lk</option>
+                        <option value="2">Old Pharmacy</option>
                         <option value="9">Yakkala Ayurveda</option>
                       </select>
                     </div>

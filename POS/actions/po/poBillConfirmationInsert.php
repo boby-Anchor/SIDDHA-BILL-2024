@@ -2,9 +2,9 @@
 session_start();
 require_once "../../config/db.php";
 
-$user_id;
-$shop_id;
-$invoice_number;
+$user_id = null;
+$shop_id = null;
+$invoice_number = null;
 
 try {
     if (isset($_SESSION['store_id'])) {

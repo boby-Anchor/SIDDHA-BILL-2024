@@ -172,7 +172,7 @@ if (!isset($_SESSION['store_id'])) {
                                                                                     ?>
                                                                                         <tr>
                                                                                             <td><?= $rowCount; ?></td>
-                                                                                            <td><?= $poItems_data['invoiceNumber']; ?></td>
+                                                                                            <td><?= $poItems_data['barcode']; ?></td>
                                                                                             <td><?= $poItems_data['invoiceItem']; ?></td>
                                                                                             <td><?= $poItems_data['invoiceItem_qty']; ?></td>
                                                                                             <td><?= number_format($poItems_data['invoiceItem_price'], 0); ?></td>
