@@ -151,7 +151,7 @@ function printTable(grnNumber, invoice_number, grnDate, supplier_name) {
     printWindow.document.write('<h6>Added : ' + grnDate + '</h6>');
     printWindow.document.write('</div>');
     printWindow.document.write('<div class="col-12" style="text-align: start;">');
-    printWindow.document.write('<h6>Printed : <?= date("Y - m - d H: i: s") ?></h6>');
+    printWindow.document.write('<h6>Printed : ' + new Date().toLocaleString() + '</h6>');
     printWindow.document.write('</div>');
     printWindow.document.write('</div>');
     printWindow.document.write('</div>');
