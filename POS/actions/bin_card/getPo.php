@@ -67,6 +67,14 @@ try {
 
     $result = $stmt->get_result();
 
+    if ($result->num_rows === 0) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'No data available.'
+        ]);
+        exit();
+    }
+
     echo json_encode([
         'status' => 'success',
         'details' => $result->fetch_all(MYSQLI_ASSOC)
