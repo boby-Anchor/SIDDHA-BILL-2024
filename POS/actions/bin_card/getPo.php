@@ -2,7 +2,10 @@
 session_start();
 
 if (!isset($_SESSION['store_id'])) {
-    header("Location: ../login.php");
+    echo json_encode([
+        'status' => 'sessionExpired',
+        'message' => 'Session expired. Wait to Login again.'
+    ]);
     exit();
 }
 
