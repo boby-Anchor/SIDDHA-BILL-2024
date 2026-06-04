@@ -54,11 +54,11 @@ if (!isset($_SESSION['store_id'])) {
                         <div class="col-12">
                             <div class="card bg-dark">
                                 <div class="card-header">
-                                    <!-- <h3>
-                                        View Purchase Orders Between And 
-                                    </h3> -->
+                                    <h3>
+                                        Bin-Card Flow of Items.
+                                    </h3>
                                     <div class="mb-4"></div>
-                                    <!-- Form start -->
+                                    <!-- Filter Start -->
                                     <div class="row px-3">
                                         <div class="col-auto">
                                             <label for="start_date" class="col-form-label">Start Date:</label>
@@ -78,13 +78,13 @@ if (!isset($_SESSION['store_id'])) {
                                         <div class="col-auto">
                                             <input type="text" id="barcode" name="barcode" class="form-control" placeholder="Enter barcode">
                                         </div>
-
                                     </div>
+                                    <!-- Filter End -->
                                 </div>
 
-                                <div class="card-body">
+                                <div class="card-body h-100">
                                     <div class="row">
-                                        <!-- Card 1 -->
+                                        <!-- Card 1 GRN Start -->
                                         <div class="col-md-6">
                                             <div class="card border border-success p-2 bg-dark">
                                                 <div class="card-header text-white d-flex align-items-center">
@@ -105,14 +105,15 @@ if (!isset($_SESSION['store_id'])) {
                                                                 <!-- <th>Placed By</th> -->
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="grnTableBody">
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
+                                        <!-- Card 1 GRN End -->
 
-                                        <!-- Card 2 -->
+                                        <!-- Card 2 PO Start -->
                                         <div class="col-md-6">
                                             <div class="card border border-warning p-2 bg-dark">
                                                 <div class="card-header text-white d-flex align-items-center">
@@ -131,15 +132,42 @@ if (!isset($_SESSION['store_id'])) {
                                                                 <!-- <th>Placed By</th> -->
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="poTableBody">
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <!-- Card 2 PO End -->
                                     </div>
-
+                                    <div class="row">
+                                        <!-- Card 3 Return Start -->
+                                        <div class="col-md-12">
+                                            <div class="card border border-danger p-2 bg-dark">
+                                                <div class="card-header text-white d-flex align-items-center">
+                                                    <h5 class="mb-0 pr-2">Return To Hub Flow</h5>
+                                                    <button class="btn btn-sm btn-primary" id="returnSearchButton"><i class="fas fa-search"></i></button>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <table id="returnTable" class="table table-bordered mb-0">
+                                                        <thead>
+                                                            <tr class="bg-info">
+                                                                <th>Return No.</th>
+                                                                <th>Date</th>
+                                                                <th>From</th>
+                                                                <th>Reason</th>
+                                                                <th>Qty</th>
+                                                                <th>Price</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="returnTableBody">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Card 3 Return End -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -157,10 +185,8 @@ if (!isset($_SESSION['store_id'])) {
     <!-- Data Table JS end -->
 </body>
 
-<!--  JS -->
-<!-- <script src="dist/js/po/po_view.js"></script> -->
 
-
+<!-- JS Start -->
 <script>
     function dataValidation(barcode) {
         if (!barcode) {
@@ -180,6 +206,9 @@ if (!isset($_SESSION['store_id'])) {
             return;
         }
 
+        let table = $("#grnTable").DataTable();
+        table.clear().draw();
+
         $.ajax({
             type: "POST",
             url: "actions/bin_card/getGrn.php",
@@ -192,11 +221,7 @@ if (!isset($_SESSION['store_id'])) {
             success: function(response) {
                 switch (response.status) {
                     case "success":
-                        setGRNDetails(response.details);
-                        break;
-
-                    case "empty":
-                        $("#grnTableBody").html("<td colspan='5' style='color: white;'>" + response.message + ".</td>");
+                        setGRNDetails(table, response.details);
                         break;
 
                     case "error":
@@ -208,14 +233,15 @@ if (!isset($_SESSION['store_id'])) {
                         break;
                 }
             },
+            error: function(xhr, status, error) {
+                ErrorMessageDisplay("An error occurred while fetching data. Try again.");
+                console.log(xhr.responseText);
+                console.log(error);
+            }
         });
     });
 
-    function setGRNDetails(details) {
-
-        let table = $("#grnTable").DataTable();
-
-        table.clear();
+    function setGRNDetails(table, details) {
 
         details.forEach(function(item) {
             table.row.add([
@@ -237,11 +263,12 @@ if (!isset($_SESSION['store_id'])) {
         var endDate = $("#end_date").val() || null;
         var barcode = $("#barcode").val() || null;
 
-        dataValidation(barcode);
+        if (!dataValidation(barcode)) {
+            return;
+        }
 
         let poTable = $("#poTable").DataTable();
-
-        // poTable.clear();
+        poTable.clear().draw();
 
         $.ajax({
             type: "POST",
@@ -259,10 +286,6 @@ if (!isset($_SESSION['store_id'])) {
                         setPODetails(poTable, response.details);
                         break;
 
-                    case "empty":
-                        $("#poTableBody").html("<td colspan='5' style='color: white;'>" + response.message + ".</td>");
-                        break;
-
                     case "error":
                         ErrorMessageDisplay(response.message);
                         break;
@@ -272,6 +295,11 @@ if (!isset($_SESSION['store_id'])) {
                         break;
                 }
             },
+            error: function(xhr, status, error) {
+                ErrorMessageDisplay("An error occurred while fetching data. Try again.");
+                console.log(xhr.responseText);
+                console.log(error);
+            }
         });
     });
 
@@ -287,6 +315,66 @@ if (!isset($_SESSION['store_id'])) {
             ]);
         });
         poTable.draw();
+    }
+
+    $("#returnSearchButton").click(function() {
+        var startDate = $("#start_date").val() || null;
+        var endDate = $("#end_date").val() || null;
+        var barcode = $("#barcode").val() || null;
+
+        if (!dataValidation(barcode)) {
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "actions/bin_card/getReturn.php",
+            data: {
+                startDate,
+                endDate,
+                barcode,
+            },
+            dataType: "json",
+            success: function(response) {
+
+                switch (response.status) {
+                    case "success":
+                        setReturnDetails(response.details);
+                        break;
+
+                    case "error":
+                        ErrorMessageDisplay(response.message);
+                        break;
+
+                    case "sessionExpired":
+                        handleExpiredSession(response.message);
+                        break;
+                }
+            },
+            error: function(xhr, status, error) {
+                ErrorMessageDisplay("An error occurred while fetching data. Try again.");
+                console.log(xhr.responseText);
+                console.log(error);
+            }
+        });
+    });
+
+    function setReturnDetails(details) {
+
+        let returnTable = $("#returnTable").DataTable();
+        returnTable.clear();
+
+        details.forEach(function(item) {
+            returnTable.row.add([
+                item.wastage_number,
+                item.date,
+                item.shopName,
+                item.reason,
+                item.qty,
+                item.item_price,
+            ]);
+        });
+        returnTable.draw();
     }
 
     $(function() {
@@ -319,9 +407,22 @@ if (!isset($_SESSION['store_id'])) {
             .container()
             .appendTo("#poTable_wrapper .col-md-6:eq(0)");
     });
+    $(function() {
+        $("#returnTable")
+            .DataTable({
+                responsive: true,
+                lengthChange: false,
+                autoWidth: false,
+                buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                order: [
+                    [1, 'desc']
+                ],
+            })
+            .buttons()
+            .container()
+            .appendTo("#returnTable_wrapper .col-md-6:eq(0)");
+    });
 </script>
-
-
-<!-- JS end -->
+<!-- JS End -->
 
 </html>
