@@ -29,7 +29,7 @@ $(document).on("click", "#proceedGrnBtn", function () {
     var item_price = parseInt($(this).find("#item_price").val().trim()); // Item price input
     var item_discount = parseInt($(this).find("#item_discount").val().trim()); // Discount input
 
-    var total_cost = $(this).find("#total_cost").text().trim(); // Total cost
+    var total_cost = $(this).find("#total_cost").val().trim(); // Total cost
     var total_value = $(this).find("#total_value").text().trim(); // Total value
     var cost_per_unit = $(this).find("#cost_per_unit").text().trim() || 0; // unit cost
     var unit_s_price = parseFloat($(this).find("#unit_s_price").val().trim()) || 0; // unit price
@@ -155,7 +155,7 @@ $(document).on("click", ".add-btn", function () {
 
       "<td>" + "<input id='item_discount' type='text' class='bg-dark form-control text-center' value='' placeholder='Discount'>" + "</td>" +
 
-      "<td>" + "<label id='total_cost'></label>" + "</td>" +
+      "<td>" + "<input id='total_cost' type='text' class='bg-dark form-control text-center' value='' placeholder='Total Cost'>" + "</td>" +
 
       "<td>" + "<label id='total_value'></label>" + "</td>" +
 
@@ -285,7 +285,6 @@ $(document).on("input", "#item_price", function () {
 $(document).on("input", "#item_discount", function () {
   const $row = $(this).closest("tr");
   var product_name = $row.find("#product_name").text();
-  var ucv_name = $row.find("#ucv_name").text();
   var product_unit = $row.find("#product_unit").text();
   var qty = parseFloat($row.find("#qty_input").val());
   var minimum_qty = parseFloat($row.find("#minimum_qty").text().replace(/[^\d.]/g, ''));
@@ -302,7 +301,37 @@ $(document).on("input", "#item_discount", function () {
     var total_value = item_price * qty;
     $row.find("#total_value").text(total_value.toFixed(0));
     var total_cost = (total_value * (100 - item_discount)) / 100;
-    $row.find("#total_cost").text(total_cost.toFixed(0));
+    $row.find("#total_cost").val(total_cost.toFixed(0));
+    if (product_unit !== 'pack / bottle' && product_unit !== 'pieces') {
+      var unit_cost = total_cost / minimum_qty;
+      $row.find("#cost_per_unit").text(unit_cost.toFixed(2));
+    }
+  }
+});
+
+$(document).on("input", "#total_cost", function () {
+  const $row = $(this).closest("tr");
+  var product_name = $row.find("#product_name").text();
+  var product_unit = $row.find("#product_unit").text();
+  var qty = parseFloat($row.find("#qty_input").val());
+  var minimum_qty = parseFloat($row.find("#minimum_qty").text().replace(/[^\d.]/g, ''));
+  var item_price = parseFloat($row.find("#item_price").val());
+  var total_cost = parseFloat($(this).val());
+
+  if (isNaN(qty)) {
+    $(this).val("");
+    ErrorMessageDisplay(product_name + " එකේ Qty දාලා ඉන්න.");
+  } else if (isNaN(item_price)) {
+    $(this).val("");
+    ErrorMessageDisplay(product_name + " එකේ Item Price දාලා ඉන්න.");
+  } else {
+    var total_value = item_price * qty;
+    $row.find("#total_value").text(total_value.toFixed(0));
+    var item_discount = ((total_value - total_cost) / total_value) * 100;
+    if (item_discount < 0) {
+      item_discount = 0;
+    }
+    $row.find("#item_discount").val(item_discount.toFixed(2));
     if (product_unit !== 'pack / bottle' && product_unit !== 'pieces') {
       var unit_cost = total_cost / minimum_qty;
       $row.find("#cost_per_unit").text(unit_cost.toFixed(2));
