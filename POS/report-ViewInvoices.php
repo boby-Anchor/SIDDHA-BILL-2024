@@ -11,8 +11,6 @@ $start_date = '';
 $end_date = '';
 $shop_id = '';
 $invoices = [];
-$totalPrice = 0;
-$totalValue = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -20,14 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $end_date = $_POST['end_date'];
     $shop_id = $_POST['shop_id'];
 
-    $result = $conn->query("SELECT invoices.*, users.name AS cashier
+    $result = $conn->query("SELECT invoices.*,
+        users.name AS cashier,
+        COUNT(invoiceitems.invoiceNumber) AS itemCount
     FROM invoices
-    INNER JOIN users ON invoices.user_id = users.id
-    WHERE
-    Date(created) BETWEEN '$start_date' AND '$end_date'
-    AND invoices.shop_id = '$shop_id'
+    INNER JOIN users
+        ON invoices.user_id = users.id
+    LEFT JOIN invoiceitems
+        ON invoiceitems.invoiceNumber = invoices.invoice_id
+    WHERE DATE(invoices.created)
+        BETWEEN '$start_date' AND '$end_date'
+        AND invoices.shop_id = '$shop_id'
+    GROUP BY invoices.invoice_id
     ");
     $invoices = $result->fetch_all(MYSQLI_ASSOC);
+} else {
+    $start_date = date("Y-m-d");
+    $end_date = date("Y-m-d");
 }
 
 ?>
@@ -94,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                         <div class="col-auto">
                                             <input type="date" id="start_date" name="start_date" class="form-control"
-                                                value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : ''; ?>" required>
+                                                value="<?= $start_date ?>" required>
                                         </div>
 
                                         <div class="col-auto">
@@ -102,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                         <div class="col-auto">
                                             <input type="date" id="end_date" name="end_date" class="form-control"
-                                                value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : ''; ?>" required>
+                                                value="<?= $end_date ?>" required>
                                         </div>
 
                                         <div class="col-auto">
@@ -143,6 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <th>#</th>
                                     <th>Patient Name</th>
                                     <th>Doctor</th>
+                                    <th>Items</th>
                                     <th>Total Amount</th>
                                     <th>Discount Percentages</th>
                                     <th>Cash Paid</th>
@@ -158,8 +166,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 ?>
                                         <tr>
                                             <td> <?= $invoice['invoice_id']; ?> <br> <?= $invoice['created']; ?></td>
-                                            <td> <?= $invoice['p_name']; ?></td>
+                                            <td> <?= $invoice['p_name']; ?> <br> <?= $invoice['reg']; ?></td>
                                             <td> <?= $invoice['d_name']; ?></td>
+                                            <td>
+                                                <button class="btn fa fa-eye badge badge-info p-2 text-white" type="button"
+                                                    onclick='viewInvoiceItems(
+                                                        <?= json_encode($invoice["reg"]) ?>,
+                                                        <?= json_encode($invoice["invoice_id"]) ?>,
+                                                        <?= json_encode($invoice["p_name"]) ?>,
+                                                        <?= json_encode($invoice["d_name"]) ?>,
+                                                        <?= json_encode($invoice["cashier"]) ?>,
+                                                        <?= json_encode($invoice["created"]) ?>
+                                                    )'>
+                                                    <?= $invoice['itemCount'] ?>
+                                                </button>
+                                            </td>
                                             <td> <?= $invoice['total_amount']; ?></td>
                                             <td> <?= $invoice['discount_percentage']; ?></td>
                                             <td> <?= $invoice['paidAmount']; ?></td>
@@ -189,6 +210,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Alert end -->
     </div>
 
+    <!-- Invoice items Modal start -->
+    <div class="modal fade" id="invoice-items-data-modal" tabindex="-1" aria-labelledby="invoiceItemsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceItemsModalLabel">Invoice Details</h5>
+                    <button type="button" class="btn-close btn btn-secondary" data-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Invoice Number:</strong> <span id="invoice_modal_order_number"></span></p>
+                            <p><strong>Registration Number:</strong> <span id="invoice_modal_reg"></span></p>
+                            <p><strong>Patient Name:</strong> <span id="invoice_modal_patient_name"></span></p>
+
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Invoice Date:</strong> <span id="invoice_modal_invoice_date"></span></p>
+                            <p><strong>Doctor Name:</strong> <span id="invoice_modal_doctor_name"></span></p>
+                            <p><strong>Cashier:</strong> <span id="invoice_modal_cashier_name"></span></p>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="invoice_items_table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Barcode</th>
+                                    <th>Item Name</th>
+                                    <th>Volume</th>
+                                    <th>SKU</th>
+                                    <th>Brand</th>
+                                    <th>Item Price</th>
+                                    <th>Qty</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoice_items_table_body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button class="btn btn-warning" type="button" onclick="handlePrint()"><i class="nav-icon fas fa-print"></i> Print</button>
+                    <button class="btn btn-primary" type="button" onclick="handleBillPrint()"><i class="nav-icon fas fa-receipt"></i> Print Bill</button> -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- PO items Modal end -->
+
     <!-- All JS -->
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
@@ -199,6 +271,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Page specific script -->
     <script>
+        function viewInvoiceItems(reg, invoiceNumber, patientName, doctorName, cashierName, invoiceDate) {
+            InfoMessageDisplay("Fetching data.");
+            $.ajax({
+                url: "actions/invoices/getItems.php",
+                method: "POST",
+                data: {
+                    invoiceNumber: invoiceNumber
+                },
+                dataType: "json",
+                success: function(response) {
+                    switch (response.status) {
+                        case "success":
+                            setDataToTable(reg, invoiceNumber, patientName, doctorName, cashierName, invoiceDate, response.items);
+                            break;
+
+                        case "sessionExpired":
+                            handleExpiredSession(response.message);
+                            break;
+
+                        default:
+                            ErrorMessageDisplay(response.message);
+                            break;
+                    }
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                    alert("Could not load invoice items.");
+                }
+            });
+        }
+
+        function setDataToTable(reg, invoiceNumber, patientName, doctorName, cashierName, invoiceDate, items) {
+            const tableBody = document.querySelector("#invoice_items_table_body");
+            tableBody.innerHTML = "";
+            let row_id = 0;
+
+            items.forEach((item) => {
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                                <td>${++row_id}</td>
+                                <td>${item.code || ""}</td>
+                                <td>${item.name || item.invoiceItem || ""}</td>
+                                <td class="text-center">${item.ucv_name}${item.unit}</td>
+                                <td>${item.sku || ""}</td>
+                                <td>${item.brand_name || ""}</td>
+                                <td>${item.invoiceItem_price ? Number(item.invoiceItem_price).toLocaleString() : ""}</td>
+                                <td>${item.invoiceItem_qty ? Number(item.invoiceItem_qty).toLocaleString() : ""}</td>
+                                <td>${item.invoiceItem_total ? Number(item.invoiceItem_total).toLocaleString() : ""}</td>
+                            `;
+                tableBody.appendChild(newRow);
+            });
+
+            document.getElementById("invoice_modal_reg").textContent = reg;
+            document.getElementById("invoice_modal_order_number").textContent = invoiceNumber;
+            document.getElementById("invoice_modal_patient_name").textContent = patientName;
+            document.getElementById("invoice_modal_doctor_name").textContent = doctorName;
+            document.getElementById("invoice_modal_cashier_name").textContent = cashierName;
+            document.getElementById("invoice_modal_invoice_date").textContent = invoiceDate;
+
+            $("#invoice-items-data-modal").modal("show");
+        }
+
         $(function() {
             $("#invoicesTable")
                 .DataTable({
