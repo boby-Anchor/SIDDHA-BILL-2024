@@ -258,6 +258,9 @@ if (!isset($_SESSION['store_id'])) {
             </div>
         </div>
 
+        <!-- Scroll to top button Start -->
+        <?php include("part/scroll_to_top_button.php"); ?>
+        <!-- Scroll to top button End -->
     </div>
 
     <?php
@@ -280,97 +283,86 @@ if (!isset($_SESSION['store_id'])) {
     ?>
 
     <!-- confirm po modal start -->
-    <div class="container">
-        <div class="modal fade bg-success" id="confirmGRN" role="dialog">
-            <div class="modal-dialog d-flex justify-content-between ">
-                <div class="modal-content bg-dark align-items-center vw-100">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Stock Confirmation</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="grnId">
-                            <div class="row">
-                                <div class="col-4 text-center text-black fw-bold">
-                                    <label for="grnNumber">GRN No.</label>
-                                    <?php
-                                    echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
-                                    ?>
-                                </div>
+    <div class="modal fade bg-success" id="confirmGRN" role="dialog">
+        <div class="modal-dialog d-flex justify-content-between ">
+            <div class="modal-content bg-dark align-items-center vw-100">
+                <div class="modal-header">
+                    <h4 class="modal-title">Stock Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="grnId">
+                        <div class="row">
+                            <div class="col-4 text-center text-black fw-bold">
+                                <label for="grnNumber">GRN No.</label>
+                                <?php
+                                echo "<span class=\"fs-2 text-dark fw-bold\" name=\"grnNumber\" id=\"grnNumber\">$grnNumber</span>";
+                                ?>
+                            </div>
 
-                                <div class="col-4 text-center">
-                                    <div class="col-12">
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <label for="grnDate">Date</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <span class="fs-2 text-dark fw-bold" name="grnDate"
-                                                    id="grnDate"><?= $grnDate ?></span>
-                                            </div>
+                            <div class="col-4 text-center">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <label for="grnDate">Date</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <span class="fs-2 text-dark fw-bold" name="grnDate"
+                                                id="grnDate"><?= $grnDate ?></span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-4 text-center">
-                                    <label for="grnTime">Added time</label>
-                                    <span class="fs-2 text-dark fw-bold" name="grnTime"
-                                        id="grnTime"><?= $grnTime ?></span>
-                                </div>
-                                <div class="orderItem col-12 mt-4 mb-3">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">B-CODE</th>
-                                                <th scope="col">P-Name</th>
-                                                <th scope="col">Qty</th>
-                                                <th scope="col">MU-Qty</th>
-                                                <th scope="col">Total Cost</th>
-                                                <th scope="col">Total Value</th>
-                                                <th scope="col">Unit Cost</th>
-                                                <th scope="col">Discount(%)</th>
-                                                <th scope="col">Item S-Price</th>
-                                                <th scope="col">Unit S-Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="grnConfirmationTableBody">
-
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
 
+                            <div class="col-4 text-center">
+                                <label for="grnTime">Added time</label>
+                                <span class="fs-2 text-dark fw-bold" name="grnTime"
+                                    id="grnTime"><?= $grnTime ?></span>
+                            </div>
+                            <div class="orderItem col-12 mt-4 mb-3">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">B-CODE</th>
+                                            <th scope="col">P-Name</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">MU-Qty</th>
+                                            <th scope="col">Total Cost</th>
+                                            <th scope="col">Total Value</th>
+                                            <th scope="col">Unit Cost</th>
+                                            <th scope="col">Discount(%)</th>
+                                            <th scope="col">Item S-Price</th>
+                                            <th scope="col">Unit S-Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="grnConfirmationTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success confirmPObtn">Save</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success confirmPObtn">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
     <!-- confirm po modal end -->
 
-
     <!-- Footer -->
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
 
-
     <!-- Alert -->
     <?php include("part/alert.php"); ?>
     <!-- Alert end -->
-
 
     <!-- All JS -->
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
 
 </body>
-
-<script>
-    const user_id = <?php echo $user_id; ?>;
-</script>
 
 <script src="dist/js/add-stock.js"></script>
 
