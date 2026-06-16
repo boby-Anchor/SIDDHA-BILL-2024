@@ -5,6 +5,9 @@ if (!isset($_SESSION['store_id'])) {
   exit();
 } else {
   require_once "config/db.php";
+
+  $userLoginData = $_SESSION['store_id'];
+  $shop_id = $userLoginData[0]['shop_id'];
 }
 ?>
 <!DOCTYPE html>
@@ -60,22 +63,31 @@ if (!isset($_SESSION['store_id'])) {
                         <th class="adThText">Description</th>
                         <th class="adThText">Items</th>
                         <th class="adThText">Total Value</th>
-                        <th class="adThText">Action</th>
+                        <th class="adThText"><?= $shop_id == 1 ? 'Action' : 'Status' ?></th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php
-                      $grn_details_result = $conn->query("SELECT wastage_batches.*,
-                      shop.shopName AS shop,
-                      wastage_reasons.reason AS reason,
-                      us1.name AS user,
-                      us2.name AS approver
-                      FROM `wastage_batches`
-                      INNER JOIN shop ON wastage_batches.shop_id = shop.shopId
-                      INNER JOIN wastage_reasons ON wastage_batches.wastage_reason_id = wastage_reasons.id
-                      INNER JOIN users us1 ON wastage_batches.created_by = us1.id
-                      LEFT JOIN users us2 ON wastage_batches.approved_by = us2.id
-                      ORDER BY created DESC LIMIT 100");
+                      $sql = "SELECT
+                          wastage_batches.*,
+                          shop.shopName AS shop,
+                          wastage_reasons.reason AS reason,
+                          us1.name AS user,
+                          us2.name AS approver
+                        FROM wastage_batches
+                        INNER JOIN shop ON wastage_batches.shop_id = shop.shopId
+                        LEFT JOIN wastage_reasons ON wastage_batches.wastage_reason_id = wastage_reasons.id
+                        INNER JOIN users us1 ON wastage_batches.created_by = us1.id
+                        LEFT JOIN users us2 ON wastage_batches.approved_by = us2.id";
+
+                      if ($shop_id != 1) {
+                        $sql .= " WHERE wastage_batches.shop_id = " . $shop_id;
+                      }
+
+                      $sql .= " ORDER BY wastage_batches.created DESC LIMIT 100";
+
+                      $grn_details_result = $conn->query($sql);
+
                       while ($grn_details_data = $grn_details_result->fetch_assoc()) { ?>
                         <tr>
                           <td class="batch_id"><?= $grn_details_data["id"] ?></td>
@@ -128,21 +140,27 @@ if (!isset($_SESSION['store_id'])) {
                             </ul>
                           </td>
                           <td><?= $grn_details_data["total_value"] ?></td>
-                          <td><?php
-
-                              if ($grn_details_data["status"] == 0) {
-                              ?>
+                          <td>
+                            <?php
+                            if ($grn_details_data["status"] == 1) {
+                            ?>
+                              Approved by:- <?= htmlspecialchars($grn_details_data["approver"]) ?>
+                              <br>
+                              Description:- <?= htmlspecialchars($grn_details_data["approval_description"]) ?>
+                            <?php
+                            } elseif ($shop_id == 1) {
+                            ?>
                               <button class="btn btn-success btn-sm" onclick="showAcceptModal(this)">
-                                <i class="fa fa-edit"> Finalize </i>
+                                <i class="fa fa-edit"></i> Finalize
                               </button>
                             <?php
-                              } else {
+                            } else {
                             ?>
-                              Approved by:- <?= $grn_details_data["approver"] ?>
-                              <br>
-                              Description:- <?= $grn_details_data["approval_description"] ?>
+                              <button class="btn btn-warning btn-sm">
+                                <i class="fa fa-clock"></i> Pending Status
+                              </button>
                             <?php
-                              }
+                            }
                             ?>
                           </td>
                         </tr>
@@ -172,10 +190,8 @@ if (!isset($_SESSION['store_id'])) {
   <!-- All JS end -->
   <!-- Wastage details modal start -->
   <div class="modal" id="wastageAcceptanceModal" role="dialog">
-    <div class="modal-dialog modal-md d-flex justify-content-between ">
+    <div class="modal-dialog modal-md justify-content-between ">
       <div class="modal-content bg-dark align-items-center">
-
-
         <div class="card-body w-100 p-4 bg-dark">
           <label for="wastageDescription" class="form-label">
             Enter wastage acceptance details
@@ -185,14 +201,14 @@ if (!isset($_SESSION['store_id'])) {
           <textarea
             id="acceptanceDescription"
             class="form-control bg-dark text-light border"
-            rows="4"
-            maxlength="100"
+            rows="10"
+            maxlength="500"
             placeholder="Enter description..."
             oninput="updateCounter(this)"></textarea>
 
           <div class="text-end mt-1">
             <small class="text-secondary">
-              <span id="charCount">0</span>/100
+              <span id="charCount">0</span>/500
             </small>
           </div>
           <div class="card-footer">
@@ -202,7 +218,6 @@ if (!isset($_SESSION['store_id'])) {
             </button>
           </div>
         </div>
-
       </div>
     </div>
   </div>
