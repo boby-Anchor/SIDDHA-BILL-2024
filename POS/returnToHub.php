@@ -7,7 +7,7 @@ if (!isset($_SESSION['store_id'])) {
     $userData = $_SESSION['store_id'][0];
     $shop_id = $userData['shop_id'];
     $user_name = $userData['name'];
-    include('config/db.php');
+    require_once 'config/db.php';
 }
 // include('actions/cart-pos.php');
 //   include('actions/cart.php');
@@ -146,9 +146,6 @@ if (!isset($_SESSION['store_id'])) {
         <!-- Footer -->
         <?php include("part/footer.php"); ?>
         <!-- Footer End -->
-        <!-- Alert -->
-        <?php include("part/alert.php"); ?>
-        <!-- Alert end -->
 
         <!-- ========================================== -->
 
@@ -236,7 +233,6 @@ if (!isset($_SESSION['store_id'])) {
         </div>
 
         <!-- ========================================== -->
-
     </div>
 
     <!-- Wastage details modal start -->
@@ -254,7 +250,7 @@ if (!isset($_SESSION['store_id'])) {
                         $sql = $conn->query("SELECT * FROM `wastage_reasons`");
                         while ($row = mysqli_fetch_assoc($sql)) {
                         ?>
-                            <option><?= $row['reason']; ?></option>
+                            <option value="<?= $row['id']; ?>"><?= $row['reason']; ?></option>
                         <?php
                         }
                         ?>
@@ -630,13 +626,9 @@ if (!isset($_SESSION['store_id'])) {
     });
 
     function checkout() {
-
         var sub_total = $("#subTotal").text().trim() || null;
         var wastageDescription = $("#wastageDescription").val().trim() || null;
         var wastageReasonSelect = $("#wastageReasonSelect").val().trim() || null;
-
-        console.log(wastageReasonSelect);
-
 
         if (wastageReasonSelect == null || wastageReasonSelect == 0) {
             ErrorMessageDisplay("Select reason.!")
