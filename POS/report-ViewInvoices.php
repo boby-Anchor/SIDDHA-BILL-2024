@@ -5,36 +5,45 @@ if (!isset($_SESSION['store_id'])) {
     exit();
 } else {
     include('config/db.php');
+    $userLoginData = $_SESSION['store_id'][0];
+    $user_shop_id = $userLoginData['shop_id'] ?? null;
 }
 
-$start_date = '';
-$end_date = '';
-$shop_id = '';
-$invoices = [];
+$today = date("Y-m-d");
+$start_date = $_POST['start_date'] ?? $today;
+$start_datetime = "$start_date 00:00:00";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$end_date   = $_POST['end_date'] ?? $today;
+$end_datetime   = "$end_date 23:59:59";
 
-    $start_date = $_POST['start_date'];
-    $end_date = $_POST['end_date'];
-    $shop_id = $_POST['shop_id'];
+$shop_id   = $_POST['shop_id'] ?? $user_shop_id;
 
+try {
     $result = $conn->query("SELECT invoices.*,
-        users.name AS cashier,
-        COUNT(invoiceitems.invoiceNumber) AS itemCount
+           users.name AS cashier,
+           COUNT(DISTINCT invoiceitems.invoiceItemId) AS itemCount,
+           COUNT(DISTINCT dm_items.id) AS dmCount,
+           bill_type.bill_type_name
     FROM invoices
     INNER JOIN users
         ON invoices.user_id = users.id
     LEFT JOIN invoiceitems
         ON invoiceitems.invoiceNumber = invoices.invoice_id
-    WHERE DATE(invoices.created)
-        BETWEEN '$start_date' AND '$end_date'
-        AND invoices.shop_id = '$shop_id'
+    LEFT JOIN dm_items
+        ON dm_items.invoice_id = invoices.invoice_id
+    INNER JOIN bill_type
+        ON bill_type.bill_type_id = invoices.bill_type_id
+    WHERE invoices.created BETWEEN '$start_datetime' AND '$end_datetime'
+      AND invoices.shop_id = '$shop_id'
     GROUP BY invoices.invoice_id
-    ");
+");
+    if (!$result) {
+        die($conn->error);
+    }
     $invoices = $result->fetch_all(MYSQLI_ASSOC);
-} else {
-    $start_date = date("Y-m-d");
-    $end_date = date("Y-m-d");
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+    exit;
 }
 
 ?>
@@ -45,15 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
-        <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            echo "Invoices Between " . $start_date . " and " . $end_date;
-        } else {
-            echo "View Invoices";
-        }
-        ?>
+        Invoices Between <?= $start_date ?> and <?= $end_date ?>
     </title>
-
 
     <!-- Data Table CSS -->
     <?php include("part/data-table-css.php"); ?>
@@ -80,67 +82,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <section class="content">
                 <div class="row">
-                    <div class="col-12">
-                        <!-- Card start -->
-                        <div class="card bg-dark">
-                            <div class="card-header">
-                                <h1>
-                                    Invoices
-                                    <?php
-                                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                                        echo "Between " . $start_date . " and " . $end_date;
-                                    }
-                                    ?>
-                                </h1>
-                                <div class="border-top mb-3"></div>
-                                <!-- Form start -->
-                                <form method="POST" id="filterForm">
-                                    <div class="row g-3 accent-cyan align-items-center px-3">
-                                        <div class="col-auto">
-                                            <label for="start_date" class="col-form-label">Start Date:</label>
-                                        </div>
-                                        <div class="col-auto">
-                                            <input type="date" id="start_date" name="start_date" class="form-control"
-                                                value="<?= $start_date ?>" required>
-                                        </div>
 
-                                        <div class="col-auto">
-                                            <label for="end_date" class="col-form-label">End Date:</label>
-                                        </div>
-                                        <div class="col-auto">
-                                            <input type="date" id="end_date" name="end_date" class="form-control"
-                                                value="<?= $end_date ?>" required>
-                                        </div>
-
-                                        <div class="col-auto">
-                                            <label for="end_date" class="col-form-label">Shop:</label>
-                                        </div>
-                                        <div class="col-auto">
-                                            <select name="shop_id" id="shop_id" class="form-control" required>
-                                                <option value="" disabled selected hidden>Select Shop</option>
-                                                <?php
-                                                $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
-                                                while ($shops_row = $shops_rs->fetch_assoc()) {
-                                                ?>
-                                                    <option value="<?= $shops_row['shopId'] ?>">
-                                                        <?= $shops_row['shopName'] ?>
-                                                    </option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="ml-2">
-                                            <button type="submit" class="btn btn-outline-success">Filter</button>
-                                        </div>
+                    <div class="card bg-dark col-12">
+                        <div class="card-header">
+                            <h1 class="border-bottom mb-3">
+                                Invoices Between <?= $start_date ?> And <?= $end_date ?>
+                            </h1>
+                            <!-- Form start -->
+                            <form method="POST" id="filterForm">
+                                <div class="row g-3 accent-cyan align-items-center px-3">
+                                    <div class="col-auto">
+                                        <label for="start_date" class="col-form-label">Start Date:</label>
                                     </div>
-                                </form>
-                                <!-- Form end -->
+                                    <div class="col-auto">
+                                        <input type="date" id="start_date" name="start_date" class="form-control"
+                                            value="<?= $start_date ?>" required>
+                                    </div>
 
-                            </div>
+                                    <div class="col-auto">
+                                        <label for="end_date" class="col-form-label">End Date:</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="date" id="end_date" name="end_date" class="form-control"
+                                            value="<?= $end_date ?>" required>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <label for="end_date" class="col-form-label">Shop:</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <select name="shop_id" id="shop_id" class="form-control" required>
+                                            <option value="<?= $shop_id ?>" disabled selected hidden>Select Shop</option>
+                                            <?php
+                                            $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
+                                            while ($shops_row = $shops_rs->fetch_assoc()) {
+                                            ?>
+                                                <option value="<?= $shops_row['shopId'] ?>">
+                                                    <?= $shops_row['shopName'] ?>
+                                                </option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="ml-2">
+                                        <button type="submit" class="btn btn-outline-success">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- Form end -->
                         </div>
-                        <!-- Card end -->
                     </div>
+                    <!-- Card end -->
 
                     <!-- Data table start -->
                     <div class="card-body overflow-auto">
@@ -150,9 +143,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <th>#</th>
                                     <th>Patient Name</th>
                                     <th>Doctor</th>
+                                    <th>Bill Type</th>
                                     <th>Items</th>
                                     <th>Total Amount</th>
-                                    <th>Discount Percentages</th>
+                                    <th>Discount %</th>
                                     <th>Cash Paid</th>
                                     <th>Card Paid</th>
                                     <th>Balance</th>
@@ -165,20 +159,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     foreach ($invoices as $invoice) {
                                 ?>
                                         <tr>
-                                            <td> <?= $invoice['invoice_id']; ?> <br> <?= $invoice['created']; ?></td>
-                                            <td> <?= $invoice['p_name']; ?> <br> <?= $invoice['reg']; ?></td>
-                                            <td> <?= $invoice['d_name']; ?></td>
+                                            <td>
+                                                <span class="inv_number"><?= $invoice['invoice_id']; ?></span>
+                                                <br>
+                                                <span class="invoiceDate "> <?= $invoice['created']; ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="p_name"> <?= $invoice['p_name']; ?></span>
+                                                <br>
+                                                <span class="reg"> <?= $invoice['reg']; ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="doctor_name"> <?= $invoice['d_name']; ?></span>
+                                            </td>
+                                            <td> <?= $invoice['bill_type_name']; ?></td>
                                             <td>
                                                 <button class="btn fa fa-eye badge badge-info p-2 text-white" type="button"
-                                                    onclick='viewInvoiceItems(
-                                                        <?= json_encode($invoice["reg"]) ?>,
-                                                        <?= json_encode($invoice["invoice_id"]) ?>,
-                                                        <?= json_encode($invoice["p_name"]) ?>,
-                                                        <?= json_encode($invoice["d_name"]) ?>,
-                                                        <?= json_encode($invoice["cashier"]) ?>,
-                                                        <?= json_encode($invoice["created"]) ?>
-                                                    )'>
-                                                    <?= $invoice['itemCount'] ?>
+                                                    onclick='viewInvoiceItems(<?= json_encode($invoice["invoice_id"])  ?>,this)'>
+                                                    <?= $invoice['dmCount'] + $invoice['itemCount'] ?>
                                                 </button>
                                             </td>
                                             <td> <?= $invoice['total_amount']; ?></td>
@@ -186,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <td> <?= $invoice['paidAmount']; ?></td>
                                             <td> <?= $invoice['cardPaidAmount']; ?></td>
                                             <td> <?= $invoice['balance']; ?></td>
-                                            <td> <?= $invoice['cashier']; ?></td>
+                                            <td class="cashier_name"> <?= $invoice['cashier']; ?></td>
                                         </tr>
                                 <?php
                                     }
@@ -196,7 +194,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </table>
                     </div>
                     <!-- Data table end -->
-
                 </div>
             </section>
         </div>
@@ -233,6 +230,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                     <div class="table-responsive">
+                        <table class="table table-bordered" id="doctor_medicine_table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Value</th>
+                                    <th>Item Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="doctor_medicine_table_body"> </tbody>
+                        </table>
                         <table class="table table-bordered" id="invoice_items_table">
                             <thead>
                                 <tr>
@@ -271,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Page specific script -->
     <script>
-        function viewInvoiceItems(reg, invoiceNumber, patientName, doctorName, cashierName, invoiceDate) {
+        function viewInvoiceItems(invoiceNumber, btn) {
             InfoMessageDisplay("Fetching data.");
             $.ajax({
                 url: "actions/invoices/getItems.php",
@@ -283,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 success: function(response) {
                     switch (response.status) {
                         case "success":
-                            setDataToTable(reg, invoiceNumber, patientName, doctorName, cashierName, invoiceDate, response.items);
+                            setDataToTable(btn, response);
                             break;
 
                         case "sessionExpired":
@@ -302,26 +310,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         }
 
-        function setDataToTable(reg, invoiceNumber, patientName, doctorName, cashierName, invoiceDate, items) {
-            const tableBody = document.querySelector("#invoice_items_table_body");
-            tableBody.innerHTML = "";
-            let row_id = 0;
+        function setDataToTable(btn, response) {
+            const dmTableBody = document.querySelector("#doctor_medicine_table_body");
+            let dm_row_id = 0;
+            dmTableBody.innerHTML = "";
+            if (response.dmItems?.length) {
+                response.dmItems.forEach((dmItem) => {
+                    const newDmRow = document.createElement("tr");
+                    newDmRow.innerHTML = `
+                                <td>${++dm_row_id}</td>
+                                <td>${dmItem.dmName}</td>
+                                <td>${dmItem.itemPrice}</td>
+                                <td>${dmItem.totalPrice}</td>
+                            `;
+                    dmTableBody.appendChild(newDmRow);
+                });
+            } else {
+                dmTableBody.innerHTML = "<tr><td colspan='4' class='text-center'>No Doctor Medicine Data</td></tr>";
+            }
 
-            items.forEach((item) => {
-                const newRow = document.createElement("tr");
-                newRow.innerHTML = `
+            const tableBody = document.querySelector("#invoice_items_table_body");
+            let row_id = 0;
+            tableBody.innerHTML = "";
+            if (response.items?.length) {
+                response.items.forEach((item) => {
+                    const newRow = document.createElement("tr");
+                    newRow.innerHTML = `
                                 <td>${++row_id}</td>
                                 <td>${item.code || ""}</td>
                                 <td>${item.name || item.invoiceItem || ""}</td>
-                                <td class="text-center">${item.ucv_name}${item.unit}</td>
+                                <td class="text-center">${item.ucv_name || ""}${item.unit || ""}</td>
                                 <td>${item.sku || ""}</td>
                                 <td>${item.brand_name || ""}</td>
                                 <td>${item.invoiceItem_price ? Number(item.invoiceItem_price).toLocaleString() : ""}</td>
                                 <td>${item.invoiceItem_qty ? Number(item.invoiceItem_qty).toLocaleString() : ""}</td>
                                 <td>${item.invoiceItem_total ? Number(item.invoiceItem_total).toLocaleString() : ""}</td>
                             `;
-                tableBody.appendChild(newRow);
-            });
+                    tableBody.appendChild(newRow);
+                });
+            } else {
+                tableBody.innerHTML = "<tr><td colspan='9' class='text-center'>No Invoice Items Data</td></tr>";
+            }
+
+            const $tr = $(btn).closest("tr");
+
+            const invoiceNumber = $tr.find(".inv_number").text().trim();
+            const reg = $tr.find(".reg").text().trim();
+            const doctorName = $tr.find(".doctor_name").text().trim();
+            const cashierName = $tr.find(".cashier_name").text().trim();
+            const patientName = $tr.find(".p_name").text().trim();
+            const invoiceDate = $tr.find(".invoiceDate ").text().trim();
 
             document.getElementById("invoice_modal_reg").textContent = reg;
             document.getElementById("invoice_modal_order_number").textContent = invoiceNumber;
