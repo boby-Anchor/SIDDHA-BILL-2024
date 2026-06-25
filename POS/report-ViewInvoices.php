@@ -18,8 +18,10 @@ $end_datetime   = "$end_date 23:59:59";
 
 $shop_id   = $_POST['shop_id'] ?? $user_shop_id;
 
+$bill_type_id   = $_POST['selectBillType'] ?? 0;
+
 try {
-    $result = $conn->query("SELECT invoices.*,
+    $sql = "SELECT invoices.*,
            users.name AS cashier,
            COUNT(DISTINCT invoiceitems.invoiceItemId) AS itemCount,
            COUNT(DISTINCT dm_items.id) AS dmCount,
@@ -34,9 +36,18 @@ try {
     INNER JOIN bill_type
         ON bill_type.bill_type_id = invoices.bill_type_id
     WHERE invoices.created BETWEEN '$start_datetime' AND '$end_datetime'
-      AND invoices.shop_id = '$shop_id'
-    GROUP BY invoices.invoice_id
-");
+    ";
+
+    if ($shop_id != 1) {
+        $sql .= " AND invoices.shop_id = '$shop_id'";
+    }
+
+    if ($bill_type_id != 0) {
+        $sql .= " AND invoices.bill_type_id = '$bill_type_id'";
+    }
+    $sql .= " GROUP BY invoices.invoice_id";
+
+    $result = $conn->query($sql);
     if (!$result) {
         die($conn->error);
     }
@@ -77,12 +88,9 @@ try {
         <!--  Sidebar end -->
 
         <div class="content-wrapper bg-dark">
-
-            <!-- Main content -->
-
+            <!-- Main content Start-->
             <section class="content">
                 <div class="row">
-
                     <div class="card bg-dark col-12">
                         <div class="card-header">
                             <h1 class="border-bottom mb-3">
@@ -107,18 +115,43 @@ try {
                                             value="<?= $end_date ?>" required>
                                     </div>
 
+                                    <?php
+                                    if ($user_shop_id == 1) {
+                                    ?>
+                                        <div class="col-auto">
+                                            <label for="end_date" class="col-form-label">Shop:</label>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <select name="shop_id" id="shop_id" class="form-control" value="" required>
+                                                <option value="0" disabled selected hidden>Select Shop</option>
+                                                <?php
+                                                $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
+                                                while ($shops_row = $shops_rs->fetch_assoc()) {
+                                                ?>
+                                                    <option value="<?= $shops_row['shopId'] ?>">
+                                                        <?= $shops_row['shopName'] ?>
+                                                    </option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
                                     <div class="col-auto">
-                                        <label for="end_date" class="col-form-label">Shop:</label>
+                                        <label for="end_date" class="col-form-label">Bill Type:</label>
                                     </div>
                                     <div class="col-auto">
-                                        <select name="shop_id" id="shop_id" class="form-control" required>
-                                            <option value="<?= $shop_id ?>" disabled selected hidden>Select Shop</option>
+                                        <select class="form-control" name="selectBillType" id="selectBillType" value="<?= $bill_type_id ?>">
+                                            <option value="0"> All </option>
                                             <?php
-                                            $shops_rs = $conn->query("SELECT shop.shopId, shop.shopName FROM shop");
-                                            while ($shops_row = $shops_rs->fetch_assoc()) {
+                                            $bill_type_rs = $conn->query("SELECT * FROM bill_type");
+                                            while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
                                             ?>
-                                                <option value="<?= $shops_row['shopId'] ?>">
-                                                    <?= $shops_row['shopName'] ?>
+                                                <option value="<?= $bill_type_row['bill_type_id'] ?>">
+                                                    <?= $bill_type_row['bill_type_name'] ?>
                                                 </option>
                                             <?php
                                             }
@@ -196,11 +229,11 @@ try {
                     <!-- Data table end -->
                 </div>
             </section>
+            <!-- Main content End -->
         </div>
         <!-- Footer -->
         <?php include("part/footer.php"); ?>
         <!-- Footer End -->
-
 
         <!-- Alert -->
         <?php include("part/alert.php"); ?>
