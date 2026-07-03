@@ -15,7 +15,7 @@ if (!isset($_SESSION['store_id'])) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title id="titleName">Home | Inv 1</title>
+  <title id="titleName">Home | Inv</title>
 
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -108,7 +108,7 @@ if (!isset($_SESSION['store_id'])) {
 
                   <!-- cashAmount -->
                   <div class="col-4 p-2 " id="cashAmountField">
-                    <input type="text" placeholder="Enter Cash Amount" class="form-control col-10" id="cashAmount"
+                    <input type="text" placeholder="Enter Amount" class="form-control col-10" id="cashAmount"
                       name="cashAmount" onkeyup="checkBalance()">
                   </div>
 
@@ -125,12 +125,12 @@ if (!isset($_SESSION['store_id'])) {
                   <!--balance-->
                   <div class="col-6">
                     <div class="col-12">
-                      <label class="balance" id="balance">000</label>
+                      <label class="text-xl" id="balance">000</label>
                     </div>
                   </div>
                   <!-- Payment Method Selector -->
                   <div class="col-6 d-flex justify-content-end align-items-center">
-                    <select name="payment-method-selector" id="payment-method-selector" class="payment-method-selector">
+                    <select name="payment-method-selector" id="payment-method-selector" class="payment-method-selector" onchange="updatePaymentMethod(this.value)">
                       <?php
                       $payment_type_rs = $conn->query("SELECT * FROM payment_type");
                       while ($payment_type_row = $payment_type_rs->fetch_assoc()) {
@@ -281,6 +281,7 @@ if (!isset($_SESSION['store_id'])) {
                     data-target="#addPaththuModal">Paththu</button>
                   <button class="btn btn-outline-info mx-1" data-toggle="modal"
                     data-target="#doctorMedicineModal">Doctor Medicine</button>
+                  <!-- <button class="btn btn-outline-warning mx-1" onclick="pukaSududa()">Puka</button> -->
                 </div>
                 <!-- Search, Add paththu and, Doctor Medicine Buttons End -->
 
@@ -517,7 +518,7 @@ if (!isset($_SESSION['store_id'])) {
                   </div>
                   <div class="d-flex justify-content-between w-100">
                     <span>Time :</span>
-                    <span class="fw-bold">
+                    <span id="invoiceDateTime" class="fw-bold">
                       <?= $currentDate ?>
                       <?= $currentTime ?>
                     </span>

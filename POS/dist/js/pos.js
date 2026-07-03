@@ -45,14 +45,14 @@ function getPrices(barcode) {
         data: {
             barcode,
         },
+        dataType: "json",
         success: function (response) {
-            const result = JSON.parse(response);
 
-            switch (result.status) {
+            switch (response.status) {
                 case "success":
                     const tableBody = document.querySelector("#sellingPriceModalTable tbody");
 
-                    result.data.forEach((row) => {
+                    response.data.forEach((row) => {
                         const newRow = document.createElement("tr");
 
                         newRow.innerHTML = `
@@ -80,11 +80,11 @@ function getPrices(barcode) {
                     break;
 
                 case "sessionExpired":
-                    handleExpiredSession(result.message);
+                    handleExpiredSession(response.message);
                     break;
 
                 default:
-                    ErrorMessageDisplay(result.message);
+                    ErrorMessageDisplay(response.message);
                     break;
             }
         },
@@ -101,21 +101,21 @@ function selectProduct(stock_id, type) {
         data: {
             stock_id,
         },
+        dataType: "json",
         success: function (response) {
-            const result = JSON.parse(response);
 
-            switch (result.status) {
+            switch (response.status) {
                 case "success":
-                    addProductRow(result.data[0], type);
+                    addProductRow(response.data[0], type);
                     $("#sellingPriceModal").modal("hide");
                     break;
 
                 case "sessionExpired":
-                    handleExpiredSession(result.message);
+                    handleExpiredSession(response.message);
                     break;
 
                 case "error":
-                    ErrorMessageDisplay(result.message);
+                    ErrorMessageDisplay(response.message);
                     break;
 
                 default:
@@ -201,24 +201,24 @@ function searchProducts(searchInput) {
         data: {
             searchName: searchInput,
         },
+        dataType: "json",
         success: function (response) {
-            const result = JSON.parse(response);
 
-            switch (result.status) {
+            switch (response.status) {
                 case "success":
-                    setProductsOnGrid(result.data);
+                    setProductsOnGrid(response.data);
                     break;
 
                 case "empty":
-                    $("#productGrid").html("<h1 style='color: white;'>" + result.message + ".</h1>");
+                    $("#productGrid").html("<h1 style='color: white;'>" + response.message + ".</h1>");
                     break;
 
                 case "error":
-                    ErrorMessageDisplay(result.message);
+                    ErrorMessageDisplay(response.message);
                     break;
 
                 case "sessionExpired":
-                    handleExpiredSession(result.message);
+                    handleExpiredSession(response.message);
                     break;
             }
         },
@@ -283,8 +283,7 @@ document.getElementById("selectBillType").addEventListener("change", function ()
 });
 
 // Select Payment Methods
-document.getElementById("payment-method-selector").addEventListener("change", function () {
-    var selectedValue = this.value;
+function updatePaymentMethod(selectedValue) {
     var cashAmountField = document.getElementById("cashAmountField");
     var cardAmountField = document.getElementById("cardAmountField");
 
@@ -307,8 +306,16 @@ document.getElementById("payment-method-selector").addEventListener("change", fu
             cardAmountField.classList.remove("d-none");
             cashAmountField.classList.remove("d-none");
             break;
+
+        case "4": // COD
+            cashAmountField.classList.remove("d-none");
+            break;
+
+        case "5": // Online Transfer
+            cashAmountField.classList.remove("d-none");
+            break;
     }
-});
+};
 
 document.addEventListener("DOMContentLoaded", function () {
     // cash or card selector change
@@ -439,6 +446,7 @@ function updateTotal(input) {
     var totalCell = row.querySelector(".total");
     totalCell.textContent = total.toFixed(2);
     calculateSubTotal();
+    $("#barcodeInput").focus();
 }
 
 // qty update -
@@ -574,15 +582,15 @@ function checkBalance() {
 
     // Calculate balance
     const balance = totalEnteredAmount - productsAllTotal;
-    $(".balance").text(balance.toLocaleString("en-US", {}));
+    $("#balance").text(balance.toLocaleString("en-US", {}));
 
     // Update balance styling
     if (balance > 0) {
-        $(".balance").addClass("positive-balance").removeClass("negative-balance");
+        $("#balance").addClass("positive-balance").removeClass("negative-balance");
     } else if (balance < 0) {
-        $(".balance").addClass("negative-balance").removeClass("positive-balance");
+        $("#balance").addClass("negative-balance").removeClass("positive-balance");
     } else {
-        $(".balance").removeClass("positive-balance negative-balance");
+        $("#balance").removeClass("positive-balance negative-balance");
     }
 
     // Handle Enter keypress for data check
@@ -777,33 +785,33 @@ function checkout(itemData) {
             itemData: JSON.stringify(itemData),
             dMData: JSON.stringify(dMData),
         },
-
+        dataType: "json",
         success: function (response) {
-            var result = JSON.parse(response);
 
-            switch (result.status) {
+            switch (response.status) {
                 case "success":
-                    document.getElementById("invoiceNumber").innerHTML = result.invoiceNumber;
-                    SuccessMessageDisplay(result.message);
+                    document.getElementById("invoiceNumber").innerHTML = response.invoiceNumber;
+                    document.getElementById("invoiceDateTime").innerHTML = response.invoiceDateTime;
+                    SuccessMessageDisplay(response.message);
 
                     //invoice print add data
-                    document.getElementById("printInvoiceData").innerHTML = generateInvoiceHTML(itemData, dMData, billData);;
+                    document.getElementById("printInvoiceData").innerHTML = generateInvoiceHTML(itemData, dMData, billData);
                     printInvoice();
                     break;
 
                 case "sessionExpired":
                     enableCheckoutButton();
-                    handleExpiredSession(result.message);
+                    handleExpiredSession(response.message);
                     break;
 
                 case "sessionDataError":
                     enableCheckoutButton();
-                    handleExpiredSession(result.message);
+                    handleExpiredSession(response.message);
                     break;
 
                 default:
                     enableCheckoutButton();
-                    ErrorMessageDisplay(result.message);
+                    ErrorMessageDisplay(response.message);
                     break;
             }
         },
@@ -842,6 +850,7 @@ function generateInvoiceHTML(itemData, dMData, billData) {
                             <span class="productTotal">${item_price}</span>
                         </div>
                     </div>
+                    <div class="col-12" style="border-bottom: #0e0e0e 0.1rem solid;"></div>
                 </div>
             `;
         });
@@ -913,10 +922,49 @@ function generateInvoiceHTML(itemData, dMData, billData) {
         const discountPercentage = bill.discountPercentage || 0;
         const deliveryCharges = bill.deliveryCharges || 0;
         const valueAddedServices = bill.valueAddedServices || 0;
+        const paymentMethodSelector = bill.paymentMethodSelector || 0;
         const cashAmount = bill.cashAmount || 0;
         const cardAmount = bill.cardAmount || 0;
 
         const vas_delivery = Number(valueAddedServices) + Number(deliveryCharges);
+        let paymentHtml = "";
+        switch (parseInt(paymentMethodSelector)) {
+            case 1: // Cash
+                paymentHtml = `
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="enterAmountFiled">Cash Amount : ${cashAmount}</span>
+                    </div>
+                `;
+                break;
+
+            case 2: // Card
+                paymentHtml = `
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="enterAmountFiled">Card Amount : ${cardAmount}</span>
+                    </div>
+                `;
+                break;
+
+            case 3: // Cash + Card
+                paymentHtml = `
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="enterAmountFiled">Cash Amount : ${cashAmount}</span>
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="enterAmountFiled">Card Amount : ${cardAmount}</span>
+                    </div>
+                `;
+                break;
+
+            case 5: // Online Transfer
+                paymentHtml = `
+                    <div class="col-12 d-flex justify-content-start pt-2">
+                        <span class="enterAmountFiled">Online Transfer : ${cashAmount}</span>
+                    </div>
+                `;
+                break;
+        }
 
         html += `
             <div class="col-12">
@@ -933,13 +981,7 @@ function generateInvoiceHTML(itemData, dMData, billData) {
                         <span class="productsAllTotal">Net Total : ${netTotal}</span>
                     </div>
 
-                    <div class="col-12 d-flex justify-content-start pt-2">
-                        <span class="enterAmountFiled">Cash Amount : ${cashAmount}</span>
-                    </div>
-
-                    <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom:#0e0e0e 0.2rem solid;">
-                        <span class="enterAmountFiled">Card Amount : ${cardAmount}</span>
-                    </div>
+                    ${paymentHtml}
 
                     <div class="col-12 d-flex justify-content-start pt-2" style="border-bottom:#0e0e0e 0.2rem solid;">
                         <span class="balance">Balance : ${balance}</span>
@@ -1093,12 +1135,11 @@ function updateBillStatus(value) {
                     token,
                 }),
                 success: function (response) {
-                    console.log(response);
 
                     $("#regNo").val(response.profileData.appointment.patientProfile.ch_patient_id);
                     $("#invoicePatientReg").text(response.profileData.appointment.patientProfile.ch_patient_id);
                     $("#patientName").val(response.profileData.appointment.patientProfile.name);
-                    $("#titleName").text(response.profileData.appointment.patientProfile.name);
+                    $("#titleName").text(token + "| " + response.profileData.appointment.patientProfile.name);
                     $("#contactNo").text(response.profileData.appointment.patientProfile.whatsapp_no);
 
                     // ------------------------ Token Print Data Set ------------------------ //
