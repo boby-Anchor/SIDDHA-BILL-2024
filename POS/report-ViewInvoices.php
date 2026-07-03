@@ -180,8 +180,9 @@ try {
                                     <th>Items</th>
                                     <th>Total Amount</th>
                                     <th>Discount %</th>
-                                    <th>Cash Paid</th>
-                                    <th>Card Paid</th>
+                                    <th>Cash</th>
+                                    <th>Card</th>
+                                    <th>Online</th>
                                     <th>Balance</th>
                                     <th>Cashier</th>
                                 </tr>
@@ -190,34 +191,58 @@ try {
                                 <?php
                                 if (!empty($invoices)) {
                                     foreach ($invoices as $invoice) {
+                                        $cash   = null;
+                                        $card   = null;
+                                        $online = null;
+
+                                        switch ((int)$invoice['payment_method']) {
+                                            case 1: // Cash
+                                                $cash = $invoice['paidAmount'];
+                                                break;
+
+                                            case 2: // Card
+                                                $card = $invoice['cardPaidAmount'];
+                                                break;
+
+                                            case 3: // Cash + Card
+                                                $cash = $invoice['paidAmount'];
+                                                $card = $invoice['cardPaidAmount'];
+                                                break;
+
+                                            case 5: // Online
+                                                $online = $invoice['paidAmount'];
+                                                break;
+                                        }
                                 ?>
                                         <tr>
                                             <td>
-                                                <span class="inv_number"><?= $invoice['invoice_id']; ?></span>
+                                                <span class="inv_number"><?= $invoice['invoice_id'] ?></span>
                                                 <br>
-                                                <span class="invoiceDate "> <?= $invoice['created']; ?></span>
+                                                <span class="invoiceDate"><?= $invoice['created'] ?></span>
                                             </td>
                                             <td>
-                                                <span class="p_name"> <?= $invoice['p_name']; ?></span>
-                                                <br>
-                                                <span class="reg"> <?= $invoice['reg']; ?></span>
+                                                <span class="p_name"><?= $invoice['p_name'] ?></span><br>
+                                                <span class="reg"><?= $invoice['reg'] ?></span>
                                             </td>
                                             <td>
-                                                <span class="doctor_name"> <?= $invoice['d_name']; ?></span>
+                                                <span class="doctor_name"><?= $invoice['d_name'] ?></span>
                                             </td>
-                                            <td> <?= $invoice['bill_type_name']; ?></td>
+                                            <td><?= $invoice['bill_type_name'] ?></td>
                                             <td>
-                                                <button class="btn fa fa-eye badge badge-info p-2 text-white" type="button"
-                                                    onclick='viewInvoiceItems(<?= json_encode($invoice["invoice_id"])  ?>,this)'>
+                                                <button
+                                                    class="btn fa fa-eye badge badge-info p-2 text-white"
+                                                    type="button"
+                                                    onclick='viewInvoiceItems(<?= json_encode($invoice["invoice_id"]) ?>, this)'>
                                                     <?= $invoice['dmCount'] + $invoice['itemCount'] ?>
                                                 </button>
                                             </td>
-                                            <td> <?= $invoice['total_amount']; ?></td>
-                                            <td> <?= $invoice['discount_percentage']; ?></td>
-                                            <td> <?= $invoice['paidAmount']; ?></td>
-                                            <td> <?= $invoice['cardPaidAmount']; ?></td>
-                                            <td> <?= $invoice['balance']; ?></td>
-                                            <td class="cashier_name"> <?= $invoice['cashier']; ?></td>
+                                            <td><?= $invoice['total_amount'] ?></td>
+                                            <td><?= $invoice['discount_percentage'] ?></td>
+                                            <td><?= $cash ?></td>
+                                            <td><?= $card ?></td>
+                                            <td><?= $online ?></td>
+                                            <td><?= $invoice['balance'] ?></td>
+                                            <td class="cashier_name"><?= $invoice['cashier'] ?></td>
                                         </tr>
                                 <?php
                                     }
