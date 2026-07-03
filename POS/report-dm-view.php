@@ -11,16 +11,22 @@ $selected_date = '';
 $invoices = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $selected_date = $_POST['date'];
-    $doctor = $_POST['doctorName'];
+    $selected_date = filter_var($_POST['date'], FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^\d{4}-\d{2}-\d{2}$/"))) ?: '';
+    $doctor = isset($_POST['doctorName']) ? trim($_POST['doctorName']) : '';
+    $bill_type_id = isset($_POST['bill_type']) ? intval($_POST['bill_type']) : 0;
 
-    $result = $conn->query("SELECT * 
-    FROM dm_items 
-    INNER JOIN invoices ON dm_items.invoice_id = invoices.invoice_id 
-    WHERE DATE(invoices.created) = '$selected_date' AND invoices.d_name ='$doctor';
-    ");
-
-    $invoices = $result->fetch_all(MYSQLI_ASSOC);
+    if ($selected_date && $doctor && $bill_type_id) {
+        $stmt = $conn->prepare("SELECT dm_items.*, invoices.invoice_id, invoices.d_name, invoices.p_name, invoices.created
+        FROM dm_items 
+        INNER JOIN invoices ON dm_items.invoice_id = invoices.invoice_id 
+        WHERE DATE(invoices.created) = ?
+        AND invoices.d_name = ?
+        AND invoices.bill_type_id = ?");
+        $stmt->bind_param('ssi', $selected_date, $doctor, $bill_type_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $invoices = $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
 $totalPrice = 0;
 $totalValue = 0;
@@ -42,12 +48,6 @@ $totalValue = 0;
     <?php include("part/all-css.php"); ?>
     <!-- All CSS end -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 </head>
 
 <body class="hold-transition layout-fixed bg-dark">
@@ -67,27 +67,37 @@ $totalValue = 0;
             <div class="row">
                 <div class="card-body overflow-hidden">
                     <div class="row px-4">
-                        <div class="col-4">
-                            <form action="" method="post">
-                                <div class="input-group">
-                                    <select class="form-control select2" id="doctorName" name="doctorName">
-                                        <option value="" disabled selected hidden>Select a doctor</option>
-                                        <?php
-                                        $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
-                                        while ($doctors_row = $doctors_rs->fetch_assoc()) {
-                                        ?>
-                                            <option value="<?= $doctors_row['name'] ?>">
-                                                <?= $doctors_row['name'] ?>
-                                            </option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                    <input type="date" id="date" name="date" class="form-control col-8 bg-dark" value="<?php echo htmlspecialchars($selected_date); ?>" required>
-                                    <button type="submit" class="form-control col-2 btn btn-success ml-2"><i class="fas fa-search"></i></button>
-                                </div>
-                            </form>
-                        </div>
+                        <form method="POST">
+                            <div class="col-8 d-flex">
+                                <select class="form-control col-6 mx-2" id="doctorName" name="doctorName" required>
+                                    <option disabled selected hidden>Select Doctor</option>
+                                    <?php
+                                    $doctors_rs = $conn->query("SELECT * FROM doctors ORDER BY name ASC");
+                                    while ($doctors_row = $doctors_rs->fetch_assoc()) {
+                                    ?>
+                                        <option class="text-black" value="<?= $doctors_row['name'] ?>">
+                                            <?= $doctors_row['name'] ?>
+                                        </option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                                <input type="date" id="date" name="date" class="form-control col-6 mx-2 bg-dark" value="<?php echo htmlspecialchars($selected_date); ?>" required>
+                                <select class="form-control col-6 mx-2" name="bill_type" id="bill_type" required>
+                                    <?php
+                                    $bill_type_rs = $conn->query("SELECT * FROM bill_type");
+                                    while ($bill_type_row = $bill_type_rs->fetch_assoc()) {
+                                    ?>
+                                        <option value="<?= $bill_type_row['bill_type_id'] ?>">
+                                            <?= $bill_type_row['bill_type_name'] ?>
+                                        </option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                                <button type="submit" class="form-control col-2 btn btn-success ml-2"><i class="fas fa-search"></i></button>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="row p-4">
@@ -178,6 +188,11 @@ $totalValue = 0;
 
 <script>
     $(function() {
+        //Initialize Select2 Elements
+        $(".doctorSelect").select2();
+    });
+
+    $(function() {
         $("#dm_data_table")
             .DataTable({
                 responsive: true,
@@ -195,4 +210,5 @@ $totalValue = 0;
             .appendTo("#dm_data_table_wrapper .col-md-6:eq(0)");
     });
 </script>
+
 </html>
