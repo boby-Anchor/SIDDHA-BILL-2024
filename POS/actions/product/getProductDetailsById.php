@@ -1,9 +1,9 @@
 <?php
 session_start();
 require_once '../../config/db.php';
-$user_id;
-$user_name;
-$shop_id;
+$user_id = null;
+$user_name = null;
+$shop_id = null;
 
 if (isset($_SESSION['store_id'])) {
     $userData = $_SESSION['store_id'][0];
@@ -23,7 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
 
     try {
-        $result = $conn->query("SELECT * FROM p_medicine WHERE id = '$id'");
+        $stmt = $conn->prepare("SELECT * FROM p_medicine WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if (!$result) {
             error_log($conn->error);

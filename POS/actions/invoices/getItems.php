@@ -33,7 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['invoiceNumber'])) {
             ON unit_category_variation.ucv_id = p_medicine.unit_variation
         LEFT JOIN p_brand
             ON p_medicine.brand = p_brand.id
-        WHERE invoiceNumber = '$invoiceNumber'");
+        WHERE invoiceNumber = '$invoiceNumber'
+        ORDER BY invoiceItemId ASC
+        ");
 
     if ($result || $dmResult) {
         echo json_encode([

@@ -273,9 +273,6 @@ if (!isset($_SESSION['store_id'])) {
         <!-- ========================================== -->
 
         <div id="invoice-POS" class="d-none">
-
-            <?php
-            ?>
             <div class="d-flex justify-content-center">
                 <div class="col-12 p-2" style="width:<?= $bill_data['print_paper_size'] ?>mm ; background: whitesmoke;">
                     <div class="row gap-1">

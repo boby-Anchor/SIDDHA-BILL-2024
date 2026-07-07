@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         FROM invoiceitems
         LEFT JOIN p_medicine ON invoiceitems.barcode = p_medicine.code
         JOIN p_brand ON p_medicine.brand = p_brand.id
-        WHERE invoiceNumber = '$invoiceNumber';
+        WHERE invoiceNumber = '$invoiceNumber'
+        ORDER BY invoiceItemId ASC
         ");
         $items = $result->fetch_all(MYSQLI_ASSOC);
 

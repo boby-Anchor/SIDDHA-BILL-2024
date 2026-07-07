@@ -47,9 +47,9 @@ try {
     WHERE s.stock_shop_id = '$shop_id'
     AND s.stock_item_code = '$barcode'
     AND (
-        (s.stock_shop_id IN ('1','2','7','9') AND s.stock_item_qty > 0)
+        (s.stock_shop_id IN ('1','2','7','9','14') AND s.stock_item_qty > 0)
         OR
-        (s.stock_shop_id NOT IN ('1','2','7','9'))
+        (s.stock_shop_id NOT IN ('1','2','7','9','14'))
       );
     ");
 

@@ -27,17 +27,17 @@ if (isset($_SESSION['store_id'])) {
     $shop_id = $userData['shop_id'];
 
     if ($user_id == 0 or $shop_id == 0) {
-        echo json_encode(array(
+        echo json_encode([
             'status' => 'sessionDataError',
             'message' => 'Session error. Wait to login again. shop: ' . $shop_id . ' user: ' . $user_id,
-        ));
+        ]);
         exit();
     }
 } else {
-    echo json_encode(array(
+    echo json_encode([
         'status' => 'sessionExpired',
         'message' => 'Session Expired! Wait to login again.',
-    ));
+    ]);
     exit();
 }
 
@@ -49,18 +49,18 @@ if ($invoiceId_rs = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schem
         $invoiceNumber .= $user_id . $shop_id . $invoiceId;
     } else {
         error_log("No AUTO_INCREMENT found for invoices table.");
-        echo json_encode(array(
+        echo json_encode([
             'status' => 'invoiceNumberError',
             'message' => 'Invoice number Creation Error! Try again.',
-        ));
+        ]);
         exit();
     }
 } else {
     error_log("Query error: " . $conn->error);
-    echo json_encode(array(
+    echo json_encode([
         'status' => 'invoiceNumberError',
         'message' => 'Invoice number Query Error!.',
-    ));
+    ]);
     exit();
 }
 
@@ -72,10 +72,10 @@ $billData = isset($_POST['billData']) ? json_decode($_POST['billData'], true) : 
 
 if (empty($billData) || (empty($itemData) && empty($dMData))) {
     error_log("Bill data error");
-    echo json_encode(array(
+    echo json_encode([
         'status' => 'billDataError',
         'message' => 'Bill Data Error! Try again.',
-    ));
+    ]);
     exit();
 }
 
@@ -314,16 +314,17 @@ if ($cm->num_rows == 0 && !empty($billData)) {
                 VALUES ('$invoiceNumber', '$user_id', '$shop_id', '$currentDateTime', '$patientName', '$contactNo', '$doctorName','$regNo','$selectBillType', '$paymentMethodSelector', '$subTotal', '$discountPercentage', '$deliveryCharges', '$valueAddedServices', '$cashAmount', '$cardAmount', '$balance')"
         )
     ) {
-        echo json_encode(array(
+        echo json_encode([
             'status' => 'success',
             'invoiceNumber' => $invoiceNumber,
+            'invoiceDateTime' => $currentDateTime,
             'message' => 'Invoice Saved Successfully!',
-        ));
+        ]);
     } else {
         error_log("Query error: " . $conn->error);
-        echo json_encode(array(
+        echo json_encode([
             'status' => 'invoiceError',
-            'message' => 'Invoice Save Error!.',
-        ));
+            'message' => $conn->error,
+        ]);
     }
 }

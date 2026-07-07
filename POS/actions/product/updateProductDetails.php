@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $barcode = $_POST['barcode'];
 }
 
-$product;
+$product ="";
 
 try {
     $stmt = $conn->prepare("SELECT * FROM p_medicine WHERE id = ?");
@@ -100,7 +100,7 @@ try {
         $updateQuery = "UPDATE p_medicine SET `brand` = '$product_brand' WHERE code = '$oldBarcode'";
         if ($conn->query($updateQuery) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating p_medicine: " . $conn->error);
+            throw new Exception("Error updating Medicine: " . $conn->error);
         }
     }
     if ($product['category'] != $product_category) {

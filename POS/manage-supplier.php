@@ -70,7 +70,7 @@ if (!isset($_SESSION['store_id'])) {
                       while ($row = mysqli_fetch_assoc($sql)) {
                       ?>
                         <tr>
-                          <th scope="row"><?php echo ++$n; ?></th>
+                          <th scope="row"><?= ++$n; ?></th>
                           <td><?= $row['name']; ?></td>
                           <td><?= $row['email']; ?></td>
                           <td><?= $row['phone']; ?></td>
@@ -84,12 +84,12 @@ if (!isset($_SESSION['store_id'])) {
                             $newStatus = $isActive ? 0 : 1;
                             $btnClass = $isActive ? 'btn-danger' : 'btn-success';
                             $icon     = $isActive ? 'fa-trash' : 'fa-undo';
-                            $message  = $isActive ? 'Are you sure to Deactivate?' : 'Are you sure to Activate?';
+                            $message  = $isActive ? "Are you sure to Deactivate " . $row['name'] . "?" : "Are you sure to Activate " . $row['name'] . "?";
                             ?>
                             <button type="submit"
-                              class="btn <?php echo $btnClass; ?> btn-sm"
+                              class="btn <?= $btnClass ?> btn-sm"
                               onclick="if(confirm('<?= $message ?>')) { updateStatus(<?= $row['id'] ?>, <?= $newStatus ?>); } return false;">
-                              <i class="fa <?php echo $icon; ?>"></i>
+                              <i class="fa <?= $icon ?>"></i>
                             </button>
                           </td>
                         </tr>

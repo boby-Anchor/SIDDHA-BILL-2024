@@ -9,17 +9,11 @@
     /*align-self: flex-end;*/
 }
 
-.balance {
-    font-size: xxx-large;
-}
-
 .negative-balance {
-    font-size: x-large;
     color: #bf1919;
 }
 
 .positive-balance {
-    font-size: x-large;
     color: #19bf19;
 }
 

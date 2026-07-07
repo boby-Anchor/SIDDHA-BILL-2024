@@ -57,10 +57,11 @@ if (!isset($_SESSION['store_id'])) {
                                                 <th>Volume</th>
                                                 <th>Price</th>
                                                 <th>Hub</th>
-                                                <th>Pharmacy</th>
+                                                <!-- <th>Pharmacy</th> -->
                                                 <th>YA</th>
                                                 <th>Refilling</th>
                                                 <th>Online</th>
+                                                <th>NP</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -76,10 +77,11 @@ if (!isset($_SESSION['store_id'])) {
                                                 p_medicine.name,
                                                 p_medicine.sku,
                                                 SUM(CASE WHEN stock_shop_id = 1 THEN stock_item_qty ELSE 0 END) AS hub_qty,
-                                                SUM(CASE WHEN stock_shop_id = 2 THEN stock_item_qty ELSE 0 END) AS pharmacy_qty,
+                                                -- SUM(CASE WHEN stock_shop_id = 2 THEN stock_item_qty ELSE 0 END) AS pharmacy_qty,
                                                 SUM(CASE WHEN stock_shop_id = 9 THEN stock_item_qty ELSE 0 END) AS YA_qty,
                                                 SUM(CASE WHEN stock_shop_id = 5 THEN stock_item_qty ELSE 0 END) AS RF_qty,
-                                                SUM(CASE WHEN stock_shop_id = 10 THEN stock_item_qty ELSE 0 END) AS OS_qty
+                                                SUM(CASE WHEN stock_shop_id = 10 THEN stock_item_qty ELSE 0 END) AS OS_qty,
+                                                SUM(CASE WHEN stock_shop_id = 14 THEN stock_item_qty ELSE 0 END) AS NP_qty
                                                 FROM stock2
                                                 INNER JOIN p_medicine ON stock2.stock_item_code = p_medicine.code
                                                 INNER JOIN p_brand ON p_brand.id = p_medicine.brand
@@ -104,8 +106,9 @@ if (!isset($_SESSION['store_id'])) {
 
                                                 while ($row = mysqli_fetch_assoc($sql)) {
                                                     $hub_qty = $row['hub_qty'] < 0 ? 0 : $row['hub_qty'];
-                                                    $pharmacy_qty = $row['pharmacy_qty'] < 0 ? 0 : $row['pharmacy_qty'];
+                                                    // $pharmacy_qty = $row['pharmacy_qty'] < 0 ? 0 : $row['pharmacy_qty'];
                                                     $YA_qty = $row['YA_qty'] < 0 ? 0 : $row['YA_qty'];
+                                                    $NP_qty = $row['NP_qty'] < 0 ? 0 : $row['NP_qty'];
                                             ?>
                                                     <tr>
                                                         <td> <?= $row['stock_item_code']; ?> </td>
@@ -115,10 +118,11 @@ if (!isset($_SESSION['store_id'])) {
                                                         <td><?= $row['ucv_name']; ?><?= $row['unit']; ?></td>
                                                         <td><?= $row['item_s_price']; ?></td>
                                                         <td><?= $hub_qty; ?></td>
-                                                        <td><?= $pharmacy_qty ?></td>
+                                                        <!-- <td><?php //$pharmacy_qty ?></td> -->
                                                         <td><?= $YA_qty ?></td>
                                                         <td><?= $row['RF_qty'] ?></td>
                                                         <td><?= $row['OS_qty'] ?></td>
+                                                        <td><?= $NP_qty ?></td>
                                                     </tr>
                                             <?php
                                                 }
