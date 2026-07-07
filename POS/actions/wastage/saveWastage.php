@@ -2,9 +2,9 @@
 session_start();
 require_once "../../config/db.php";
 
-$user_id;
-$shop_id;
-$wastageBatchId;
+$user_id = null;
+$shop_id = null;
+$wastageBatchId = null;
 
 try {
     if (isset($_SESSION['store_id'])) {
@@ -16,10 +16,10 @@ try {
         $invoiceId_row = $invoiceId_rs->fetch_assoc();
         $wastageBatchId = $invoiceId_row['AUTO_INCREMENT'];
     } else {
-        echo json_encode(array(
+        echo json_encode([
             'status' => 'session_expired',
             'message' => 'Session expired. Wait to login again.',
-        ));
+        ]);
         exit();
     }
 
@@ -27,11 +27,11 @@ try {
     $products = json_decode($_POST['products'], true);
 
     $sub_total = 0;
-    $wastageDescription;
-    $wastageReasonSelect;
+    $wastageDescription = null;
+    $wastageReasonSelect = null;
     $currentDateTime = date("Y-m-d H:i:s");
 
-    if (!is_null($wastageBatchId) && is_array($billData) && !empty($billData) && is_array($products) && !empty($products)) {
+    if ($wastageBatchId != null && is_array($billData) && !empty($billData) && is_array($products) && !empty($products)) {
 
         foreach ($billData as $value) {
             $sub_total = $value['sub_total'];
@@ -119,10 +119,10 @@ try {
                         WHERE stock_shop_id = '$shop_id' AND stock_item_code = '$code' AND item_s_price = '$product_cost'");
                 }
             } else {
-                echo json_encode(array(
+                echo json_encode([
                     'status' => 'error',
                     'message' => 'Invalid product entry',
-                ));
+                ]);
             }
         }
 
@@ -135,23 +135,22 @@ try {
                 'message' => 'Saved Successfully!',
             ]);
         } else {
-            $error = $conn->error;
-            error_log("Error in inserting data: " . $error);
+            error_log("Error in inserting data: " . $conn->error . "id :" . $wastageReasonSelect);
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Saving error',
+                'message' => "Saving error: $conn->error",
             ]);
         }
     } else {
-        echo json_encode(array(
+        echo json_encode([
             'status' => 'error',
             'message' => 'No products found or invalid data received.',
-        ));
+        ]);
         exit();
     }
 } catch (Throwable $th) {
-    echo json_encode(array(
+    echo json_encode([
         'status' => 'error',
         'message' => $th->getMessage(),
-    ));
+    ]);
 }
