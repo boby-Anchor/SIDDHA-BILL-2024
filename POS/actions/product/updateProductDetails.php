@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $barcode = $_POST['barcode'];
 }
 
-$product ="";
+$product = "";
 
 try {
     $stmt = $conn->prepare("SELECT * FROM p_medicine WHERE id = ?");
@@ -93,21 +93,21 @@ try {
         $updateQuery = "UPDATE p_medicine SET `sku` = '$product_sku' WHERE code = '$oldBarcode'";
         if ($conn->query($updateQuery) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating p_medicine: " . $conn->error);
+            throw new Exception("Error updating medicine SKU: $conn->error");
         }
     }
     if ($product['brand'] != $product_brand) {
         $updateQuery = "UPDATE p_medicine SET `brand` = '$product_brand' WHERE code = '$oldBarcode'";
         if ($conn->query($updateQuery) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating Medicine: " . $conn->error);
+            throw new Exception("Error updating medicine brand: $conn->error");
         }
     }
     if ($product['category'] != $product_category) {
         $updateQuery = "UPDATE p_medicine SET `category` = '$product_category' WHERE code = '$oldBarcode'";
         if ($conn->query($updateQuery) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating p_medicine: " . $conn->error);
+            throw new Exception("Error updating medicine category: $conn->error");
         }
     }
     if ($product['name'] != $product_name) {
@@ -115,25 +115,25 @@ try {
         $updateQuery = "UPDATE p_medicine SET `name` = '$product_name' WHERE code = '$oldBarcode'";
         if ($conn->query($updateQuery) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating p_medicine: " . $conn->error);
+            throw new Exception("Error updating medicine name: $conn->error");
         }
         // update Invoice items
         $updateInvoiceItem = "UPDATE invoiceitems SET invoiceItem = '$product_name' WHERE barcode = '$oldBarcode'";
         if ($conn->query($updateInvoiceItem) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating invoice_item: " . $conn->error);
+            throw new Exception("Error updating invoice_item: $conn->error");
         }
         // update PO items
         $updatePO = "UPDATE poinvoiceitems SET invoiceItem = '$product_name' WHERE item_code = '$oldBarcode'";
         if ($conn->query($updatePO) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating po_item: " . $conn->error);
+            throw new Exception("Error updating po_item: $conn->error");
         }
         // update Stock
         $updateStock = "UPDATE stock2 SET stock_item_name = '$product_name' WHERE stock_item_code  = '$oldBarcode'";
         if ($conn->query($updateStock) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating Stock: " . $conn->error);
+            throw new Exception("Error updating Stock: $conn->error");
         }
     }
 
@@ -158,37 +158,37 @@ try {
         $updateQuery = "UPDATE p_medicine SET `code` = '$barcode' WHERE code = '$oldBarcode'";
         if ($conn->query($updateQuery) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating p_medicine: " . $conn->error);
+            throw new Exception("Error updating medicine barcode: $conn->error");
         }
         // update GRN items
         $updateGrn = "UPDATE grn_item SET grn_p_id = '$barcode' WHERE grn_p_id = '$oldBarcode'";
         if ($conn->query($updateGrn) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating grn_item: " . $conn->error);
+            throw new Exception("Error updating grn_item: $conn->error");
         }
         // update Invoice items
         $updateInvoiceItem = "UPDATE invoiceitems SET barcode = '$barcode' WHERE barcode = '$oldBarcode'";
         if ($conn->query($updateInvoiceItem) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating invoice_item: " . $conn->error);
+            throw new Exception("Error updating invoice_item: $conn->error");
         }
         // update PO items
         $updatePO = "UPDATE poinvoiceitems SET item_code = '$barcode' WHERE item_code = '$oldBarcode'";
         if ($conn->query($updatePO) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating po_item: " . $conn->error);
+            throw new Exception("Error updating po_item: $conn->error");
         }
         // update Stock
         $updateStock = "UPDATE stock2 SET stock_item_code  = '$barcode' WHERE stock_item_code  = '$oldBarcode'";
         if ($conn->query($updateStock) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating Stock: " . $conn->error);
+            throw new Exception("Error updating Stock: $conn->error");
         }
         // update Wastage
         $updateStock = "UPDATE wastage_batch_items SET barcode  = '$barcode' WHERE barcode  = '$oldBarcode'";
         if ($conn->query($updateStock) !== TRUE) {
             error_log($conn->error);
-            throw new Exception("Error updating Stock: " . $conn->error);
+            throw new Exception("Error updating Stock: $conn->error");
         }
     }
     $conn->commit();

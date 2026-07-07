@@ -14,7 +14,7 @@ if (isset($_SESSION['store_id'])) {
     exit();
 }
 
-$allowedTables = ['p_supplier'];
+$allowedTables = ['p_supplier','p_brand'];
 
 $id = $_POST['id'];
 $table = $_POST['table'];
@@ -36,8 +36,8 @@ if (!in_array($table, $allowedTables)) {
     exit();
 }
 
-$stmt = $conn->prepare("UPDATE `$table` SET `status` = ?, `created_by` = ? WHERE `id` = ?");
-$stmt->bind_param("iii", $status, $user_id, $id);
+$stmt = $conn->prepare("UPDATE `$table` SET `status` = ? WHERE `id` = ?");
+$stmt->bind_param("ii", $status, $id);
 
 if ($stmt->execute()) {
     if ($stmt->affected_rows > 0) {
