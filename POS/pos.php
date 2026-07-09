@@ -277,6 +277,8 @@ if (!isset($_SESSION['store_id'])) {
                   <input type="search" class="form-control mx-1" name="productSearch" id="productSearch"
                     oninput="if(this.value.length>1)searchProducts(this.value.trim()); return false;"
                     placeholder="Search..." onfocus="this.value='';">
+                  <button class="btn btn-outline-warning mx-1" data-toggle="modal"
+                    data-target="#polytheneBagsModal">Bags</button>
                   <button class="btn btn-outline-success mx-1" data-toggle="modal"
                     data-target="#addPaththuModal">Paththu</button>
                   <button class="btn btn-outline-info mx-1" data-toggle="modal"
@@ -424,6 +426,124 @@ if (!isset($_SESSION['store_id'])) {
     </div>
     <!-- Select selling price modal end -->
 
+    <!-- Polythene bags modal start -->
+    <div class="modal" id="polytheneBagsModal" role="dialog">
+      <div class="modal-dialog modal-lg d-flex justify-content-between ">
+        <div class="modal-content bg-dark align-items-center">
+          <div class="mt-3">
+            <h4>Enter Polythene Bags Usage</h4>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex align-items-center p-2">
+                <input
+                  type="checkbox"
+                  id="noBagsCheck"
+                  class="mr-2 form-check-input"
+                  onclick="
+                    $('#zipLockBagsQtyInput').prop('disabled',this.checked).val('0');
+                    $('#smallBagsQtyInput').prop('disabled',this.checked).val('0');
+                    $('#mediumBagsQtyInput').prop('disabled',this.checked).val('0');
+                    $('#largeBagsQtyInput').prop('disabled',this.checked).val('0');
+                ">
+                <h4 class="mb-0 ml-2">No bags provided</h4>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <table class="table text-center" id="polytheneBagsModalTable">
+              <thead>
+                <tr>
+                  <th>Bag Size</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Zip Lock</td>
+                  <td>5</td>
+                  <td>
+                    <div class="row">
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+                      </div>
+                      <div class="col-4">
+                        <input class="form-control text-center" id="zipLockBagsQtyInput" type="number" min="1" value="0"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                      </div>
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Small</td>
+                  <td>2</td>
+                  <td>
+                    <div class="row">
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+                      </div>
+                      <div class="col-4">
+                        <input class="form-control text-center" id="smallBagsQtyInput" type="number" min="1" value="0"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                      </div>
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Medium</td>
+                  <td>3</td>
+                  <td>
+                    <div class="row">
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+                      </div>
+                      <div class="col-4">
+                        <input class="form-control text-center" id="mediumBagsQtyInput" type="number" min="1" value="0"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                      </div>
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Large</td>
+                  <td>5</td>
+                  <td>
+                    <div class="row">
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+                      </div>
+                      <div class="col-4">
+                        <input class="form-control text-center" id="largeBagsQtyInput" type="number" min="1" value="0"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                      </div>
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Polythene bags modal end -->
+
     <!-- Footer -->
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
@@ -543,8 +663,34 @@ if (!isset($_SESSION['store_id'])) {
               </div>
               <!-- table header end -->
               <div class="printInvoiceData" id="printInvoiceData">
-
               </div>
+
+              <!-- Patient benefits box start -->
+              <div class="col-12 mt-1" id="patientBenefitsBoxInvoice">
+                <div class="check-by-box border border-1 rounded-1">
+                  <label style="margin-bottom:3px;">
+                    Benefits ----------------------
+                  </label>
+                  <div id="zipLock-bags-area-invoice" class="d-flex justify-content-between align-items-center">
+                    <label class="mb-0">ZipLock bags</label>
+                    <label id="zipLockBagsQtyInvoice" class="mb-0"></label>
+                  </div>
+                  <div id="large-bags-area-invoice" style="margin-bottom:3px;">
+                    <label> Large bags </label>
+                    <label id="largeBagsQtyInvoice"></label>
+                  </div>
+                  <div id="medium-bags-area-invoice" style="margin-bottom:3px;">
+                    <label>Medium bags</label>
+                    <label id="mediumBagsQtyInvoice"></label>
+                  </div>
+                  <div id="small-bags-area-invoice" style="margin-bottom:3px;">
+                    <label>Small bags</label>
+                    <label id="smallBagsQtyInvoice"></label>
+                  </div>
+                </div>
+              </div>
+              <!-- Patient benefits box end -->
+
               <table>
                 <tr style="font-weight: 600;">
                   <td>
@@ -560,17 +706,13 @@ if (!isset($_SESSION['store_id'])) {
                         <!-- Checked by box -->
                         <div class="col-12 d-flex justify-content-center">
                           <div class="check-by-box">
-                            <center>
-                              <label style="font-weight:bold; margin-bottom:3px;">
-                                Checked BY
-                              </label>
-                            </center>
+                            <label style="font-weight:bold; margin-bottom:3px;">
+                              Checked by
+                            </label>
 
-                            <label for="date">Date: <?= $currentDate ?> <?= $currentTime ?></label>
-
-                            <label for="emp-no">EMP No:.............................</label>
-
-                            <label for="signature">Signature:..........................</label>
+                            <label>Date: <?= $currentDate ?> <?= $currentTime ?></label>
+                            <label>EMP No:.............................</label>
+                            <label>Signature:..........................</label>
                           </div>
                         </div>
                       </div>
@@ -624,7 +766,7 @@ if (!isset($_SESSION['store_id'])) {
                 </div>
                 <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div>
                 <div class="col-12">
-                  <label class="col-4">CH No:</label>
+                  <label class="col-4">CHY:</label>
                   <label id="token_patient_chy"></label>
                 </div>
                 <div class="col-12" style="border-bottom: 2px dotted #0e0e0e;"></div>

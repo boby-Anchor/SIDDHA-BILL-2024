@@ -605,7 +605,7 @@ function handleCheckout() {
     $("#checkoutBtn").html("Processing...");
     const displayedBalance = parseFloat($("#balance").text().replace(/,/g, ""));
     if (displayedBalance >= 0) {
-        dataCheck();
+        handleBags();
     } else {
         enableCheckoutButton();
         ErrorMessageDisplay("Invalid payment amount!");
@@ -615,6 +615,49 @@ function handleCheckout() {
 function enableCheckoutButton() {
     $("#checkoutBtn").prop("disabled", false);
     $("#checkoutBtn").html("Checkout <i class='bi bi-arrow-right-circle-fill'></i>");
+}
+
+function showBagsModal() {
+    $("#polytheneBagsModal").modal("show");
+}
+
+function handleBags() {
+    var noBagsCheck = $("#noBagsCheck").prop("checked");
+    if (noBagsCheck) {
+        $("#patientBenefitsBoxInvoice").addClass("d-none");
+        dataCheck();
+    } else {
+        if ($("#zipLockBagsQtyInput").val() > 0 ||
+            $("#largeBagsQtyInput").val() > 0 ||
+            $("#mediumBagsQtyInput").val() > 0 ||
+            $("#smallBagsQtyInput").val() > 0
+        ) {
+            if (Number($("#zipLockBagsQtyInput").val()) <= 0) {
+                $("#zipLock-bags-area-invoice").addClass("d-none");
+            } else {
+                $("#zipLockBagsQtyInvoice").html($("#zipLockBagsQtyInput").val());
+            }
+            if (Number($("#largeBagsQtyInput").val()) <= 0) {
+                $("#large-bags-area-invoice").addClass("d-none");
+            } else {
+                $("#largeBagsQtyInvoice").html($("#largeBagsQtyInput").val());
+            }
+            if (Number($("#mediumBagsQtyInput").val()) <= 0) {
+                $("#medium-bags-area-invoice").addClass("d-none");
+            } else {
+                $("#mediumBagsQtyInvoice").html($("#mediumBagsQtyInput").val());
+            }
+            if (Number($("#smallBagsQtyInput").val()) <= 0) {
+                $("#small-bags-area-invoice").addClass("d-none");
+            } else {
+                $("#smallBagsQtyInvoice").html($("#smallBagsQtyInput").val());
+            }
+            dataCheck();
+        } else {
+            enableCheckoutButton();
+            showBagsModal();
+        }
+    }
 }
 
 // Data validation
@@ -908,6 +951,7 @@ function generateInvoiceHTML(itemData, dMData, billData) {
                     </div>
                 `;
                 }
+                html += `<div class="col-12" style="border-bottom: #0e0e0e 0.1rem solid;"></div>`;
             }
         });
     }
@@ -1065,7 +1109,7 @@ function printInvoice() {
         font-size:medium;\
         font-weight: bold;\
       }\
-        .check-by-box {\
+    .check-by-box {\
             border: 2px solid #000 !important;\
             width:100%;\
             padding: 5px;\
@@ -1302,16 +1346,6 @@ function handleTokenPrint() {
         font-size:medium;\
         font-weight: bold;\
       }\
-        .check-by-box {\
-            border: 2px solid #000 !important;\
-            width:100%;\
-            padding: 5px;\
-            font-family: Arial, sans-serif;\
-        }\
-    .check-by-box label {\
-            display: block;\
-            font-size: 10px !important;\
-        }\
     "
         );
         printWindow.document.write("</style>");
