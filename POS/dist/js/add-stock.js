@@ -1,16 +1,12 @@
 // ==============================================================================
-
+// Event listener for clicking the proceed button to show the confirmation modal
 $(document).on("click", "#proceedGrnBtn", function () {
 
   var hasInvoiceNumber = $("#hasInvoiceNumber").prop("checked");
   var invoice_number = $("#invoice_number").val();
 
   if (hasInvoiceNumber && !invoice_number) {
-    if (user_id == 44) {
-      return (ErrorMessageDisplay("කෝ දැහැමි Invoice Number එක?"))
-    } else {
-      return (ErrorMessageDisplay("කෝ Invoice Number එක?"))
-    }
+    return (ErrorMessageDisplay("කෝ Invoice Number එක?"))
   }
 
   var poArray = [];
@@ -53,22 +49,25 @@ $(document).on("click", "#proceedGrnBtn", function () {
       return false;
     } else {
       var productData = {
-        product_code: product_code,
-        product_name: product_name,
+        product_code,
+        product_name,
 
-        product_qty: product_qty,
-        free_qty: free_qty,
+        product_qty,
+        free_qty,
 
-        minimum_qty: minimum_qty,
-        free_minimum_qty: free_minimum_qty,
+        minimum_qty,
+        free_minimum_qty,
 
-        item_price: item_price,
-        item_discount: item_discount,
+        item_price,
+        item_discount,
 
-        total_cost: total_cost,
-        total_value: total_value,
-        cost_per_unit: cost_per_unit,
-        unit_s_price: unit_s_price,
+        total_cost,
+        total_value,
+        cost_per_unit,
+        unit_s_price,
+
+        mfd,
+        exp,
       };
       poArray.push(productData);
     }
@@ -112,7 +111,7 @@ $(document).on("click", "#proceedGrnBtn", function () {
 });
 
 // ==============================================================================
-
+// Event listener for clicking the add button to add products to the list
 $(document).on("click", ".add-btn", function () {
   var product_code = $(this).closest("tr").find("#product_code").text();
   var product_name = $(this).closest("tr").find("#product_name").text().trim();
@@ -129,8 +128,8 @@ $(document).on("click", ".add-btn", function () {
     }
   });
 
+  // If the product does not already exist in the table, add it
   if (!exists) {
-    // Append new row to the table
     var markup =
       "<tr>" +
       "<th scope='row' id='product_code'>" + product_code + "</th>" +
@@ -151,9 +150,21 @@ $(document).on("click", ".add-btn", function () {
       "<input type='text' id='free_manual_unit_input' class='bg-dark form-control text-center free_manual_unit_input' value=''>" +
       "</td>" +
 
-      "<td>" + "<input type='text' id='item_price' class='bg-dark form-control text-center' value=''  placeholder='Price'></td>" +
+      "<td>" +
+      "<input type='text' id='item_price' class='bg-dark form-control text-center mb-2' placeholder='Price'>" +
+      "<div class='form-group input-group'>" +
+      "<label class='d-flex align-items-center pr-1 m-0'>MFD</label>" +
+      "<input type='date' id='mfd' class='bg-dark form-control'>" +
+      "</div>" +
+      "</td>" +
 
-      "<td>" + "<input id='item_discount' type='text' class='bg-dark form-control text-center' value='' placeholder='Discount'>" + "</td>" +
+      "<td>" +
+      "<input id='item_discount' type='text' class='bg-dark form-control text-center mb-2' value='' placeholder='Discount'>" +
+      "<div class='form-group input-group'>" +
+      "<label class='d-flex align-items-center pr-1 m-0'>EXP</label>" +
+      "<input type='date' id='exp' class='bg-dark form-control'>" +
+      "</div>" +
+      "</td>" +
 
       "<td>" + "<input id='total_cost' type='text' class='bg-dark form-control text-center' value='' placeholder='Total Cost'>" + "</td>" +
 
@@ -194,79 +205,53 @@ $(document).on("click", ".cus-delete", function () {
   $(".po_btn").toggleClass("d-flex", $(".addedProTable tbody tr").length > 0);
 });
 
-// Calculate minimum quantity unit based on product_unit
+// Calculate minimum quantity of product qty
 $(document).on("input", "#qty_input", function () {
   var product_unit = $(this).closest("tr").find("#product_unit").text();
   var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
-  if (product_unit === 'l') {
-    var liters = parseFloat($(this).val());
-    var milliliters = ucv_name * liters * 1000;
-    $(this).closest("tr").find("#minimum_qty").text(milliliters + "ml");
-  }
-  if (product_unit === 'kg') {
-    var kilo = parseFloat($(this).val());
-    var grams = ucv_name * kilo * 1000;
-    $(this).closest("tr").find("#minimum_qty").text(grams + "g");
-  }
-  if (product_unit === 'm') {
-    var meter = parseFloat($(this).val());
-    var centimete = ucv_name * meter * 100;
-    $(this).closest("tr").find("#minimum_qty").text(centimete + "cm");
-  }
-  if (product_unit === 'ml') {
-    var ml = parseFloat($(this).val());
-    var mililiters = ucv_name * ml;
-    $(this).closest("tr").find("#minimum_qty").text(mililiters + "ml");
-  }
-  if (product_unit === 'g') {
-    var g = parseFloat($(this).val());
-    var grams = ucv_name * g;
-    $(this).closest("tr").find("#minimum_qty").text(grams + "g");
-  }
-  if (product_unit === 'cm') {
-    var cm = parseFloat($(this).val());
-    var centimeters = ucv_name * cm;
-    $(this).closest("tr").find("#minimum_qty").text(centimeters + "cm");
-  }
+  $(this).closest("tr").find("#minimum_qty").text(calUnitQty(product_unit, ucv_name, parseFloat($(this).val())));
 });
 
-// free qty input for auto generate minimum qty
+// Auto generate minimum qty of free items
 $(document).on("input", "#free_qty", function () {
   var product_unit = $(this).closest("tr").find("#product_unit").text();
   var ucv_name = parseFloat($(this).closest("tr").find("#ucv_name").text());
-  if (product_unit === 'l') {
-    var liters = parseFloat($(this).val());
-    var milliliters = ucv_name * liters * 1000;
-    $(this).closest("tr").find("#free_minimum_qty").text(milliliters + "ml");
-  }
-  if (product_unit === 'kg') {
-    var kilo = parseFloat($(this).val());
-    var grams = ucv_name * kilo * 1000;
-    $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-  }
-  if (product_unit === 'm') {
-    var meter = parseFloat($(this).val());
-    var centimete = ucv_name * meter * 100;
-    $(this).closest("tr").find("#free_minimum_qty").text(centimete + "cm");
-  }
-  if (product_unit === 'ml') {
-    var ml = parseFloat($(this).val());
-    var mililiters = ucv_name * ml;
-    $(this).closest("tr").find("#free_minimum_qty").text(mililiters + "ml");
-  }
-  if (product_unit === 'g') {
-    var g = parseFloat($(this).val());
-    var grams = ucv_name * g;
-    $(this).closest("tr").find("#free_minimum_qty").text(grams + "g");
-  }
-  if (product_unit === 'cm') {
-    var cm = parseFloat($(this).val());
-    var centimeters = ucv_name * cm;
-    $(this).closest("tr").find("#free_minimum_qty").text(centimeters + "cm");
-  }
+  $(this).closest("tr").find("#free_minimum_qty").text(calUnitQty(product_unit, ucv_name, parseFloat($(this).val())));
 });
 
-// calculate cost per unit 
+// Calculate minimum quantity based on product unit and ucv_name
+function calUnitQty(product_unit, ucv_name, qty) {
+
+  let unit_qty;
+  switch (product_unit) {
+    case "l":
+      unit_qty = ucv_name * qty * 1000;
+      return (unit_qty + "ml");
+      break;
+    case "kg":
+      unit_qty = ucv_name * qty * 1000;
+      return (unit_qty + "kg");
+      break;
+    case "m":
+      unit_qty = ucv_name * qty * 100;
+      return (unit_qty + "m");
+      break;
+    case "ml":
+      unit_qty = ucv_name * qty;
+      return (unit_qty + "ml");
+      break;
+    case "g":
+      unit_qty = ucv_name * qty;
+      return (unit_qty + "g");
+      break;
+    case "cm":
+      unit_qty = ucv_name * qty;
+      return (unit_qty + "cm");
+      break;
+  }
+}
+
+// Calculate total value when item price is changed
 $(document).on("input", "#item_price", function () {
   const $row = $(this).closest("tr");
   const price = parseFloat($(this).val());
@@ -282,6 +267,7 @@ $(document).on("input", "#item_price", function () {
   }
 });
 
+// calculate total cost and cost per unit when item discount is changed
 $(document).on("input", "#item_discount", function () {
   const $row = $(this).closest("tr");
   var product_name = $row.find("#product_name").text();
@@ -309,6 +295,7 @@ $(document).on("input", "#item_discount", function () {
   }
 });
 
+// calculate item discount and cost per unit when total cost is changed
 $(document).on("input", "#total_cost", function () {
   const $row = $(this).closest("tr");
   var product_name = $row.find("#product_name").text();
@@ -339,14 +326,11 @@ $(document).on("input", "#total_cost", function () {
   }
 });
 
-
+// Confirm Purchase Order
 $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function () {
-  // $(this).prop('disabled', true);
   $(".confirmPObtn").prop('disabled', true);
-
   var invoice_number = $("#invoice_number").val().trim() || null;
   var supplier_id = $("#supplier_select").val()
-
   var poArray = [];
 
   $("#grnConfirmationTableBody tr").each(function () {
@@ -365,19 +349,21 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
     var cost_per_item = item_price * (1 - item_discount / 100);
 
     var productData = {
-      product_code: product_code,
-      product_name: product_name,
-      product_total_qty: product_total_qty,
-      product_qty: product_qty,
-      minimum_qty: minimum_qty,
-      item_price: item_price,
-      item_discount: item_discount,
-      cost_per_unit: cost_per_unit,
-      cost_per_item: cost_per_item,
-      total_cost: total_cost,
-      total_value: total_value,
-      unit_s_price: unit_s_price,
-      free_qty: free_qty,
+      product_code,
+      product_name,
+      product_total_qty,
+      product_qty,
+      minimum_qty,
+      item_price,
+      item_discount,
+      cost_per_unit,
+      cost_per_item,
+      total_cost,
+      total_value,
+      unit_s_price,
+      free_qty,
+      mfd,
+      exp,
     };
     poArray.push(productData);
   });
@@ -390,34 +376,32 @@ $(document).off("click", ".confirmPObtn").on("click", ".confirmPObtn", function 
       supplier_id,
       products: JSON.stringify(poArray),
     },
+    dataType: "json",
     success: function (response) {
-      var result = JSON.parse(response);
 
-      if (result.status === 'success') {
-        SuccessMessageDisplay(result.message);
+      if (response.status === 'success') {
+        SuccessMessageDisplay(response.message);
         setTimeout(() => {
           location.reload();
         }, 3000);
-      } else if (result.status === 'error') {
-        // $(".confirmPObtn").prop('disabled', false);
-        ErrorMessageDisplay(result.message);
-      } else if (result.status === 'sessionExpired') {
-        // $(".confirmPObtn").prop('disabled', false);
-        ErrorMessageDisplay(result.message);
+      } else if (response.status === 'error') {
+        $(".confirmPObtn").prop('disabled', false);
+        ErrorMessageDisplay(response.message);
+      } else if (response.status === 'sessionExpired') {
+        $(".confirmPObtn").prop('disabled', false);
+        ErrorMessageDisplay(response.message);
         setTimeout(function () {
           window.open(window.location.href, '_blank');
         }, 5000);
       } else {
-        ErrorMessageDisplay(result.status, result.message);
+        ErrorMessageDisplay(response.status, response.message);
       }
-      $(".confirmPObtn").prop('disabled', false);
     },
     error: function (xhr, status, error) {
       ErrorMessageDisplay("Connection failed. Check Internet connection.");
       $(".confirmPObtn").prop('disabled', false);
     },
   });
-
 });
 
 // ==============================================================================
