@@ -442,7 +442,7 @@ if (!isset($_SESSION['store_id'])) {
                   id="noBagsCheck"
                   class="mr-2 form-check-input"
                   onclick="
-                    $('#zipLockBagsQtyInput').prop('disabled',this.checked).val('0');
+                    $('#xlBagsQtyInput').prop('disabled',this.checked).val('0');
                     $('#smallBagsQtyInput').prop('disabled',this.checked).val('0');
                     $('#mediumBagsQtyInput').prop('disabled',this.checked).val('0');
                     $('#largeBagsQtyInput').prop('disabled',this.checked).val('0');
@@ -461,24 +461,6 @@ if (!isset($_SESSION['store_id'])) {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Zip Lock</td>
-                  <td>5</td>
-                  <td>
-                    <div class="row">
-                      <div class="col-4 d-flex justify-content-center">
-                        <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
-                      </div>
-                      <div class="col-4">
-                        <input class="form-control text-center" id="zipLockBagsQtyInput" type="number" min="1" value="0"
-                          oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                      </div>
-                      <div class="col-4 d-flex justify-content-center">
-                        <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
                 <tr>
                   <td>Small</td>
                   <td>2</td>
@@ -525,6 +507,24 @@ if (!isset($_SESSION['store_id'])) {
                       </div>
                       <div class="col-4">
                         <input class="form-control text-center" id="largeBagsQtyInput" type="number" min="1" value="0"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                      </div>
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-primary plusQty" onclick="increaseQuantity(this)">+</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>XL</td>
+                  <td>10</td>
+                  <td>
+                    <div class="row">
+                      <div class="col-4 d-flex justify-content-center">
+                        <button class="btn btn-secondary minusQty" onclick="decreaseQuantity(this)">-</button>
+                      </div>
+                      <div class="col-4">
+                        <input class="form-control text-center" id="xlBagsQtyInput" type="number" min="1" value="0"
                           oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                       </div>
                       <div class="col-4 d-flex justify-content-center">
@@ -671,9 +671,9 @@ if (!isset($_SESSION['store_id'])) {
                   <label style="margin-bottom:3px;">
                     Benefits ----------------------
                   </label>
-                  <div id="zipLock-bags-area-invoice" class="d-flex justify-content-between align-items-center">
-                    <label class="mb-0">ZipLock bags</label>
-                    <label id="zipLockBagsQtyInvoice" class="mb-0"></label>
+                  <div id="xl-bags-area-invoice" class="d-flex justify-content-between align-items-center">
+                    <label class="mb-0">XL bags</label>
+                    <label id="xlBagsQtyInvoice" class="mb-0"></label>
                   </div>
                   <div id="large-bags-area-invoice" style="margin-bottom:3px;">
                     <label> Large bags </label>

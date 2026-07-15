@@ -627,15 +627,15 @@ function handleBags() {
         $("#patientBenefitsBoxInvoice").addClass("d-none");
         dataCheck();
     } else {
-        if ($("#zipLockBagsQtyInput").val() > 0 ||
+        if ($("#xlBagsQtyInput").val() > 0 ||
             $("#largeBagsQtyInput").val() > 0 ||
             $("#mediumBagsQtyInput").val() > 0 ||
             $("#smallBagsQtyInput").val() > 0
         ) {
-            if (Number($("#zipLockBagsQtyInput").val()) <= 0) {
-                $("#zipLock-bags-area-invoice").addClass("d-none");
+            if (Number($("#xlBagsQtyInput").val()) <= 0) {
+                $("#xl-bags-area-invoice").addClass("d-none");
             } else {
-                $("#zipLockBagsQtyInvoice").html($("#zipLockBagsQtyInput").val());
+                $("#xlBagsQtyInvoice").html($("#xlBagsQtyInput").val());
             }
             if (Number($("#largeBagsQtyInput").val()) <= 0) {
                 $("#large-bags-area-invoice").addClass("d-none");
