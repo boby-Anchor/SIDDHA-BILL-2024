@@ -2,6 +2,20 @@
 include('config/db.php');
 session_start();
 
+try {
+    function printErrorLog($error_message)
+    {
+        $error_log_path = $_SERVER['DOCUMENT_ROOT'] . "error_log.txt";
+        file_put_contents($error_log_path, $error_message, FILE_APPEND);
+    }
+} catch (Exception $exception) {
+    echo json_encode(array(
+        'status' => 'error',
+        'message' => 'path Fatal Error. Contact IT Department',
+    ));
+    exit();
+}
+
 if (isset($_SESSION['store_id'])) {
     $userLoginData = $_SESSION['store_id'][0];
     $user_id = $userLoginData['id'] ?? null;
@@ -18,7 +32,7 @@ if (isset($_POST['products'])) {
 
     $poArray = json_decode($_POST['products'], true);
 
-    $errorOccurred = false;
+    $errorOccured = false;
     $notificationMessage = "";
 
     if (is_array($poArray) && !empty($poArray)) {
@@ -62,17 +76,17 @@ if (isset($_POST['products'])) {
                     }
 
                 } else {
-                    $errorOccurred = true;
+                    $errorOccured = true;
                     $error_message = "Data update error\n";
                 }
             }
         } catch (Exception $exception) {
-            $errorOccurred = true;
+            $errorOccured = true;
             $error_message = "ERROR: " . $exception->getMessage() . "\n";
-            error_log($error_message);
+            printErrorLog($error_message);
             $notificationMessage .= $exception->getMessage();
         } finally {
-            if ($errorOccurred) {
+            if ($errorOccured) {
                 echo json_encode(array(
                     'status' => 'error',
                     'message' => $error_message

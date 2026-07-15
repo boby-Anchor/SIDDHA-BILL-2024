@@ -138,7 +138,7 @@ if (!isset($_SESSION['store_id'])) {
       <div class="col-12">
         <div class="row w-100">
 
-          <!-- left side desing start -->
+          <!-- left side design start -->
           <div class="col-12">
             <div class="card-body h-100 bg-dark overflow-hidden">
               <div class="row">
@@ -154,9 +154,9 @@ if (!isset($_SESSION['store_id'])) {
 
                 <?php
                 // if (isset($_SESSION['store_id'])) {
-
+                
                 //     $userLoginData = $_SESSION['store_id'];
-
+                
                 //     foreach ($userLoginData as $userData) {
                 //         $shop_id = $userData['shop_id'];
                 //         $supplier_rs = $conn->query("SELECT DISTINCT p_supplier.* FROM p_supplier
@@ -167,13 +167,12 @@ if (!isset($_SESSION['store_id'])) {
                 //         while ($supplier_data = $supplier_rs->fetch_assoc()) {
                 ?>
                 <!-- <option value="<?php // $supplier_data["id"] 
-                                    ?>"><?php // $supplier_data["name"] 
-                                        ?></option>
+                ?>"><?php // $supplier_data["name"] 
+                ?></option>
                                         <?php
                                         //         }
                                         //     }
                                         // }
-
                                         ?>
                                      </select>
                                 </div>  -->
@@ -205,65 +204,9 @@ if (!isset($_SESSION['store_id'])) {
                           </tr>
                         </thead>
                         <tbody id="filterBySupTable">
-                          <?php
-
-                          if (isset($_SESSION['store_id'])) {
-
-                            $userLoginData = $_SESSION['store_id'];
-
-                            foreach ($userLoginData as $userData) {
-                              $shop_id = $userData['shop_id'];
-                              $p_medicine_rs = $conn->query("SELECT p_medicine.id AS pid, p_medicine.name AS p_name, 
-                                                            p_medicine.code AS code,
-                                                            p_medicine.img AS img,
-                                                            p_medicine_category.name AS category, p_brand.name AS brand,
-                                                            medicine_unit.unit AS unit, unit_category_variation.ucv_name,
-                                                            stock2.stock_id AS stock_id,
-                                                            stock2.item_s_price AS itemSprice,
-                                                            stock2.unit_s_price AS unitSprice
-                                                            FROM producttoshop
-                                                            INNER JOIN p_medicine ON p_medicine.id = producttoshop.medicinId
-                                                            INNER JOIN p_medicine_category ON p_medicine.category = p_medicine_category.id
-                                                            INNER JOIN p_brand ON p_brand.id = p_medicine.brand
-                                                            INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
-                                                            INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                                                            LEFT JOIN `stock2` ON `stock2`.`stock_item_code` = `p_medicine`.`code`
-                                                            WHERE
-                                                            shop_id='$shop_id' AND (producttoshop.productToShopStatus = 'added' OR producttoshop.productToShopStatus = 'all') 
-                                                            GROUP BY p_medicine.name, itemSprice
-                                                            ORDER BY p_medicine.name ASC
-                                                            ");
-
-                              $tableRowCount = 1;
-                              while ($p_medicine_data = $p_medicine_rs->fetch_assoc()) {
-                          ?>
-                                <tr>
-                                  <th id="product_code" class="d-none"><?= $p_medicine_data['code'] ?></th>
-                                  <th id="stock_id" class="d-none"><?= $p_medicine_data['stock_id'] ?></th>
-                                  <th id="ucv_name" class="d-none"><?= $p_medicine_data['ucv_name'] ?> </th>
-                                  <th id="unitSprice" class="d-none"><?= $p_medicine_data['unitSprice'] ?> </th>
-                                  <th scope="row"><?= $tableRowCount ?></th>
-                                  <!-- <td>
-                                                                        <div class="product-img" style="background-image: url('dist/img/product/<?= $p_medicine_data['img'] ?>');"></div>
-                                                                    </td> -->
-                                  <td>
-                                    <label id="product_name"><?= $p_medicine_data['p_name'] ?></label>
-                                    (<?= $p_medicine_data['ucv_name'] ?>
-                                    <?= $p_medicine_data['unit'] ?>)
-                                  </td>
-                                  <td id="product_category"><?= $p_medicine_data['category'] ?></td>
-                                  <td id="product_brand"><?= $p_medicine_data['brand'] ?></td>
-                                  <td id="itemSprice"><?= $p_medicine_data['itemSprice'] ?></td>
-                                  <td id="product_unit"><?= $p_medicine_data['unit'] ?></td>
-                                  <td><button class="btn btn-outline-success add-btn">Add</button></td>
-                                </tr>
-                          <?php
-                                $tableRowCount++;
-                              }
-                            }
-                          }
-                          ?>
-
+                          <tr>
+                            <td colspan="7" class="text-center">Search Product</td>
+                          </tr>
                         </tbody>
                       </table>
 
@@ -275,7 +218,7 @@ if (!isset($_SESSION['store_id'])) {
               </div>
             </div>
           </div>
-          <!-- left side desing end -->
+          <!-- left side design end -->
 
           <!-- add to stock table -->
 
@@ -306,9 +249,10 @@ if (!isset($_SESSION['store_id'])) {
 
           </div>
           <div class="po_btn col-6 d-none flex-column">
-            <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i class="fas fa-arrow-right"></i></a>
+            <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i
+                class="fas fa-arrow-right"></i></a>
           </div>
-          <!-- right side desing end -->
+          <!-- right side design end -->
         </div>
       </div>
     </div>

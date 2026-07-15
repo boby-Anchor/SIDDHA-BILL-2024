@@ -299,7 +299,7 @@ try {
                             </thead>
                             <tbody id="doctor_medicine_table_body"> </tbody>
                         </table>
-                        <table class="table table-bordered" id="invoice_items_table">
+                        <table class="table" id="invoice_items_table">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -313,7 +313,7 @@ try {
                                     <th>Cost</th>
                                 </tr>
                             </thead>
-                            <tbody id="invoice_items_table_body"></tbody>
+                            <tbody class="border-top-0" id="invoice_items_table_body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -393,16 +393,24 @@ try {
             if (response.items?.length) {
                 response.items.forEach((item) => {
                     const newRow = document.createElement("tr");
+                    if (item.isPaththu == 1) {
+                        newRow.className = "border border-warning";
+                    } else if (item.isPaththu == 2) {
+                        newRow.className = "border border-danger";
+                    } else {
+                        newRow.className = "border border-info";
+                    }
                     newRow.innerHTML = `
-                                <td>${++row_id}</td>
-                                <td>${item.code || ""}</td>
-                                <td>${item.name || item.invoiceItem || ""}</td>
-                                <td class="text-center">${item.ucv_name || ""}${item.unit || ""}</td>
-                                <td>${item.sku || ""}</td>
-                                <td>${item.brand_name || ""}</td>
-                                <td>${item.invoiceItem_price ? Number(item.invoiceItem_price).toLocaleString() : ""}</td>
-                                <td>${item.invoiceItem_qty ? Number(item.invoiceItem_qty).toLocaleString() : ""}</td>
-                                <td>${item.invoiceItem_total ? Number(item.invoiceItem_total).toLocaleString() : ""}</td>
+                                <td class="border-top-0">${++row_id}</td>
+                                <td class="border-top-0 d-none">${item.isPaththu}</td>
+                                <td class="border-top-0">${item.code || ""}</td>
+                                <td class="border-top-0">${item.name || item.invoiceItem || ""}</td>
+                                <td class="border-top-0 text-center">${item.ucv_name || ""}${item.unit || ""}</td>
+                                <td class="border-top-0">${item.sku || ""}</td>
+                                <td class="border-top-0">${item.brand_name || ""}</td>
+                                <td class="border-top-0">${item.invoiceItem_price ? Number(item.invoiceItem_price).toLocaleString() : ""}</td>
+                                <td class="border-top-0">${item.invoiceItem_qty ? Number(item.invoiceItem_qty).toLocaleString() : ""}</td>
+                                <td class="border-top-0">${item.invoiceItem_total ? Number(item.invoiceItem_total).toLocaleString() : ""}</td>
                             `;
                     tableBody.appendChild(newRow);
                 });

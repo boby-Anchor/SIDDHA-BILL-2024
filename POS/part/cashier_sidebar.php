@@ -51,81 +51,9 @@ if (isset($_SESSION['store_id'])) {
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-          <!-- Edit stock for Yakkala Ayurveda Start -->
-          <?php
-          if ($shop_id == 9 || $shop_id == 10 || $shop_id == 1) {
-            if ($user_id == 16 || $shop_id == 10) {
-          ?>
-              <li class="nav-header"> Add Stock Items</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-copy"></i>
-                  <p>
-                    Special CutOff
-                    <i class="fas fa-angle-left right"></i>
-                    <span class="badge badge-info right">1</span>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="edit-stock_new.php" class="nav-link">
-                      <i class="nav-icon fas fa-copy"></i>
-                      <i class=""></i>
-                      <p>Edit item Qty</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            <?php
-            }
-            if ($shop_id == 9 || $shop_id == 10) {
-            ?>
-              <li class="nav-header"> Stock Item functions </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-copy"></i>
-                  <p>
-                    Purchase
-                    <i class="fas fa-angle-left right"></i>
-                    <span class="badge badge-info right">2</span>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="stock.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>View Shop Stock</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="report-viewAllShopStock.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>View all Shop Stock</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="add-purchase.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Add Purchase Order</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="manage-purchase.php" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Orders List</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-          <?php
-            }
-          }
-          ?>
-          <!-- Edit stock for Yakkala Ayurveda End -->
-
-          <!-- Refilling area -->
+          <!-- Refilling Functions Start -->
           <?php if ($user_id == 38) { ?>
-
+            <li class="nav-header"> Refilling Shop </li>
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <!-- <i class="nav-icon fas fa-sliders-h"></i> -->
@@ -133,11 +61,10 @@ if (isset($_SESSION['store_id'])) {
                 <p>
                   Refilling Functions
                   <i class="fas fa-angle-left right"></i>
-                  <span class="badge badge-info right">2</span>
+                  <span class="badge badge-info right">3</span>
                 </p>
               </a>
               <ul class="nav nav-treeview">
-
                 <li class="nav-item">
                   <a href="refilling_invoice.php" class="nav-link">
                     <i class="nav-icon fas fa-prescription-bottle"></i>
@@ -150,14 +77,14 @@ if (isset($_SESSION['store_id'])) {
                     <p>Transfer to Hub</p>
                   </a>
                 </li>
-                <!-- <li class="nav-item" disabled> -->
-                <li class="nav-item">
+                <!-- Refilling Reports Start -->
+                <li class="nav-item border">
                   <a href="#" class="nav-link">
                     <i class="fas fa-receipt"></i>
                     <p>
                       Refill Reports
                       <i class="fas fa-angle-left right"></i>
-                      <span class="badge badge-info right">4</span>
+                      <span class="badge badge-info right">3</span>
                     </p>
                   </a>
                   <ul class="nav nav-treeview">
@@ -181,203 +108,297 @@ if (isset($_SESSION['store_id'])) {
                     </li>
                   </ul>
                 </li>
+                <!-- Refilling Reports End -->
+              </ul>
             </li>
-        </ul>
-        </li>
+            <!-- Refilling Functions Start -->
+          <?php } ?>
 
-      <?php } ?>
-
-      <!-- Cashier -->
-      <!-- <li class="nav-item">
-        <a href="report-cutoffStock.php" class="nav-link">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Cutoff Stock 02-06</p>
-        </a>
-      </li> -->
-      <li class="nav-header"> Cashier Functions </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link">
-          <i class="nav-icon fas fa-sliders-h"></i>
-          <p>
-            Options
-            <i class="fas fa-angle-left right"></i>
-            <span class="badge badge-info right">3</span>
-          </p>
-        </a>
-        <ul class="nav nav-treeview">
-          <li class="nav-item">
-            <a href="pos.php" class="nav-link">
-              <i class="nav-icon fas fa-file-invoice-dollar"></i>
-              <p>POS Invoice</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="edit_unit_price.php" class="nav-link">
-              <d class="nav-icon fas fa-pen-square"></d>
-              <p>Update Unit Price</p>
-            </a>
-          </li>
-
-          <li class="nav-item" disabled>
-            <a href="returnToHub.php" class="nav-link">
-              <i class="nav-icon fas fa-reply-all"></i>
-              <p>Return Invoice</p>
-            </a>
-          </li>
-        </ul>
-      </li>
-
-      <!--<li class="nav-item">-->
-      <!--  <a href="sales.php" class="nav-link">-->
-      <!--    <i class="nav-icon fas fa-copy"></i>-->
-      <!--    <p>Sales</p>-->
-      <!--  </a>-->
-      <!--</li>-->
-
-      <!--<li class="nav-item">-->
-      <!--  <a href="#" class="nav-link">-->
-      <!--    <i class="nav-icon fas fa-copy"></i>-->
-      <!--    <p>-->
-      <!--      Damages-->
-      <!--      <i class="fas fa-angle-left right"></i>-->
-      <!--      <span class="badge badge-info right">2</span>-->
-      <!--    </p>-->
-      <!--  </a>-->
-      <!--  <ul class="nav nav-treeview">-->
-      <!--    <li class="nav-item">-->
-      <!--      <a href="add-damage.php" class="nav-link">-->
-      <!--        <i class="far fa-circle nav-icon"></i>-->
-      <!--        <p>Add Damage</p>-->
-      <!--      </a>-->
-      <!--    </li>-->
-      <!--    <li class="nav-item">-->
-      <!--      <a href="damage.php" class="nav-link">-->
-      <!--        <i class="far fa-circle nav-icon"></i>-->
-      <!--        <p>Damage Products</p>-->
-      <!--      </a>-->
-      <!--    </li>-->
-      <!--  </ul>-->
-      <!--</li>-->
-      <!--<li class="nav-header">PEOPLES</li>-->
-      <!--<li class="nav-item">-->
-      <!--  <a href="#" class="nav-link">-->
-      <!--    <i class="nav-icon fas fa-copy"></i>-->
-      <!--    <p>-->
-      <!--      Customers-->
-      <!--      <i class="fas fa-angle-left right"></i>-->
-      <!--      <span class="badge badge-info right">2</span>-->
-      <!--    </p>-->
-      <!--  </a>-->
-      <!--  <ul class="nav nav-treeview">-->
-      <!--    <li class="nav-item">-->
-      <!--      <a href="add-customer.php" class="nav-link">-->
-      <!--        <i class="far fa-circle nav-icon"></i>-->
-      <!--        <p>Add Customers</p>-->
-      <!--      </a>-->
-      <!--    </li>-->
-      <!--    <li class="nav-item">-->
-      <!--      <a href="manage-customer.php" class="nav-link">-->
-      <!--        <i class="far fa-circle nav-icon"></i>-->
-      <!--        <p>Manage Customers</p>-->
-      <!--      </a>-->
-      <!--    </li>-->
-      <!--  </ul>-->
-      <!--</li>-->
-
-
-      <!--<li class="nav-item">-->
-      <!--  <a href="today-report.php" class="nav-link">-->
-      <!--    <i class="nav-icon fas fa-copy"></i>-->
-      <!--    <p>Today Report</p>-->
-      <!--  </a>-->
-      <!--</li>-->
-
-      <!-- <li class="nav-header">Reports</li> -->
-
-      <li class="nav-item">
-        <a href="#" class="nav-link">
-          <i class="nav-icon fas fa-file-invoice"></i>
-          <p>
-            Reports
-            <i class="fas fa-angle-left right"></i>
-            <span class="badge badge-info right">6</span>
-          </p>
-        </a>
-        <ul class="nav nav-treeview">
-
+          <!-- Edit stock for Yakkala Ayurveda And Online Start -->
           <?php
-          if ($user_id == 57) {
+          if ($shop_id == 9 || $shop_id == 10 || $shop_id == 14) {
+            if ($user_id == 51 || $user_id == 57 || $shop_id == 10) {
           ?>
-            <li class="nav-item">
-              <a href="report-viewAllShopStock.php" class="nav-link">
-                <i class="nav-icon fas fa-medkit"></i>
-                <p>All shops item price</p>
-              </a>
-            </li>
+              <li class="nav-header"> Add Stock Items</li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Special CutOff
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">1</span>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="edit-stock_new.php" class="nav-link">
+                      <i class="nav-icon fas fa-copy"></i>
+                      <i class=""></i>
+                      <p>Edit item Qty</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            <?php
+            }
+            if ($shop_id == 9 || $shop_id == 10 || ($shop_id == 14 && $user_id == 38)) {
+            ?>
+              <li class="nav-header"> Stock Item functions </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Purchase
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">2</span>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="stock.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>View Shop Stock</p>
+                    </a>
+                  </li>
+                  <?php
+                  if ($shop_id == 10|| ($shop_id == 14 && $user_id == 38)) {
+                  ?>
+                    <li class="nav-item">
+                      <a href="report-viewAllShopStock.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>View all Shop Stock</p>
+                      </a>
+                    </li>
+                  <?php
+                  }
+                  ?>
+                  <li class="nav-item">
+                    <a href="add-purchase.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Add Purchase Order</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="manage-purchase.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Orders List</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="poView.php" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>PO view</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
           <?php
+            }
           }
           ?>
+          <!-- Edit stock for Yakkala Ayurveda And Online End -->
 
-          <li class="nav-item">
-            <a href="report-dm-view.php" class="nav-link">
-              <i class="nav-icon fas fa-medkit"></i>
-              <p>Doc Med Report</p>
+          <!-- Cashier -->
+          <!-- <li class="nav-item">
+            <a href="report-cutoffStock.php" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Cutoff Stock 02-06</p>
             </a>
+          </li> -->
+          <li class="nav-header"> Cashier Functions </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-sliders-h"></i>
+              <p>
+                Options
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">3</span>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <!-- <li class="nav-item">
+                <a href="newPharmacyTransfer.php" class="nav-link">
+                  <i class="nav-icon fas fa-arrow-alt-circle-right"></i>
+                  <p>Send to New Pharmacy</p>
+                </a>
+              </li> -->
+              <li class="nav-item">
+                <a href="pos.php" class="nav-link">
+                  <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                  <p>POS Invoice</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="edit_unit_price.php" class="nav-link">
+                  <d class="nav-icon fas fa-pen-square"></d>
+                  <p>Update Unit Price</p>
+                </a>
+              </li>
+
+              <li class="nav-item" disabled>
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-reply-all"></i>
+                  <p>Invoice Return</p>
+                </a>
+              </li>
+              <li class="nav-item" disabled>
+                <a href="returnToHub.php" class="nav-link">
+                  <i class="nav-icon fas fa-warehouse"></i>
+                  <p>Returns & Wastage</p>
+                </a>
+              </li>
+              <li class="nav-item" disabled>
+                <a href="wastageAndReturns.php" class="nav-link">
+                  <i class="nav-icon fas fa-history"></i>
+                  <p>R & W Report</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="manage-doctors.php" class="nav-link">
+                  <i class="nav-icon fas fa-user-md"></i>
+                  <p>Add doctor</p>
+                </a>
+              </li>
+            </ul>
           </li>
 
-          <li class="nav-item">
-            <a href="report-ViewInvoices.php" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>View Invoices</p>
-            </a>
-          </li>
+          <!--<li class="nav-item">-->
+          <!--  <a href="sales.php" class="nav-link">-->
+          <!--    <i class="nav-icon fas fa-copy"></i>-->
+          <!--    <p>Sales</p>-->
+          <!--  </a>-->
+          <!--</li>-->
+
+          <!--<li class="nav-item">-->
+          <!--  <a href="#" class="nav-link">-->
+          <!--    <i class="nav-icon fas fa-copy"></i>-->
+          <!--    <p>-->
+          <!--      Damages-->
+          <!--      <i class="fas fa-angle-left right"></i>-->
+          <!--      <span class="badge badge-info right">2</span>-->
+          <!--    </p>-->
+          <!--  </a>-->
+          <!--  <ul class="nav nav-treeview">-->
+          <!--    <li class="nav-item">-->
+          <!--      <a href="add-damage.php" class="nav-link">-->
+          <!--        <i class="far fa-circle nav-icon"></i>-->
+          <!--        <p>Add Damage</p>-->
+          <!--      </a>-->
+          <!--    </li>-->
+          <!--    <li class="nav-item">-->
+          <!--      <a href="damage.php" class="nav-link">-->
+          <!--        <i class="far fa-circle nav-icon"></i>-->
+          <!--        <p>Damage Products</p>-->
+          <!--      </a>-->
+          <!--    </li>-->
+          <!--  </ul>-->
+          <!--</li>-->
+          <!--<li class="nav-header">PEOPLES</li>-->
+          <!--<li class="nav-item">-->
+          <!--  <a href="#" class="nav-link">-->
+          <!--    <i class="nav-icon fas fa-copy"></i>-->
+          <!--    <p>-->
+          <!--      Customers-->
+          <!--      <i class="fas fa-angle-left right"></i>-->
+          <!--      <span class="badge badge-info right">2</span>-->
+          <!--    </p>-->
+          <!--  </a>-->
+          <!--  <ul class="nav nav-treeview">-->
+          <!--    <li class="nav-item">-->
+          <!--      <a href="add-customer.php" class="nav-link">-->
+          <!--        <i class="far fa-circle nav-icon"></i>-->
+          <!--        <p>Add Customers</p>-->
+          <!--      </a>-->
+          <!--    </li>-->
+          <!--    <li class="nav-item">-->
+          <!--      <a href="manage-customer.php" class="nav-link">-->
+          <!--        <i class="far fa-circle nav-icon"></i>-->
+          <!--        <p>Manage Customers</p>-->
+          <!--      </a>-->
+          <!--    </li>-->
+          <!--  </ul>-->
+          <!--</li>-->
+
+
+          <!--<li class="nav-item">-->
+          <!--  <a href="today-report.php" class="nav-link">-->
+          <!--    <i class="nav-icon fas fa-copy"></i>-->
+          <!--    <p>Today Report</p>-->
+          <!--  </a>-->
+          <!--</li>-->
+
+          <!-- <li class="nav-header">Reports</li> -->
 
           <li class="nav-item">
-            <a href="report-OldInvoices.php" class="nav-link">
-              <i class="nav-icon fas fa-print"></i>
-              <p>Old Invoices</p>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-invoice"></i>
+              <p>
+                Reports
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">6</span>
+              </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="report-dm-view.php" class="nav-link">
+                  <i class="nav-icon fas fa-medkit"></i>
+                  <p>Doc Med Report</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="report-ViewInvoices.php" class="nav-link">
+                  <i class="nav-icon fas fa-file-alt"></i>
+                  <p>View Invoices</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="report-OldInvoices.php" class="nav-link">
+                  <i class="nav-icon fas fa-print"></i>
+                  <p>Print Old Invoices</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="cashier-today-report.php" class="nav-link">
+                  <i class="nav-icon fas fa-money-bill-wave"></i>
+                  <p>My Today Sales Report</p>
+                </a>
+              </li>
+
+              <!-- <li class="nav-item">
+                <a href="report-ItemOutQty.php" class="nav-link">
+                  <i class="nav-icon fas fa-prescription-bottle-alt"></i>
+                  <i class=""></i>
+                  <p>Total Items Sale Report</p>
+                </a>
+              </li> -->
+
+              <li class="nav-item">
+                <a href="cashier-sales-report.php" class="nav-link">
+                  <i class="nav-icon fas fa-chart-line"></i>
+                  <p>Sales Report</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="cashier-all-sales-report.php" class="nav-link">
+                  <i class="nav-icon far fa-chart-bar"></i>
+                  <p>All Sales Report</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="patient-invoiceReport.php" class="nav-link">
+                  <i class="nav-icon fab fa-accessible-icon"></i>
+                  <p>Patient Invoice Report</p>
+                </a>
+              </li>
+            </ul>
           </li>
 
-          <li class="nav-item">
-            <a href="cashier-today-report.php" class="nav-link">
-              <i class="nav-icon fas fa-money-bill-wave"></i>
-              <p>My Today Sales Report</p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="report-ItemOutQty.php" class="nav-link">
-              <i class="nav-icon fas fa-prescription-bottle-alt"></i>
-              <i class=""></i>
-              <p>Total Items Sale Report</p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="cashier-sales-report.php" class="nav-link">
-              <i class="nav-icon fas fa-chart-line"></i>
-              <p>Sales Report</p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="cashier-all-sales-report.php" class="nav-link">
-              <i class="nav-icon far fa-chart-bar"></i>
-              <p>All Sales Report</p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="patient-invoiceReport.php" class="nav-link">
-              <i class="nav-icon fab fa-accessible-icon"></i>
-              <p>Patient Invoice Report</p>
-            </a>
-          </li>
         </ul>
-      </li>
-
-      </ul>
       </nav>
 
     </div>

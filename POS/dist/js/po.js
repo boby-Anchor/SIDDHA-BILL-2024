@@ -11,14 +11,43 @@ function searchProducts(searchInput) {
   if (searchInput !== "") {
     $.ajax({
       type: "POST",
-      url: "actions/searchNameProductPo.php",
+      url: "actions/pos/searchProductByName.php",
       data: {
         searchName: searchInput,
       },
       success: function (response) {
-        $("#productGrid").html(response);
+        const result = JSON.parse(response);
+
+        switch (result.status) {
+          case "success":
+            setProductsOnGrid(result.data);
+            break;
+
+          case "empty":
+            $("#productGrid").html("<h1 style='color: white;'>" + result.message + ".</h1>");
+            break;
+
+          case "error":
+            ErrorMessageDisplay(result.message);
+            break;
+
+          case "sessionExpired":
+            handleExpiredSession(result.message);
+            break;
+        }
       },
     });
+
+    // $.ajax({
+    //   type: "POST",
+    //   url: "actions/searchNameProductPo.php",
+    //   data: {
+    //     searchName: searchInput,
+    //   },
+    //   success: function (response) {
+    //     $("#productGrid").html(response);
+    //   },
+    // });
   } else {
     $("#productGrid").html("<h1 style='color: white;'>Search product name.</h1>");
   }
@@ -160,7 +189,6 @@ function addDiscount() {
 function checkNetTotal() {
   var subTotal = parseFloat($("#subTotal").text().replace(/,/g, ""));
   var billType = document.getElementById("selectBillType");
-  var paymentMethod = document.getElementById("payment-method-selector");
 
   var discountPercentage = parseFloat(document.getElementById("discountAmount").value);
 

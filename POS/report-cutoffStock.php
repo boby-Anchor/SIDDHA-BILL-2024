@@ -19,7 +19,7 @@ $cost = 0;
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>2026/01/22 Cut off Stock</title>
+  <title>2026/02/06 Cut off Stock</title>
 
   <!-- Data Table CSS -->
   <?php include("part/data-table-css.php"); ?>
@@ -49,7 +49,7 @@ $cost = 0;
             <div class="col-12">
               <div class="card bg-dark">
                 <div class="card-header">
-                  <h3 class="card-title">2026/01/22 Cut off Stock</h3>
+                  <h3 class="card-title">2026/02/06 Pharmacy Cut off Stock</h3>
                 </div>
                 <div class="card-body overflow-auto">
                   <table id="stockTable" class="table table-bordered">
@@ -71,54 +71,53 @@ $cost = 0;
                       <?php
                       if (isset($_SESSION['store_id'])) {
 
-                        $userLoginData = $_SESSION['store_id'];
+                        $userLoginData = $_SESSION['store_id'][0];
+                        $shop_id = $userLoginData['shop_id'];
 
-                        foreach ($userLoginData as $userData) {
-                          $shop_id = $userData['shop_id'];
-                          $sql = $conn->query("SELECT stock3.stock_id,p_medicine.img AS p_img,
+                        $sql = $conn->query("SELECT stock4.stock_id,p_medicine.img AS p_img,
                           p_medicine.name AS p_name,
                           p_brand.name AS bName,
-                          stock3.stock_id,
-                          stock3.stock_item_cost AS p_cost,
-                          stock3.stock_item_code AS p_code,
-                          stock3.stock_item_qty AS p_a_stock,
-                          stock3.item_s_price AS p_s_price,
-                          stock3.transferred_qty,
+                          stock4.stock_id,
+                          stock4.stock_item_cost AS p_cost,
+                          stock4.stock_item_code AS p_code,
+                          stock4.stock_item_qty AS p_a_stock,
+                          stock4.item_s_price AS p_s_price,
+                          stock4.transferred_qty,
                           p_medicine_category.name AS p_category,
                           medicine_unit.unit AS unit , unit_category_variation.ucv_name
-                          FROM stock3
-                          INNER JOIN p_medicine ON p_medicine.code = stock3.stock_item_code
+                          FROM stock4
+                          INNER JOIN p_medicine ON p_medicine.code = stock4.stock_item_code
                           INNER JOIN p_medicine_category ON p_medicine_category.id = p_medicine.category
                           INNER JOIN p_brand ON p_brand.id = p_medicine.brand
                           INNER JOIN medicine_unit ON medicine_unit.id = p_medicine.medicine_unit_id
                           INNER JOIN unit_category_variation ON unit_category_variation.ucv_id = p_medicine.unit_variation
-                          WHERE stock3.stock_shop_id = '$shop_id'
+                          WHERE stock4.stock_shop_id = '$shop_id'
                           ORDER BY p_medicine.name ASC");
-                          while ($row = mysqli_fetch_assoc($sql)) {
+                        while ($row = mysqli_fetch_assoc($sql)) {
                       ?>
-                            <tr>
-                              <td style="padding:5px" class="text-center">
-                                <?= $row['p_code']; ?>
-                              </td>
-                              <td> <?= $row['p_name']; ?> </td>
-                              <td> <label class="ucv_name"><?= $row['ucv_name'] ?></label> <label class="product_unit"> <?= $row['unit']; ?> </label> </td>
-                              <td> <?= $row['bName']; ?></td>
-                              <td> <?= $row['p_category']; ?></td>
-                              <td> <label> <?= $row['p_s_price']; ?> </label> </td>
-                              <td> <?= $row['p_a_stock'] > 0 ? $row['p_a_stock'] : 0; ?> </td>
-                              <td> <?= $row['transferred_qty'] ?> </td>
-                              <td>
-                                <div class="row">
-                                  <div class="col-6">
-                                    <input type="number" class="col-12 form-control transferring_qty" name="transferring_qty" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                                  </div>
-                                  <div class="col-6">
-                                    <button class="btn btn-success col-12" onclick="updateTotal( <?= $row['stock_id']; ?>, <?= $row['transferred_qty']; ?>, this )">Add</button>
-                                  </div>
+                          <tr>
+                            <td style="padding:5px" class="text-center">
+                              <?= $row['p_code']; ?>
+                            </td>
+                            <td> <?= $row['p_name']; ?> </td>
+                            <td> <label class="ucv_name"><?= $row['ucv_name'] ?></label> <label class="product_unit"> <?= $row['unit']; ?> </label> </td>
+                            <td> <?= $row['bName']; ?></td>
+                            <td> <?= $row['p_category']; ?></td>
+                            <td> <label> <?= $row['p_s_price']; ?> </label> </td>
+                            <td> <?= $row['p_a_stock'] > 0 ? $row['p_a_stock'] : 0; ?> </td>
+                            <td> <?= $row['transferred_qty'] ?> </td>
+                            <td>
+                              <div class="row">
+                                <div class="col-6">
+                                  <input type="number" class="col-12 form-control transferring_qty" name="transferring_qty" min="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                                 </div>
-                              </td>
-                            </tr>
-                      <?php }
+                                <div class="col-6">
+                                  <button class="btn btn-success col-12" onclick="updateTotal( <?= $row['stock_id']; ?>, <?= $row['transferred_qty']; ?>, this )">Add</button>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                      <?php
                         }
                       }
                       ?>

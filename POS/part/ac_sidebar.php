@@ -83,7 +83,7 @@ if (isset($_SESSION['store_id'])) {
             </li>
             <li class="nav-item">
               <a href="report-ViewInvoices.php" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
+                <i class="nav-icon fas fa-file-alt"></i>
                 <p>View Invoices</p>
               </a>
             </li>
@@ -105,13 +105,13 @@ if (isset($_SESSION['store_id'])) {
                 <p>PO Item Qty Report</p>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="report-ItemOutQty.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
                 <i class=""></i>
                 <p>Total Items Sale Report</p>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a href="report-weeklySalesCompare.php" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>

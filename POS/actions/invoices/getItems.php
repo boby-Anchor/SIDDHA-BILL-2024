@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['invoiceNumber'])) {
         LEFT JOIN p_brand
             ON p_medicine.brand = p_brand.id
         WHERE invoiceNumber = '$invoiceNumber'
-        ORDER BY invoiceItemId ASC
+        ORDER BY isPaththu DESC,
+            invoiceItemId ASC
         ");
 
     if ($result || $dmResult) {

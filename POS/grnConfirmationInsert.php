@@ -7,10 +7,10 @@ if (isset($_SESSION['store_id'])) {
     $user_id = $userLoginData['id'] ?? null;
     $shop_id = $userLoginData['shop_id'] ?? null;
 } else {
-    echo json_encode(array(
+    echo json_encode([
         'status' => 'sessionExpired',
         'message' => 'Session expired. Wait to Login again.',
-    ));
+    ]);
     exit();
 }
 
@@ -28,16 +28,13 @@ if (isset($_POST['products'])) {
     $error_message = "";
 
     if (is_array($poArray) && !empty($poArray)) {
-
         try {
-
             // Fetch GRN number
             $grn_number_result = $conn->query("SELECT `AUTO_INCREMENT` FROM information_schema.tables WHERE table_schema = '$db' AND table_name = 'grn'");
             $grn_number_data = $grn_number_result->fetch_assoc();
             $grn_number = "GRN-000" . $grn_number_data['AUTO_INCREMENT'];
 
             foreach ($poArray as $product) {
-
                 if (
                     !empty($product['product_code']) &&
                     !empty($product['product_name']) &&
@@ -47,10 +44,9 @@ if (isset($_POST['products'])) {
                     !empty($product['item_price']) &&
                     // !empty($product['unit_s_price']) &&
                     !empty($product['total_cost']) &&
-                    !empty($product['total_value'])
-                    // !empty($product['free_qty'])
+                    !empty($product['total_value']) &&
+                    !empty($product['exp'])
                 ) {
-
                     $product_code = $product['product_code'];
                     $product_name = $product['product_name'];
                     $product_total_qty = $product['product_total_qty'];
@@ -64,13 +60,15 @@ if (isset($_POST['products'])) {
                     $total_cost = $product['total_cost'];
                     $total_value = $product['total_value'];
                     $free_qty = $product['free_qty'] ?? 0;
+                    $mfd = $product['mfd'] ?? null;
+                    $exp = $product['exp'] ?? null;
 
                     // Add product cost to the total cost
                     $grnTotalCost += $total_cost;
                     $grnTotalValue += $total_value;
 
                     // Query stock once
-                    $stock_result = $conn->query("SELECT * FROM  stock2 WHERE stock_item_code = '$product_code'
+                    $stock_result = $conn->query("SELECT stock_id FROM  stock2 WHERE stock_item_code = '$product_code'
                     AND item_s_price = '$item_price' AND stock_shop_id = '$shop_id'");
 
                     try {

@@ -518,16 +518,6 @@ $totalValue = 0;
         font-size:medium;\
         font-weight: bold;\
       }\
-        .check-by-box {\
-            border: 2px solid #000 !important;\
-            width:100%;\
-            padding: 5px;\
-            font-family: Arial, sans-serif;\
-        }\
-    .check-by-box label {\
-            display: block;\
-            font-size: 10px !important;\
-        }\
     "
             );
             printWindow.document.write("</style>");

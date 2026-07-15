@@ -7,7 +7,6 @@ if (!isset($_SESSION['store_id'])) {
     include('config/db.php');
     $userLoginData = $_SESSION['store_id'][0];
     $shop_id = $userLoginData['shop_id'];
-    $user_id = $userLoginData['id'];
 }
 
 ?>
@@ -29,9 +28,9 @@ if (!isset($_SESSION['store_id'])) {
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
@@ -250,8 +249,10 @@ if (!isset($_SESSION['store_id'])) {
                         </div>
                     </div>
                     <div class="po_btn col-6 d-none flex-column">
-                        <a type="button" class="btn btn-outline-success" id="proceedGrnBtn">Proceed Order <i
-                                class="fas fa-arrow-right"></i></a>
+                        <button class="btn btn-outline-success" id="proceedGrnBtn">
+                            Proceed Order
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                     <!-- right side design end -->
                 </div>
@@ -284,8 +285,8 @@ if (!isset($_SESSION['store_id'])) {
 
     <!-- confirm po modal start -->
     <div class="modal fade bg-success" id="confirmGRN" role="dialog">
-        <div class="modal-dialog d-flex justify-content-between ">
-            <div class="modal-content bg-dark align-items-center vw-100">
+        <div class="modal-dialog d-flex justify-content-between modal-xl">
+            <div class="modal-content bg-dark align-items-center">
                 <div class="modal-header">
                     <h4 class="modal-title">Stock Confirmation</h4>
                 </div>
@@ -332,6 +333,8 @@ if (!isset($_SESSION['store_id'])) {
                                             <th scope="col">Discount(%)</th>
                                             <th scope="col">Item S-Price</th>
                                             <th scope="col">Unit S-Price</th>
+                                            <th scope="col">MFD</th>
+                                            <th scope="col">EXP</th>
                                         </tr>
                                     </thead>
                                     <tbody id="grnConfirmationTableBody">
@@ -354,10 +357,6 @@ if (!isset($_SESSION['store_id'])) {
     <?php include("part/footer.php"); ?>
     <!-- Footer End -->
 
-    <!-- Alert -->
-    <?php include("part/alert.php"); ?>
-    <!-- Alert end -->
-
     <!-- All JS -->
     <?php include("part/all-js.php"); ?>
     <!-- All JS end -->
@@ -365,5 +364,14 @@ if (!isset($_SESSION['store_id'])) {
 </body>
 
 <script src="dist/js/add-stock.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#invoice_number").val(123);
+        $("#supplier_select").val(1);
+        $("#pnInput").val("as");
+        fbs();
+    });
+</script>
 
 </html>
